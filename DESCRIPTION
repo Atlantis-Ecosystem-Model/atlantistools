@@ -3,6 +3,7 @@ Title: What the Package Does (one line, title case)
 Version: 0.0.0.9000
 Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
 Description: helper tools to extract and visualise atlantis output
+URL: https://github.com/alketh/atlantistools
 Depends:
     R (>= 3.2.3)
 License: What license is it under?
