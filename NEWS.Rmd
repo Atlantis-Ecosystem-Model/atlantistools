@@ -1,0 +1,19 @@
+---
+title: "NEWS"
+output: html_document
+---
+
+# atlantistools 0.0.0.9000
+
+## New features
+
+## Documentation improvements
+
+## Minor improvements
+
+* `function1()` dummy text
+
+* `function2()` dummy text
+
+## Bug fixes
+
