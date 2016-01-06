@@ -12,17 +12,13 @@
 #' @return A \code{data.frame} of functional group information.
 #'
 #' @examples
-#' d <- system.file("extdata", testscenario, package = "atlantisom")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' file <- "functionalGroups.csv"
 #' fgs <- load_fgs(d, file)
 
 load_fgs <- function(dir = getwd(), file_fgs) {
-  if (is.null(dir)) {
-    file.fgs <- file_fgs
-  } else {
-    file.fgs <- file.path(dir, file_fgs)
-  }
-  result <- read.table(file = file.fgs, sep = ",",
+  if (!is.null(dir)) file_fgs <- file.path(dir, file_fgs)
+  result <- read.table(file = file_fgs, sep = ",",
                        header = TRUE, stringsAsFactors = FALSE)
   return(result)
 }
