@@ -1,0 +1,34 @@
+Code,Index,Name,IsRec,NumSubFleets
+midwcCEP,1,midwater trawl on cephalopods,0,1
+jigCEP,2,jig on cephalopods,0,0
+midwcFP,3,midwater trawl on planktivores,0,0
+dredgeBFS,4,dredge on filter feeders,0,0
+netFD,5,gillnet on demersals and ling,0,1
+netSH,6,gillnet on sharks,0,3
+plineFVO,7,pelagic line on tuna ans sharks,0,0
+pseineFVO,8,purse seine on tuna ans sharks,0,0
+pseineFP,9,purse seine on planktivores,0,0
+trapBMS,10,trap on macrozoobenthos,0,0
+trapFD,11,trap on demersals and ling,0,1
+dtrawlBMS,12,demersal trawl on macrozooben.,0,0
+dtrawlCEP,13,demersal trawl on cephalopods,0,1
+dtrawlFD,14,demersal trawl on demersal ling,0,4
+dtrawlFDB,15,demersal trawl on flathead,0,3
+dtrawlFDO,16,demersal trawl on roughy,0,3
+midwcFD,17,midwater trawl on demersal ling,0,1
+dseineFDB,18,danish seine on flathead,0,2
+dlineFD,19,demersal line on demersal ling,0,1
+dlineFVS,20,demersal line on piscivores,0,0
+dlineSH,21,demersal line on sharks,0,1
+diveBG,22,dive on benthic grazers,0,0
+pseineFVS,23,purse seine on piscivores,0,0
+cullPIN,24,cull of pinnipeds,0,0
+recfish,25,recreational fisheries,1,2
+ptrawlPWN,26,demersal trawl on prawns,0,1
+dtrawlFBP,27,demersal trawl on benthopelag,0,1
+midwcZL,28,midwater trawl on krill,0,0
+trapFDE,29,trap on shallow demersals,0,0
+dlineFDE,30,demersal line on shallow dem,0,1
+netFDE,31,gill net on shallow demersals,0,0
+midwcPWN,32,midwater trawl on prawns,0,0
+mowMA,33,mowing of kelp,0,0
