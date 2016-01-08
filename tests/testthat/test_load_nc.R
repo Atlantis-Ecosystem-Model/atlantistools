@@ -4,15 +4,9 @@ d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
 bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 
-ref_files <- c("ref_eat.rda", "ref_grazing.rda", "ref_n.rda", "ref_nums.rda")
-ref_files <- system.file("data", ref_files, package = "atlantistools")
-
-for (i in seq_along(ref_files)) {
-  load(ref_files[i])
-}
+data(c("ref_eat.rda", "ref_grazing.rda", "ref_n.rda", "ref_nums.rda"))
 
 # Test numbers!
-
 data <- load_nc(dir = d,
                 nc = "outputSETAS.nc",
                 bps = bps,
@@ -21,7 +15,7 @@ data <- load_nc(dir = d,
                 select_variable = "Nums",
                 bboxes = bboxes,
                 check_acronyms = TRUE)
-
+#
 test_that("test column names", {
   expect_equal(names(data), names(ref_nums))
 })
@@ -34,7 +28,7 @@ test_that("test output numbers", {
   expect_equal(sum(is.na(test$atoutput.x)) + sum(is.na(test$atoutput.y)), 0)
   expect_true(sd(test$check[!is.na(test$check)]) < 0.0000001)
 })
-
+#
 # Test nitrogen!
 
 data <- load_nc(dir = d,
