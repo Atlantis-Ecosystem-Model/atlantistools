@@ -26,6 +26,6 @@ head(fgs)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
-  \code{\link{load_bps}}, \code{\link{reexports}}
+  \code{\link{load_bps}}, \code{\link{load_nc}}
 }
 

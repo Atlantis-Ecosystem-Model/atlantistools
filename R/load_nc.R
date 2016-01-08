@@ -31,7 +31,6 @@
 #' in the output.
 #' @family load functions
 #' @export
-#'
 #' @return A \code{data.frame} in long format with the following coumn names:
 #'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 #'
@@ -51,13 +50,13 @@
 #'   check_acronyms = TRUE)
 #' str(test)
 
-# Import '%>%' operator from magrittr
-#' @importFrom magrittr %>%
-#' @export
-magrittr::`%>%`
+# # Import '%>%' operator from magrittr
+# #' @importFrom magrittr %>%
+# #' @export
+# magrittr::`%>%`
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
-                    select_variable, bboxes = c(0)) {
+                    select_variable, bboxes = c(0), check_acronyms = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
   # at the end. However, this requires alot more storage and the code wouldn't be highly

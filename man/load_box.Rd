@@ -27,6 +27,6 @@ Kelli Faye Johnson
 }
 \seealso{
 Other load functions: \code{\link{load_bps}},
-  \code{\link{load_fgs}}, \code{\link{reexports}}
+  \code{\link{load_fgs}}, \code{\link{load_nc}}
 }
 
