@@ -3,4 +3,4 @@
 ^README\.Rmd$
 ^README-.*\.png$
 ^\.travis\.yml$
-NEWS\.md
+NEWS\.Rmd
