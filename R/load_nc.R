@@ -26,7 +26,12 @@
 #' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 #' }) can be loaded at a time.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' @param check_acronyms Logical testing if functional-groups in
+#' select_groups are inactive in the current model run. The will be omitted
+#' in the output.
 #' @family load functions
+#' @export
+#'
 #' @return A \code{data.frame} in long format with the following coumn names:
 #'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 #'
@@ -35,40 +40,43 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' fgs <- "functionalGroups.csv"
-#' bps <- load_bps(dir = d, fgs = fgs, file_init = "INIT_VMPA_Jan2015.nc")
-#' test <- load_nc(dir = d, nc = "outputSETASCATCH.nc",
-#'   fgs = fgs, bps = bps,
-#'   select_variable = "Catch",
-#'   select_groups = "Pisciv_T_Fish",
+#' bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
+#' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+#' test <- load_nc(dir = d, nc = "outputSETAS.nc",
+#'   bps = bps,
+#'   fgs = "functionalGroups.csv",
+#'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
+#'   select_variable = "ResN",
+#'   bboxes = bboxes,
 #'   check_acronyms = TRUE)
 #' str(test)
-#' rm(test)
-#'
+
+# Import '%>%' operator from magrittr
 #' @importFrom magrittr %>%
 #' @export
+magrittr::`%>%`
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
-                    select_variable =
-                      c("N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing", "Catch"),
-                    check_acronyms = TRUE, bboxes = c(0)) {
+                    select_variable, bboxes = c(0)) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
   # at the end. However, this requires alot more storage and the code wouldn't be highly
   # vectorised (which it is at the moment...)!
+  supported_variables <- c("N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
+  if (length(select_groups) == 0) stop("No functional groups selected.")
+  if (length(select_variable) == 0) stop("No variable selected.")
+  if (length(select_variable) > 1) stop("Only one variable allowed per function call.")
+  if (any(!is.element(select_variable, supported_variables))) {
+    stop(paste("Only", paste(supported_variables, collapse = ", "), "can be selected as 'select_variable'"))
+  }
+
+  fgs <- load_fgs(dir = dir, fgs = fgs)
 
   # Check input of the nc file
   if (tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
     stop("The argument for nc,", nc, "does not end in nc")
   }
-  if (is.null(dir)) {
-    file.nc <- nc
-  } else {
-    file.nc <- file.path(dir, nc)
-  }
-
-  # Check input of select_variable as only one value is allowed
-  select_variable <- match.arg(select_variable, several.ok = FALSE)
+  if (!is.null(dir)) nc <- file.path(dir, nc)
 
   # Check input structure!
   if (check_acronyms) {
@@ -88,7 +96,7 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   # Deal with file structures
 
   # Load ATLANTIS output!
-  at_out <- RNetCDF::open.nc(con = file.nc)
+  at_out <- RNetCDF::open.nc(con = nc)
   on.exit(RNetCDF::close.nc(at_out))
 
   if (select_variable != "N" & all(is.element(select_groups, bps))) stop("The only output for Biomasspools is N.")

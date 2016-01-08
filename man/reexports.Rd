@@ -36,6 +36,10 @@ Only one variable of the options available (i.e., \code{c(
 }) can be loaded at a time.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+
+\item{check_acronyms}{Logical testing if functional-groups in
+select_groups are inactive in the current model run. The will be omitted
+in the output.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -52,6 +56,19 @@ below to see their documentation.
 \describe{
   \item{magrittr}{\code{\link[magrittr]{\%>\%}}}
 }}
+\examples{
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
+bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+test <- load_nc(dir = d, nc = "outputSETAS.nc",
+  bps = bps,
+  fgs = "functionalGroups.csv",
+  select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
+  select_variable = "ResN",
+  bboxes = bboxes,
+  check_acronyms = TRUE)
+str(test)
+}
 \author{
 Alexander Keth
 }
