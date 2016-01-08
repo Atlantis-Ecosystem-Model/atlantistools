@@ -12,7 +12,8 @@ The names match with the column 'Name' in the functionalGroups.csv file.}
 \item{layer}{Layerid starting from 0 to numlayers - 1.}
 \item{time}{Timestep given as inter from 1 to the last timestep. To
 convert to actual time lateron use 'toutinc' in the 'run.prm' file.}
-\item{atoutput}{Obersavtion column storing the actual output value.}
+\item{atoutput}{Obersavtion column storing the actual output value.
+Numbers at age.}
 }}
 \source{
 \describe{
