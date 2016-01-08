@@ -23,7 +23,7 @@ ref_n <- load_nc(dir = d,
                     check_acronyms = TRUE)
 
 ref_grazing <- load_nc(dir = d,
-                 nc = "outputSETAS.nc",
+                 nc = "outputSETASPROD.nc",
                  bps = bps,
                  fgs = "functionalGroups.csv",
                  select_groups = get_groups(dir = d, fgs = "functionalGroups.csv"),
@@ -32,7 +32,7 @@ ref_grazing <- load_nc(dir = d,
                  check_acronyms = TRUE)
 
 ref_eat <- load_nc(dir = d,
-                       nc = "outputSETAS.nc",
+                       nc = "outputSETASPROD.nc",
                        bps = bps,
                        fgs = "functionalGroups.csv",
                        select_groups = get_groups(dir = d, fgs = "functionalGroups.csv"),
@@ -41,6 +41,6 @@ ref_eat <- load_nc(dir = d,
                        check_acronyms = TRUE)
 
 test_that("test output numbers", {
-  expect_equal(dim(text)[1], 826)
-  expect_equal(dim(text)[2], 6)
+  expect_equal(dim(ref_nums)[1], 826)
+  expect_equal(dim(ref_nums)[2], 6)
 })
