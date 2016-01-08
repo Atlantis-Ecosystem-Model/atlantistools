@@ -3,7 +3,7 @@
 #' Read in the functional group file as dataframe.
 #'
 #' @param dir Path of the Atlantis model folder.
-#' @param file_fgs Name of the functional groups file which is typically saved as
+#' @param fgs Name of the functional groups file which is typically saved as
 #' \code{functionalGroups.csv}.
 #'
 #' @export
@@ -17,9 +17,9 @@
 #' fgs <- load_fgs(d, file)
 #' fgs
 
-load_fgs <- function(dir = getwd(), file_fgs) {
-  if (!is.null(dir)) file_fgs <- file.path(dir, file_fgs)
-  result <- read.table(file = file_fgs, sep = ",",
+load_fgs <- function(dir = getwd(), fgs) {
+  if (!is.null(dir)) fgs <- file.path(dir, fgs)
+  result <- read.table(file = fgs, sep = ",",
                        header = TRUE, stringsAsFactors = FALSE)
   return(result)
 }
