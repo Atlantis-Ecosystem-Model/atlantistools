@@ -6,6 +6,12 @@
 \usage{
 load_fgs(dir = getwd(), file_fgs)
 }
+\arguments{
+\item{dir}{Path of the Atlantis model folder.}
+
+\item{file_fgs}{Name of the functional groups file which is typically saved as
+\code{functionalGroups.csv}.}
+}
 \value{
 A \code{data.frame} of functional group information.
 }
@@ -16,5 +22,6 @@ Read in the functional group file as dataframe.
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 file <- "functionalGroups.csv"
 fgs <- load_fgs(d, file)
+head(fgs)
 }
 
