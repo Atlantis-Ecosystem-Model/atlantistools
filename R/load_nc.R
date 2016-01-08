@@ -50,10 +50,9 @@
 #'   check_acronyms = TRUE)
 #' str(test)
 
-# # Import '%>%' operator from magrittr
-# #' @importFrom magrittr %>%
-# #' @export
-# magrittr::`%>%`
+# Import '%>%' operator from magrittr
+#' @importFrom magrittr %>%
+
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
                     select_variable, bboxes = c(0), check_acronyms = TRUE) {

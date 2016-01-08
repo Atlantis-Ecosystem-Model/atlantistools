@@ -26,5 +26,7 @@ Kelli Faye Johnson
 }
 \seealso{
 \code{\link{load_box}}
+
+Other get functions: \code{\link{get_groups}}
 }
 
