@@ -78,7 +78,7 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
 
   # Check input structure!
   if (check_acronyms) {
-    active_groups <- as.vector(subset(fgs, IsTurnedOn == 1)$Name)
+    active_groups <- fgs[fgs$IsTurnedOn == 1, "Name"]
     inactive_groups <- select_groups[which(!is.element(select_groups, active_groups))]
     if (length(inactive_groups) >= 1) {
       select_groups <- select_groups[!is.element(select_groups, inactive_groups)]
