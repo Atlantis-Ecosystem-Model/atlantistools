@@ -1,5 +1,7 @@
 language: r
 warnings_are_errors: true
 sudo: required
-r_binary_packages:
-- RNetCDF
+apt_packages:
+- pgf
+- libudunits2-dev
+- libnetcdf-dev
