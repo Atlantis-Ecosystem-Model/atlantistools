@@ -11,8 +11,6 @@ for (i in seq_along(ref_files)) {
   load(ref_files[i])
 }
 
-lapply(ref_files, load)
-
 # Test numbers!
 
 data <- load_nc(dir = d,
