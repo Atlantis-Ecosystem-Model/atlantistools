@@ -4,10 +4,15 @@ Version: 0.0.0.9000
 Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
 Description: Helper tools to extract and visualise atlantis output.
 URL: https://github.com/alketh/atlantistools
-Depends: 
+Depends:
     R (>= 3.2.3)
 License: GPL
 LazyData: true
 Maintainer: 'Alexander Keth' <alexander.keth@uni-hamburg.de>
 RoxygenNote: 5.0.1
 Suggests: testthat
+Imports:
+  dplyr,
+  magrittr,
+  RNetCDF
+
