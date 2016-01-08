@@ -24,4 +24,7 @@ file <- "functionalGroups.csv"
 fgs <- load_fgs(d, file)
 fgs
 }
+\seealso{
+Other load.functions: \code{\link{load_nc}}
+}
 

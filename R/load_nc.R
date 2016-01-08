@@ -2,34 +2,42 @@
 #'
 #' This function loads Atlantis outputfiles (any netcdf file) and
 #' converts them to a \code{data.frame}.
-#' @template dir
-#' @template file_nc
-#' @template bps
-#' @template fgs
-#' @template select_groups
-#' @param select_variable A character value spefifying which variable to return.
-#'   loaded. Only one variable of the options available (i.e., \code{c(
-#'   "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
-#'   }) can be loaded at a time.
-#' @param check_acronyms A logical, specifying if selected groups are active
-#'   in the model run. This is used in automated runs.
-#'   All groups are passed when plotting is called via batch-file,
-#'   (which cannot be changed easily) this will result in errors if some
-#'   groups are not active in the model run. By default this argument is \code{TRUE}.
-#' @template bboxes
+#' @param dir Character string giving the path of the Atlantis model folder.
+#' If data is stored in multiple folders (e.g. main model folder and output
+#' folder) you should use 'NULL' as dir.
+#' @param nc Character string giving the filename of netcdf file which
+#' shall be read in. Usually "output[...].nc". Currently the general-
+#' production- and catch.nc files can be loaded in. In case you are using
+#' multiple folder for your model files and outputfiles pass the complete
+#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' case.
+#' @param bps Vector of character strings giving the complete list of epibenthic
+#' functional groups (Only present in the sediment layer). The names have to match
+#' the column 'Name' in the 'functionalGroups.csv' file.
+#' @param fgs Character string giving the filename of 'functionalGroups.csv'
+#' file. In case you are using multiple folders for your model files and
+#' outputfiles pass the complete folder/filename string as fgs.
+#' In addition set dir to 'NULL' in this case.
+#' @param select_groups Character vector of funtional groups which shall be read in.
+#' Names have to match the ones used in the ncdf file. Check column "Name" in
+#' "functionalGroups.csv" for clarification.
+#' @param select_variable Character value spefifying which variable to load.
+#' Only one variable of the options available (i.e., \code{c(
+#' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
+#' }) can be loaded at a time.
+#' @param bboxes Integer vector giving the box-id of the boundary boxes.
 #' @family load functions
 #' @return A \code{data.frame} in long format with the following coumn names:
-#'   Species, timestep, polygon, agecl, and atoutput (i.e., variable).
+#'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 #'
 #' @keywords gen
 #' @author Alexander Keth
 #'
 #' @examples
-#' testfolder <- "INIT_VMPA_Jan2015"
-#' d <- system.file("extdata", testfolder, package = "atlantisom")
-#' fgs <- load_fgs(d, "functionalGroups.csv")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' fgs <- "functionalGroups.csv"
 #' bps <- load_bps(dir = d, fgs = fgs, file_init = "INIT_VMPA_Jan2015.nc")
-#' test <- load_nc(dir = d, file_nc = "outputSETASCATCH.nc",
+#' test <- load_nc(dir = d, nc = "outputSETASCATCH.nc",
 #'   fgs = fgs, bps = bps,
 #'   select_variable = "Catch",
 #'   select_groups = "Pisciv_T_Fish",
@@ -40,7 +48,7 @@
 #' @importFrom magrittr %>%
 #' @export
 
-load_nc <- function(dir = getwd(), file_nc, bps, fgs, select_groups,
+load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
                     select_variable =
                       c("N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing", "Catch"),
                     check_acronyms = TRUE, bboxes = c(0)) {
@@ -50,13 +58,13 @@ load_nc <- function(dir = getwd(), file_nc, bps, fgs, select_groups,
   # vectorised (which it is at the moment...)!
 
   # Check input of the nc file
-  if (tail(strsplit(file_nc, "\\.")[[1]], 1) != "nc") {
-    stop("The argument for file_nc,", file_nc, "does not end in nc")
+  if (tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
+    stop("The argument for nc,", nc, "does not end in nc")
   }
   if (is.null(dir)) {
-    file.nc <- file_nc
+    file.nc <- nc
   } else {
-    file.nc <- file.path(dir, file_nc)
+    file.nc <- file.path(dir, nc)
   }
 
   # Check input of select_variable as only one value is allowed

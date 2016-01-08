@@ -2,7 +2,7 @@
 #'
 #' Read in the functional group file as dataframe.
 #'
-#' @param  dir Path of the Atlantis model folder.
+#' @param dir Path of the Atlantis model folder.
 #' @param file_fgs Name of the functional groups file which is typically saved as
 #' \code{functionalGroups.csv}.
 #'
