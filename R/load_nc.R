@@ -290,8 +290,8 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   # NOTE: invert cohorts of size 10 are not considered!
   if (select_variable == "N" & any(final_agecl != 10 & final_agecl > 1)) {
     result <- result %>%
-      dplyr::group_by(polygon, layer, species, time) %>%
-      dplyr::summarise(atoutput = sum(atoutput))
+      dplyr::group_by_("polygon", "layer", "species", "time") %>%
+      dplyr::summarise_(atoutput = sum("atoutput"))
   }
 
   return(result)
