@@ -22,7 +22,7 @@ Read in the functional group file as dataframe.
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 file <- "functionalGroups.csv"
 fgs <- load_fgs(d, file)
-fgs
+head(fgs)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
