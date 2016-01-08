@@ -4,12 +4,12 @@
 \alias{load_fgs}
 \title{Load the functional group file}
 \usage{
-load_fgs(dir = getwd(), file_fgs)
+load_fgs(dir = getwd(), fgs)
 }
 \arguments{
 \item{dir}{Path of the Atlantis model folder.}
 
-\item{file_fgs}{Name of the functional groups file which is typically saved as
+\item{fgs}{Name of the functional groups file which is typically saved as
 \code{functionalGroups.csv}.}
 }
 \value{
@@ -25,6 +25,7 @@ fgs <- load_fgs(d, file)
 fgs
 }
 \seealso{
-Other load.functions: \code{\link{load_nc}}
+Other load functions: \code{\link{load_box}},
+  \code{\link{load_bps}}, \code{\link{reexports}}
 }
 

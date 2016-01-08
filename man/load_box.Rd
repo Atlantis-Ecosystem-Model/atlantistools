@@ -21,7 +21,6 @@ for an Atlantis scenario.
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
-head(boxes)
 }
 \author{
 Kelli Faye Johnson

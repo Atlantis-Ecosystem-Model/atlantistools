@@ -11,15 +11,19 @@
 #'
 #' @return A \code{vector} specifying which boxes are on the boundary.
 #' @export
-#'
+#' @examples
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
+#' get_boundary(boxinfo = boxes)
+
 get_boundary <- function(boxinfo) {
   new <- vector()
-  boxes <- sapply(boxinfo$boxes, "[[", "vert")
+#   boxes <- sapply(boxinfo$boxes, "[[", "vert")
   iface <- sapply(boxinfo$boxes, "[[", "iface")
   facepoints <- do.call("rbind",lapply(lapply(boxinfo$faces, "[", , 1:2),
                                        apply, 2, paste, collapse = "_"))
   vertices <- apply(boxinfo$bnd_vert, 1, paste, collapse = "_")
-  for(ii in seq(dim(facepoints)[1])) {
+  for (ii in seq(dim(facepoints)[1])) {
     # Check how many points of a given box (ii) have points that are also
     # listed in the boundary box points
     temp <- which(sapply(facepoints[ii, ],

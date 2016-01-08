@@ -15,7 +15,7 @@
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' file <- "functionalGroups.csv"
 #' fgs <- load_fgs(d, file)
-#' fgs
+#' head(fgs)
 
 load_fgs <- function(dir = getwd(), fgs) {
   if (!is.null(dir)) fgs <- file.path(dir, fgs)

@@ -6,28 +6,24 @@
 #' @family load functions
 #' @author Kelli Faye Johnson
 #'
-#' @template dir
-#' @template file_bgm
+#' @param dir Path of the Atlantis model folder.
+#' @param bgm Character string giving the name of the atlantis bgm file.
 #'
 #' @return A list of information regarding boxes for an Atlantis scenario.
 #' @export
 #' @examples
-#' scenario <- "INIT_VMPA_Jan2015"
-#' d <- system.file("extdata", scenario, package = "atlantisom")
-#' boxes <- load_box(dir = d, file_bgm = "VMPA_setas.bgm")
-#'
-load_box <- function(dir = getwd(), file_bgm) {
-  if (is.null(dir)) {
-    file.bgm <- file_bgm
-  } else {
-    file.bgm <- file.path(dir, file_bgm)
-  }
-  if (!file.exists(file.bgm)) {
-    stop(paste("The file", file.bgm, "does not exist in the specified dir\n",
-               "please check the arguments dir and file_bgm in load_box."))
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
+
+load_box <- function(dir = getwd(), bgm) {
+  if (!is.null(dir)) bgm <- file.path(dir, bgm)
+
+  if (!file.exists(bgm)) {
+    stop(paste("The file", bgm, "does not exist in the specified dir\n",
+               "please check the arguments dir and bgm in load_box."))
   }
 
-  data <- readLines(file.bgm)
+  data <- readLines(bgm)
   proj <- gsub("projection[[:space:]]+", "", grep("projection", data, value = TRUE))
   nbox <- as.numeric(gsub("nbox|[[:space:]]", "", grep("nbox", data, value = TRUE)))
   nface <- as.numeric(gsub("nface|[[:space:]]", "", grep("nface", data, value = TRUE)))
