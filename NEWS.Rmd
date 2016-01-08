@@ -7,13 +7,11 @@ output: html_document
 
 ## New features
 
+* `load_fgs()` Read in the functional group file as dataframe.
+
 ## Documentation improvements
 
 ## Minor improvements
-
-* `function1()` dummy text
-
-* `function2()` dummy text
 
 ## Bug fixes
 
