@@ -121,6 +121,26 @@
 
 #' @keywords gen
 #' @examples
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+nc_gen <- "outputSETAS.nc"
+nc_prod <- "outputSETASPROD.nc"
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+bps <- load_bps(dir = dir, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
+fgs <- "functionalGroups.csv"
+select_groups <- c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
+bboxes <- get_boundary(boxinfo = load_box(dir = dir, bgm = "VMPA_setas.bgm"))
+check_acronyms <- TRUE
+out <- "preprocess.Rda"
+report <- TRUE
+
+#' test <- load_nc(dir = d, nc = "outputSETAS.nc",
+#'   bps = bps,
+#'   fgs = "functionalGroups.csv",
+#'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
+#'   select_variable = "ResN",
+#'   bboxes = bboxes,
+#'   check_acronyms = TRUE)
+#' str(test)
 #' @export
 
 preprocess <- function(dir,
@@ -219,13 +239,13 @@ preprocess <- function(dir,
                         check_acronyms = check_acronyms)
 
   flux       <- load_nc_physics(dir = dir,
-                                nc = nc_out,
+                                nc = nc_gen,
                                 select_physics = c("eflux", "vflux"),
                                 bboxes = bboxes,
                                 aggregate_layers = TRUE)
 
   physics    <- load_nc_physics(dir = dir,
-                                nc = nc_out,
+                                nc = nc_gen,
                                 select_physics = physic_var,
                                 bboxes = bboxes,
                                 aggregate_layers = FALSE)
@@ -239,20 +259,29 @@ preprocess <- function(dir,
                         bboxes = bboxes,
                         check_acronyms = check_acronyms)
 
+  # Further aggregation functions!
+  agg_mean <- function(data, col, vars){
+    dots = sapply(vars, . %>% {as.formula(paste0('~', .))})
+    result <- as.data.frame(data) %>%
+      dplyr::group_by_(.dots = dots) %>%
+      dplyr::summarise_(atoutput = interp(~mean(var), var = as.name(col)))
+    return(result)
+  }
+
+  agg_sum <- function(data, col, vars){
+    dots = sapply(vars, . %>% {as.formula(paste0('~', .))})
+    result <- as.data.frame(data) %>%
+      dplyr::group_by_(.dots = dots) %>%
+      dplyr::summarise_(atoutput = interp(~sum(var), var = as.name(col)))
+    return(result)
+  }
+
   if (report) print("*** Start: data transformations! ***")
   # Aggregate Layers for N, Nums, ResN, StructN
-  at_n <- at_n %>%
-    dplyr::group_by(species, polygon, time) %>%
-    dplyr::summarise(atoutput = mean(atoutput))
-  at_resn <- at_resn_l %>%
-    dplyr::group_by(species, polygon, agecl, time) %>%
-    dplyr::summarise(atoutput = mean(atoutput))
-  at_structn <- at_structn_l %>%
-    dplyr::group_by(species, polygon, agecl, time) %>%
-    dplyr::summarise(atoutput = mean(atoutput))
-  at_nums <- at_nums_l %>%
-    dplyr::group_by(species, polygon, agecl, time) %>%
-    dplyr::summarise(atoutput = sum(atoutput))
+  at_n       <- agg_mean(data = at_n,         col = "atoutput", vars = c("species", "polygon", "time"))
+  at_resn    <- agg_mean(data = at_resn_l,    col = "atoutput", vars = c("species", "polygon", "agecl", "time"))
+  at_structn <- agg_mean(data = at_structn_l, col = "atoutput", vars = c("species", "polygon", "agecl", "time"))
+  at_nums    <- agg_sum(data = at_nums_l,     col = "atoutput", vars = c("species", "polygon", "agecl", "time"))
 
   # Calculate biomass for age-groups
   names(at_resn_l)[names(at_resn_l) == "atoutput"] <- "atresn"
@@ -261,66 +290,50 @@ preprocess <- function(dir,
   at_structn_l <- dplyr::left_join(at_structn_l, at_resn_l)
   at_structn_l$biomass_ind <- with(at_structn_l, (atoutput + atresn) * atnums * bio_conv)
 
-  # At this point at_resn_l, at_nums_l are not needed anymore!
-  rm(at_resn_l, at_nums_l)
-  gc()
-
-  biomass <- at_structn_l %>%
-    dplyr::group_by(species, time) %>%
-    dplyr::summarise(atoutput = sum(biomass_ind)) %>%
-    dplyr::mutate(model = "atlantis")
   # Biomass per ageclass
-  biomass_ages <- at_structn_l %>%
-    dplyr::group_by(species, agecl, time) %>%
-    dplyr::summarise(atoutput = sum(biomass_ind))
-
-  # At this point at_structn_l is not needed anymore!
-  rm(at_structn_l)
-  gc()
+  biomass_ages <- agg_sum(data = at_structn_l, col = "biomass_ind", vars = c("species", "agecl", "time"))
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
-  at_nums_age <- at_nums %>%
-    dplyr::group_by(species, agecl, time) %>%
-    dplyr::summarise(atoutput = sum(atoutput))
-  at_nums_polygon <- at_nums %>%
-    dplyr::group_by(species, polygon, time) %>%
-    dplyr::summarise(atoutput = sum(atoutput))
-  at_nums_overview <- at_nums %>%
-    dplyr::group_by(species, time) %>%
-    dplyr::summarise(atoutput = sum(atoutput))
-
-  # At this point at_nums is not needed anymore!
-  rm(at_nums)
-  gc()
+  at_nums_age      <- agg_sum(data = at_nums, col = "atoutput", vars = c("species", "agecl", "time"))
+  at_nums_polygon  <- agg_sum(data = at_nums, col = "atoutput", vars = c("species", "polygon", "time"))
+  at_nums_overview <- agg_sum(data = at_nums, col = "atoutput", vars = c("species", "time"))
 
   # Calculate biomass for non-age-groups
-  vol <- load_atlantis_ncdf_physics(nc_out = nc_out,
-                                    physic_variables = c("volume", "dz"),
-                                    aggregate_layers = F,
-                                    remove_bboxes = T)
+  vol <- load_nc_physics(dir = dir,
+                         nc = nc_gen,
+                         select_physics = c("volume", "dz"),
+                         bboxes = bboxes,
+                         aggregate_layers = F)
 
-  vol <- reshape2::dcast(vol, polygon + layer + time ~ variable, value.var = "atoutput")
+  vol <- tidyr::spread_(data = vol, key_col = c("variable"), value_col = "atoutput")
 
   at_n_pools <- dplyr::left_join(at_n_pools, vol)
   at_n_pools$biomass_ind <- with(at_n_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
   biomass_pools <- at_n_pools %>%
-    dplyr::group_by(species, time) %>%
-    dplyr::summarise(atoutput = sum(biomass_ind))
+    dplyr::group_by_("species", "time") %>%
+    dplyr::summarise_(atoutput = ~sum(biomass_ind))
 
-  # Put everyhing together
-  biomass_pools_dummy <- biomass_pools
-  biomass_pools_dummy$model <- "atlantis"
-  biomass <- rbind(biomass, biomass_pools_dummy)
+  # Combine with biomass from age-groups
+  biomass <- biomass_ages %>%
+    dplyr::group_by_("species", "time") %>%
+    dplyr::summarise_(atoutput = ~sum(atoutput)) %>%
+    rbind(biomass_pools) %>%
+    dplyr::mutate(model = "atlantis")
 
-  # Correlation matrix of biomass time-series!
-  biomass_cor <- biomass %>%
-    reshape2::dcast(time ~ species, value.var = "atoutput", fill = 0) %>%
-    dplyr::select(-time) %>%
-    as.matrix() %>%
-    cor() %>%
-    as.data.frame() %>%
-    stack()
-  biomass_cor$x <- rep(unique(biomass_cor$ind), times = length(unique(biomass_cor$ind)))
+  # Further aggregation functions!
+  mean_over_ages <- function(data){
+    result <- data %>%
+      dplyr::group_by_("species", "agecl", "time") %>%
+      dplyr::summarise_(atoutput = ~mean(atoutput))
+    return(result)
+  }
+
+  mean_over_polygons <- function(data){
+    result <- data %>%
+      dplyr::group_by_("species", "polygon", "time") %>%
+      dplyr::summarise_(atoutput = ~mean(atoutput))
+    return(result)
+  }
 
   # NOTE: New dataframes also have to be added here depending on the calculations needed!
   agg_age      <- lapply(list(at_structn, at_resn, at_eat, at_growth), mean_over_ages)
