@@ -2,13 +2,28 @@
 #'
 #'
 #' This function loads Atlantis outputfiles (netcdf) and converts them to a dataframe.
-#' @param model_path Character string of the ATLANTIS folder.
-#' @param filename Character string of the general ATLANTIS output file. Usually "outputNorthSea.nc".
-#' @param physic_variables Character value spefifying which variables shall be loaded. Only one variable can be loaded at a time. Currently, only "salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a", "Denitrifiction", "Nitrification" can be selected.
-#' @param aggregate_layers Logical specifying if layers shall be aggregated or not.
-#' @param load_init Logical specifying if an initial file shall be read in. Default is F wich means output files are loaded.
-#' @param remove_bboxes Logical specifying if an boundary boxes  shall be excluded. Default is T.
-#' @return Dataframe in long format with the following informations: variable, timestep, polygon, and value (= "atoutput").
+#' @param dir Character string giving the path of the Atlantis model folder.
+#' If data is stored in multiple folders (e.g. main model folder and output
+#' folder) you should use 'NULL' as dir.
+#' @param nc Character string giving the filename of netcdf file which
+#' shall be read in. Usually "output[...].nc". Currently the general-
+#' production- and catch.nc files can be loaded in. In case you are using
+#' multiple folder for your model files and outputfiles pass the complete
+#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' case.
+#' @param select_physics Character vector of physical variables which shall be read in.
+#' Names have to match the ones used in the ncdf file.
+#' @param aggregate_layers Logical indicating if values for layers should be
+#' aggregated (\code{TRUE}) or not (\code{FALSE}).
+#' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' @param check_acronyms Logical testing if functional-groups in
+#' select_groups are inactive in the current model run. The will be omitted
+#' in the output.
+#' @family load functions
+#' @export
+#' @return A \code{data.frame} in long format with the following coumn names:
+#'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
+
 
 #' @details This functions converts the ATLANTIS output to a dataframe which can be processed in R.
 #' @keywords gen
@@ -16,30 +31,33 @@
 #' load_atlantis_ncdf_physics(model_path = file.path("z:", "Atlantis", "ATLANTIS NSmodel base"), filename = "outputNorthSea.nc", physic_variables = c("salt", "Temp"))
 #' @export
 
-load_atlantis_ncdf_physics <- function(nc_out,
-                                       physic_variables,
-                                       aggregate_layers,
-                                       remove_bboxes){
-  if (is.null(physic_variables)) stop("No physical variables selected.")
-  supported_variables <- get_physics()
+load_nc_physics <- function(dir,
+                            nc,
+                            select_physics,
+                            aggregate_layers,
+                            bboxes){
+  if (is.null(select_physics)) stop("No physical variables selected.")
+  supported_variables <- c("salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a",
+                           "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz")
 
-  wrong_input <- physic_variables[which(!is.element(physic_variables, supported_variables))]
+  wrong_input <- select_physics[which(!is.element(select_physics, supported_variables))]
 
   if (length(wrong_input) >= 1) {
     stop(paste(wrong_input, "not part of", paste(supported_variables, collapse = ", ")))
   }
 
   # Load ATLANTIS output!
-  at_out <- ncdf4::nc_open(filename = nc_out)
+  at_out <- RNetCDF::open.nc(con = nc)
+  on.exit(RNetCDF::close.nc(at_out))
 
   # Extract number of timesteps, polygons and layers from netcdf
-  n_timesteps <- at_out$dim[[1]]$len
-  n_boxes     <- at_out$dim[[2]]$len
-  n_layers    <- at_out$dim[[3]]$len
+  n_timesteps <- RNetCDF::dim.inq.nc(at_out, 0)$length
+  n_boxes     <- RNetCDF::dim.inq.nc(at_out, 1)$length
+  n_layers    <- RNetCDF::dim.inq.nc(at_out, 2)$length
 
   if (n_timesteps == 1) stop("Timestep is one.")
 
-  num_layers <- ncdf4::ncvar_get(nc = at_out, varid = "numlayers")[,1]
+  num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")[,1]
   # add sediment layer!
   num_layers <- num_layers + ifelse(num_layers == 0, 0, 1)
 
@@ -63,8 +81,8 @@ load_atlantis_ncdf_physics <- function(nc_out,
   }
 
   # Perform ncdf extraction! This is the main time consuming step!
-  physic_variables <- sort(physic_variables)
-  physic_output <- lapply(physic_variables, ncdf4::ncvar_get, nc = at_out)
+  select_physics <- sort(select_physics)
+  physic_output <- lapply(select_physics, RNetCDF::var.get.nc, ncfile = at_out)
 
   # Create vectors for polygons and layers! Each vector has the length equal to one timestep!
   # All data from islands and non-existent layers is removed! Therefore the length of these
@@ -98,15 +116,15 @@ load_atlantis_ncdf_physics <- function(nc_out,
   }
 
   # Order of the data in value column = "atoutput".
-  # 1. physic_variables --> rep with num_existing_layers * n_timesteps
-  # 2. timestep         --> rep each with num_existing_layers then times physic_variables
-  # 3. polygon          --> rep polygons times timesteps * physic_variables
-  # 4. layer            --> rep layers times timesteps * physic_variables
+  # 1. select_physics   --> rep with num_existing_layers * n_timesteps
+  # 2. timestep         --> rep each with num_existing_layers then times select_physics
+  # 3. polygon          --> rep polygons times timesteps * select_physics
+  # 4. layer            --> rep layers times timesteps * select_physics
   # The code is highly vectorized and therefore quite effective!
-  result <- data.frame(variable = rep(physic_variables, each = length(layers) * n_timesteps),
-                       polygon = rep(polygons, times = n_timesteps * length(physic_variables)),
-                       layer = rep(layers, times = n_timesteps * length(physic_variables)),
-                       time = rep(rep(0:(n_timesteps - 1), each = length(layers)), times = length(physic_variables)),
+  result <- data.frame(variable = rep(select_physics, each = length(layers) * n_timesteps),
+                       polygon = rep(polygons, times = n_timesteps * length(select_physics)),
+                       layer = rep(layers, times = n_timesteps * length(select_physics)),
+                       time = rep(rep(0:(n_timesteps - 1), each = length(layers)), times = length(select_physics)),
                        atoutput = do.call(c, result),
                        stringsAsFactors = F)
 
@@ -122,8 +140,8 @@ load_atlantis_ncdf_physics <- function(nc_out,
 
   if (aggregate_layers) {
     result <- result %>%
-      dplyr::group_by(variable, polygon, time) %>%
-      dplyr::summarise(atoutput = mean(atoutput))
+      dplyr::group_by_("variable", "polygon", "time") %>%
+      dplyr::summarise_(atoutput = ~mean(atoutput))
   }
 
   return(result)
