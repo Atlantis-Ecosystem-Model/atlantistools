@@ -14,5 +14,6 @@ Suggests: testthat
 Imports:
   dplyr,
   magrittr,
-  RNetCDF
+  RNetCDF,
+  stringr
 
