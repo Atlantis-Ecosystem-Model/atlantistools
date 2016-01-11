@@ -259,29 +259,29 @@ preprocess <- function(dir,
                         bboxes = bboxes,
                         check_acronyms = check_acronyms)
 
-  # Further aggregation functions!
-  agg_mean <- function(data, col, vars){
+  # Further aggregation functions using NSE!
+  agg_mean <- function(data, col = "atoutput", vars){
     dots = sapply(vars, . %>% {as.formula(paste0('~', .))})
     result <- as.data.frame(data) %>%
       dplyr::group_by_(.dots = dots) %>%
-      dplyr::summarise_(atoutput = interp(~mean(var), var = as.name(col)))
+      dplyr::summarise_(atoutput = lazyeval::interp(~mean(var), var = as.name(col)))
     return(result)
   }
 
-  agg_sum <- function(data, col, vars){
+  agg_sum <- function(data, col = "atoutput", vars){
     dots = sapply(vars, . %>% {as.formula(paste0('~', .))})
     result <- as.data.frame(data) %>%
       dplyr::group_by_(.dots = dots) %>%
-      dplyr::summarise_(atoutput = interp(~sum(var), var = as.name(col)))
+      dplyr::summarise_(atoutput = lazyeval::interp(~sum(var), var = as.name(col)))
     return(result)
   }
 
   if (report) print("*** Start: data transformations! ***")
   # Aggregate Layers for N, Nums, ResN, StructN
-  at_n       <- agg_mean(data = at_n,         col = "atoutput", vars = c("species", "polygon", "time"))
-  at_resn    <- agg_mean(data = at_resn_l,    col = "atoutput", vars = c("species", "polygon", "agecl", "time"))
-  at_structn <- agg_mean(data = at_structn_l, col = "atoutput", vars = c("species", "polygon", "agecl", "time"))
-  at_nums    <- agg_sum(data = at_nums_l,     col = "atoutput", vars = c("species", "polygon", "agecl", "time"))
+  at_n       <- agg_mean(data = at_n,         vars = c("species", "polygon", "time"))
+  at_resn    <- agg_mean(data = at_resn_l,    vars = c("species", "polygon", "agecl", "time"))
+  at_structn <- agg_mean(data = at_structn_l, vars = c("species", "polygon", "agecl", "time"))
+  at_nums    <- agg_sum(data = at_nums_l,     vars = c("species", "polygon", "agecl", "time"))
 
   # Calculate biomass for age-groups
   names(at_resn_l)[names(at_resn_l) == "atoutput"] <- "atresn"
@@ -289,14 +289,7 @@ preprocess <- function(dir,
   at_structn_l <- dplyr::inner_join(at_structn_l, at_nums_l)
   at_structn_l <- dplyr::left_join(at_structn_l, at_resn_l)
   at_structn_l$biomass_ind <- with(at_structn_l, (atoutput + atresn) * atnums * bio_conv)
-
-  # Biomass per ageclass
   biomass_ages <- agg_sum(data = at_structn_l, col = "biomass_ind", vars = c("species", "agecl", "time"))
-
-  # Aggregate Numbers! This is done seperately since numbers need to be summed!
-  at_nums_age      <- agg_sum(data = at_nums, col = "atoutput", vars = c("species", "agecl", "time"))
-  at_nums_polygon  <- agg_sum(data = at_nums, col = "atoutput", vars = c("species", "polygon", "time"))
-  at_nums_overview <- agg_sum(data = at_nums, col = "atoutput", vars = c("species", "time"))
 
   # Calculate biomass for non-age-groups
   vol <- load_nc_physics(dir = dir,
@@ -309,9 +302,7 @@ preprocess <- function(dir,
 
   at_n_pools <- dplyr::left_join(at_n_pools, vol)
   at_n_pools$biomass_ind <- with(at_n_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
-  biomass_pools <- at_n_pools %>%
-    dplyr::group_by_("species", "time") %>%
-    dplyr::summarise_(atoutput = ~sum(biomass_ind))
+  biomass_pools <- agg_sum(data = at_n_pools, vars = c("species", "time"))
 
   # Combine with biomass from age-groups
   biomass <- biomass_ages %>%
@@ -319,6 +310,11 @@ preprocess <- function(dir,
     dplyr::summarise_(atoutput = ~sum(atoutput)) %>%
     rbind(biomass_pools) %>%
     dplyr::mutate(model = "atlantis")
+
+  # Aggregate Numbers! This is done seperately since numbers need to be summed!
+  at_nums_age      <- agg_sum(data = at_nums, vars = c("species", "agecl", "time"))
+  at_nums_polygon  <- agg_sum(data = at_nums, vars = c("species", "polygon", "time"))
+  at_nums_overview <- agg_sum(data = at_nums, vars = c("species", "time"))
 
   # Further aggregation functions!
   mean_over_ages <- function(data){
@@ -343,11 +339,6 @@ preprocess <- function(dir,
   # At this point at_structn, at_resn, at_eat and at_growth are not needed anymore!
   rm(at_structn, at_resn, at_eat, at_growth, at_n)
   gc()
-
-  # Calculate agestructure per group and timestep!
-  at_agestructure <- at_nums_age %>%
-    dplyr::group_by(species, time) %>%
-    dplyr::mutate(atoutput = atoutput / sum(atoutput))
 
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
