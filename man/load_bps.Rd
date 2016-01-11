@@ -37,6 +37,7 @@ load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
 \code{\link{load_fgs}}
 
 Other load functions: \code{\link{load_box}},
-  \code{\link{load_fgs}}, \code{\link{load_nc}}
+  \code{\link{load_fgs}}, \code{\link{load_nc_physics}},
+  \code{\link{load_nc}}
 }
 

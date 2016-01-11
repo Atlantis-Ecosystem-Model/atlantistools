@@ -22,13 +22,19 @@
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
-#'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
+#'   variable, time, polygon, layer, and atoutput (i.e., variable).
 
 
 #' @details This functions converts the ATLANTIS output to a dataframe which can be processed in R.
 #' @keywords gen
 #' @examples
-#' load_atlantis_ncdf_physics(model_path = file.path("z:", "Atlantis", "ATLANTIS NSmodel base"), filename = "outputNorthSea.nc", physic_variables = c("salt", "Temp"))
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+#' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
+#'   select_physics = c("salt", "NO3", "volume"),
+#'   aggregate_layers = F,
+#'   bboxes = bboxes)
+#' str(test)
 #' @export
 
 load_nc_physics <- function(dir,
@@ -45,6 +51,12 @@ load_nc_physics <- function(dir,
   if (length(wrong_input) >= 1) {
     stop(paste(wrong_input, "not part of", paste(supported_variables, collapse = ", ")))
   }
+
+  # Check input of the nc file
+  if (tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
+    stop("The argument for nc,", nc, "does not end in nc")
+  }
+  if (!is.null(dir)) nc <- file.path(dir, nc)
 
   # Load ATLANTIS output!
   at_out <- RNetCDF::open.nc(con = nc)
@@ -65,14 +77,14 @@ load_nc_physics <- function(dir,
   # or not (= 0). Boxes without layers (= islands) have only 0s as id! This is used lateron to remove
   # data from non-existent layers! By default output should be 0 in those layers. However, this approach is
   # much more robust as true zeros are kept!!! In addition all layers in boundary boxes are also set
-  # to 0 if remove_bboxes is TRUE! This will speed up the code ALOT! In addition is helps to vectorise
+  # to 0! This will speed up the code ALOT! In addition is helps to vectorise
   # the dataframe creation. Applying a boolean array to an array results in a vector!
   for (i in seq_along(num_layers)) {
     if (i == 1) layerid <- array(dim = c(n_layers, n_boxes))
     if (num_layers[i] == 0) {
       layerid[, i] <- 0
     } else {
-      if (remove_bboxes & is.element((i - 1), get_bboxes())) {
+      if (!is.null(bboxes) & is.element((i - 1), bboxes)) {
         layerid[, i] <- 0
       } else {
         layerid[, i] <- c(rep(0, times = n_layers - num_layers[i]), rep(1, times = num_layers[i]))
@@ -90,8 +102,8 @@ load_nc_physics <- function(dir,
   boxes <- 0:(n_boxes - 1)
   # Remove islands! and boundary boxes!
   island_ids <- num_layers == 0
-  if (remove_bboxes) {
-    boundary_ids <- is.element(boxes, get_bboxes())
+  if (!is.null(bboxes)) {
+    boundary_ids <- is.element(boxes, bboxes)
     island_ids <- island_ids | boundary_ids
   }
   boxes <- boxes[!island_ids]
@@ -127,8 +139,6 @@ load_nc_physics <- function(dir,
                        time = rep(rep(0:(n_timesteps - 1), each = length(layers)), times = length(select_physics)),
                        atoutput = do.call(c, result),
                        stringsAsFactors = F)
-
-  # Remove min_pools if existent (well, there always are min pools... ;)).
 
   # Remove min_pools if existent (well, there always are min pools... ;)).
   min_pools <- is.element(result$atoutput, c(0, 1e-08, 1e-16))
