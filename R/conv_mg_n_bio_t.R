@@ -15,7 +15,7 @@
 
 #' @export
 
-conv_mg_n_to_bio_t <- function(dir, prm_biol){
+conv_mg_n_bio_t <- function(dir, prm_biol){
   x_cn <- extract_from_prm(dir = dir, file = prm_biol, variable = "X_CN")
   k_wetdry <- extract_from_prm(dir = dir, file = prm_biol, variable = "k_wetdry")
   conv <- x_cn * k_wetdry / 1000000000
