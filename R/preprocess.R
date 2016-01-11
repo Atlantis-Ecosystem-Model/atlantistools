@@ -1,91 +1,106 @@
 #' Preprocess Atlantis output (netcdf)
 #'
 
-#' This function loads data from Atlantis output (netcdf) files. performs various calculations (biomass, eat, growth, physics...)
-#' and saves files to csv!
-#' @param nc_out Connection of the ATLANTIS general netcdf output file given as complete folder/filename string.
-#' Usually "output[...].nc".
-#' @param nc_init Connection of the ATLANTIS init file given as complete folder/filename string. Usually "init[...].nc".
-#' @param file_fgs Connection of the ATLANTIS functional groups file given as complete folder/filename string.
-#' Usually "functionalGroups.csv".
-#' @param nc_prod Connection of the ATLANTIS netcdf productivity output file given as complete folder/filename string.
-#' Usually "output[...]PROD.nc".
+#' This function loads data from Atlantis output (netcdf) files, performs various
+#' calculations and saves the intermediate output as .Rda file. Information
+#' about individual weight is extracted from the general netcdf output file via
+#' "N", "ResN", "StructN" in additon information about numbers is extracted via
+#' "Nums". Using the productivity outputfile information about feeding is extracted
+#' ("Eat", "Grazing"). The raw-data is aggregated in various levels of
+#' complexity. E.g. spatially, age-based, vertically.
+#' Please see the details section for further information about the specific
+#' calculations.
+#' @param dir Character string giving the path of the Atlantis model folder.
+#' If data is stored in multiple folders (e.g. main model folder and output
+#' folder) you should use 'NULL' as dir.
+#' @param nc_gen Character string giving the filename of the general netcdf
+#' file Usually "output[...].nc". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' case.
+#' @param nc_prod Character string giving the filename of the productivity netcdf
+#' file. Usually "output[...]PROD.nc". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' case.
+#' @param bps Vector of character strings giving the complete list of epibenthic
+#' functional groups (Only present in the sediment layer). The names have to match
+#' the column 'Name' in the 'functionalGroups.csv' file.
+#' @param fgs Character string giving the filename of 'functionalGroups.csv'
+#' file. In case you are using multiple folders for your model files and
+#' outputfiles pass the complete folder/filename string as fgs.
+#' In addition set dir to 'NULL' in this case.
+#' @param select_groups Character vector of funtional groups which shall be read in.
+#' Names have to match the ones used in the ncdf file. Check column "Name" in
+#' "functionalGroups.csv" for clarification.
+#' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' @param check_acronyms Logical testing if functional-groups in
+#' select_groups are inactive in the current model run. The will be omitted
+#' in the output.
+
 #' @param prm_biol Connection of the ATLANTIS biological-paramter file given as complete folder/filename string.
 #' Usually "[...]_biol.prm".
 #' @param prm_run Connection of the ATLANTIS run-parameter file given as complete folder/filename string.
 #' Usually "[...]_run_fishing.prm".
-#' @param select_groups Character vector of funtional groups which shall be plotted. Names have to match the ones
-#' used in the ncdf file. Check column "Name" in "functionalGroups.csv" for clarification.
-#' @param report Logical specifying if additional notifications shall be printed.
-#' @param check_acronyms Logical specifying if selected groups are active in the model run. This is used in automated runs.
-#' Since all groups are passed when plotting (plot_atlantis) is called via batch-file (which cannot be changed easily)
-#' this will result in errors if some groups are not active in the model run. By default this is TRUE.
+#'
 #' @param output_path Character string giving the output path the processed files are written into.
 #' @return 19 csv files.
 
-#' @details This functions performs various calculations (details below) and saves the result as a named list of dataframes.
-#' In addition results are saved to HDD as *.csv for easier data handling lateron! Following gives a summary of every list
-#' element starting with the name of the list entry the name of the *.csv and a description for each file.
-#' 01. agg_age_at_structn --> "preprocessed_agg_age_at_structn.csv"
-#' "StructN" for each age-structured group calculated as mean value per time, species and age over layer and polygon.
+#' @details This functions performs various calculations (details below) and saves the result as a
+#' named list of dataframes.In addition results are saved to HDD as *.Rda file.
 #'
-#' 02. agg_age_at_resn --> "preprocessed_agg_age_at_resn.csv"
-#' "ResN" for each age-structured group calculated as mean value per time, species and age over layer and polygon.
+#' 1. structn_age
+#'    "StructN" for each age-structured group calculated as mean value
+#'    per time, species and age over layer and polygon.
 #'
-#' 03. agg_age_at_eat --> "preprocessed_agg_age_at_eat.csv"
-#' "Eat" for each age-structured group calculated as mean value per time, species and age over polygon.
+#' 2. resn_age
+#'    "ResN" for each age-structured group calculated as mean value
+#'    per time, species and age over layer and polygon.
 #'
-#' 04. agg_age_at_growth --> "preprocessed_agg_age_at_growth.csv"
-#' "Growth" for each age-structured group calculated as mean value per time, species and age over polygon.
+#' 3. eat_age
+#'    "Eat" for each age-structured group calculated as mean value
+#'    per time, species and age over polygon.
 #'
-#' 05. agg_polygon_at_n --> "preprocessed_agg_polygon_at_n.csv"
-#' "N" for each group calculated as mean value per time, species, polygon over layer.
+#' 4. growth_age
+#'    "Growth" for each age-structured group calculated as mean value per time, species and age over polygon.
 #'
-#' 06. agg_overview_at_n --> "preprocessed_agg_overview_at_n.csv"
-#' "N" for each group calculated as mean value per time and species over layer and polygon.
+#' 5. nit_box
+#'    "N" (nitroge) for each group calculated as mean value
+#'    per time, species, polygon over layer.
 #'
-#' 07. agg_overview_at_eat --> "preprocessed_agg_overview_at_eat.csv"
-#' "Eat" for each age-structured group calculated as mean value per time and species over age and polygon.
+#' 6. nit
+#'    "N" (nitrogen) for each group calculated as mean value
+#'    per time and species over layer and polygon.
 #'
-#' 08. agg_overview_at_growth --> "preprocessed_agg_overview_at_growth.csv"
-#' "Growth" for each age-structured group calculated as mean value per time and species over age and polygon.
+#' 7. eat
+#'    "Eat" for each age-structured group calculated as mean value
+#'    per time and species over age and polygon.
 #'
-#' 09. at_nums_overview --> "preprocessed_at_nums_overview.csv"
-#' "Nums" for each age-structured group calculated as summed value per time and species over age, polygon and layer.
+#' 8. growth
+#'    "Growth" for each age-structured group calculated as mean value
+#'    per time and species over age and polygon.
 #'
-#' 10. at_nums_age --> "preprocessed_at_nums_age.csv"
-#' "Nums" for each age-structured group calculated as summed value per time, species and age over polygon and layer.
+#' 9. nums
+#'    "Nums" for each age-structured group calculated as summed value
+#'    per time and species over age, polygon and layer.
 #'
-#' 11. at_nums_polygon --> "preprocessed_at_nums_polygon.csv"
-#' "Nums" for each age-structured group calculated as summed value per time, species and polygon over age and layer.
+#' 10. nums_age
+#'     "Nums" for each age-structured group calculated as summed value
+#'     per time, species and age over polygon and layer.
 #'
-#' 12. biomass_ages --> "preprocessed_biomass_ages.csv"
-#' Biomass as (StructN + ResN) * conversion_factor * Nums for each age-structured group calculated as summed value
-#' per time, species and age over polygon and layer.
+#' 11. nums_box
+#'     "Nums" for each age-structured group calculated as summed value
+#'     per time, species and polygon over age and layer.
 #'
-#' 13. at_agestructure --> "preprocessed_at_agestructure.csv"
-#' Relative Contribution of each ageclass to total number for each age-structured group over time.
+#' 15. physics
+#'     Given as mean value over all layers for each physical parameter and timestep.
 #'
-#' 14. biomass --> "preprocessed_biomass.csv"
-#' Biomass as (StructN + ResN) * conversion_factor * Nums for each age-structured group calculated as summed value
-#' per time, species and age over polygon and layer. Combined with the biomass of non age-structured groups whose biomass
-#' is calculated as N * volume / dz * conversion_factor for sediment groups and atoutput * volume * bio_conv for non
-#' sediment groups.
-
-#' 15. physics --> "preprocessed_physics.csv"
-#' Given as mean value over all layers for each physical parameter and timestep.
+#' 16. flux
+#'     Given as raw value for each layer and timestep.
 #'
-#' 16. flux --> "preprocessed_flux.csv"
-#' Given as raw value for each layer and timestep.
-#'
-#' 17. biomass_cor --> "preprocessed_biomass_cor.csv"
-#' Correlation of biomass timeseries for each group with each other group. See "biomass" for details of biomass calculation.
-#'
-#' 18. biomass_pools --> "preprocessed_biomass_pools.csv"
-#' Biomass of non age-structured groups. See "biomass" for details of biomass calculation.
-#'
-#' 19. at_grazing --> "preprocessed_at_grazing.csv"
-#' "Grazing" for each biomasspool calculated as mean value per time and species over polygon.
+#' 19. grazing
+#'     "Grazing" for each biomasspool calculated as mean value
+#'     per time and species over polygon.
 
 #' @keywords gen
 #' @examples
