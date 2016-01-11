@@ -19,5 +19,5 @@ test <- convert_time(dir = d,
   modelstart = ms)
 
 test_that("test convert_time", {
-  expect_equal(min(test$time), ms)
+  expect_equal(min(test$time), as.Date.numeric(0, origin = ms))
 })
