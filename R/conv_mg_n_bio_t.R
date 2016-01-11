@@ -34,7 +34,7 @@ extract_param <- function(chars, variable){
     if (length(pos) > 1) {
       stop(paste("Variable", variable, "found multiple times."))
     } else {
-      result <- result[pos]
+      result <- chars[pos]
       result <- str_split_twice(char = result, min_only = TRUE)
       return(result)
     }
