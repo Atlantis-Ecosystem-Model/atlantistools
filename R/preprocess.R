@@ -64,11 +64,11 @@
 #' 4. growth_age
 #'    "Growth" for each age-structured group calculated as mean value per time, species and age over polygon.
 #'
-#' 5. nit_box
+#' 5. nitrogen_box
 #'    "N" (nitroge) for each group calculated as mean value
 #'    per time, species, polygon over layer.
 #'
-#' 6. nit
+#' 6. nitrogen
 #'    "N" (nitrogen) for each group calculated as mean value
 #'    per time and species over layer and polygon.
 #'
@@ -80,42 +80,55 @@
 #'    "Growth" for each age-structured group calculated as mean value
 #'    per time and species over age and polygon.
 #'
-#' 9. nums
+#' 9. numbers
 #'    "Nums" for each age-structured group calculated as summed value
 #'    per time and species over age, polygon and layer.
 #'
-#' 10. nums_age
+#' 10. numbers_age
 #'     "Nums" for each age-structured group calculated as summed value
 #'     per time, species and age over polygon and layer.
 #'
-#' 11. nums_box
+#' 11. numbers_box
 #'     "Nums" for each age-structured group calculated as summed value
 #'     per time, species and polygon over age and layer.
 #'
-#' 15. physics
+#' 12. physics
 #'     Given as mean value over all layers for each physical parameter and timestep.
 #'
-#' 16. flux
+#' 13. flux_layer
 #'     Given as raw value for each layer and timestep.
 #'
-#' 19. grazing
+#' 14. grazing
 #'     "Grazing" for each biomasspool calculated as mean value
 #'     per time and species over polygon.
+#'
+#' 15. biomass_age
+#'     Biomass as (StructN + ResN) * conversion_factor * Nums for each
+#'     age-structured group (>= 10 cohorts) calculated as summed value
+#'     per time, species and age over polygon and layer.
+#'
+#' 16. biomass_pools
+#'     Biomass of non age-structured groups (< 10 cohorts) calculated as
+#'     nitrogen * volume / dz * conversion_factor for epibenthic groups and
+#'     nitrogen * volume * bio_conv for non epibenthic groups.
+#'
+#' 15. biomass
+#'     Biomass_age summed per time and species over age.
+
 
 #' @keywords gen
 #' @examples
-#' preprocess_data(model_path = file.path("z:", "Atlantis", "ATLANTIS_NSmodel_base"), filename_output = "outputNorthSea.nc", filename_prod = "outputNorthSeaPROD.nc", select_groups = get_groups())
 #' @export
 
-preprocess <- function(nc_out,
-                            file_fgs,
-                            nc_prod,
-                            prm_biol,
-                            prm_run,
-                            select_groups,
-                            report,
-                            check_acronyms,
-                            output_path){
+preprocess <- function(dir,
+                       nc_gen
+                       nc_prod,
+                       bps,
+                       fgs,
+                       select_groups,
+                       bboxes,
+                       check_acronyms,
+                       output_path){
 
   age_groups <- get_age_groups(file_fgs = file_fgs)
   select_age_groups <- select_groups[is.element(select_groups, age_groups)]
