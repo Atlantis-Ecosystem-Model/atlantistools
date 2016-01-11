@@ -15,5 +15,6 @@ Imports:
   dplyr,
   magrittr,
   RNetCDF,
-  stringr
+  stringr,
+  lazyeval
 
