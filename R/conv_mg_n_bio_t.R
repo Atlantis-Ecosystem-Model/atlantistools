@@ -16,24 +16,23 @@
 #' @export
 
 get_conv_mgnbiot <- function(dir, prm_biol){
-  x_cn <- extract_from_prm(dir = dir, file = prm_biol, variable = "X_CN")
-  k_wetdry <- extract_from_prm(dir = dir, file = prm_biol, variable = "k_wetdry")
+  if (!is.null(dir)) prm_biol <- file.path(dir, prm_biol)
+  prm_biol <- readLines(con = prm_biol)
+
+  x_cn <- extract_param(chars = prm_biol, variable = "X_CN")
+  k_wetdry <- extract_param(chars = prm_biol, variable = "k_wetdry")
   conv <- x_cn * k_wetdry / 1000000000
   return(conv)
 }
 
-# Extract value for a specific parameter from any parameter file.
-# Only one paramter can be passed per function call. the
-# parameter-flag and the value have to be in the same row.
-extract_from_prm <- function(dir, file, variable){
-  if (!is.null(dir)) file <- file.path(dir, file)
-  result <- readLines(con = file)
-  pos <- grep(pattern = variable, x = result)
+# Extract value for a specific parameter from a Vector of character strings.
+extract_param <- function(chars, variable){
+  pos <- grep(pattern = variable, x = chars)
   if (length(pos) == 0) {
-    stop(paste("Variable", variable, "not found in", file))
+    stop(paste("Variable", variable, "not found."))
   } else {
     if (length(pos) > 1) {
-      stop(paste("Variable", variable, "found multiple times in", file))
+      stop(paste("Variable", variable, "found multiple times."))
     } else {
       result <- result[pos]
       result <- str_split_twice(char = result, min_only = TRUE)
