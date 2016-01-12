@@ -43,5 +43,6 @@ test <- convert_time(dir = d,
   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
   data = test,
   modelstart = "1991-01-01")
+convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", data = ref_nums, modelstart = "1991-01-01")
 }
 
