@@ -30,19 +30,10 @@ Convert timestep to actual time!
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
-test <- load_nc(dir = d, nc = "outputSETAS.nc",
-  bps = bps,
-  fgs = "functionalGroups.csv",
-  select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-  select_variable = "Nums",
-  bboxes = bboxes,
-  check_acronyms = TRUE)
 test <- convert_time(dir = d,
-  prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-  data = test,
-  modelstart = "1991-01-01")
-convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", data = ref_nums, modelstart = "1991-01-01")
+   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+   data = ref_nums,
+   modelstart = "1991-01-01")
+head(test)
 }
 
