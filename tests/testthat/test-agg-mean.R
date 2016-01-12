@@ -1,4 +1,4 @@
-contect("agg_mean and agg_sum are tested.")
+context("agg_mean and agg_sum are tested.")
 
 data("ref_nums.rda")
 
