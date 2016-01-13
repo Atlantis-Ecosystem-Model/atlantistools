@@ -16,7 +16,7 @@ parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string and set dir to 'NULL'.}
 
-\item{data}{Dataframe with column having information about the model timestep.}
+\item{data}{Dataframe having a column with information about the model timestep.}
 
 \item{modelstart}{Character string giving the start of the model run
 in the format \code{'yyyy-mm-dd'}.}
