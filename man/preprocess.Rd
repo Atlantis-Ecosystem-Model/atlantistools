@@ -4,8 +4,8 @@
 \alias{preprocess}
 \title{Preprocess Atlantis output (netcdf)}
 \usage{
-preprocess(dir, nc_gen, nc_prod, prm_biol, bps, fgs, select_groups, bboxes,
-  check_acronyms, out, report)
+preprocess(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select_groups,
+  bboxes, check_acronyms, modelstart, out, report)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -29,6 +29,11 @@ parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string and set dir to 'NULL'.}
 
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
+
 \item{bps}{Vector of character strings giving the complete list of epibenthic
 functional groups (Only present in the sediment layer). The names have to match
 the column 'Name' in the 'functionalGroups.csv' file.}
@@ -48,6 +53,9 @@ Names have to match the ones used in the ncdf file. Check column "Name" in
 select_groups are inactive in the current model run. The will be omitted
 in the output.}
 
+\item{modelstart}{Character string giving the start of the model run
+in the format \code{'yyyy-mm-dd'}.}
+
 \item{out}{Character string giving the filename of the *.Rda output
 file. In case you are using different folders for your model data
 and output files please pass a complete folder/filename string and
@@ -55,14 +63,6 @@ set dir to 'NULL'.}
 
 \item{report}{Logical indicating if additional information shall be printed
 during function evaluation.}
-
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{modelstart}{Character string giving the start of the model run
-in the format \code{'yyyy-mm-dd'}.}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.

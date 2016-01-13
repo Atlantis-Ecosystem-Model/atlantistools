@@ -103,11 +103,10 @@
 #'     Summed per time and species over polygon and layer. Combined with
 #'     biomass_age Summed per time and species over ages.
 
-
 #' @keywords gen
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' preprocess(dir = d,
+#' test <- preprocess(dir = d,
 #'    nc_gen = "outputSETAS.nc",
 #'    nc_prod = "outputSETASPROD.nc",
 #'    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
@@ -248,14 +247,13 @@ preprocess <- function(dir,
   # Convert timestep to actual time.
   result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = modelstart)
 
-#   # Write rest to HDD
-#   if (report) print("*** Start: writing files! ***")
-#   for (i in seq_along(result)) {
-#     write.csv(result[[i]], file.path(output_path, paste0("preprocessed_", names(result)[i], ".csv")), row.names = F, quote = F)
-#   }
-#   if (report) print("*** End: writing files! All Done! ***")
-#
-#   return(result)
+  # Write rest to HDD
+  if (report) print("*** Start: writing files! ***")
+  if (!is.null(dir)) out <- file.path(dir, out)
+  save(result, file = out)
+
+  if (report) print("*** End: writing files! Preprocession of data done! ***")
+  return(result)
 }
 
 
