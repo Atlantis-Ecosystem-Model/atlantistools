@@ -4,7 +4,8 @@
 \alias{load_nc_physics}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc_physics(dir, nc, select_physics, aggregate_layers, bboxes)
+load_nc_physics(dir, nc, select_physics, aggregate_layers, bboxes,
+  warn_zeros = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -26,6 +27,9 @@ aggregated (\code{TRUE}) or not (\code{FALSE}).}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
 
+\item{warn_zeros}{Logical indicating if check for actual zeros in the
+data shall be printed or not.}
+
 \item{check_acronyms}{Logical testing if functional-groups in
 select_groups are inactive in the current model run. The will be omitted
 in the output.}
@@ -42,11 +46,10 @@ This functions converts the ATLANTIS output to a dataframe which can be processe
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
   select_physics = c("salt", "NO3", "volume"),
   aggregate_layers = F,
-  bboxes = bboxes)
+  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 str(test)
 }
 \seealso{
