@@ -68,14 +68,6 @@
 #'    "Growth" for each age-structured group calculated as mean value
 #'    per time, species and age over polygon.
 #'
-#' 5. nitrogen_box
-#'    "N" (nitroge) for each group calculated as mean value
-#'    per time, species, polygon over layer.
-#'
-#' 6. nitrogen
-#'    "N" (nitrogen) for each group calculated as mean value
-#'    per time and species over layer and polygon.
-#'
 #' 7. eat
 #'    "Eat" for each age-structured group calculated as mean value
 #'    per time and species over age and polygon.
@@ -210,7 +202,7 @@ preprocess <- function(dir,
   at_structn_l <- dplyr::inner_join(at_structn_l, at_nums_l)
   at_structn_l <- dplyr::left_join(at_structn_l, at_resn_l)
   at_structn_l$biomass_ind <- with(at_structn_l, (atoutput + atresn) * atnums * bio_conv)
-  biomass_ages <- agg_sum(data = at_structn_l, col = "biomass_ind", groups = c("species", "agecl", "time"))
+  biomass_age <- agg_sum(data = at_structn_l, col = "biomass_ind", groups = c("species", "agecl", "time"))
 
   # Calculate biomass for non-age-groups
   vol <- load_nc_physics(dir = dir,
@@ -226,18 +218,21 @@ preprocess <- function(dir,
   biomass_pools <- agg_sum(data = at_n_pools, groups = c("species", "time"))
 
   # Combine with biomass from age-groups
-  biomass <- biomass_ages %>%
+  biomass <- biomass_age %>%
     dplyr::group_by_("species", "time") %>%
     dplyr::summarise_(atoutput = ~sum(atoutput)) %>%
     rbind(biomass_pools) %>%
     dplyr::mutate(model = "atlantis")
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
-  at_nums_age      <- agg_sum(data = at_nums, groups = c("species", "agecl", "time"))
-  at_nums_polygon  <- agg_sum(data = at_nums, groups = c("species", "polygon", "time"))
-  at_nums_overview <- agg_sum(data = at_nums, groups = c("species", "time"))
+  nums     <- agg_sum(data = at_nums_l, groups = c("species", "time"))
+  nums_age <- agg_sum(data = at_nums_l, groups = c("species", "agecl", "time"))
+  nums_box <- agg_sum(data = at_nums_l, groups = c("species", "polygon", "time"))
 
-  # NOTE: New dataframes also have to be added here depending on the calculations needed!
+  # Aggregate the rest of the dataframes. This is done using agg_mean!
+  structn_age <- agg_mean(data = at_structn_l, groups = c("species", "time", "agecl"))
+  resn_age    <- agg_mean(data = at_resn_l,    groups = c("species", "time", "agecl"))
+
   agg_age      <- lapply(list(at_structn, at_resn, at_eat, at_growth), mean_over_ages)
   agg_polygon  <- lapply(list(at_n), mean_over_polygons)
   agg_overview <- lapply(list(at_n, at_eat, at_growth, at_grazing), mean_overview)
@@ -259,7 +254,7 @@ preprocess <- function(dir,
 #     "at_nums_overview"       = at_nums_overview,
 #     "at_nums_age"            = at_nums_age,
 #     "at_nums_polygon"        = at_nums_polygon,
-#     "biomass_ages"           = biomass_ages,
+#     "biomass_age"           = biomass_ages,
 #     "at_agestructure"        = at_agestructure,
 #     "biomass"                = biomass,
 #     "physics"                = physics,
