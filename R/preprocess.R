@@ -61,54 +61,41 @@
 #' 1. structn_age
 #'    "StructN" for each age-structured group calculated as mean value
 #'    per time, species and age over layer and polygon.
-#'
 #' 2. resn_age
 #'    "ResN" for each age-structured group calculated as mean value
 #'    per time, species and age over layer and polygon.
-#'
 #' 3. eat_age
 #'    "Eat" for each age-structured group calculated as mean value
 #'    per time, species and age over polygon.
-#'
 #' 4. growth_age
 #'    "Growth" for each age-structured group calculated as mean value
 #'    per time, species and age over polygon.
-#'
 #' 7. eat
 #'    "Eat" for each age-structured group calculated as mean value
 #'    per time and species over age and polygon.
-#'
 #' 8. growth
 #'    "Growth" for each age-structured group calculated as mean value
 #'    per time and species over age and polygon.
-#'
 #' 9. numbers
 #'    "Nums" for each age-structured group calculated as summed value
 #'    per time and species over age, polygon and layer.
-#'
 #' 10. numbers_age
 #'     "Nums" for each age-structured group calculated as summed value
 #'     per time, species and age over polygon and layer.
-#'
 #' 11. numbers_box
 #'     "Nums" for each age-structured group calculated as summed value
 #'     per time, species and polygon over age and layer.
-#'
 #' 12. physics
 #'     Given as mean value over all layers for each physical parameter and time.
-#'
 #' 13. flux_layer
 #'     Given as raw value for each layer and timestep.
-#'
 #' 14. grazing
 #'     "Grazing" for each biomasspool calculated as mean value
 #'     per time and species over polygon.
-#'
 #' 15. biomass_age
 #'     Biomass as (StructN + ResN) * conversion_factor * Nums for each
 #'     age-structured group (>= 10 cohorts) calculated as summed value
 #'     per time, species and age over polygon and layer.
-#'
 #' 16. biomass
 #'     Biomass of non age-structured groups (< 10 cohorts) calculated as
 #'     nitrogen * volume / dz * conversion_factor for epibenthic groups and
@@ -124,11 +111,13 @@
 #'    nc_gen = "outputSETAS.nc",
 #'    nc_prod = "outputSETASPROD.nc",
 #'    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#'    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
 #'    bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
 #'    fgs = "functionalGroups.csv",
 #'    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
 #'    bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")),
 #'    check_acronyms = TRUE,
+#'    modelstart = "1991-01-01",
 #'    out = "preprocess.Rda",
 #'    report = TRUE)
 #' @export
@@ -255,6 +244,7 @@ preprocess <- function(dir,
   )
 
   # Convert timestep to actual time.
+  result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = model_start)
 
 #   # Write rest to HDD
 #   if (report) print("*** Start: writing files! ***")

@@ -55,6 +55,14 @@ set dir to 'NULL'.}
 
 \item{report}{Logical indicating if additional information shall be printed
 during function evaluation.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
+
+\item{modelstart}{Character string giving the start of the model run
+in the format \code{'yyyy-mm-dd'}.}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.
