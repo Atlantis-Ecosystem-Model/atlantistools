@@ -244,7 +244,7 @@ preprocess <- function(dir,
   )
 
   # Convert timestep to actual time.
-  result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = model_start)
+  result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = modelstart)
 
 #   # Write rest to HDD
 #   if (report) print("*** Start: writing files! ***")
