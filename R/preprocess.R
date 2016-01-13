@@ -228,9 +228,9 @@ preprocess <- function(dir,
   # Aggregate the rest of the dataframes. This is done using agg_mean!
   structn_age <- agg_mean(data = at_structn_l, groups = c("species", "time", "agecl"))
   resn_age    <- agg_mean(data = at_resn_l,    groups = c("species", "time", "agecl"))
-  eat_age     <- agg_mean(data = eat,          groups = c("species", "time", "agecl"))
-  growth_age  <- agg_mean(data = growth,       groups = c("species", "time", "agecl"))
-  grazing     <- agg_mean(data = grazing,      groups = c("species", "time"))
+  eat_age     <- agg_mean(data = at_eat,          groups = c("species", "time", "agecl"))
+  growth_age  <- agg_mean(data = at_growth,       groups = c("species", "time", "agecl"))
+  grazing     <- agg_mean(data = at_grazing,      groups = c("species", "time"))
 
   # WARNING: Newly created dataframes have to be added here!
   result <- list(

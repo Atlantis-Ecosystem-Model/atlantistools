@@ -90,14 +90,6 @@ named list of dataframes.In addition results are saved to HDD as *.Rda file.
    "Growth" for each age-structured group calculated as mean value
    per time, species and age over polygon.
 
-5. nitrogen_box
-   "N" (nitroge) for each group calculated as mean value
-   per time, species, polygon over layer.
-
-6. nitrogen
-   "N" (nitrogen) for each group calculated as mean value
-   per time and species over layer and polygon.
-
 7. eat
    "Eat" for each age-structured group calculated as mean value
    per time and species over age and polygon.
