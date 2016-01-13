@@ -19,6 +19,8 @@
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
 #' in the output.
+#' @param warn_zeros Logical indicating if check for actual zeros in the
+#' data shall be printed or not.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -29,11 +31,10 @@
 #' @keywords gen
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 #' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
 #'   select_physics = c("salt", "NO3", "volume"),
 #'   aggregate_layers = F,
-#'   bboxes = bboxes)
+#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 #' str(test)
 #' @export
 
@@ -41,7 +42,8 @@ load_nc_physics <- function(dir,
                             nc,
                             select_physics,
                             aggregate_layers,
-                            bboxes){
+                            bboxes,
+                            warn_zeros = FALSE){
   if (is.null(select_physics)) stop("No physical variables selected.")
   supported_variables <- c("salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a",
                            "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz")
@@ -144,7 +146,9 @@ load_nc_physics <- function(dir,
   min_pools <- is.element(result$atoutput, c(0, 1e-08, 1e-16))
   if (length(min_pools) > 0) {
     print_min_pools <- sum(min_pools)
-    if (print_min_pools > 0) warning(paste0(round(print_min_pools/dim(result)[1] * 100), "% of entries are min-pools (0, 1e-08, 1e-16)"))
+    if (print_min_pools > 0 & warn_zeros){
+      warning(paste0(round(print_min_pools/dim(result)[1] * 100), "% of entries are min-pools (0, 1e-08, 1e-16)"))
+    }
     result <- result[!min_pools, ]
   }
 

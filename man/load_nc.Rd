@@ -5,7 +5,7 @@
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
 load_nc(dir = getwd(), nc, bps, fgs, select_groups, select_variable,
-  bboxes = c(0), check_acronyms = TRUE)
+  bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -42,6 +42,9 @@ Only one variable of the options available (i.e., \code{c(
 \item{check_acronyms}{Logical testing if functional-groups in
 select_groups are inactive in the current model run. The will be omitted
 in the output.}
+
+\item{warn_zeros}{Logical indicating if check for actual zeros in the
+data shall be printed or not.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -53,15 +56,12 @@ converts them to a \code{data.frame}.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 test <- load_nc(dir = d, nc = "outputSETAS.nc",
-  bps = bps,
+  bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
   fgs = "functionalGroups.csv",
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "ResN",
-  bboxes = bboxes,
-  check_acronyms = TRUE)
+  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 str(test)
 }
 \author{
