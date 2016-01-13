@@ -241,12 +241,13 @@ preprocess <- function(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select
 
   # Write rest to HDD
   if (report) print("*** Start: writing files! ***")
-  if (save_to_disc){
+  if (save_to_disc) {
     if (!is.null(dir)) out <- file.path(dir, out)
     save(result, file = out)
+    if (report) print("*** End: writing files!***")
   }
 
-  if (report) print("*** End: writing files! Preprocession of data done! ***")
+  if (report) print("*** End: Processing of data done. HURRAY!!!***")
   return(result)
 }
 

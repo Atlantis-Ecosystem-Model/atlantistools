@@ -5,7 +5,8 @@
 \title{Preprocess Atlantis output (netcdf)}
 \usage{
 preprocess(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select_groups,
-  bboxes, check_acronyms, modelstart, out, report)
+  bboxes, check_acronyms, modelstart, out, report = TRUE,
+  save_to_disc = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -63,6 +64,9 @@ set dir to 'NULL'.}
 
 \item{report}{Logical indicating if additional information shall be printed
 during function evaluation.}
+
+\item{save_to_disc}{Logical indicating if the resulting list shall be stored
+on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.
@@ -129,7 +133,7 @@ named list of dataframes.In addition results are saved to HDD as *.Rda file.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-preprocess(dir = d,
+test <- preprocess(dir = d,
    nc_gen = "outputSETAS.nc",
    nc_prod = "outputSETASPROD.nc",
    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
@@ -141,7 +145,8 @@ preprocess(dir = d,
    check_acronyms = TRUE,
    modelstart = "1991-01-01",
    out = "preprocess.Rda",
-   report = TRUE)
+   report = TRUE,
+   save_to_disc = FALSE)
 }
 \keyword{gen}
 
