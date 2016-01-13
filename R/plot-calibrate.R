@@ -7,27 +7,25 @@
 #' @examples
 #' plot_calibrate(preprocess_setas$structn_age)
 
+# load(file.path(getwd(), "data", "preprocess_setas.rda"))
+# data <- preprocess_setas$biomass_age
+
 plot_calibrate <- function(data) {
   if (!any(is.element(names(data), "time"))) {
     stop("Column time not found in data")
   }
   # Divide values by reference value (time = min(time))
-  min_time <- min(data$time)
-  ref <- data %>%
-    dplyr::filter(time == min_time)
+  ref <- data[data$time == min(data$time), ]
   ref$time <- NULL
   names(ref)[names(ref) == "atoutput"] <- "atoutput_ref"
   result <- data %>%
     dplyr::left_join(ref) %>%
-    dplyr::mutate_(atoutput = ~atoutput / atoutput_ref) %>%
-    dplyr::mutate_(agecl = ~factor(agecl))
+    dplyr::mutate_(atoutput = ~atoutput / atoutput_ref)
   result$atoutput[result$atoutput_ref == 0] <- 0
-  # Strangely ordering gets lost due to standardisation. This was because of the use of left_join.
-  #   result <- order_data(data = result)
 
   anno <- c(min(data$time), max(data$time))
 
-  plot <- ggplot2::ggplot(data = result, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~agecl)) +
+  plot <- ggplot2::ggplot(data = result, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~factor(agecl))) +
     ggplot2::annotate("rect", xmin = anno[1], xmax = anno[2], ymin = 0.5, ymax = 1.5, alpha = 0.1) +
     ggplot2::annotate("rect", xmin = anno[1], xmax = anno[2], ymin = 0.8, ymax = 1.2, alpha = 0.3) +
     ggplot2::geom_line() +
