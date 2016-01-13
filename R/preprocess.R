@@ -253,10 +253,10 @@ preprocess <- function(dir,
 
   if (report) print("*** Start: data transformations! ***")
   # Aggregate Layers for N, Nums, ResN, StructN
-  at_n       <- agg_mean(data = at_n,         vars = c("species", "polygon", "time"))
-  at_resn    <- agg_mean(data = at_resn_l,    vars = c("species", "polygon", "agecl", "time"))
-  at_structn <- agg_mean(data = at_structn_l, vars = c("species", "polygon", "agecl", "time"))
-  at_nums    <- agg_sum(data = at_nums_l,     vars = c("species", "polygon", "agecl", "time"))
+  at_n       <- agg_mean(data = at_n,         groups = c("species", "polygon", "time"))
+  at_resn    <- agg_mean(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"))
+  at_structn <- agg_mean(data = at_structn_l, groups = c("species", "polygon", "agecl", "time"))
+  at_nums    <- agg_sum(data = at_nums_l,     groups = c("species", "polygon", "agecl", "time"))
 
   # Calculate biomass for age-groups
   names(at_resn_l)[names(at_resn_l) == "atoutput"] <- "atresn"
@@ -264,7 +264,7 @@ preprocess <- function(dir,
   at_structn_l <- dplyr::inner_join(at_structn_l, at_nums_l)
   at_structn_l <- dplyr::left_join(at_structn_l, at_resn_l)
   at_structn_l$biomass_ind <- with(at_structn_l, (atoutput + atresn) * atnums * bio_conv)
-  biomass_ages <- agg_sum(data = at_structn_l, col = "biomass_ind", vars = c("species", "agecl", "time"))
+  biomass_ages <- agg_sum(data = at_structn_l, col = "biomass_ind", groups = c("species", "agecl", "time"))
 
   # Calculate biomass for non-age-groups
   vol <- load_nc_physics(dir = dir,
@@ -277,7 +277,7 @@ preprocess <- function(dir,
 
   at_n_pools <- dplyr::left_join(at_n_pools, vol)
   at_n_pools$biomass_ind <- with(at_n_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
-  biomass_pools <- agg_sum(data = at_n_pools, vars = c("species", "time"))
+  biomass_pools <- agg_sum(data = at_n_pools, groups = c("species", "time"))
 
   # Combine with biomass from age-groups
   biomass <- biomass_ages %>%
@@ -287,9 +287,9 @@ preprocess <- function(dir,
     dplyr::mutate(model = "atlantis")
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
-  at_nums_age      <- agg_sum(data = at_nums, vars = c("species", "agecl", "time"))
-  at_nums_polygon  <- agg_sum(data = at_nums, vars = c("species", "polygon", "time"))
-  at_nums_overview <- agg_sum(data = at_nums, vars = c("species", "time"))
+  at_nums_age      <- agg_sum(data = at_nums, groups = c("species", "agecl", "time"))
+  at_nums_polygon  <- agg_sum(data = at_nums, groups = c("species", "polygon", "time"))
+  at_nums_overview <- agg_sum(data = at_nums, groups = c("species", "time"))
 
   # Further aggregation functions!
   mean_over_ages <- function(data){
