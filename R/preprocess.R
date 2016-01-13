@@ -162,101 +162,47 @@ preprocess <- function(dir,
   # "load_atlantis_ncdf" and "load_atlantis_ncdf_physics" are independent functions in seperate R-files!
   # NOTE: Data for new plots has to be added here if not already available!
   if (report) print("*** Start: Reading in layerd data: n")
-  at_n <- load_nc(dir = dir,
-                  nc = nc_gen,
-                  bps = bps,
-                  fgs = fgs,
-                  select_groups = select_groups,
-                  select_variable = "N",
-                  bboxes = bboxes,
-                  check_acronyms = check_acronyms)
+  at_n <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_groups,
+                  select_variable = "N", bboxes = bboxes, check_acronyms = check_acronyms)
 
   if (report) print("*** Start: Reading in layerd data: structn")
-  at_structn_l <- load_nc(dir = dir,
-                          nc = nc_gen,
-                          bps = bps,
-                          fgs = fgs,
-                          select_groups = select_age_groups,
-                          select_variable = "StructN",
-                          bboxes = bboxes,
-                          check_acronyms = check_acronyms)
+  at_structn_l <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
+                          select_variable = "StructN", bboxes = bboxes, check_acronyms = check_acronyms)
 
   if (report) print("*** Start: Reading in layerd data: resn")
-  at_resn_l    <- load_nc(dir = dir,
-                          nc = nc_gen,
-                          bps = bps,
-                          fgs = fgs,
-                          select_groups = select_age_groups,
-                          select_variable = "ResN",
-                          bboxes = bboxes,
-                          check_acronyms = check_acronyms)
+  at_resn_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
+                          select_variable = "ResN", bboxes = bboxes, check_acronyms = check_acronyms)
 
   if (report) print("*** Start: Reading in layerd data: nums")
-  at_nums_l    <- load_nc(dir = dir,
-                          nc = nc_gen,
-                          bps = bps,
-                          fgs = fgs,
-                          select_groups = select_age_groups,
-                          select_variable = "Nums",
-                          bboxes = bboxes,
-                          check_acronyms = check_acronyms)
+  at_nums_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
+                          select_variable = "Nums", bboxes = bboxes, check_acronyms = check_acronyms)
 
   if (report) print("*** Start: Reading in layerd data: n for invert groups")
-  at_n_pools   <- load_nc(dir = dir,
-                          nc = nc_gen,
-                          bps = bps,
-                          fgs = fgs,
-                          select_groups = select_other_groups,
-                          select_variable = "N",
-                          bboxes = bboxes,
-                          check_acronyms = check_acronyms)
+  at_n_pools   <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_other_groups,
+                          select_variable = "N", bboxes = bboxes, check_acronyms = check_acronyms)
 
   if (report) print("*** End: Reading in layerd data")
-  at_eat     <- load_nc(dir = dir,
-                        nc = nc_prod,
-                        bps = bps,
-                        fgs = fgs,
-                        select_groups = select_age_groups,
-                        select_variable = "Eat",
-                        bboxes = bboxes,
-                        check_acronyms = check_acronyms)
+  at_eat     <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
+                        select_variable = "Eat", bboxes = bboxes, check_acronyms = check_acronyms)
 
-  at_growth  <- load_nc(dir = dir,
-                        nc = nc_prod,
-                        bps = bps,
-                        fgs = fgs,
-                        select_groups = select_age_groups,
-                        select_variable = "Growth",
-                        bboxes = bboxes,
-                        check_acronyms = check_acronyms)
+  at_growth  <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
+                        select_variable = "Growth", bboxes = bboxes, check_acronyms = check_acronyms)
 
-  flux       <- load_nc_physics(dir = dir,
-                                nc = nc_gen,
-                                select_physics = c("eflux", "vflux"),
-                                bboxes = bboxes,
-                                aggregate_layers = TRUE)
+  flux       <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("eflux", "vflux"),
+                                bboxes = bboxes, aggregate_layers = TRUE)
 
-  physics    <- load_nc_physics(dir = dir,
-                                nc = nc_gen,
-                                select_physics = physic_var,
-                                bboxes = bboxes,
-                                aggregate_layers = FALSE)
+  physics    <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = physic_var,
+                                bboxes = bboxes, aggregate_layers = FALSE)
 
-  at_grazing <- load_nc(dir = dir,
-                        nc = nc_prod,
-                        bps = bps,
-                        fgs = fgs,
-                        select_groups = select_other_groups,
-                        select_variable = "Grazing",
-                        bboxes = bboxes,
-                        check_acronyms = check_acronyms)
+  at_grazing <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_other_groups,
+                        select_variable = "Grazing", bboxes = bboxes, check_acronyms = check_acronyms)
 
   if (report) print("*** Start: data transformations! ***")
   # Aggregate Layers for N, Nums, ResN, StructN
-  at_n       <- agg_mean(data = at_n,         groups = c("species", "polygon", "time"))
-  at_resn    <- agg_mean(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"))
-  at_structn <- agg_mean(data = at_structn_l, groups = c("species", "polygon", "agecl", "time"))
-  at_nums    <- agg_sum(data = at_nums_l,     groups = c("species", "polygon", "agecl", "time"))
+#   at_n       <- agg_mean(data = at_n,         groups = c("species", "polygon", "time"))
+#   at_resn    <- agg_mean(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"))
+#   at_structn <- agg_mean(data = at_structn_l, groups = c("species", "polygon", "agecl", "time"))
+#   at_nums    <- agg_sum(data = at_nums_l,     groups = c("species", "polygon", "agecl", "time"))
 
   # Calculate biomass for age-groups
   names(at_resn_l)[names(at_resn_l) == "atoutput"] <- "atresn"
@@ -290,21 +236,6 @@ preprocess <- function(dir,
   at_nums_age      <- agg_sum(data = at_nums, groups = c("species", "agecl", "time"))
   at_nums_polygon  <- agg_sum(data = at_nums, groups = c("species", "polygon", "time"))
   at_nums_overview <- agg_sum(data = at_nums, groups = c("species", "time"))
-
-  # Further aggregation functions!
-  mean_over_ages <- function(data){
-    result <- data %>%
-      dplyr::group_by_("species", "agecl", "time") %>%
-      dplyr::summarise_(atoutput = ~mean(atoutput))
-    return(result)
-  }
-
-  mean_over_polygons <- function(data){
-    result <- data %>%
-      dplyr::group_by_("species", "polygon", "time") %>%
-      dplyr::summarise_(atoutput = ~mean(atoutput))
-    return(result)
-  }
 
   # NOTE: New dataframes also have to be added here depending on the calculations needed!
   agg_age      <- lapply(list(at_structn, at_resn, at_eat, at_growth), mean_over_ages)
