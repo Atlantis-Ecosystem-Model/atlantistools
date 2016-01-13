@@ -126,11 +126,13 @@ preprocess <- function(dir,
                        nc_gen,
                        nc_prod,
                        prm_biol,
+                       prm_run,
                        bps,
                        fgs,
                        select_groups,
                        bboxes,
                        check_acronyms,
+                       modelstart,
                        out,
                        report){
 
