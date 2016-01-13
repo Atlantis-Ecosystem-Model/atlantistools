@@ -153,10 +153,6 @@ preprocess <- function(dir,
   if (report) print("*** Start: reading in data! ***")
   # "load_atlantis_ncdf" and "load_atlantis_ncdf_physics" are independent functions in seperate R-files!
   # NOTE: Data for new plots has to be added here if not already available!
-  if (report) print("*** Start: Reading in layerd data: n")
-  at_n <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_groups,
-                  select_variable = "N", bboxes = bboxes, check_acronyms = check_acronyms)
-
   if (report) print("*** Start: Reading in layerd data: structn")
   at_structn_l <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
                           select_variable = "StructN", bboxes = bboxes, check_acronyms = check_acronyms)
@@ -232,37 +228,27 @@ preprocess <- function(dir,
   # Aggregate the rest of the dataframes. This is done using agg_mean!
   structn_age <- agg_mean(data = at_structn_l, groups = c("species", "time", "agecl"))
   resn_age    <- agg_mean(data = at_resn_l,    groups = c("species", "time", "agecl"))
-
-  agg_age      <- lapply(list(at_structn, at_resn, at_eat, at_growth), mean_over_ages)
-  agg_polygon  <- lapply(list(at_n), mean_over_polygons)
-  agg_overview <- lapply(list(at_n, at_eat, at_growth, at_grazing), mean_overview)
-
-  # At this point at_structn, at_resn, at_eat and at_growth are not needed anymore!
-  rm(at_structn, at_resn, at_eat, at_growth, at_n)
-  gc()
+  eat_age     <- agg_mean(data = eat,          groups = c("species", "time", "agecl"))
+  growth_age  <- agg_mean(data = growth,       groups = c("species", "time", "agecl"))
+  grazing     <- agg_mean(data = grazing,      groups = c("species", "time"))
 
   # WARNING: Newly created dataframes have to be added here!
-#   result <- list(
-#     "agg_age_at_structn"     = agg_age[[1]],
-#     "agg_age_at_resn"        = agg_age[[2]],
-#     "agg_age_at_eat"         = agg_age[[3]],
-#     "agg_age_at_growth"      = agg_age[[4]],
-#     "agg_polygon_at_n"       = agg_polygon[[1]],
-#     "agg_overview_at_n"      = agg_overview[[1]],
-#     "agg_overview_at_eat"    = agg_overview[[2]],
-#     "agg_overview_at_growth" = agg_overview[[3]],
-#     "at_nums_overview"       = at_nums_overview,
-#     "at_nums_age"            = at_nums_age,
-#     "at_nums_polygon"        = at_nums_polygon,
-#     "biomass_age"           = biomass_ages,
-#     "at_agestructure"        = at_agestructure,
-#     "biomass"                = biomass,
-#     "physics"                = physics,
-#     "flux"                   = flux,
-#     "biomass_cor"            = biomass_cor,
-#     "biomass_pools"          = biomass_pools,
-#     "at_grazing"             = agg_overview[[4]]
-#   )
+  result <- list(
+    "structn_age" = structn_age,
+    "resn_age"    = resn_age,
+    "eat_age"     = eat_age,
+    "growth_age"  = growth_age,
+    "nums"        = nums,
+    "nums_age"    = nums_age,
+    "nums_box"    = nums_box,
+    "physics"     = physics,
+    "flux"        = flux,
+    "grazing"     = grazing,
+    "biomass_age" = biomass_age,
+    "biomass"     = biomass
+  )
+
+  # Convert timestep to actual time.
 #
 #   # Write rest to HDD
 #   if (report) print("*** Start: writing files! ***")
