@@ -17,6 +17,5 @@ Imports:
   RNetCDF,
   stringr,
   lazyeval,
-  ggplot2,
   tidyr
 
