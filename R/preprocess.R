@@ -26,6 +26,10 @@
 #' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string and set dir to 'NULL'.
+#' @param prm_run Character string giving the filename of the run
+#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
 #' @param bps Vector of character strings giving the complete list of epibenthic
 #' functional groups (Only present in the sediment layer). The names have to match
 #' the column 'Name' in the 'functionalGroups.csv' file.
@@ -40,6 +44,8 @@
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
 #' in the output.
+#' @param modelstart Character string giving the start of the model run
+#' in the format \code{'yyyy-mm-dd'}.
 #' @param out Character string giving the filename of the *.Rda output
 #' file. In case you are using different folders for your model data
 #' and output files please pass a complete folder/filename string and
@@ -221,16 +227,16 @@ preprocess <- function(dir,
     dplyr::mutate(model = "atlantis")
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
-  nums     <- agg_sum(data = at_nums_l, groups = c("species", "time"))
-  nums_age <- agg_sum(data = at_nums_l, groups = c("species", "agecl", "time"))
-  nums_box <- agg_sum(data = at_nums_l, groups = c("species", "polygon", "time"))
+  nums     <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "time"))
+  nums_age <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "agecl", "time"))
+  nums_box <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "polygon", "time"))
 
-  # Aggregate the rest of the dataframes. This is done using agg_mean!
+  # Aggregate the rest of the dataframes by mean!
   structn_age <- agg_mean(data = at_structn_l, groups = c("species", "time", "agecl"))
-  resn_age    <- agg_mean(data = at_resn_l,    groups = c("species", "time", "agecl"))
-  eat_age     <- agg_mean(data = at_eat,          groups = c("species", "time", "agecl"))
-  growth_age  <- agg_mean(data = at_growth,       groups = c("species", "time", "agecl"))
-  grazing     <- agg_mean(data = at_grazing,      groups = c("species", "time"))
+  resn_age    <- agg_mean(data = at_resn_l,    groups = c("species", "time", "agecl"), col = "atresn")
+  eat_age     <- agg_mean(data = at_eat,       groups = c("species", "time", "agecl"))
+  growth_age  <- agg_mean(data = at_growth,    groups = c("species", "time", "agecl"))
+  grazing     <- agg_mean(data = at_grazing,   groups = c("species", "time"))
 
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
@@ -249,7 +255,7 @@ preprocess <- function(dir,
   )
 
   # Convert timestep to actual time.
-#
+
 #   # Write rest to HDD
 #   if (report) print("*** Start: writing files! ***")
 #   for (i in seq_along(result)) {
