@@ -121,26 +121,18 @@
 
 #' @keywords gen
 #' @examples
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-nc_gen <- "outputSETAS.nc"
-nc_prod <- "outputSETASPROD.nc"
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-bps <- load_bps(dir = dir, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
-fgs <- "functionalGroups.csv"
-select_groups <- c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
-bboxes <- get_boundary(boxinfo = load_box(dir = dir, bgm = "VMPA_setas.bgm"))
-check_acronyms <- TRUE
-out <- "preprocess.Rda"
-report <- TRUE
-
-#' test <- load_nc(dir = d, nc = "outputSETAS.nc",
-#'   bps = bps,
-#'   fgs = "functionalGroups.csv",
-#'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-#'   select_variable = "ResN",
-#'   bboxes = bboxes,
-#'   check_acronyms = TRUE)
-#' str(test)
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' preprocess(dir = d,
+#'    nc_gen = "outputSETAS.nc",
+#'    nc_prod = "outputSETASPROD.nc",
+#'    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#'    bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
+#'    fgs = "functionalGroups.csv",
+#'    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
+#'    bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")),
+#'    check_acronyms = TRUE,
+#'    out = "preprocess.Rda",
+#'    report = TRUE)
 #' @export
 
 preprocess <- function(dir,
@@ -259,23 +251,6 @@ preprocess <- function(dir,
                         bboxes = bboxes,
                         check_acronyms = check_acronyms)
 
-  # Further aggregation functions using NSE!
-  agg_mean <- function(data, col = "atoutput", vars){
-    dots = sapply(vars, . %>% {as.formula(paste0('~', .))})
-    result <- as.data.frame(data) %>%
-      dplyr::group_by_(.dots = dots) %>%
-      dplyr::summarise_(atoutput = lazyeval::interp(~mean(var), var = as.name(col)))
-    return(result)
-  }
-
-  agg_sum <- function(data, col = "atoutput", vars){
-    dots = sapply(vars, . %>% {as.formula(paste0('~', .))})
-    result <- as.data.frame(data) %>%
-      dplyr::group_by_(.dots = dots) %>%
-      dplyr::summarise_(atoutput = lazyeval::interp(~sum(var), var = as.name(col)))
-    return(result)
-  }
-
   if (report) print("*** Start: data transformations! ***")
   # Aggregate Layers for N, Nums, ResN, StructN
   at_n       <- agg_mean(data = at_n,         vars = c("species", "polygon", "time"))
@@ -341,36 +316,36 @@ preprocess <- function(dir,
   gc()
 
   # WARNING: Newly created dataframes have to be added here!
-  result <- list(
-    "agg_age_at_structn"     = agg_age[[1]],
-    "agg_age_at_resn"        = agg_age[[2]],
-    "agg_age_at_eat"         = agg_age[[3]],
-    "agg_age_at_growth"      = agg_age[[4]],
-    "agg_polygon_at_n"       = agg_polygon[[1]],
-    "agg_overview_at_n"      = agg_overview[[1]],
-    "agg_overview_at_eat"    = agg_overview[[2]],
-    "agg_overview_at_growth" = agg_overview[[3]],
-    "at_nums_overview"       = at_nums_overview,
-    "at_nums_age"            = at_nums_age,
-    "at_nums_polygon"        = at_nums_polygon,
-    "biomass_ages"           = biomass_ages,
-    "at_agestructure"        = at_agestructure,
-    "biomass"                = biomass,
-    "physics"                = physics,
-    "flux"                   = flux,
-    "biomass_cor"            = biomass_cor,
-    "biomass_pools"          = biomass_pools,
-    "at_grazing"             = agg_overview[[4]]
-  )
-
-  # Write rest to HDD
-  if (report) print("*** Start: writing files! ***")
-  for (i in seq_along(result)) {
-    write.csv(result[[i]], file.path(output_path, paste0("preprocessed_", names(result)[i], ".csv")), row.names = F, quote = F)
-  }
-  if (report) print("*** End: writing files! All Done! ***")
-
-  return(result)
+#   result <- list(
+#     "agg_age_at_structn"     = agg_age[[1]],
+#     "agg_age_at_resn"        = agg_age[[2]],
+#     "agg_age_at_eat"         = agg_age[[3]],
+#     "agg_age_at_growth"      = agg_age[[4]],
+#     "agg_polygon_at_n"       = agg_polygon[[1]],
+#     "agg_overview_at_n"      = agg_overview[[1]],
+#     "agg_overview_at_eat"    = agg_overview[[2]],
+#     "agg_overview_at_growth" = agg_overview[[3]],
+#     "at_nums_overview"       = at_nums_overview,
+#     "at_nums_age"            = at_nums_age,
+#     "at_nums_polygon"        = at_nums_polygon,
+#     "biomass_ages"           = biomass_ages,
+#     "at_agestructure"        = at_agestructure,
+#     "biomass"                = biomass,
+#     "physics"                = physics,
+#     "flux"                   = flux,
+#     "biomass_cor"            = biomass_cor,
+#     "biomass_pools"          = biomass_pools,
+#     "at_grazing"             = agg_overview[[4]]
+#   )
+#
+#   # Write rest to HDD
+#   if (report) print("*** Start: writing files! ***")
+#   for (i in seq_along(result)) {
+#     write.csv(result[[i]], file.path(output_path, paste0("preprocessed_", names(result)[i], ".csv")), row.names = F, quote = F)
+#   }
+#   if (report) print("*** End: writing files! All Done! ***")
+#
+#   return(result)
 }
 
 
