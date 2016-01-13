@@ -7,21 +7,6 @@
 #' @examples
 #' plot_calibrate(preprocess_setas$structn_age)
 
-# dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-# load(file.path(getwd(), "data", "preprocess_setas.rda"))
-#
-# data <- preprocess_setas$structn_age
-
-# test <- load_nc(dir = dir, nc = "outputSETAS.nc",
-#   bps = bps,
-#   fgs = "functionalGroups.csv",
-#   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-#   select_variable = "ResN",
-#   bboxes = bboxes,
-#   check_acronyms = TRUE)
-# str(test)
-
-
 plot_calibrate <- function(data) {
   if (!any(is.element(names(data), "time"))) {
     stop("Column time not found in data")
@@ -48,6 +33,8 @@ plot_calibrate <- function(data) {
     ggplot2::geom_line() +
     ggplot2::geom_hline(yintercept = 1, linetype = "dotted") +
     ggplot2::facet_wrap(~species, scales = "free_y", ncol = 8)
+
+  print(plot)
 
   return(plot)
 }
