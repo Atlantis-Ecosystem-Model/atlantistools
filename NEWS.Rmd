@@ -8,10 +8,41 @@ output: html_document
 ## New features
 
 * `load_fgs()` Read in the functional group file as dataframe.
+* `load_bps()` Extracts the names of the epibenthic biomasspools from the initial conditions file.
+* `load_box()` Load the box specification file (*.bgm) for an Atlantis scenario.
+* `load_nc()` Read in data from Atlantis netcdf output files. Currently the general and the 
+production outputfile are supported. In addition the following variables can be read in:
+"N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn" and "Grazing". Please only pass one
+variable per function call. 
+* `load_nc_physics()` Read in physical data from Atlantis netcdf output file. Works very
+similar like load_nc.
+* `plot_calibrate()` Plot relative timeseries of various variables (E.g. biomass@age, 
+weight@age). The start of the model run is used as reference point.
+* `preprocess()` Various model specifications are read in from the ncdf-output files
+and aggregated with different levels of complexity. (E.g. biomass per species, time and ageclass
+or biomass per species, time and box). The data can be stored in a *.rda file to save
+storage on harddisc. The function returns a list of dataframes which all have the same structure.
+This function should be executed before you start plotting as most of the plotting routines 
+pull out the data from this file/object.
+* `agg_mean()` Aggregate data using dplyr functionality. This is basically a wrapper
+for 'group_by' followed by 'summarise'.
+* `agg_sum()` See 'agg_mean' for further details. The summary function used her is 'sum'.
 
 ## Documentation improvements
 
 ## Minor improvements
+
+* `convert_path()` Allows users to use the model with either one model folder or multiple
+model folders (e.g. one main model folder and an extra folder for model output). I highly 
+recommend to store all the data in one folder because then you only have to supply the
+directory once and can acces all files using only the filename. If you are using multiple
+files you always have to pass the complete folder/filename-string as filename and set
+the 'dir' paramater to NULL.
+* `get_boundary()` Extract the boundary boxes from the list of boxinfos generated with 'load_box()'. 
+* `get_conv_mgnbiot()` Extract the factor to convert data from mg nitrogen to biomass in t
+from the biol*.prm file.
+* `get_groups()` Collection of similar functions which get specific
+#' columns from the Atlantis functionalGroups.csv file. (E.g. cohort-groups, acronyms, ...)
 
 ## Bug fixes
 
