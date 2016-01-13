@@ -34,8 +34,6 @@ plot_calibrate <- function(data) {
     ggplot2::geom_hline(yintercept = 1, linetype = "dotted") +
     ggplot2::facet_wrap(~species, scales = "free_y", ncol = 8)
 
-  print(plot)
-
   return(plot)
 }
 
