@@ -29,6 +29,8 @@
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
 #' in the output.
+#' @param warn_zeros Logical indicating if check for actual zeros in the
+#' data shall be printed or not.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -39,15 +41,12 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
-#' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 #' test <- load_nc(dir = d, nc = "outputSETAS.nc",
-#'   bps = bps,
+#'   bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
 #'   fgs = "functionalGroups.csv",
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
 #'   select_variable = "ResN",
-#'   bboxes = bboxes,
-#'   check_acronyms = TRUE)
+#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 #' str(test)
 
 # Import '%>%' operator from magrittr
@@ -55,7 +54,7 @@
 
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
-                    select_variable, bboxes = c(0), check_acronyms = TRUE) {
+                    select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
   # at the end. However, this requires alot more storage and the code wouldn't be highly
@@ -273,7 +272,9 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   if (length(min_pools) > 0) {
     # exclude 1st timestep and sediment layer from calculation! They behave differently...
     print_min_pools <- sum(min_pools) - length(result[min_pools & result$time == 1, 1]) - length(result[min_pools & result$time > 1 & result$layer == 7, 1])
-    if (print_min_pools > 0) warning(paste0(round(print_min_pools/dim(result)[1] * 100), "% of ", select_variable, " are true min-pools (0, 1e-08, 1e-16)"))
+    if (print_min_pools > 0 & warn_zeros){
+      warning(paste0(round(print_min_pools/dim(result)[1] * 100), "% of ", select_variable, " are true min-pools (0, 1e-08, 1e-16)"))
+    }
     result <- result[!min_pools, ]
   }
 
