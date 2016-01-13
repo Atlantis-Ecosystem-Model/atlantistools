@@ -115,7 +115,7 @@
 #'    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
 #'    bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
 #'    fgs = "functionalGroups.csv",
-#'    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo"),
+#'    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Diatom", "Zoo"),
 #'    bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")),
 #'    check_acronyms = TRUE,
 #'    modelstart = "1991-01-01",
