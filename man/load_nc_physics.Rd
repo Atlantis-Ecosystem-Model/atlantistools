@@ -29,10 +29,6 @@ aggregated (\code{TRUE}) or not (\code{FALSE}).}
 
 \item{warn_zeros}{Logical indicating if check for actual zeros in the
 data shall be printed or not.}
-
-\item{check_acronyms}{Logical testing if functional-groups in
-select_groups are inactive in the current model run. The will be omitted
-in the output.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -48,7 +44,7 @@ This functions converts the ATLANTIS output to a dataframe which can be processe
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
   select_physics = c("salt", "NO3", "volume"),
-  aggregate_layers = F,
+  aggregate_layers = FALSE,
   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 str(test)
 }

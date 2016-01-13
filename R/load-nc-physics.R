@@ -16,9 +16,6 @@
 #' @param aggregate_layers Logical indicating if values for layers should be
 #' aggregated (\code{TRUE}) or not (\code{FALSE}).
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
-#' @param check_acronyms Logical testing if functional-groups in
-#' select_groups are inactive in the current model run. The will be omitted
-#' in the output.
 #' @param warn_zeros Logical indicating if check for actual zeros in the
 #' data shall be printed or not.
 #' @family load functions
@@ -33,7 +30,7 @@
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
 #'   select_physics = c("salt", "NO3", "volume"),
-#'   aggregate_layers = F,
+#'   aggregate_layers = FALSE,
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 #' str(test)
 #' @export
