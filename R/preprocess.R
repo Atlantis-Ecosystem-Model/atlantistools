@@ -52,6 +52,8 @@
 #' set dir to 'NULL'.
 #' @param report Logical indicating if additional information shall be printed
 #' during function evaluation.
+#' @param save_to_disc Logical indicating if the resulting list shall be stored
+#' on the hard-disc (\code{TRUE}) or not (\code{FALSE}).
 #'
 #' @return Named list with the dataframes as list entry saved as .Rda file.
 
@@ -118,22 +120,12 @@
 #'    check_acronyms = TRUE,
 #'    modelstart = "1991-01-01",
 #'    out = "preprocess.Rda",
-#'    report = TRUE)
+#'    report = TRUE,
+#'    save_to_disc = FALSE)
 #' @export
 
-preprocess <- function(dir,
-                       nc_gen,
-                       nc_prod,
-                       prm_biol,
-                       prm_run,
-                       bps,
-                       fgs,
-                       select_groups,
-                       bboxes,
-                       check_acronyms,
-                       modelstart,
-                       out,
-                       report){
+preprocess <- function(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
+                       check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE){
 
   age_groups <- get_age_groups(dir = dir, fgs = fgs)
   select_age_groups <- select_groups[is.element(select_groups, age_groups)]
@@ -249,8 +241,10 @@ preprocess <- function(dir,
 
   # Write rest to HDD
   if (report) print("*** Start: writing files! ***")
-  if (!is.null(dir)) out <- file.path(dir, out)
-  save(result, file = out)
+  if (save_to_disc){
+    if (!is.null(dir)) out <- file.path(dir, out)
+    save(result, file = out)
+  }
 
   if (report) print("*** End: writing files! Preprocession of data done! ***")
   return(result)
