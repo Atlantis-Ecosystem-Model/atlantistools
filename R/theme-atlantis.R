@@ -8,9 +8,9 @@
 #' @param small Integer giving the size of the font used in the rest of the plot.
 #' @param scale_font Numeric used to scale all font sizes. Deafult is 1.
 #' @param rot_xaxis_text Logical indicating if x-axis text should be
-#' rotated by 45°.
+#' rotated by 45 degree.
 #' @param rot_strips_y Logical indicating if facet labels should be
-#' rotated by 90°.
+#' rotated by 90 degree.
 #' @family theme functions
 #' @export
 #'

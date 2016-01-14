@@ -18,10 +18,10 @@ facet labels.}
 \item{scale_font}{Numeric used to scale all font sizes. Deafult is 1.}
 
 \item{rot_xaxis_text}{Logical indicating if x-axis text should be
-rotated by 45°.}
+rotated by 45 degree.}
 
 \item{rot_strips_y}{Logical indicating if facet labels should be
-rotated by 90°.}
+rotated by 90 degree.}
 }
 \description{
 This function is a customised theme for ggplot2 plots. It's applied
