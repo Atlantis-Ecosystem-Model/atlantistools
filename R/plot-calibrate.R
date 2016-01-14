@@ -7,9 +7,6 @@
 #' @examples
 #' plot_calibrate(preprocess_setas$structn_age)
 
-# load(file.path(getwd(), "data", "preprocess_setas.rda"))
-# data <- preprocess_setas$biomass_age
-
 plot_calibrate <- function(data) {
   if (!any(is.element(names(data), "time"))) {
     stop("Column time not found in data")
@@ -30,7 +27,8 @@ plot_calibrate <- function(data) {
     ggplot2::annotate("rect", xmin = anno[1], xmax = anno[2], ymin = 0.8, ymax = 1.2, alpha = 0.3) +
     ggplot2::geom_line() +
     ggplot2::geom_hline(yintercept = 1, linetype = "dotted") +
-    ggplot2::facet_wrap(~species, scales = "free_y", ncol = 8)
+    ggplot2::facet_wrap(~species, scales = "free_y", ncol = 8) +
+    theme_atlantis()
 
   return(plot)
 }
