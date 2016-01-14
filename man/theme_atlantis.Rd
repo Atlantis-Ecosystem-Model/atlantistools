@@ -28,9 +28,9 @@ This function is a customised theme for ggplot2 plots. It's applied
 by default to all plots created within \code{atlantistools}.
 }
 \examples{
-nums_agg <- agg_sum(data = ref_nums, groups = c("species", "time"))
+\dontrun{nums_agg <- agg_sum(data = ref_nums, groups = c("species", "time"))
 ggplot2::ggplot(data = nums_agg, ggplot2::aes(x = time, y = atoutput)) +
    ggplot2::facet_wrap(~species) +
-   theme_atlantis()
+   theme_atlantis()}
 }
 
