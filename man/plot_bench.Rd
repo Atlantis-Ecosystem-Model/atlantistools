@@ -4,10 +4,12 @@
 \alias{plot_bench}
 \title{Compare Atlantis scenario with other models/data sources.}
 \usage{
-plot_bench(data, dir, compare)
+plot_bench(data, ex_data)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
+
+\item{ex_data}{Dataframe to compare the atlantis run with.}
 }
 \value{
 ggplot2 object
@@ -16,6 +18,10 @@ ggplot2 object
 Compare Atlantis scenario with other models/data sources.
 }
 \examples{
-plot_bench(preprocess_setas$structn_age)
+data_comp <- preprocess_setas$biomass
+data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2)
+data_comp$atoutput <- NULL
+data_comp$model <- "test_model"
+plot_bench(data = preprocess_setas$biomass, ex_data = data_comp)
 }
 
