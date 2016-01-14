@@ -21,7 +21,7 @@ plot_bench <- function(data, ex_data) {
 
   comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
   model_time <- comp %>%
-    dplyr::group_by_("model") %>%
+    dplyr::group_by_(~model) %>%
     dplyr::summarise_(time = ~max(time))
   max_time <- min(model_time$time)
 
