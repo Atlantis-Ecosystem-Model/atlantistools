@@ -135,7 +135,16 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   # If the combination of select_groups and select_variable ends up not being found.
   if (length(search_clean) == 0) return(0)
 
-  at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = at_out)
+  at_data <- list()
+  # Initialise progress par!
+  pb <- txtProgressBar(min = 0, max = length(search_clean), style = 3)
+  for (i in seq_along(search_clean)) {
+    at_data[[i]] <- RNetCDF::var.get.nc(ncfile = at_out, variable = search_clean[i])
+    # update progress bar
+    setTxtProgressBar(pb, i)
+  }
+  close(pb)
+  # at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = at_out)
 
   # Get final species and number of ageclasses per species
   final_species <- select_groups[sapply(lapply(select_groups, grepl, x = search_clean), any)]
