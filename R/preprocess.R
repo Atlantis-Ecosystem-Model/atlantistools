@@ -205,8 +205,7 @@ preprocess <- function(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select
   biomass <- biomass_age %>%
     dplyr::group_by_("species", "time") %>%
     dplyr::summarise_(atoutput = ~sum(atoutput)) %>%
-    rbind(biomass_pools) %>%
-    dplyr::mutate(model = "atlantis")
+    rbind(biomass_pools)
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
   nums     <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "time"))
