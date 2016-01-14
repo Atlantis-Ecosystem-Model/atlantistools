@@ -9,7 +9,7 @@
 #' @param scale_font Numeric used to scale all font sizes. Deafult is 1.
 #' @param rot_xaxis_text Logical indicating if x-axis text should be
 #' rotated by 45°.
-#' @param rot_strips_yLogical indicating if facet labels should be
+#' @param rot_strips_y Logical indicating if facet labels should be
 #' rotated by 90°.
 #' @family theme functions
 #' @export
@@ -21,7 +21,7 @@
 #'    theme_atlantis()
 
 #' @export
-theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, rot_xaxis_text = T, rot_strips_y = T){
+theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, rot_xaxis_text = TRUE, rot_strips_y = TRUE){
   ggplot2::theme(
     text                = ggplot2::element_text(family = "sans", size = large * scale_font),
     title               = ggplot2::element_text(hjust = .5),

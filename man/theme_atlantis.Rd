@@ -5,7 +5,7 @@
 \title{Customised theme used in all plots.}
 \usage{
 theme_atlantis(large = 22, medium = 18, small = 14, scale_font = 1,
-  rot_xaxis_text = T, rot_strips_y = T)
+  rot_xaxis_text = TRUE, rot_strips_y = TRUE)
 }
 \arguments{
 \item{large}{Integer giving the size of the font for the main parts of the plot.}
@@ -20,7 +20,7 @@ facet labels.}
 \item{rot_xaxis_text}{Logical indicating if x-axis text should be
 rotated by 45°.}
 
-\item{rot_strips_yLogical}{indicating if facet labels should be
+\item{rot_strips_y}{Logical indicating if facet labels should be
 rotated by 90°.}
 }
 \description{
