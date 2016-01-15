@@ -4,13 +4,17 @@ library("dplyr")
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "functionalGroups.csv")
+diet <- load_dietcheck(dir = d,
+                       dietcheck = "outputSETASDietCheck.txt",
+                       fgs = "functionalGroups.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+                       modelstart = "1991-01-01")
 
 test1 <- diet %>%
-  group_by()
+  group_by(time, pred, agecl) %>%
+  summarise(check = sum(diet))
 
 test_that("test output numbers", {
-  expect_equal(dim(data), dim(ref_nums))
-  expect_equal(sum(is.na(test$atoutput.x)) + sum(is.na(test$atoutput.y)), 0)
-  expect_true(sd(test$check[!is.na(test$check)]) < 0.0000001)
+  expect_true(all(abs(test1$check - 1) < 0.001))
+  expect_equal(dim(diet), c(6320, 5))
 })

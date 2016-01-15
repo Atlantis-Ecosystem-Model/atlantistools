@@ -9,7 +9,8 @@ test <- load_nc(dir = d, nc = "outputSETAS.nc",
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "Nums",
   bboxes = bboxes,
-  check_acronyms = TRUE)
+  check_acronyms = TRUE,
+  testmode = TRUE)
 
 ms <- "1991-01-01"
 

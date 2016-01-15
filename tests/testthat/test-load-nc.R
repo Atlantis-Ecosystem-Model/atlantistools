@@ -14,7 +14,8 @@ data <- load_nc(dir = d,
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
                 select_variable = "Nums",
                 bboxes = bboxes,
-                check_acronyms = TRUE)
+                check_acronyms = TRUE,
+                testmode = TRUE)
 #
 test_that("test column names", {
   expect_equal(names(data), names(ref_nums))
@@ -38,7 +39,8 @@ data <- load_nc(dir = d,
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
                 select_variable = "N",
                 bboxes = bboxes,
-                check_acronyms = TRUE)
+                check_acronyms = TRUE,
+                testmode = TRUE)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_n))
@@ -62,7 +64,8 @@ data <- load_nc(dir = d,
                 select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
                 select_variable = "Grazing",
                 bboxes = bboxes,
-                check_acronyms = TRUE)
+                check_acronyms = TRUE,
+                testmode = TRUE)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_grazing))
@@ -86,7 +89,8 @@ data <- load_nc(dir = d,
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
                 select_variable = "Eat",
                 bboxes = bboxes,
-                check_acronyms = TRUE)
+                check_acronyms = TRUE,
+                testmode = TRUE)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_eat))
