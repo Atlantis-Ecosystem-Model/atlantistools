@@ -10,6 +10,7 @@
 #' @param data Dataframe having a column with information about the model timestep.
 #' @param modelstart Character string giving the start of the model run
 #' in the format \code{'yyyy-mm-dd'}.
+#' @param stock_state Logical indicating if a stock_state dataframe is changed.
 #' @return Dataframe whose column time is converted from timesteps to
 #' actual time.
 #' @examples
@@ -22,11 +23,16 @@
 
 #' @export
 
-convert_time <- function(dir, prm_run, data, modelstart){
+convert_time <- function(dir, prm_run, data, modelstart, stock_state = FALSE){
   if (!is.null(dir)) prm_run <- file.path(dir, prm_run)
   prm_run <- readLines(con = prm_run)
 
-  toutinc <- extract_param(chars = prm_run, variable = "toutinc")
-  if (any(names(data) == "time")) data$time <- with(data, as.Date.numeric(time * toutinc, origin = modelstart))
+  if (!stock_state) {
+    toutinc <- extract_param(chars = prm_run, variable = "toutinc")
+    if (any(names(data) == "time")) data$time <- with(data, as.Date.numeric(time * toutinc, origin = modelstart))
+  } else {
+    if (any(names(data) == "time")) data$time <- with(data, as.Date.numeric(time, origin = modelstart))
+  }
+
   return(data)
 }
