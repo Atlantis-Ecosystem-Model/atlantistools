@@ -1,4 +1,4 @@
-#' Plot contribuition of diet contents for each functional group.
+#' Plot contribution of diet contents for each functional group.
 #'
 #' @param dir Character string giving the path of the Atlantis output folder.
 #' @param dietcheck Character string of the DietCheck.txt file. Usually
