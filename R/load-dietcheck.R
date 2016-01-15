@@ -12,6 +12,8 @@
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
+#' @param modelstart Character string giving the start of the model run
+#' in the format \code{'yyyy-mm-dd'}.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -19,9 +21,16 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' test <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "functionalGroups.csv")
+#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "functionalGroups.csv", model_start = "1991-01-01")
+#' head(diet, n = 25)
+#' str(diet)
 
-load_dietcheck <- function(dir, dietcheck, fgs) {
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+dietcheck <- "outputSETASDietCheck.txt"
+fgs <- "functionalGroups.csv"
+
+
+load_dietcheck <- function(dir, dietcheck, fgs, model_start) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase make sure to use "))
@@ -30,8 +39,37 @@ load_dietcheck <- function(dir, dietcheck, fgs) {
   # read in diet information
   diet <- read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
 
-  # remove entries without diet-information!
-  diet <- diet[rowSums(x = diet[, 5:ncol(diet)]) != 0,]
+  # Check if multiple stocks are available per functional group!
+  if (all(diet$Stock) == 0) {
+    diet$Stock <- NULL
+  } else {
+    stop("Multiple stocks present. Dietcheck only works with 1 stock per funtional group.")
+  }
 
+  # Cohorts start with 0 in DietCheck.txt!
+  diet$Cohort <- diet$Cohort + 1
+
+  # remove entries without diet-information!
+  diet <- diet[rowSums(x = diet[, 4:ncol(diet)]) != 0,]
+
+  # Convert to long dataframe and rename columns!
+  diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "diet", gather_cols = names(diet)[4:ncol(diet)])
+  names(diet_long)[names(diet_long) == "Group"] <- "pred"
+  names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
+  names(diet_long) <- tolower(names(diet_long))
+
+
+  # Add factors with pretty labels
+
+  fgs <- load_fgs(dir = dir, fgs = fgs)
+  fgs <- fgs[c("Code", "LongName")]
+
+  diet_long <- dplyr::left_join(diet_long, fgs, by = c("pred" = "Code"))
+#
+#
+#
+#   names(diet) <- tolower(names(diet))
+
+  return(diet)
 
 }
