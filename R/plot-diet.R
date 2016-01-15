@@ -10,7 +10,17 @@
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' plot_diet(dir = d, dietcheck = "outputSETASDietCheck.txt")
 
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+dietcheck <- "outputSETASDietCheck.txt"
+
 plot_diet <- function(dir = getwd(), dietcheck) {
+
+
+  plot <- ggplot2::ggplot(diet, ggplot2::aes_(x = time, y = m2_perc, fill = prey)) +
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::scale_fill_manual(values = col_pal) +
+    ggplot2::labs(x = "time [years]", y = "M2 [relative]", title = NULL)
+
 
   return(plot)
 }
