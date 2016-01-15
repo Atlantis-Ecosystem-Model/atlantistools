@@ -10,9 +10,6 @@
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' plot_diet(dir = d, dietcheck = "outputSETASDietCheck.txt")
 
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-dietcheck <- "outputSETASDietCheck.txt"
-
 plot_diet <- function(dir = getwd(), dietcheck) {
 
 
