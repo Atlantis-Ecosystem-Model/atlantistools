@@ -12,6 +12,10 @@
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
+#' @param prm_run Character string giving the filename of the run
+#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
 #' @param modelstart Character string giving the start of the model run
 #' in the format \code{'yyyy-mm-dd'}.
 #' @family load functions
@@ -21,16 +25,21 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "functionalGroups.csv", model_start = "1991-01-01")
+#' diet <- load_dietcheck(dir = d,
+#'     dietcheck = "outputSETASDietCheck.txt",
+#'     fgs = "functionalGroups.csv",
+#'     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#'     modelstart = "1991-01-01")
 #' head(diet, n = 25)
 #' str(diet)
 
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-dietcheck <- "outputSETASDietCheck.txt"
-fgs <- "functionalGroups.csv"
+# dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+# dietcheck <- "outputSETASDietCheck.txt"
+# fgs <- "functionalGroups.csv"
+# prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+# modelstart <- "1991-01-01"
 
-
-load_dietcheck <- function(dir, dietcheck, fgs, model_start) {
+load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase make sure to use "))
@@ -57,19 +66,14 @@ load_dietcheck <- function(dir, dietcheck, fgs, model_start) {
   names(diet_long)[names(diet_long) == "Group"] <- "pred"
   names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
   names(diet_long) <- tolower(names(diet_long))
-
+  diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
 
   # Add factors with pretty labels
-
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  fgs <- fgs[c("Code", "LongName")]
+  diet_long$pred <- factor(diet_long$pred)
+  levels(diet_long$pred) <- fgs[sapply(levels(diet_long$pred), function(x) which(fgs$Code == x)), "LongName"]
+  diet_long$prey <- factor(diet_long$prey)
+  levels(diet_long$prey) <- fgs[sapply(levels(diet_long$prey), function(x) which(fgs$Code == x)), "LongName"]
 
-  diet_long <- dplyr::left_join(diet_long, fgs, by = c("pred" = "Code"))
-#
-#
-#
-#   names(diet) <- tolower(names(diet))
-
-  return(diet)
-
+  return(diet_long)
 }
