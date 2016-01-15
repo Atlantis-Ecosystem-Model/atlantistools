@@ -4,7 +4,7 @@
 \alias{convert_time}
 \title{Convert timestep to actual time!}
 \usage{
-convert_time(dir, prm_run, data, modelstart)
+convert_time(dir, prm_run, data, modelstart, stock_state = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -20,6 +20,8 @@ folder/filename string and set dir to 'NULL'.}
 
 \item{modelstart}{Character string giving the start of the model run
 in the format \code{'yyyy-mm-dd'}.}
+
+\item{stock_state}{Logical indicating if a stock_state dataframe is changed.}
 }
 \value{
 Dataframe whose column time is converted from timesteps to
