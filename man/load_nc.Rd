@@ -5,7 +5,8 @@
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
 load_nc(dir = getwd(), nc, bps, fgs, select_groups, select_variable,
-  bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE)
+  bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE,
+  testmode = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -45,6 +46,8 @@ in the output.}
 
 \item{warn_zeros}{Logical indicating if check for actual zeros in the
 data shall be printed or not.}
+
+\item{testmode}{Logical indicating if test with detvtools::tets() are performed.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
