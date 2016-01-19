@@ -33,12 +33,6 @@
 #' head(diet, n = 25)
 #' str(diet)
 
-# dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-# dietcheck <- "outputSETASDietCheck.txt"
-# fgs <- "functionalGroups.csv"
-# prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
-# modelstart <- "1991-01-01"
-
 load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
@@ -70,10 +64,14 @@ load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
 
   # Add factors with pretty labels
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  diet_long$pred <- factor(diet_long$pred)
+  labels <- sort(fgs$LongName[is.element(fgs$Code, unique(diet_long$pred))])
+
+  diet_long$pred <- factor(diet_long$pred, levels = fgs$Code[sapply(labels, function(x) which(fgs$LongName == x))], labels = labels)
   levels(diet_long$pred) <- fgs[sapply(levels(diet_long$pred), function(x) which(fgs$Code == x)), "LongName"]
   diet_long$prey <- factor(diet_long$prey)
   levels(diet_long$prey) <- fgs[sapply(levels(diet_long$prey), function(x) which(fgs$Code == x)), "LongName"]
 
   return(diet_long)
 }
+
+
