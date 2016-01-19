@@ -63,13 +63,13 @@ load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
   diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
 
   # Add factors with pretty labels
-  fgs <- load_fgs(dir = dir, fgs = fgs)
-  labels <- sort(fgs$LongName[is.element(fgs$Code, unique(diet_long$pred))])
-
-  diet_long$pred <- factor(diet_long$pred, levels = fgs$Code[sapply(labels, function(x) which(fgs$LongName == x))], labels = labels)
-  levels(diet_long$pred) <- fgs[sapply(levels(diet_long$pred), function(x) which(fgs$Code == x)), "LongName"]
-  diet_long$prey <- factor(diet_long$prey)
-  levels(diet_long$prey) <- fgs[sapply(levels(diet_long$prey), function(x) which(fgs$Code == x)), "LongName"]
+#   fgs <- load_fgs(dir = dir, fgs = fgs)
+#   labels_pred <- sort(fgs$LongName[is.element(fgs$Code, unique(diet_long$pred))])
+#
+#   diet_long$pred <- factor(diet_long$pred, levels = fgs$Code[sapply(labels, function(x) which(fgs$LongName == x))], labels = labels)
+#   levels(diet_long$pred) <- fgs[sapply(levels(diet_long$pred), function(x) which(fgs$Code == x)), "LongName"]
+#   diet_long$prey <- factor(diet_long$prey)
+#   levels(diet_long$prey) <- fgs[sapply(levels(diet_long$prey), function(x) which(fgs$Code == x)), "LongName"]
 
   return(diet_long)
 }
