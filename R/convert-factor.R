@@ -14,17 +14,24 @@
 #' @return Column of a dataframe in factor format.
 #' @export
 #'
-#' @examples
-#'
 
 convert_factor <- function(dir, fgs, col) {
   fgs <- convert_path(dir = dir, file = fgs)
+  fgs <- load_fgs(dir = dir, fgs = fgs)
 
   # Create vector of sorted labels!
-  labels <- sort(fgs$LongName[is.element(fgs$Code, unique(col))])
-
-  # Convert col to factor!
-  col <- factor(col, levels = fgs$Code[sapply(labels, function(x) which(fgs$LongName == x))], labels = labels)
+  avail <- unique(col)
+  if (any(is.element(avail, fgs$Code))) {
+    labels <- sort(fgs$LongName[is.element(fgs$Code, unique(col))])
+    col <- factor(col, levels = fgs$Code[sapply(labels, function(x) which(fgs$LongName == x))], labels = labels)
+  } else {
+    if (any(is.element(avail, fgs$Name))) {
+       labels <- sort(fgs$LongName[is.element(fgs$Name, unique(col))])
+       col <- factor(col, levels = fgs$Name[sapply(labels, function(x) which(fgs$LongName == x))], labels = labels)
+    } else {
+      stop("Neither entries in column Code nor Name match the entries in parameter col!")
+    }
+  }
 
   return(col)
 }
