@@ -1,0 +1,73 @@
+---
+title: "package demo"
+author: "Alexander Keth"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{package demo}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library("atlantistools")
+library("ggplot2")
+
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+```
+
+
+## Preprocess your atlantis outoput
+
+```{r}
+setas <- preprocess(dir = d,
+                    nc_gen = "outputSETAS.nc",
+                    nc_prod = "outputSETASPROD.nc",
+                    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+                    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+                    bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
+                    fgs = "functionalGroups.csv",
+                    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Diatom", "Zoo"),
+                    bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")),
+                    check_acronyms = TRUE,
+                    modelstart = "1991-01-01",
+                    out = "preprocess.Rda",
+                    report = TRUE,
+                    save_to_disc = FALSE)
+```
+
+## Create reference plot for individual weight and biomass
+
+```{r, fig.width=8, fig.height=5}
+plot_calibrate(data = setas$structn_age)
+plot_calibrate(data = setas$resn_age)
+plot_calibrate(data = setas$biomass_age)
+```
+
+## Plot DietCheck.txt
+
+```{r}
+# Load DietCheck.txt with load_dietcheck
+diet <- load_dietcheck(dir = d, 
+                       dietcheck = "outputSETASDietCheck.txt", 
+                       fgs = "functionalGroups.csv", 
+                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                       modelstart = "1991-01-01", 
+                       combine_tresh = 0.03)
+
+```
+
+
+```{r, fig.show='hold', fig.width=8, fig.height=5}
+# Create a plot for each predator in your model.
+feeding_plots <- plot_dietcheck(data = diet)
+feeding_plots[[1]]
+```
+
+```{r}
+# Save all plots to disc as pdf!
+for (i in seq_along(feeding_plots)) {
+  ggsave(filename = paste0("feeding", i, ".pdf"), plot = feeding_plots[[i]], path = d, width = 14, height = 10)
+}
+```
+
