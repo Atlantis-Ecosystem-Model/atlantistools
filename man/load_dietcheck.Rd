@@ -4,7 +4,7 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir, dietcheck, fgs, prm_run, modelstart)
+load_dietcheck(dir, dietcheck, fgs, prm_run, modelstart, combine_tresh)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -29,6 +29,12 @@ folder/filename string and set dir to 'NULL'.}
 
 \item{modelstart}{Character string giving the start of the model run
 in the format \code{'yyyy-mm-dd'}.}
+
+\item{combine_tresh}{Integer indicating minimum amount to the stomach contribution.
+Each prey item with a lower contribution as this treshold is assigned to the
+grpup "Rest". This is necessary for species with a wide variety of food items
+in their diet. Otherwise the screen will be cluttered with colors in the
+dietplots.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -43,7 +49,8 @@ diet <- load_dietcheck(dir = d,
     dietcheck = "outputSETASDietCheck.txt",
     fgs = "functionalGroups.csv",
     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-    modelstart = "1991-01-01")
+    modelstart = "1991-01-01",
+    combine_tresh = 0.03)
 head(diet, n = 25)
 str(diet)
 }

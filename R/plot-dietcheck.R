@@ -1,46 +1,73 @@
-# #' Plot contribution of diet contents for each functional group.
-# #'
-# #' @param data Dataframe with information about diets. The dataframe
-# #' should be generated with \seealso{load_dietcheck}.
-# #' @return List of ggplot2 objects.
-# #' @export
-# #'
-# #' @examples
-# #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-# #' plot_diet(dir = d, dietcheck = "outputSETASDietCheck.txt")
-#
+#' Plot contribution of diet contents for each functional group.
+#'
+#' @param data Dataframe with information about diets. The dataframe
+#' should be generated with \code{\link{load_dietcheck}}.
+#' @return List of ggplot2 objects.
+#' @export
+#'
+#' @examples
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' diet <- load_dietcheck(dir = d,
+#'     dietcheck = "outputSETASDietCheck.txt",
+#'     fgs = "functionalGroups.csv",
+#'     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#'     modelstart = "1991-01-01",
+#'     combine_tresh = 0.03)
+#' plots <- plot_dietcheck(data = diet)
+
 # d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 # data <- load_dietcheck(dir = d,
 #     dietcheck = "outputSETASDietCheck.txt",
 #     fgs = "functionalGroups.csv",
 #     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
 #     modelstart = "1991-01-01")
+
+plot_dietcheck <- function(data) {
+  plot_func <- function(data) {
+    # order data according to dietcontribution
+    agg_data <- data %>%
+      group_by_(~prey) %>%
+      summarise_(sum_diet = ~sum(diet))
+    data$prey <- factor(data$prey, levels = agg_data$prey[order(agg_data$sum_diet, decreasing = TRUE)])
+    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~diet, fill = ~prey)) +
+      ggplot2::geom_bar(stat = "identity") +
+      ggplot2::scale_fill_manual(values = get_colpal()) +
+      ggplot2::labs(x = "time", y = "contribution to diet [%]", title = NULL) +
+      ggplot2::coord_cartesian(expand = FALSE) +
+      ggplot2::labs(title = paste("Predator:", unique(data$pred))) +
+      theme_atlantis() +
+      ggplot2::theme(legend.position = "right")
+
+    if (is.element("agecl", names(data))) {
+      if (length(unique(data$agecl)) > 1) {
+        plot <- plot + ggplot2::facet_wrap(~agecl, ncol = 5)
+      }
+    }
+
+    return(plot)
+  }
+
+  data_pred <- split(data, data$pred)
+  data_pred <- lapply(data_pred, droplevels)
+  plots <- lapply(data_pred, plot_func)
+  return(plots)
+}
+
+# dietns <- load_dietcheck(dir = file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS"),
+#                          dietcheck = "outputNorthSeaDietCheck.txt",
+#                          fgs = "functionalGroups.csv",
+#                          prm_run = "NorthSea_biol_fishing.prm",
+#                          modelstart = "1991-01-01",
+#                          combine_tresh = 0.03)
 #
-# plot_dietcheck <- function(data) {
-#   plot_func <- function(data) {
-#     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~diet, fill = ~prey)) +
-#       ggplot2::geom_bar(stat = "identity") +
-#       ggplot2::scale_fill_manual(values = col_pal) +
-#       ggplot2::facet_grid(. ~ agecl) +
-#       ggplot2::labs(x = "time", y = "contribution to diet [%]", title = NULL) +
-#       theme_atlantis() +
-#       ggplot2::theme(legend.position = "right")
-#     return(plot)
-#   }
+# plots <- plot_dietcheck(data = dietns)
 #
-#   steps <- split(data, data$pred)
-#   steps <- lapply(steps, drop.levels)
-#   plots <- lapply(steps, plot_func)
-#   return(plots)
-# }
-#
-#
-# ggplot2::ggplot(subset(data, time == min(time)), ggplot2::aes(x = pred, y = prey, fill = diet)) +
+# ggplot2::ggplot(data = subset(dietns, agecl == 1), ggplot2::aes(x = time, y = prey, fill = diet)) +
 #   ggplot2::geom_tile() +
 #   ggplot2::scale_fill_gradientn(colours = rainbow(7), name = "Diet [%]"
 #                        #, breaks = c(0.25,0.5,0.75,1), labels = c(.25,.5,.75,1)
-#   )
-#   # facet_grid(Subdomain ~ ., scales = "free", space = "free") +
+#   ) +
+#   ggplot2::facet_wrap(~pred)
 #
 # plots <- plot_dietcheck(data = data)
 #
