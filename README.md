@@ -15,3 +15,10 @@ Get the development version from github:
 # install.packages(devtools)
 devtools::install_github("alketh/atlantistools")
 ```
+
+If you want to check out the vignette please use
+
+``` r
+devtools::install_github("alketh/atlantistools", build_vignettes = TRUE)
+vignette("package-demo", package = "atlantistools")
+```
