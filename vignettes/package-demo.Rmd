@@ -1,10 +1,10 @@
 ---
-title: "package demo"
+title: "package-demo"
 author: "Alexander Keth"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{package demo}
+  %\VignetteIndexEntry{package-demo}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
