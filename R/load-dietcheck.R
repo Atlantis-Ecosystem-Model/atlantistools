@@ -52,7 +52,7 @@ load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
   # Cohorts start with 0 in DietCheck.txt!
   diet$Cohort <- diet$Cohort + 1
 
-  # remove entries without diet-information!
+  # remove entries without any diet-information!
   diet <- diet[rowSums(x = diet[, 4:ncol(diet)]) != 0,]
 
   # Convert to long dataframe and rename columns!
@@ -61,6 +61,9 @@ load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
   names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
   names(diet_long) <- tolower(names(diet_long))
   diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
+
+  # Remove entries without spefific diet information
+  diet_long <- diet_long[diet_long$diet != 0, ]
 
   # Add factors with pretty labels
   fgs <- load_fgs(dir = dir, fgs = fgs)
