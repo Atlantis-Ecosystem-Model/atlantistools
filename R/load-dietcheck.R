@@ -18,6 +18,11 @@
 #' folder/filename string and set dir to 'NULL'.
 #' @param modelstart Character string giving the start of the model run
 #' in the format \code{'yyyy-mm-dd'}.
+#' @param combine_tresh Integer indicating minimum amount to the stomach contribution.
+#' Each prey item with a lower contribution as this treshold is assigned to the
+#' grpup "Rest". This is necessary for species with a wide variety of food items
+#' in their diet. Otherwise the screen will be cluttered with colors in the
+#' dietplots.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -29,14 +34,15 @@
 #'     dietcheck = "outputSETASDietCheck.txt",
 #'     fgs = "functionalGroups.csv",
 #'     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-#'     modelstart = "1991-01-01")
+#'     modelstart = "1991-01-01",
+#'     combine_tresh = 0.03)
 #' head(diet, n = 25)
 #' str(diet)
 
-load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
+load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart, combine_tresh) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
-    stop(paste("File", dietcheck, "not found. Plase make sure to use "))
+    stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
   }
 
   # read in diet information
@@ -60,15 +66,21 @@ load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart) {
   names(diet_long)[names(diet_long) == "Group"] <- "pred"
   names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
   names(diet_long) <- tolower(names(diet_long))
-  diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
 
   # Remove entries without spefific diet information
   diet_long <- diet_long[diet_long$diet != 0, ]
 
+  # Combine prey groups with low contribution to the diet!
+  diet_long$prey[diet_long$diet <= combine_tresh] <- "Rest"
+  diet_long <- dplyr::group_by_(diet_long, ~time, ~pred, ~agecl, ~prey)
+  diet_long <- dplyr::summarise_(diet_long, diet = ~sum(diet))
+
+  diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
+
   # Add factors with pretty labels
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  diet_long$pred <- convert_factor(data_fgs = fgs, col = diet_long$pred)
-  diet_long$prey <- convert_factor(data_fgs = fgs, col = diet_long$prey)
+  diet_long$pred <- convert_factor(data_fgs = fgs, col = diet_long$pred, diet = TRUE)
+  diet_long$prey <- convert_factor(data_fgs = fgs, col = diet_long$prey, diet = TRUE)
 
   return(diet_long)
 }
