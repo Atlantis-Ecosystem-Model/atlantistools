@@ -1,6 +1,6 @@
 context("load_dietcheck test datastructure")
 
-library("dplyr")
+library("dplyr", warn.conflicts = FALSE)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
@@ -17,4 +17,6 @@ test1 <- diet %>%
 test_that("test output numbers", {
   expect_true(all(abs(test1$check - 1) < 0.001))
   expect_equal(dim(diet), c(6320, 5))
+  expect_is(diet$pred, "factor")
+  expect_is(diet$prey, "factor")
 })
