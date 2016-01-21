@@ -26,8 +26,8 @@ plot_dietcheck <- function(data) {
   plot_func <- function(data) {
     # order data according to dietcontribution
     agg_data <- data %>%
-      group_by_(~prey) %>%
-      summarise_(sum_diet = ~sum(diet))
+      dplyr::group_by_(~prey) %>%
+      dplyr::summarise_(sum_diet = ~sum(diet))
     data$prey <- factor(data$prey, levels = agg_data$prey[order(agg_data$sum_diet, decreasing = TRUE)])
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~diet, fill = ~prey)) +
       ggplot2::geom_bar(stat = "identity") +
