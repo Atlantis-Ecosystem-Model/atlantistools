@@ -5,17 +5,11 @@
 \title{Function to convert any column with information about functional groups
 to a factor whose levels use the LongName of the functional groups file.}
 \usage{
-convert_factor(dir, fgs, col)
+convert_factor(data_fgs, col)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
+\item{data_fgs}{Dataframe with information about functionalGroups.
+Usually loaded with load_fgs().}
 
 \item{col}{Column of the dataframe which is converted to a factor.}
 }
