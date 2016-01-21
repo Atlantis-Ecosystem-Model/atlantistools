@@ -7,6 +7,8 @@ fgs <- load_fgs(dir = d, fgs = file)
 
 newcol <- convert_factor(data_fgs = fgs, col = fgs$Name)
 newcol2 <- convert_factor(data_fgs = fgs, col = fgs$Code)
+newcol3 <- convert_factor(data_fgs = fgs, col = c(fgs$Code, "Rest"), diet = F)
+
 
 test_that("test convert_factor", {
   expect_is(fgs$Name, "character")
@@ -16,4 +18,6 @@ test_that("test convert_factor", {
   expect_equal(newcol, as.factor(fgs$LongName))
   expect_equal(newcol2, as.factor(fgs$LongName))
   expect_error(convert_factor(data_fgs = fgs, col = fgs$LongName), "match the entries in parameter col!")
+  expect_equal(convert_factor(data_fgs = fgs, col = c(fgs$Code, "Rest"), diet = T), factor(c(fgs$LongName, "Rest"), levels = c(sort(fgs$LongName), "Rest")))
+  expect_true(is.na(newcol3[length(newcol3)]))
 })
