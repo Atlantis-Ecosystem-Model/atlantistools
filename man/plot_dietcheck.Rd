@@ -8,16 +8,22 @@ plot_dietcheck(data)
 }
 \arguments{
 \item{data}{Dataframe with information about diets. The dataframe
-should be generated with \see{load_dietcheck}.}
+should be generated with \code{\link{load_dietcheck}}.}
 }
 \value{
-ggplot2 object
+List of ggplot2 objects.
 }
 \description{
 Plot contribution of diet contents for each functional group.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-plot_diet(dir = d, dietcheck = "outputSETASDietCheck.txt")
+diet <- load_dietcheck(dir = d,
+    dietcheck = "outputSETASDietCheck.txt",
+    fgs = "functionalGroups.csv",
+    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+    modelstart = "1991-01-01",
+    combine_tresh = 0.03)
+plots <- plot_dietcheck(data = diet)
 }
 
