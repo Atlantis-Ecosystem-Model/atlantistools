@@ -15,5 +15,5 @@ test_that("test convert_factor", {
   expect_is(newcol, "factor")
   expect_equal(newcol, as.factor(fgs$LongName))
   expect_equal(newcol2, as.factor(fgs$LongName))
-  expect_error(convert_factor(data_fgs = fgs, col = fgs$LongName), "Neither entries in column Code nor Name match the entries in parameter col!")
+  expect_error(convert_factor(data_fgs = fgs, col = fgs$LongName), "Not all entries in column Code (or Name) match the entries in parameter col!")
 })
