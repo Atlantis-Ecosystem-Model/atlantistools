@@ -240,9 +240,11 @@ preprocess <- function(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select
   result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = modelstart)
 
   # Convert Species names to Longnames!
-  fgs_data <- load_fgs(dir = dir, fgs = fgs)
   for (i in seq_along(result)) {
-    result[[i]]$species <- convert_factor(data_fgs = fgs_data, col = result[[i]]$species)
+    # exlude physics dataframes!
+    if (is.element("species", names(result[[i]]))) {
+      result[[i]]$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$species)
+    }
   }
 
   # Write rest to HDD
