@@ -20,5 +20,6 @@ Imports:
   stringr,
   lazyeval,
   tidyr,
-  ggplot2
+  ggplot2,
+  proj4
 VignetteBuilder: knitr
