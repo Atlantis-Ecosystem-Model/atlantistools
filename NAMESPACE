@@ -3,6 +3,7 @@
 export("%>%")
 export(agg_mean)
 export(agg_sum)
+export(convert_bgm)
 export(convert_factor)
 export(convert_path)
 export(convert_time)

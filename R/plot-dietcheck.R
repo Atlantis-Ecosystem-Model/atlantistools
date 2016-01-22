@@ -15,13 +15,6 @@
 #'     combine_tresh = 0.03)
 #' plots <- plot_dietcheck(data = diet)
 
-# d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-# data <- load_dietcheck(dir = d,
-#     dietcheck = "outputSETASDietCheck.txt",
-#     fgs = "functionalGroups.csv",
-#     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-#     modelstart = "1991-01-01")
-
 plot_dietcheck <- function(data) {
   plot_func <- function(data) {
     # order data according to dietcontribution
