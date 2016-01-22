@@ -31,7 +31,8 @@
 #' in the output.
 #' @param warn_zeros Logical indicating if check for actual zeros in the
 #' data shall be printed or not.
-#' @param testmode Logical indicating if test with detvtools::tets() are performed.
+#' @param report Logical indicating if progress bars shall be printed (\code{TRUE}) or
+#' not (\code{FALSE}).
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -55,7 +56,7 @@
 
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
-                    select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, testmode = FALSE) {
+                    select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
   # at the end. However, this requires alot more storage and the code wouldn't be highly
@@ -138,13 +139,13 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
 
   at_data <- list()
   # Initialise progress par!
-  if (!testmode) pb <- txtProgressBar(min = 0, max = length(search_clean), style = 3)
+  if (report) pb <- txtProgressBar(min = 0, max = length(search_clean), style = 3)
     for (i in seq_along(search_clean)) {
       at_data[[i]] <- RNetCDF::var.get.nc(ncfile = at_out, variable = search_clean[i])
       # update progress bar
-      if (!testmode) setTxtProgressBar(pb, i)
+      if (report) setTxtProgressBar(pb, i)
     }
-  if (!testmode) close(pb)
+  if (report) close(pb)
 
   # at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = at_out)
 

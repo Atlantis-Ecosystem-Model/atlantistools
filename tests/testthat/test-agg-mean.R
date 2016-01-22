@@ -1,6 +1,6 @@
 context("agg_mean and agg_sum are tested.")
 
-data("ref_nums.rda")
+# data("ref_nums.rda")
 
 test_that("test agg_mean with reference data for numbers", {
   expect_is(agg_sum(data = ref_nums, groups = c("species", "agecl")), "data.frame")

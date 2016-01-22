@@ -10,7 +10,7 @@ test <- load_nc(dir = d, nc = "outputSETAS.nc",
   select_variable = "Nums",
   bboxes = bboxes,
   check_acronyms = TRUE,
-  testmode = TRUE)
+  report = FALSE)
 
 ms <- "1991-01-01"
 

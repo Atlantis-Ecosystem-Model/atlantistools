@@ -4,7 +4,11 @@ d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
 bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 
-data(c("ref_eat.rda", "ref_grazing.rda", "ref_n.rda", "ref_nums.rda"))
+# d2 <- system.file("data", package = "atlantistools")
+#
+# load(file.path(d2, "ref_eat.rda"))
+
+# load(c("ref_eat.rda", "ref_grazing.rda", "ref_n.rda", "ref_nums.rda"))
 
 # Test numbers!
 data <- load_nc(dir = d,
@@ -15,7 +19,7 @@ data <- load_nc(dir = d,
                 select_variable = "Nums",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
-                testmode = TRUE)
+                report = FALSE)
 #
 test_that("test column names", {
   expect_equal(names(data), names(ref_nums))
@@ -40,7 +44,7 @@ data <- load_nc(dir = d,
                 select_variable = "N",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
-                testmode = TRUE)
+                report = FALSE)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_n))
@@ -65,7 +69,7 @@ data <- load_nc(dir = d,
                 select_variable = "Grazing",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
-                testmode = TRUE)
+                report = FALSE)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_grazing))
@@ -90,7 +94,7 @@ data <- load_nc(dir = d,
                 select_variable = "Eat",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
-                testmode = TRUE)
+                report = FALSE)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_eat))
