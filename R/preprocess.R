@@ -238,6 +238,12 @@ preprocess <- function(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select
   # Convert timestep to actual time.
   result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = modelstart)
 
+  # Convert Species names to Longnames!
+  fgs_data <- load_fgs(dir = dir, fgs = fgs)
+  for (i in seq_along(result)) {
+    result[[i]]$species <- convert_factor(data_fgs = fgs_data, col = result[[i]]$species)
+  }
+
   # Write rest to HDD
   if (report) print("*** Start: writing files! ***")
   if (save_to_disc) {
