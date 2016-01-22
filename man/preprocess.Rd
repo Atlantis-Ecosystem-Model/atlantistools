@@ -145,7 +145,6 @@ test <- preprocess(dir = d,
    check_acronyms = TRUE,
    modelstart = "1991-01-01",
    out = "preprocess.Rda",
-   report = FALSE,
    save_to_disc = FALSE)
 }
 \keyword{gen}

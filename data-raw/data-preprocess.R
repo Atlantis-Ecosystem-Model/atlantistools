@@ -13,9 +13,11 @@ preprocess_setas <- preprocess(dir = d,
    modelstart = "1991-01-01",
    out = "preprocess.Rda",
    report = TRUE,
-   save_to_disc = FALSE)
+   save_to_disc = TRUE)
 
 
 
-devtools::use_data(preprocess_setas, pkg = "atlantistools")
+devtools::use_data(preprocess_setas, pkg = "atlantistools", overwrite = TRUE)
+
+rm(list = ls())
 

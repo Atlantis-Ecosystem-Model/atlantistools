@@ -65,8 +65,7 @@ test <- load_nc(dir = d, nc = "outputSETAS.nc",
   fgs = "functionalGroups.csv",
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "ResN",
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")),
-  report = FALSE)
+  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 str(test)
 }
 \author{
