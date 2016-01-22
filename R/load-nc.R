@@ -51,10 +51,6 @@
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 #' str(test)
 
-# Import '%>%' operator from magrittr
-#' @importFrom magrittr %>%
-
-
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
                     select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
