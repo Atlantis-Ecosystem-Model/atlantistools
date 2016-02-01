@@ -12,7 +12,7 @@
 #' @return A \code{vector} specifying which boxes are on the boundary.
 #' @export
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
 #' get_boundary(boxinfo = boxes)
 

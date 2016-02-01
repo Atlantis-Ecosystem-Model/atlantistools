@@ -17,7 +17,7 @@ Use the output from \code{\link{load_box}} and obtain a \code{vector}
 specifying which boxes are along the boundary.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
 get_boundary(boxinfo = boxes)
 }
