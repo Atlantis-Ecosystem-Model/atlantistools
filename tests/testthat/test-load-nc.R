@@ -1,7 +1,7 @@
 context("load_nc check structure and values in output dataframe")
 
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
 bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 
 # d2 <- system.file("data", package = "atlantistools")
@@ -14,7 +14,7 @@ bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 data <- load_nc(dir = d,
                 nc = "outputSETAS.nc",
                 bps = bps,
-                fgs = "functionalGroups.csv",
+                fgs = "SETasGroups.csv",
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
                 select_variable = "Nums",
                 bboxes = bboxes,
@@ -39,7 +39,7 @@ test_that("test output numbers", {
 data <- load_nc(dir = d,
                 nc = "outputSETAS.nc",
                 bps = bps,
-                fgs = "functionalGroups.csv",
+                fgs = "SETasGroups.csv",
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
                 select_variable = "N",
                 bboxes = bboxes,
@@ -64,7 +64,7 @@ test_that("test output nitrogen", {
 data <- load_nc(dir = d,
                 nc = "outputSETASPROD.nc",
                 bps = bps,
-                fgs = "functionalGroups.csv",
+                fgs = "SETasGroups.csv",
                 select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
                 select_variable = "Grazing",
                 bboxes = bboxes,
@@ -89,7 +89,7 @@ test_that("test output nitrogen", {
 data <- load_nc(dir = d,
                 nc = "outputSETASPROD.nc",
                 bps = bps,
-                fgs = "functionalGroups.csv",
+                fgs = "SETasGroups.csv",
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
                 select_variable = "Eat",
                 bboxes = bboxes,

@@ -1,11 +1,11 @@
 context("convert_time test")
 
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
 bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 test <- load_nc(dir = d, nc = "outputSETAS.nc",
   bps = bps,
-  fgs = "functionalGroups.csv",
+  fgs = "SETasGroups.csv",
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "Nums",
   bboxes = bboxes,
@@ -15,7 +15,7 @@ test <- load_nc(dir = d, nc = "outputSETAS.nc",
 ms <- "1991-01-01"
 
 test <- convert_time(dir = d,
-  prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+  prm_run = "VMPA_setas_run_fishing_F_New.prm",
   data = test,
   modelstart = ms)
 

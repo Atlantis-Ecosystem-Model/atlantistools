@@ -2,12 +2,12 @@ context("load_dietcheck test datastructure")
 
 library("dplyr", warn.conflicts = FALSE)
 
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
 diet <- load_dietcheck(dir = d,
                        dietcheck = "outputSETASDietCheck.txt",
-                       fgs = "functionalGroups.csv",
-                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+                       fgs = "SETasGroups.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_New.prm",
                        modelstart = "1991-01-01",
                        combine_tresh = 0)
 
