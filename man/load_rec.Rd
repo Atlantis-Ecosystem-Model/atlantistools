@@ -4,7 +4,7 @@
 \alias{load_rec}
 \title{Load information for SSB and Recruits from an Atlantis model run.}
 \usage{
-load_rec(dir, yoy, ssb, fgs, prm_biol, prm_run, modelstart)
+load_rec(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -49,13 +49,13 @@ thousands.
 Load information for SSB and Recruits from an Atlantis model run.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 load_rec(dir = d,
    yoy = "outputSETASYOY.txt",
    ssb = "outputSETASSSB.txt",
-   fgs = "functionalGroups.csv",
-   prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+   fgs = "SETasGroups.csv",
+   prm_biol = "VMPA_setas_biol_fishing_New.prm",
+   prm_run = "VMPA_setas_run_fishing_F_New.prm",
    modelstart = "1991-01-01")
 }
 

@@ -32,16 +32,16 @@
 #' @export
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' load_rec(dir = d,
 #'    yoy = "outputSETASYOY.txt",
 #'    ssb = "outputSETASSSB.txt",
-#'    fgs = "functionalGroups.csv",
-#'    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-#'    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#'    fgs = "SETasGroups.csv",
+#'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'    modelstart = "1991-01-01")
 
-load_rec <- function(dir, yoy, ssb, fgs, prm_biol, prm_run, modelstart) {
+load_rec <- function(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart) {
   load_txt <- function(dir, file) {
     file <- convert_path(dir = dir, file = file)
     data <- read.table(file, header = T)
