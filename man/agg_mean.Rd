@@ -2,12 +2,15 @@
 % Please edit documentation in R/agg-mean.R
 \name{agg_mean}
 \alias{agg_mean}
+\alias{agg_perc}
 \alias{agg_sum}
 \title{Aggregate data using dplyr functionality.}
 \usage{
 agg_mean(data, col = "atoutput", groups)
 
 agg_sum(data, col = "atoutput", groups)
+
+agg_perc(data, col = "atoutput", groups)
 }
 \arguments{
 \item{data}{Dataframe the aggregation is applied to.}

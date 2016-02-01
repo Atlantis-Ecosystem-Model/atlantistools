@@ -30,3 +30,16 @@ agg_sum <- function(data, col = "atoutput", groups){
     dplyr::summarise_(atoutput = lazyeval::interp(~sum(var), var = as.name(col)))
   return(result)
 }
+
+#' @export
+#' @rdname agg_mean
+agg_perc <- function(data, col = "atoutput", groups){
+  dots = sapply(groups, . %>% {as.formula(paste0('~', .))})
+  result <- as.data.frame(data) %>%
+    dplyr::group_by_(.dots = dots) %>%
+    dplyr::mutate_(atoutput = lazyeval::interp(~var/sum(var), var = as.name(col)))
+  return(result)
+}
+
+
+
