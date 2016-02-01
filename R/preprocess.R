@@ -107,14 +107,14 @@
 
 #' @keywords gen
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' test <- preprocess(dir = d,
 #'    nc_gen = "outputSETAS.nc",
 #'    nc_prod = "outputSETASPROD.nc",
-#'    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-#'    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-#'    bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
-#'    fgs = "functionalGroups.csv",
+#'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
+#'    bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
+#'    fgs = "SETasGroups.csv",
 #'    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Diatom", "Zoo"),
 #'    bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")),
 #'    check_acronyms = TRUE,
@@ -123,7 +123,7 @@
 #'    save_to_disc = FALSE)
 #' @export
 
-preprocess <- function(dir, nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
+preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
                        check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE){
 
   age_groups <- get_age_groups(dir = dir, fgs = fgs)
