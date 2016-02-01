@@ -19,8 +19,8 @@ A \code{data.frame} of functional group information.
 Read in the functional group file as dataframe.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-file <- "functionalGroups.csv"
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+file <- "SETasGroups.csv"
 fgs <- load_fgs(d, file)
 head(fgs)
 }
