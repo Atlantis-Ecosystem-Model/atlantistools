@@ -5,10 +5,10 @@
 #' @export
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 
-convert_bgm <- function(dir, bgm) {
+convert_bgm <- function(dir = getwd(), bgm) {
   box <- load_box(dir = dir, bgm = bgm)
 
   # Get info of projection used! Some models don't use '+' to split their

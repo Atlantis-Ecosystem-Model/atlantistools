@@ -4,7 +4,7 @@
 \alias{convert_bgm}
 \title{Transform data from bgm-file to map dataframe.}
 \usage{
-convert_bgm(dir, bgm)
+convert_bgm(dir = getwd(), bgm)
 }
 \arguments{
 \item{dir}{Path of the Atlantis model folder.}
@@ -15,7 +15,7 @@ convert_bgm(dir, bgm)
 Transform data from bgm-file to map dataframe.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 }
 
