@@ -2,6 +2,7 @@
 
 export("%>%")
 export(agg_mean)
+export(agg_perc)
 export(agg_sum)
 export(convert_bgm)
 export(convert_factor)

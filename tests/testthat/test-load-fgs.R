@@ -10,6 +10,6 @@ test_that("test format of species names", {
 
 test_that("test file dimensions", {
   expect_equal(dim(load_fgs(dir = d, fgs = file))[1], 62)
-  expect_equal(dim(load_fgs(dir = d, fgs = file))[2], 25)
+  expect_equal(dim(load_fgs(dir = d, fgs = file))[2], 18)
 })
 
