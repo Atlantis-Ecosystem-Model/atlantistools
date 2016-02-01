@@ -30,7 +30,7 @@
 
 #' @export
 #' @rdname get_groups
-get_groups <- function(dir, fgs){
+get_groups <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
   result <- fgs$Name
   return(result)
@@ -38,7 +38,7 @@ get_groups <- function(dir, fgs){
 
 #' @export
 #' @rdname get_groups
-get_age_groups <- function(dir, fgs){
+get_age_groups <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
   result <- fgs$Name[fgs$NumCohorts == 10]
   return(result)
@@ -46,7 +46,7 @@ get_age_groups <- function(dir, fgs){
 
 #' @export
 #' @rdname get_groups
-get_acronyms <- function(dir, fgs){
+get_acronyms <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
   result <- fgs[, names(fgs) == "Code"]
   return(result)
@@ -54,7 +54,7 @@ get_acronyms <- function(dir, fgs){
 
 #' @export
 #' @rdname get_groups
-get_age_acronyms <- function(dir, fgs){
+get_age_acronyms <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
   result <- fgs$Code[fgs$NumCohorts == 10]
   return(result)
@@ -62,7 +62,7 @@ get_age_acronyms <- function(dir, fgs){
 
 #' @export
 #' @rdname get_groups
-get_nonage_acronyms <- function(dir, fgs){
+get_nonage_acronyms <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
   result <- fgs$Code[fgs$NumCohorts != 10]
   return(result)
@@ -70,7 +70,7 @@ get_nonage_acronyms <- function(dir, fgs){
 
 #' @export
 #' @rdname get_groups
-get_fish_acronyms <- function(dir, fgs){
+get_fish_acronyms <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
   # Older models use the column GroupType, newer ones use InvertType.
   supported_columns <- c("InvertType", "GroupType")

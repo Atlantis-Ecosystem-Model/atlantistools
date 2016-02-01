@@ -15,7 +15,7 @@
 
 #' @export
 
-get_conv_mgnbiot <- function(dir, prm_biol){
+get_conv_mgnbiot <- function(dir = getwd(), prm_biol){
   if (!is.null(dir)) prm_biol <- file.path(dir, prm_biol)
   prm_biol <- readLines(con = prm_biol)
 
