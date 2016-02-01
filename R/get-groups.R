@@ -24,9 +24,9 @@
 #' @return Character string.
 
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' get_age_groups(dir = d, fgs = "functionalGroups.csv")
-#' get_nonage_acronyms(dir = d, fgs = "functionalGroups.csv")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' get_age_groups(dir = d, fgs = "SETasGroups.csv")
+#' get_nonage_acronyms(dir = d, fgs = "SETasGroups.csv")
 
 #' @export
 #' @rdname get_groups

@@ -50,9 +50,9 @@ Currently, the following character strings can be created
 - get_fish_acronyms ectracts the column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-get_age_groups(dir = d, fgs = "functionalGroups.csv")
-get_nonage_acronyms(dir = d, fgs = "functionalGroups.csv")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+get_age_groups(dir = d, fgs = "SETasGroups.csv")
+get_nonage_acronyms(dir = d, fgs = "SETasGroups.csv")
 }
 \seealso{
 Other get functions: \code{\link{get_boundary}}
