@@ -26,7 +26,7 @@
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
-#'   species, time, agecl, and atoutput (i.e., variable).
+#'   time, pred, habitat, prey and atoutput (i.e., variable).
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
@@ -48,32 +48,35 @@ load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart, c
   # read in diet information
   diet <- read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
 
-  # Check if multiple stocks are available per functional group!
-  if (all(diet$Stock) == 0) {
-    diet$Stock <- NULL
-  } else {
-    stop("Multiple stocks present. Dietcheck only works with 1 stock per funtional group.")
-  }
+  # Check if multiple stocks are available per functional group! Only used with trunc code!
+#   if (all(diet$Stock) == 0) {
+#     diet$Stock <- NULL
+#   } else {
+#     stop("Multiple stocks present. Dietcheck only works with 1 stock per funtional group.")
+#   }
 
-  # Cohorts start with 0 in DietCheck.txt!
-  diet$Cohort <- diet$Cohort + 1
+  # Cohorts start with 0 in DietCheck.txt! Only used with trunc code!
+#   diet$Cohort <- diet$Cohort + 1
 
   # remove entries without any diet-information!
   diet <- diet[rowSums(x = diet[, 4:ncol(diet)]) != 0,]
 
   # Convert to long dataframe and rename columns!
   diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "diet", gather_cols = names(diet)[4:ncol(diet)])
-  names(diet_long)[names(diet_long) == "Group"] <- "pred"
-  names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
+  names(diet_long)[names(diet_long) == "Predator"] <- "pred"
+  # Only used with trunc code!
+  # names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
   names(diet_long) <- tolower(names(diet_long))
 
   # Remove entries without spefific diet information
   diet_long <- diet_long[diet_long$diet != 0, ]
 
+  # Convert to percentages!
+  diet_long <- agg_perc(data = diet_long, col = "diet", groups = c("time", "pred", "habitat"))
+
   # Combine prey groups with low contribution to the diet!
-  diet_long$prey[diet_long$diet <= combine_tresh] <- "Rest"
-  diet_long <- dplyr::group_by_(diet_long, ~time, ~pred, ~agecl, ~prey)
-  diet_long <- dplyr::summarise_(diet_long, diet = ~sum(diet))
+  diet_long$prey[diet_long$atoutput <= combine_tresh] <- "Rest"
+  diet_long <- agg_sum(data = diet_long, groups = c("time", "pred", "habitat", "prey"))
 
   diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
 

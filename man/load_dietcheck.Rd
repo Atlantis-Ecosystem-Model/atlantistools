@@ -39,7 +39,7 @@ dietplots.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
-  species, time, agecl, and atoutput (i.e., variable).
+  time, pred, habitat, prey and atoutput (i.e., variable).
 }
 \description{
 Read in the atlantis dietcheck.txt file and perform some basic data transformations.

@@ -13,12 +13,12 @@ diet <- load_dietcheck(dir = d,
 
 
 test1 <- diet %>%
-  group_by(time, pred, agecl) %>%
-  summarise(check = sum(diet))
+  group_by(time, pred, habitat) %>%
+  summarise(check = sum(atoutput))
 
 test_that("test output numbers", {
   expect_true(all(abs(test1$check - 1) < 0.001))
-  expect_equal(dim(diet), c(3605, 5))
+  expect_equal(dim(diet), c(390, 5))
   expect_is(diet$pred, "factor")
   expect_is(diet$prey, "factor")
 })
