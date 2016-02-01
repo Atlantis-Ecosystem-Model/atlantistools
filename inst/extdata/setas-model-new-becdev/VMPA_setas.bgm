@@ -1,0 +1,449 @@
+# box model geometry based on VMPA_setas_20051216.bgm and created using Mike Fuller's script and nswbgm.xls file
+# * indicates faces were swapped around  from lr	to RL    
+# Number of boxes in horizontal plane         
+projection proj=aea lat_1=-18 lat_2=-36 lat_0=0 lon_0=134 x_0=3000000 y_0=6000000 ellps=GRS80 towgs84=0,0,0,0,0,0,0 units=m no_defs
+
+nbox 11              
+
+# Number of faces in horizontal plane         
+nface 22              
+
+# Maximum bottom depth (m) if botz	> this reset botz	    
+# to be this as far as model is concerned      
+maxwcbotz	-5000              
+
+bnd_vert 4227984.241 1449270.8             
+bnd_vert 4279136.436 1451037.995             
+bnd_vert 4684173.263 1362498.346             
+bnd_vert 4491403.29 1129920.74             
+bnd_vert 4338741.332 857210.3446
+bnd_vert 4103303.743 1108524.337
+bnd_vert 4095245.855 1128504.676
+bnd_vert 4005591.597 1198429.099
+bnd_vert 4076346.288 1180625.165
+bnd_vert 4100255.75 1215013.051
+bnd_vert 4098457.156 1190348.264
+bnd_vert 4112591.948 1186491.954
+bnd_vert 4119192.894 1199654.889
+bnd_vert 4126007.805 1214717.378
+bnd_vert 4117835.538 1230808.278
+bnd_vert 4124324.475 1232994.964
+bnd_vert 4120952.358 1244934.619
+bnd_vert 4125927.266 1253039.784
+bnd_vert 4127515.982 1236100.035
+bnd_vert 4137876.722 1238264.628
+bnd_vert 4136162.703 1250519.948
+bnd_vert 4146211.091 1253284.755
+bnd_vert 4150574.838 1248500.686
+bnd_vert 4143534.034 1239442.132
+bnd_vert 4143877.268 1231487.187
+bnd_vert 4146714.798 1223041.63
+bnd_vert 4156836.725 1212853.733
+bnd_vert 4172617.459 1213523.739
+bnd_vert 4172863.935 1217687.731
+bnd_vert 4174362.073 1243038.807
+bnd_vert 4176204.79 1249155.402
+bnd_vert 4166759.901 1257093.164
+bnd_vert 4170747.237 1265763.437
+bnd_vert 4180747.281 1287469.515
+bnd_vert 4192761.979 1331387.526
+bnd_vert 4206907.413 1329331.56
+bnd_vert 4203498.77 1309000.311   
+bnd_vert 4213115.748 1310603.639   
+bnd_vert 4210644.156 1335661.288   
+bnd_vert 4218353.484 1377268.384   
+bnd_vert 4217695.648 1388194.791   
+bnd_vert 4217118.224 1396742.619   
+bnd_vert 4222275.219 1415516.758   
+bnd_vert 4220120.66 1423505.118   
+bnd_vert 4221354.915 1434506.772   
+bnd_vert 4227984.241 1449270.8   
+
+# Data for Box Number 0
+box0.label	Box0    
+box0.inside	4043667.571 1150676.493   
+box0.nconn	1    
+box0.iface	0    
+box0.ibox	0    
+box0.botz	-370    
+box0.area	3261982282    
+box0.vertmix	0.000001    
+box0.horizmix	1    
+box0.vert 4005591.597 1198429.099   
+box0.vert 3998613.455 1174049.433   
+box0.vert 4065533.389 1102640.49   
+box0.vert 4095090.658 1128446.461   
+box0.vert 4095245.855 1128504.676   
+box0.vert 4005591.597 1198429.099   
+
+# Data for Box Number 1
+box1.label	Box1    
+box1.inside	4100099.914 1176681.599   
+box1.nconn	5    
+box1.iface	1 10 11 13 17
+box1.ibox	0 2 2 2 2
+box1.botz	-110    
+box1.area	7921941564    
+box1.vertmix	0.000001    
+box1.horizmix	1    
+box1.vert 4146211.091 1253284.755   
+box1.vert 4136162.703 1250519.948   
+box1.vert 4137876.722 1238264.628   
+box1.vert 4127515.982 1236100.035   
+box1.vert 4125927.266 1253039.784   
+box1.vert 4120952.358 1244934.619   
+box1.vert 4124324.475 1232994.964   
+box1.vert 4117835.538 1230808.278   
+box1.vert 4126007.805 1214717.378   
+box1.vert 4119192.894 1199654.889   
+box1.vert 4112591.948 1186491.954
+box1.vert 4098457.156 1190348.264
+box1.vert 4100255.75 1215013.051
+box1.vert 4076346.288 1180625.165
+box1.vert 4005591.597 1198429.099
+box1.vert 4095245.855 1128504.676
+box1.vert 4145689.223 1147426.042
+box1.vert 4181371.972 1197053.162
+box1.vert 4176229.447 1209534.409
+box1.vert 4172617.459 1213523.739
+box1.vert 4156836.725 1212853.733
+box1.vert 4146714.798 1223041.63
+box1.vert 4143877.268 1231487.187
+box1.vert 4143534.034 1239442.132
+box1.vert 4150574.838 1248500.686
+box1.vert 4146211.091 1253284.755
+
+# Data for Box Number 2    
+box2.label	Box2        
+box2.inside	4191669.42 1228857.271       
+box2.nconn	9        
+box2.iface	8 9 10 11 12 13 14 17 19
+box2.ibox	3 3 1 1 5 1 5 1 10
+box2.botz	-466        
+box2.area	6672503482        
+box2.vertmix	0.000001        
+box2.horizmix	1        
+box2.vert 4192761.979 1331387.526       
+box2.vert 4206907.413 1329331.56       
+box2.vert 4203498.77 1309000.311       
+box2.vert 4213115.748 1310603.639       
+box2.vert 4222741.77 1284105.382       
+box2.vert 4233489.401 1287312.423
+box2.vert 4194753.601 1191669.404
+box2.vert 4154945.669 1136888.861
+box2.vert 4103303.743 1108524.337
+box2.vert 4095245.855 1128504.676
+box2.vert 4145689.223 1147426.042
+box2.vert 4181371.972 1197053.162
+box2.vert 4176229.447 1209534.409
+box2.vert 4172617.459 1213523.739
+box2.vert 4172863.935 1217687.731
+box2.vert 4174362.073 1243038.807
+box2.vert 4176204.79 1249155.402
+box2.vert 4166759.901 1257093.164
+box2.vert 4170747.237 1265763.437
+box2.vert 4180747.281 1287469.515
+box2.vert 4192761.979 1331387.526
+
+# Data for Box Number 3   
+box3.label	Box3       
+box3.inside	4240609.12 1380659.6      
+box3.nconn	8       
+box3.iface	1 2 3 4 6 7 8 9
+box3.ibox	6 4 4 4 4 5 2 2
+box3.botz	-444       
+box3.area	6872607300       
+box3.vertmix	0.000001       
+box3.horizmix	1       
+box3.vert 4227984.241 1449270.8      
+box3.vert 4279136.436 1451037.995      
+box3.vert 4270324.874 1430016.246      
+box3.vert 4262935.276 1379750.467      
+box3.vert 4268749.109 1374815.774      
+box3.vert 4243952.061 1312588.589   
+box3.vert 4233489.401 1287312.423   
+box3.vert 4222741.77 1284105.382   
+box3.vert 4213115.748 1310603.639   
+box3.vert 4210644.156 1335661.288   
+box3.vert 4218353.484 1377268.384   
+box3.vert 4217695.648 1388194.791   
+box3.vert 4217118.224 1396742.619   
+box3.vert 4222275.219 1415516.758   
+box3.vert 4220120.66 1423505.118   
+box3.vert 4221354.915 1434506.772   
+box3.vert 4227984.241 1449270.8   
+
+# Data for Box Number 4
+box4.label	Box4    
+box4.inside	4445261.219 1315655.719   
+box4.nconn	7      
+box4.iface	2 3 4 5 6 15 16
+box4.ibox	3 3 3 7 3 8 5
+box4.botz	-4255      
+box4.area	75747539320      
+box4.vertmix	0.000001      
+box4.horizmix	1      
+box4.vert 4279136.436 1451037.995     
+box4.vert 4270324.874 1430016.246     
+box4.vert 4262935.276 1379750.467     
+box4.vert 4268749.109 1374815.774     
+box4.vert 4243952.061 1312588.589     
+box4.vert 4491403.29 1129920.74     
+box4.vert 4684173.263 1362498.346     
+box4.vert 4279136.436 1451037.995     
+
+# Data for Box Number 5  
+box5.label	Box5      
+box5.inside	4295691.382 1085573.101     
+box5.nconn	7      
+box5.iface	7 12 14 16 18 20 21
+box5.ibox	3 2 2 4 2 9 10
+box5.botz	-3405      
+box5.area	85057277224      
+box5.vertmix	0.000001      
+box5.horizmix	1      
+box5.vert 4243952.061 1312588.589     
+box5.vert 4233489.401 1287312.423     
+box5.vert 4194753.601 1191669.404     
+box5.vert 4154945.669 1136888.861     
+box5.vert 4103303.743 1108524.337     
+box5.vert 4338741.332 857210.3446     
+box5.vert 4491403.29 1129920.74   
+box5.vert 4243952.061 1312588.589   
+
+# Data for Box Number 6
+box6.label	Box6    
+box6.inside	4267195.266 1480676.477   
+box6.nconn	1    
+box6.iface	1    
+box6.ibox	3    
+box6.botz	-511    
+box6.area	2920024932    
+box6.vertmix	0.000001    
+box6.horizmix	1    
+box6.vert 4301311.658 1509501.86   
+box6.vert 4262600.71 1517099.037   
+box6.vert 4227984.241 1449270.8   
+box6.vert 4279136.436 1451037.995   
+box6.vert 4301311.658 1509501.86   
+
+# Data for Box Number 7
+box7.label	Box7    
+box7.inside	4500570.723 1438339.614   
+box7.nconn	1    
+box7.iface	5    
+box7.ibox	4    
+box7.botz	-4531    
+box7.area	29657214243    
+box7.vertmix	0.000001    
+box7.horizmix	1    
+box7.vert 4279136.436 1451037.995   
+box7.vert 4301311.658 1509501.86   
+box7.vert 4730975.542 1425178.621   
+box7.vert 4723001.214 1354821.223   
+box7.vert 4684173.263 1362498.346   
+box7.vert 4279136.436 1451037.995   
+
+# Data for Box Number 8
+box8.label	Box8    
+box8.inside	4603015.595 1233723.862   
+box8.nconn	1    
+box8.iface	15    
+box8.ibox	4    
+box8.botz	-4650    
+box8.area	11785329871    
+box8.vertmix	0.000001    
+box8.horizmix	1    
+box8.vert 4723001.214 1354821.223   
+box8.vert 4684173.263 1362498.346   
+box8.vert 4491403.29 1129920.74   
+box8.vert 4542025.189 1122686.913   
+box8.vert 4723001.214 1354821.223   
+
+# Data for Box Number 9
+box9.label	Box9    
+box9.inside	4435544.591 993008.8211   
+box9.nconn	1    
+box9.iface	20    
+box9.ibox	5    
+box9.botz	-4551    
+box9.area	11875425115    
+box9.vertmix	0.000001    
+box9.horizmix	1    
+box9.vert 4542025.189 1122686.913   
+box9.vert 4491403.29 1129920.74   
+box9.vert 4338741.332 857210.3446   
+box9.vert 4332200.315 805175.2794   
+box9.vert 4542025.189 1122686.913   
+
+# Data for Box Number 10
+box10.label	Box10    
+box10.inside	4211217.116 967318.2742   
+box10.nconn	2    
+box10.iface	19 21   
+box10.ibox	2 5   
+box10.botz	-3702    
+box10.area	13751806805    
+box10.vertmix	0.000001    
+box10.horizmix	1    
+box10.vert 4095245.855 1128504.676   
+box10.vert 4095090.658 1128446.461   
+box10.vert 4065533.389 1102640.49    
+box10.vert 4332200.315 805175.2794    
+box10.vert 4338741.332 857210.3446    
+box10.vert 4103303.743 1108524.337    
+box10.vert 4095245.855 1128504.676    
+
+# Data for face number 0 
+face0.p1	4005591.597 1198429.099    
+face0.p2	4095245.855 1128504.676    
+face0.length	113698.3335     
+face0.cs	-0.788527462 0.614999546    
+face0.lr	1 0    
+
+# Data for face number 1 *
+face1.p1	4279136.436 1451037.995    
+face1.p2	4227984.241 1449270.8    
+face1.length	51182.71243     
+face1.cs	0.999403759 0.03452719    
+face1.lr	3 6    
+
+# Data for face number 2 *
+face2.p1	4279136.436 1451037.995    
+face2.p2	4270324.874 1430016.246    
+face2.length	22793.80534     
+face2.cs	0.386577038 0.922257119    
+face2.lr	3 4    
+
+# Data for face number 3 *
+face3.p1	4270324.874 1430016.246    
+face3.p2	4262935.276 1379750.467    
+face3.length	50806.04939     
+face3.cs	0.14544721 0.989366014    
+face3.lr	3 4    
+
+# Data for face number 4 
+face4.p1	4262935.276 1379750.467    
+face4.p2	4268749.109 1374815.774    
+face4.length	7625.736344     
+face4.cs	-0.762396298 0.647110411    
+face4.lr	3 4    
+
+# Data for face number 5 *
+face5.p1	4279136.436 1451037.995    
+face5.p2	4684173.263 1362498.346    
+face5.length	414601.1342     
+face5.cs	-0.976931304 0.213553804    
+face5.lr	7 4    
+
+# Data for face number 6 *
+face6.p1	4268749.109 1374815.774    
+face6.p2	4243952.061 1312588.589    
+face6.length	66985.94066     
+face6.cs	0.370182884 0.928958897    
+face6.lr	4 3    
+
+# Data for face number 7 *
+face7.p1	4243952.061 1312588.589    
+face7.p2	4233489.401 1287312.423    
+face7.length	27356.01968     
+face7.cs	0.382462788 0.923970896    
+face7.lr	3 5    
+
+# Data for face number 8 
+face8.p1	4233489.401 1287312.423    
+face8.p2	4222741.77 1284105.382    
+face8.length	11215.91214     
+face8.cs	0.95824852 0.285936661    
+face8.lr	2 3    
+
+# Data for face number 9 *
+face9.p1	4213115.748 1310603.639    
+face9.p2	4222741.77 1284105.382    
+face9.length	28192.51516     
+face9.cs	-0.341438919 0.939903966    
+face9.lr	3 2    
+
+# Data for face number 10 *
+face10.p1	4172617.459 1213523.739    
+face10.p2	4176229.447 1209534.409    
+face10.length	5381.562565     
+face10.cs	-0.671178291 0.741295961    
+face10.lr	2 1    
+
+# Data for face number 11 *
+face11.p1	4176229.447 1209534.409    
+face11.p2	4181371.972 1197053.162    
+face11.length	13499.15147     
+face11.cs	-0.380951713 0.924594934    
+face11.lr	1 2    
+
+# Data for face number 12 *
+face12.p1	4233489.401 1287312.423    
+face12.p2	4194753.601 1191669.404    
+face12.length	103189.3852     
+face12.cs	0.375385512 0.926868771    
+face12.lr	2 5    
+
+# Data for face number 13 *
+face13.p1	4181371.972 1197053.162    
+face13.p2	4145689.223 1147426.042    
+face13.length	61123.72337     
+face13.cs	0.583779033 0.811912582    
+face13.lr	2 1    
+
+# Data for face number 14 
+face14.p1	4194753.601 1191669.404    
+face14.p2	4154945.669 1136888.861    
+face14.length	67716.90545     
+face14.cs	0.587858105 0.808964059    
+face14.lr	2 5    
+
+# Data for face number 15 *
+face15.p1	4684173.263 1362498.346    
+face15.p2	4491403.29 1129920.74    
+face15.length	302080.4616     
+face15.cs	0.638141149 0.769919394    
+face15.lr	8 4    
+
+# Data for face number 16 *
+face16.p1	4243952.061 1312588.589    
+face16.p2	4491403.29 1129920.74    
+face16.length	307570.5672     
+face16.cs	-0.804534814 0.593905491    
+face16.lr	5 4    
+
+# Data for face number 17 
+face17.p1	4145689.223 1147426.042    
+face17.p2	4095245.855 1128504.676    
+face17.length	53875.33308     
+face17.cs	0.936298035 0.351206476    
+face17.lr	1 2    
+
+# Data for face number 18 
+face18.p1	4154945.669 1136888.861    
+face18.p2	4103303.743 1108524.337    
+face18.length	58918.88252     
+face18.cs	0.876491942 0.48141653    
+face18.lr	2 5    
+
+# Data for face number 19 *
+face19.p1	4095245.855 1128504.676    
+face19.p2	4103303.743 1108524.337    
+face19.length	21543.98964     
+face19.cs	-0.374020255 0.927420535    
+face19.lr	10 2    
+
+# Data for face number 20 *
+face20.p1	4491403.29 1129920.74    
+face20.p2	4338741.332 857210.3446    
+face20.length	312532.6111     
+face20.cs	0.488467291 0.872582206    
+face20.lr	5 9    
+
+# Data for face number 21 
+face21.p1	4103303.743 1108524.337    
+face21.p2	4338741.332 857210.3446    
+face21.length	344368.3798     
+face21.cs	-0.683679462 0.729782429    
+face21.lr	10 5    

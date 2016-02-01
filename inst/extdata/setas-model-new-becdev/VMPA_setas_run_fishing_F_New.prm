@@ -1,0 +1,82 @@
+# Run parameters
+verbose      0 	# Detailed logged output
+
+flagecon_on        0   # Flag showing whether want economics loaded and submodel run (1) or not (0)
+flag_fisheries_on  1   # Flag showing whether want fisheries loaded and submodel run (1) or not (0)
+flag_skip_biol     0   # Flag showing whether want biological model run (1) or not (0 - only used when debugging fisheries)
+flag_skip_phys     0   # Flag showing whether want biological model run (0) or not (1 - only used when debugging fisheries)
+
+debug_it	0
+checkbox      0        # Give detailed logged output for this box
+checkstart    366666660 day    # Start detailed logged output after this date
+checkstop     366666660 day    # Stop detailed logged output after this date
+fishtest      0        # Count up total population for each vertebrate after each main subroutine: 0=no, 1=yes
+flaggape      0        # Periodically list prey vs gape statistics (tuning diagnostic)
+flagchecksize 0        # Periodically list relative size (tuning diagnostic)
+flagagecheck  0       # Periodically list age structure per cohort (tuning diagnostic)
+flagdietcheck 1        # Periodically list realised diet matchups (tuning diagnostic)
+checkNH       0        # Give detailed logged output for NH in checkbox
+checkDL       0        # Give detailed logged output for DL in checkbox
+checkDR       0        # Give detailed logged output for DR in checkbox
+checkbiom     0        # Give detailed logged output for biomasses in checkbox
+which_fleet   33       # ID number of fleet to track (if don't want to track anything set to 33), find number in fisheries input file.
+which_check   100       # ID number of group to track (if don't want to track anything set to 80), find number from functional group input file.
+habitat_check 0
+move_check    67       # ID number of group where tracking movements
+fishmove      1        # Set to 0 to turn vertebrate movement off for debugging purposes
+debug         0        # 0=debuging off, 1=debug fishing, 2=debug discards, 3=debug histfishing,
+                       # 4=debug assessments, 5=debug mpas, 6=debug effort, 7=debug econ, 8=debug aging, 
+                       # 9=debug_spawning, 10=debug migration, 11=debug movement, 12=debug stocks, 
+                       # 13=debug biomass calcs, 14=debug feeding, 15=debug everything
+
+title      SE Tasmania model with constant forced fishing and base level fishing pressure on FMM increased 2000 fold
+dt         	12 hour     # 12 hour time step
+tstop       1095 day     # Stop time after the given period 15000 5000
+
+toutstart  	0 day       # Output start time
+toutinc    	365 day     # Write output with this periodicity
+toutfinc   	365 day     # Write fisheries output with this periodicity
+tburnday   0 day
+external_box 0
+
+tsumout    	30  	day      # Write stock state summary with this periodicity
+flagannual_Mest 0      # Whether to write out estimates of mortality per predator annually (1) or not (0)
+fishout    	1          # Switch to turn fisheries output on = 1, off = 0
+flagreusefile 	2        # Switch to show want to append output file no = 0, yes = 1, replace = 2
+flag_age_output 1
+
+# Parameters defining the numbers of certain types of groups (needed to  parameter arrays in the
+# initialisation section of the model, best left untouched for now) 
+K_num_tot_sp    62     # total number of biological groups in the model - must match the number of groups defined in your functional group definition file. 
+K_num_stocks_per_sp 4  # maximum number of stocks per group in the model
+K_num_bed_types  3     # maximum number of seabed types (currently only reef, soft and flat) 3
+K_num_cover_types 10   # maximum number of habitat types. Should be equal to K_num_bed_types + number of cover groups in your function def input file + 1( canyons ).
+K_num_detritus   3     # Total number of detritus groups in the model (labile and refractory and carrion)
+
+# Parameters defining the numbers of certain types of fisheries 
+# (needed to  parameter arrays in the initialisation section of the model,
+# best left untouched for now) 
+K_num_fisheries   33   # Maximum number of fisheries - must match the number of fisheries defined in your fisheries definition input file.
+K_num_ports       17   # Maxiumum number of ports in the model area 
+K_max_num_zoning  1    # Maximum number of spatial zonings used in the model
+K_num_reg         2    # Maximum number of management zonings used in the model
+K_num_markets     2    # Maxiumum number of markets in the model area 
+K_num_catchqueue  7    # Length (in days) of list of catches used in running average to give recent CPUE for effort model 8
+
+# Location parameters
+flaghemisphere    0    # Flag for hemisphere model is in (0 = southern; 1 = northern)
+flagIsEstuary     0    # Flag to indicate if the model is estuary. If true a sediment tracer is required in the initial conditions input file. 
+
+# Parameters for rescalingin inital vertebrate densities - only for use in emergencies,
+# should really update the cdf file instead
+
+flagscaleinit     1  # Flag to indicate whether scaling initial vertebrate densities (1=yes, 0=no)
+
+# Multiplicative scalr for vertebrate initial densities (as read-in from cdf file) Only values for vertebrates used. Order matches functional group definition file.
+init_scalar       62
+1 1 1 1 1 1 1 1 2 1 1 1 0.1 1 0.5 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+
+trackAtomicRatio 0
+
+check_dups 0
