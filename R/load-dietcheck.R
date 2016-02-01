@@ -29,17 +29,17 @@
 #'   species, time, agecl, and atoutput (i.e., variable).
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' diet <- load_dietcheck(dir = d,
 #'     dietcheck = "outputSETASDietCheck.txt",
-#'     fgs = "functionalGroups.csv",
-#'     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#'     fgs = "SETasGroups.csv",
+#'     prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'     modelstart = "1991-01-01",
 #'     combine_tresh = 0.03)
 #' head(diet, n = 25)
 #' str(diet)
 
-load_dietcheck <- function(dir, dietcheck, fgs, prm_run, modelstart, combine_tresh) {
+load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart, combine_tresh) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
