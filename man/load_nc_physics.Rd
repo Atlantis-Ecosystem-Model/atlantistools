@@ -41,7 +41,7 @@ This function loads Atlantis outputfiles (netcdf) and converts them to a datafra
 This functions converts the ATLANTIS output to a dataframe which can be processed in R.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
   select_physics = c("salt", "NO3", "volume"),
   aggregate_layers = FALSE,

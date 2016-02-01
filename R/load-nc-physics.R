@@ -27,7 +27,7 @@
 #' @details This functions converts the ATLANTIS output to a dataframe which can be processed in R.
 #' @keywords gen
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
 #'   select_physics = c("salt", "NO3", "volume"),
 #'   aggregate_layers = FALSE,
@@ -35,7 +35,7 @@
 #' str(test)
 #' @export
 
-load_nc_physics <- function(dir,
+load_nc_physics <- function(dir = getwd(),
                             nc,
                             select_physics,
                             aggregate_layers,
