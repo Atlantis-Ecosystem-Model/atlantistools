@@ -59,10 +59,10 @@ This function loads Atlantis outputfiles (any netcdf file) and
 converts them to a \code{data.frame}.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 test <- load_nc(dir = d, nc = "outputSETAS.nc",
-  bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc"),
-  fgs = "functionalGroups.csv",
+  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
+  fgs = "SETasGroups.csv",
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "ResN",
   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
