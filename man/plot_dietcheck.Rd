@@ -25,5 +25,6 @@ diet <- load_dietcheck(dir = d,
     modelstart = "1991-01-01",
     combine_tresh = 0.03)
 plots <- plot_dietcheck(data = diet)
+plots[[1]]
 }
 

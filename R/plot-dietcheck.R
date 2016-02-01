@@ -14,15 +14,16 @@
 #'     modelstart = "1991-01-01",
 #'     combine_tresh = 0.03)
 #' plots <- plot_dietcheck(data = diet)
+#' plots[[1]]
 
 plot_dietcheck <- function(data) {
   plot_func <- function(data) {
     # order data according to dietcontribution
     agg_data <- data %>%
       dplyr::group_by_(~prey) %>%
-      dplyr::summarise_(sum_diet = ~sum(diet))
+      dplyr::summarise_(sum_diet = ~sum(atoutput))
     data$prey <- factor(data$prey, levels = agg_data$prey[order(agg_data$sum_diet, decreasing = TRUE)])
-    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~diet, fill = ~prey)) +
+    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~prey)) +
       ggplot2::geom_bar(stat = "identity") +
       ggplot2::scale_fill_manual(values = get_colpal()) +
       ggplot2::labs(x = "time", y = "contribution to diet [%]", title = NULL) +
@@ -31,9 +32,17 @@ plot_dietcheck <- function(data) {
       theme_atlantis() +
       ggplot2::theme(legend.position = "right")
 
+    # Only used with trunc models!
     if (is.element("agecl", names(data))) {
       if (length(unique(data$agecl)) > 1) {
         plot <- plot + ggplot2::facet_wrap(~agecl, ncol = 5)
+      }
+    }
+
+    # This is repetitive... who cares...
+    if (is.element("habitat", names(data))) {
+      if (length(unique(data$habitat)) > 1) {
+        plot <- plot + ggplot2::facet_wrap(~habitat, ncol = 4)
       }
     }
 
