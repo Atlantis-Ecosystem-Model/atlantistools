@@ -13,8 +13,8 @@ test <- load_rec(dir = d,
                  modelstart = "1991-01-01")
 
 test_that("test output numbers", {
-  expect_equal(dim(test), c(6, 4))
+  expect_equal(dim(test), c(8, 4))
   expect_equal(names(test), c("species", "time", "ssb", "rec"))
-  expect_equal(sum(test$ssb), 809747.3)
-  expect_equal(sum(test$rec), 274208183)
+  expect_true(sum(test$ssb)/1133986 > 0.999)
+  expect_equal(sum(test$rec), 357116785)
 })
