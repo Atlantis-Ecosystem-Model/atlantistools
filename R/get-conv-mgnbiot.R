@@ -10,8 +10,8 @@
 #' folder/filename string and set dir to 'NULL'.
 #' @return Conversion factor as numeric value.
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm")
 
 #' @export
 
