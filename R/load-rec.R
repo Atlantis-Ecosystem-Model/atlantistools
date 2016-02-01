@@ -59,8 +59,8 @@ load_rec <- function(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart
   yoy$code <- gsub(pattern = ".0", replacement = "", x = yoy$code)
 
   # Remove zeros and duplicate values in ssb and yoy and combine!
-  ssb <- ssb[ssb$atoutput != 0, ]
-  ssb <- ssb[c(1, which(diff(ssb$atoutput, lag = 1) != 0) + 1), ]
+  yoy <- yoy[yoy$atoutput != 0, ]
+  yoy <- yoy[c(1, which(diff(yoy$atoutput, lag = 1) != 0) + 1), ]
   result <- dplyr::inner_join(x = yoy, y = ssb, by = c("time", "code"))
 
   # Extract info about recruit weights from the biological parameterfile!
