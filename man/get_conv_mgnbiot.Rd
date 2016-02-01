@@ -5,7 +5,7 @@
 \title{Extract conversion factor used to transform data from nitrogen in mg to
 biomass in tonnes.}
 \usage{
-get_conv_mgnbiot(dir, prm_biol)
+get_conv_mgnbiot(dir = getwd(), prm_biol)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.

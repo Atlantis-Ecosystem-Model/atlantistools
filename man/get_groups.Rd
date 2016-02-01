@@ -10,17 +10,17 @@
 \title{Collection of similar functions which get specific
 columns from the Atlantis \code{functionalGroups.csv}}
 \usage{
-get_groups(dir, fgs)
+get_groups(dir = getwd(), fgs)
 
-get_age_groups(dir, fgs)
+get_age_groups(dir = getwd(), fgs)
 
-get_acronyms(dir, fgs)
+get_acronyms(dir = getwd(), fgs)
 
-get_age_acronyms(dir, fgs)
+get_age_acronyms(dir = getwd(), fgs)
 
-get_nonage_acronyms(dir, fgs)
+get_nonage_acronyms(dir = getwd(), fgs)
 
-get_fish_acronyms(dir, fgs)
+get_fish_acronyms(dir = getwd(), fgs)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
