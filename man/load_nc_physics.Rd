@@ -4,7 +4,7 @@
 \alias{load_nc_physics}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc_physics(dir, nc, select_physics, aggregate_layers, bboxes,
+load_nc_physics(dir = getwd(), nc, select_physics, aggregate_layers, bboxes,
   warn_zeros = FALSE)
 }
 \arguments{

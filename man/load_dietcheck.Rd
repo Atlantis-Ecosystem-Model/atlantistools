@@ -4,7 +4,8 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir, dietcheck, fgs, prm_run, modelstart, combine_tresh)
+load_dietcheck(dir = getwd(), dietcheck, fgs, prm_run, modelstart,
+  combine_tresh)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
