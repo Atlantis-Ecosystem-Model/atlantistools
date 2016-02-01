@@ -15,16 +15,7 @@ convert to actual time lateron use 'toutinc' in the 'run.prm' file.}
 Nitrogen in mg N m-3.}
 }}
 \source{
-\describe{
-\item{Function}{load_nc}
-\item{dir}{system.file("extdata", "setas-model-new-trunk", package = "atlantistools")}
-\item{nc}{"outputSETAS.nc"}
-\item{bps}{load_bps(dir = d, fgs = "functionalGroups.csv", init = "INIT_VMPA_Jan2015.nc")}
-\item{fgs}{"functionalGroups.csv"}
-\item{select_groups}{get_groups(dir = d, fgs = "functionalGroups.csv")}
-\item{select_variable}{"N"}
-\item{bboxes}{get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))}
-\item{check_acronsm}{TRUE}}
+See \code{data-raw/data-preprocess.R} for further information.
 }
 \usage{
 ref_n
