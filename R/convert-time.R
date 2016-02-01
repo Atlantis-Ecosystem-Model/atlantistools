@@ -14,16 +14,16 @@
 #' @return Dataframe whose column time is converted from timesteps to
 #' actual time.
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' test <- convert_time(dir = d,
-#'    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'    data = ref_nums,
 #'    modelstart = "1991-01-01")
 #' head(test)
 
 #' @export
 
-convert_time <- function(dir, prm_run, data, modelstart, stock_state = FALSE){
+convert_time <- function(dir = getwd(), prm_run, data, modelstart, stock_state = FALSE){
   if (!is.null(dir)) prm_run <- file.path(dir, prm_run)
   prm_run <- readLines(con = prm_run)
 
