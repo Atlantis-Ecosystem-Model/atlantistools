@@ -12,7 +12,7 @@
 #' check_df_names(preprocess_setas$biomass_age, expect = c("time", "species", "atoutput", "ages"))
 #' }
 
-check_df_names <- function(data, expect, optional) {
+check_df_names <- function(data, expect, optional = NULL) {
   df_names <- names(data)[!is.element(names(data), optional)]
   wrong_names <- df_names[!is.element(df_names, expect)]
 
