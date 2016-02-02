@@ -168,10 +168,10 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
 
   if (report) print("*** Start: Reading in physics data")
   flux       <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("eflux", "vflux"),
-                                bboxes = bboxes, aggregate_layers = TRUE)
+                                bboxes = bboxes, aggregate_layers = FALSE)
 
   physics    <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = physic_var,
-                                bboxes = bboxes, aggregate_layers = FALSE)
+                                bboxes = bboxes, aggregate_layers = TRUE)
 
 
   if (report) print("*** Start: data transformations! ***")
