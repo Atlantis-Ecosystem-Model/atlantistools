@@ -84,14 +84,14 @@ or long simulations.
 
 Always add a spatial representation of your model if you have issues with model tuning. This makes the life of Bec and Beth much easier.
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width = 7, fig.height = 5}
 bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 plot_boxes(bgm_data)
 ```
 
 ## Create reference plot for individual weight and biomass
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width = 7, fig.height = 5}
 plot_calibrate(data = setas$structn_age)
 plot_calibrate(data = setas$resn_age)
 plot_calibrate(data = setas$biomass_age)
@@ -99,7 +99,7 @@ plot_calibrate(data = setas$biomass_age)
 
 ## Visualise cohort distributions for numbers and biomass over time
 
-```{r, fig.width=7, fig.height=5}
+```{r, fig.width = 7, fig.height = 5}
 plot_struct(data = setas$biomass_age)
 plot_struct(data = setas$nums_age)
 ```
@@ -120,7 +120,7 @@ diet <- load_dietcheck(dir = d,
 Please note that the plots will look much nicer if the somulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
-```{r, fig.show='hold', fig.width=7, fig.height=5}
+```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model.
 feeding_plots <- plot_dietcheck(data = diet)
 feeding_plots[[1]]
