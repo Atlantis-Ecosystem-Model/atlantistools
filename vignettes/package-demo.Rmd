@@ -18,6 +18,10 @@ d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
 
 ## Preprocess your atlantis outoput
+The first thing you should do is preprocessing the output of your atlantis simulation if you want to
+use `atlantistools`. During this process an extensive set of dataframes is created from the general-
+and production netcdf files (e.g. individual weight, biomass, numbers at age ...). These dataframes
+can be directly passed to various plotting routines.
 
 ```{r}
 setas <- preprocess(dir = d,
@@ -35,8 +39,54 @@ setas <- preprocess(dir = d,
                     check_acronyms = TRUE,
                     modelstart = "1991-01-01",
                     out = "preprocess.Rda",
-                    report = TRUE,
+                    report = FALSE,
                     save_to_disc = FALSE)
+```
+
+You can also directly pass the boundary boxes or epibenthic groups as vectors instead of using the
+functions `load_bps` or `get_boundary`. However, I highly recommend to use these build in functions
+as they ensure the correct output independant of model formulation.
+
+```{r, eval = FALSE}
+setas <- preprocess(dir = d,
+                    nc_gen = "outputSETAS.nc",
+                    nc_prod = "outputSETASPROD.nc",
+                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                    prm_run = "VMPA_setas_run_fishing_F_New.prm",
+                    bps = c("Filter_Shallow", 
+                            "Filter_Other", 
+                            "Filter_Deep", 
+                            "Benthic_grazer", 
+                            "Macrobenth_Deep", 
+                            "Megazoobenthos", 
+                            "Macrobenth_Shallow", 
+                            "Macroalgae"),
+                    fgs = "SETasGroups.csv",
+                    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
+                                      "Cephalopod", "Diatom", "Zoo"),
+                    bboxes = c(0, 6, 7, 8, 9, 10),
+                    check_acronyms = TRUE,
+                    modelstart = "1991-01-01",
+                    out = "preprocess.Rda",
+                    report = FALSE,
+                    save_to_disc = FALSE)
+```
+
+The data can be stored on your machine if `save_to_disc` is set
+to `TRUE`. The data is stored as `RData` as a list of dataframes which all have the same format.
+This is done to save storage and to make sure that the data structure is not altered when the data is imported again.
+If you want to work with external software you should convert the dataframes to `*.txt` or `*.csv` files.
+In addition you should always set `report` to `TRUE` to activate progression bars during
+data import and transformation since this may take some time for complex models (many boxes/groups)
+or long simulations. 
+
+## Create a map of your model for Bec!
+
+Always add a spatial representation of your model if you have issues with model tuning. This makes the life of Bec and Beth much easier.
+
+```{r, fig.width=7, fig.height=5}
+bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+plot_boxes(bgm_data)
 ```
 
 ## Create reference plot for individual weight and biomass
@@ -60,6 +110,8 @@ diet <- load_dietcheck(dir = d,
 
 ```
 
+Please note that the plots will look much nicer if the somulation period is elongated.
+I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
 ```{r, fig.show='hold', fig.width=7, fig.height=5}
 # Create a plot for each predator in your model.
