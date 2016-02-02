@@ -5,16 +5,14 @@
 #'
 #' @param data Dataframe to check.
 #' @param expect Character vector giving the names of the expected columns
-#' @param optional Character vector giving the names of optional columns.
 #' @export
 #'
 #' @examples \dontrun{
 #' check_df_names(preprocess_setas$biomass_age, expect = c("time", "species", "atoutput", "ages"))
 #' }
 
-check_df_names <- function(data, expect, optional = NULL) {
+check_df_names <- function(data, expect) {
   df_names <- names(data)
-  expect <- c(expect, optional)
   wrong_names <- df_names[!is.element(df_names, expect)]
 
   if (length(wrong_names) > 1) {

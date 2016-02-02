@@ -4,14 +4,12 @@
 \alias{check_df_names}
 \title{Function to check the names of a dataframe.}
 \usage{
-check_df_names(data, expect, optional = NULL)
+check_df_names(data, expect)
 }
 \arguments{
 \item{data}{Dataframe to check.}
 
 \item{expect}{Character vector giving the names of the expected columns}
-
-\item{optional}{Character vector giving the names of optional columns.}
 }
 \description{
 This function is used in most plotting routines to check if the correct dataframe
