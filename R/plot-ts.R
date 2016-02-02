@@ -5,7 +5,7 @@
 #' @export
 #'
 #' @examples
-#' plot_ts(preprocess_setas$biomass)
+#' plot_ts(preprocess_setas$biomass$age)
 
 plot_ts <- function(data) {
   if (!any(is.element(names(data), "time"))) {
