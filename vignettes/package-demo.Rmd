@@ -97,6 +97,13 @@ plot_calibrate(data = setas$resn_age)
 plot_calibrate(data = setas$biomass_age)
 ```
 
+## Visualise cohort distributions for numbers and biomass over time
+
+```{r, fig.width=7, fig.height=5}
+plot_struct(data = setas$biomass_age)
+plot_struct(data = setas$nums_age)
+```
+
 ## Plot DietCheck.txt
 
 ```{r}
