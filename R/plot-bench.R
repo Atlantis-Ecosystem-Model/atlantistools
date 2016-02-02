@@ -13,6 +13,8 @@
 #' plot_bench(data = preprocess_setas$biomass, ex_data = data_comp)
 
 plot_bench <- function(data, ex_data) {
+  check_df_names(data = data, expect = c("time", "atoutput", "species"))
+
   names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
   ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
 

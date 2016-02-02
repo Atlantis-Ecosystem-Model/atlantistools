@@ -26,6 +26,8 @@
 #' plot_rec(data, ex_data)
 
 plot_rec <- function(data, ex_data) {
+  check_df_names(data = data, expect = c("ssb", "rec", "time", "species"))
+
   ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
   ex_data$species <- factor(ex_data$species, levels = levels(data$species))
   ex_data$time <- NA

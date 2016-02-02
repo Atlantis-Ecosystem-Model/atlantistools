@@ -10,6 +10,8 @@
 #' plot_boxes(bgm_data)
 
 plot_boxes <- function(data) {
+  check_df_names(data = data, expect = c("long", "lat", "box"))
+
   inside <- unique(subset(data, select = c("inside_lat", "inside_long", "box")))
   names(inside)[1:2] <- c("lat", "long")
   plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~factor(box), group = ~factor(box), label = ~box)) +

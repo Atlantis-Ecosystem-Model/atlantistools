@@ -17,6 +17,8 @@
 #' plots[[1]]
 
 plot_dietcheck <- function(data) {
+  check_df_names(data = data, expect = c("time", "atoutput", "prey", "pred"), optional = c("habitat", "agecl"))
+
   plot_func <- function(data) {
     # order data according to dietcontribution
     agg_data <- data %>%

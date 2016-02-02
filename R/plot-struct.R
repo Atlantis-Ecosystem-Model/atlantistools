@@ -8,6 +8,8 @@
 #' plot_struct(preprocess_setas$biomass_age)
 
 plot_struct <- function(data) {
+  check_df_names(data = data, expect = c("time", "atoutput", "species", "agecl"))
+
   data <- agg_perc(data = data, groups = c("species", "time"))
 
   plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~factor(agecl))) +
