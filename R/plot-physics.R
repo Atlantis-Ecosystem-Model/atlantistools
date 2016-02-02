@@ -13,6 +13,7 @@ plot_physics <- function(data) {
   plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
     ggplot2::geom_line() +
     ggplot2::facet_grid(variable ~ polygon, scales = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
+    ggplot2::labs(y = "Value [unit]") +
     theme_atlantis()
 
   return(plot)
