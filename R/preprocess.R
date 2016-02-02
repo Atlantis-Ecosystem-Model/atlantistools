@@ -233,7 +233,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
     "nums_box"    = nums_box,
     "physics"     = physics,
     "resn_age"    = resn_age,
-    "structn_age" = structn_age,
+    "structn_age" = structn_age
   )
 
   # Convert timestep to actual time.
