@@ -38,7 +38,7 @@ plot_rec <- function(data, ex_data) {
 
   plot <- ggplot2::ggplot(data = comp, ggplot2::aes_(x = ~ssb, y = ~rec, shape = ~model, colour = ~time)) +
     ggplot2::geom_point() +
-    ggplot2::facet_wrap(~species, ncol = 8, scale = "free") +
+    ggplot2::facet_wrap(~species, ncol = 8, scale = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::scale_colour_gradientn(colours = rainbow(7)) +
     ggplot2::labs(x = "SSB [tonnes]", y = "Recruits [thousands]") +
     theme_atlantis()

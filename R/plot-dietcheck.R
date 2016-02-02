@@ -35,14 +35,14 @@ plot_dietcheck <- function(data) {
     # Only used with trunc models!
     if (is.element("agecl", names(data))) {
       if (length(unique(data$agecl)) > 1) {
-        plot <- plot + ggplot2::facet_wrap(~agecl, ncol = 5)
+        plot <- plot + ggplot2::facet_wrap(~agecl, ncol = 5, labeller = ggplot2::label_wrap_gen(width = 15))
       }
     }
 
     # This is repetitive... who cares...
     if (is.element("habitat", names(data))) {
       if (length(unique(data$habitat)) > 1) {
-        plot <- plot + ggplot2::facet_wrap(~habitat, ncol = 4)
+        plot <- plot + ggplot2::facet_wrap(~habitat, ncol = 4, labeller = ggplot2::label_wrap_gen(width = 15))
       }
     }
 

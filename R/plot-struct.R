@@ -12,7 +12,7 @@ plot_struct <- function(data) {
 
   plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~factor(agecl))) +
     ggplot2::geom_bar(stat = "identity") +
-    ggplot2::facet_wrap( ~species, ncol = 8) +
+    ggplot2::facet_wrap( ~species, ncol = 8, labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::guides(fill = ggplot2::guide_legend(nrow = 1)) +
     ggplot2::labs(y = "Distribution [%]") +
     theme_atlantis()
