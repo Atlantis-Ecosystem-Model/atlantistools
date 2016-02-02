@@ -4,7 +4,7 @@
 \alias{check_df_names}
 \title{Function to check the names of a dataframe.}
 \usage{
-check_df_names(data, expect)
+check_df_names(data, expect, optional)
 }
 \arguments{
 \item{data}{Dataframe to check.}
