@@ -22,7 +22,7 @@ plot_calibrate <- function(data) {
 
   anno <- c(min(data$time), max(data$time))
 
-  plot <- ggplot2::ggplot(data = result, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~factor(agecl))) +
+  plot <- ggplot2::ggplot(data = result, ggplot2::aes_(x = ~time, y = ~atoutput)) +
     ggplot2::annotate("rect", xmin = anno[1], xmax = anno[2], ymin = 0.5, ymax = 1.5, alpha = 0.1) +
     ggplot2::annotate("rect", xmin = anno[1], xmax = anno[2], ymin = 0.8, ymax = 1.2, alpha = 0.3) +
     ggplot2::geom_line() +
@@ -31,6 +31,11 @@ plot_calibrate <- function(data) {
     ggplot2::guides(col = ggplot2::guide_legend(nrow = 1)) +
     ggplot2::labs(y = "Relative to model start") +
     theme_atlantis()
+
+  # This ensures that the plotting
+  if (is.element("agecl", names(data))) {
+    plot <- plot + ggplot2::aes_(colour = ~factor(agecl))
+  }
 
   return(plot)
 }
