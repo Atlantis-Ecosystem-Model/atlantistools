@@ -16,6 +16,6 @@ ggplot2 object
 Function to plot time series of atlantis ncdf output.
 }
 \examples{
-plot_ts(preprocess_setas$biomass)
+plot_ts(preprocess_setas$biomass_age)
 }
 
