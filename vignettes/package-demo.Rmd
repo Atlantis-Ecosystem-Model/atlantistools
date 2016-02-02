@@ -93,8 +93,12 @@ plot_boxes(bgm_data)
 
 ```{r, fig.width = 7, fig.height = 5}
 plot_calibrate(data = setas$structn_age)
-plot_calibrate(data = setas$resn_age)
-plot_calibrate(data = setas$biomass_age)
+```
+
+The function can also be used with non-age structured data.
+
+```{r, fig.width = 7, fig.height = 5}
+plot_calibrate(data = setas$biomass)
 ```
 
 ## Visualise cohort distributions for numbers and biomass over time
