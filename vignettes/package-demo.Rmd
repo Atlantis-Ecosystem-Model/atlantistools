@@ -89,6 +89,23 @@ bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 plot_boxes(bgm_data)
 ```
 
+## Plot physics and fluxes
+
+```{r, fig.width = 7, fig.height = 10}
+plot_physics(setas$physics)
+
+```
+```{r, fig.width = 7, fig.height = 5}
+plot_flux(setas$flux)
+```
+
+
+## Plot biomass timeseries (or any other time series!)
+
+```{r, fig.width = 14, fig.height = 5}
+plot_ts(setas$biomass)
+```
+
 ## Create reference plot for individual weight and biomass
 
 ```{r, fig.width = 7, fig.height = 5}
@@ -97,7 +114,7 @@ plot_calibrate(data = setas$structn_age)
 
 The function can also be used with non-age structured data.
 
-```{r, fig.width = 7, fig.height = 5}
+```{r, fig.width = 14, fig.height = 5}
 plot_calibrate(data = setas$biomass)
 ```
 
@@ -109,6 +126,11 @@ plot_struct(data = setas$nums_age)
 ```
 
 ## Plot DietCheck.txt
+
+During preprocessing of atlantis simulations data is only extracted from the nc files.
+Since information about feeding interactions is stored in the `DietCheck.txt` files the
+data has to be read in first using `load_dietcheck`. This may change in later stages of the
+package by adding `load_dietcheck` to `preprocess`.
 
 ```{r}
 # Load DietCheck.txt with load_dietcheck
@@ -144,4 +166,49 @@ for (i in seq_along(feeding_plots)) {
 }
 dev.off()
 ```
+
+## Compare recruitment with recruitment data.
+
+Please note that recruitment in Atlantis differs with recruitment in most other models due to changes of recruitment
+ages (which is generally age 0-3 in stock assessment models). Thanks @ Isaac for pointing that out.
+Both recruiment and ssb is stored in `*.txt` files like the `DietCheck.txt`. Therefore the data has to be read in first.
+
+```{r}
+rec <- load_rec(dir = d,
+   yoy = "outputSETASYOY.txt",
+   ssb = "outputSETASSSB.txt",
+   fgs = "SETasGroups.csv",
+   prm_biol = "VMPA_setas_biol_fishing_New.prm",
+   prm_run = "VMPA_setas_run_fishing_F_New.prm",
+   modelstart = "1991-01-01")
+```
+
+As the Setas model comes without recruitment data I will create the data randomly.
+
+```{r, fig.width = 7, fig.height = 5}
+ex_data <- rec
+ex_data$species <- as.character(ex_data$species)
+ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
+ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
+ex_data$model <- "test_model"
+plot_rec(data = rec, ex_data)
+```
+
+## Compare your model run with other models/data!
+
+I simply add some noise to the biomass timeseries to show the resulting plot.
+
+```{r, fig.width = 7, fig.height = 5}
+data_comp <- setas$biomass
+data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2)
+data_comp$atoutput <- NULL
+data_comp$model <- "test_model"
+plot_bench(data = setas$biomass, ex_data = data_comp)
+```
+
+
+
+
+
+
 
