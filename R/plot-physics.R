@@ -8,20 +8,12 @@
 #' plot_physics(preprocess_setas$physics)
 
 plot_physics <- function(data) {
-  if (!any(is.element(names(data), "time"))) {
-    stop("Column time not found in data")
-  }
+  check_df_names(data = data, expect = c("time", "atoutput", "variable", "polygon"))
 
   plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
     ggplot2::geom_line() +
-    ggplot2::facet_wrap(~species, scales = "free_y", ncol = 8, labeller = ggplot2::label_wrap_gen(width = 15)) +
-    ggplot2::guides(col = ggplot2::guide_legend(nrow = 1)) +
+    ggplot2::facet_grid(variable ~ polygon, scales = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
     theme_atlantis()
-
-  # Allow plotting for both cohort and non-cohort data!
-  if (is.element("agecl", names(data))) {
-    plot <- plot + ggplot2::aes_(colour = ~factor(agecl))
-  }
 
   return(plot)
 }
