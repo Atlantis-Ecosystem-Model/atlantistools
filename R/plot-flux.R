@@ -10,7 +10,7 @@
 plot_flux <- function(data) {
   check_df_names(data = data, expect = c("time", "atoutput", "variable", "polygon", "layer"))
 
-  plot <- ggplot2::ggplot(data = data, ggplot2::aes(x = ~time, y = ~atoutput, colour = ~variable, linetype = ~variable)) +
+  plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~variable, linetype = ~variable)) +
     ggplot2::geom_line() +
     ggplot2::facet_grid(polygon ~ layer, scales = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::labs(y = "Value [unit]") +
