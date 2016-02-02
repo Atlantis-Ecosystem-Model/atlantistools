@@ -16,7 +16,7 @@ plot_boxes <- function(data) {
     ggplot2::geom_polygon(colour = "black") +
     ggplot2::geom_text(data = inside) +
     theme_atlantis() +
-    ggplot2::guides(fill = ggplot2::guide_legend(nrow = 1)) +
+    ggplot2::guides(fill = ggplot2::guide_legend(ncol = 1)) +
     ggplot2::theme(legend.position = "right")
 
   return(plot)
