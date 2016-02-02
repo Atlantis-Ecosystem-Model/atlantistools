@@ -28,6 +28,8 @@ plot_calibrate <- function(data) {
     ggplot2::geom_line() +
     ggplot2::geom_hline(yintercept = 1, linetype = "dotted") +
     ggplot2::facet_wrap(~species, scales = "free_y", ncol = 8) +
+    ggplot2::guides(col = ggplot2::guide_legend(nrow = 1)) +
+    ggplot2::labs(y = "Relative to model start") +
     theme_atlantis()
 
   return(plot)
