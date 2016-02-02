@@ -32,7 +32,7 @@ plot_calibrate <- function(data) {
     ggplot2::labs(y = "Relative to model start") +
     theme_atlantis()
 
-  # This ensures that the plotting
+  # Allow plotting for both cohort and non-cohort data!
   if (is.element("agecl", names(data))) {
     plot <- plot + ggplot2::aes_(colour = ~factor(agecl))
   }
