@@ -3,6 +3,20 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.1.0.9000
+
+## New features
+
+* `plot_bench()` 
+* `plot_boxes()` 
+* `plot_calibrate()` 
+* `plot_dietcheck()` 
+* `plot_flux()` 
+* `plot_physics()` 
+* `plot_rec()` 
+* `plot_struct()` 
+* `plot_ts()` 
+
 # atlantistools 0.0.0.9000
 
 ## New features
@@ -16,6 +30,9 @@ production outputfile are supported. In addition the following variables can be 
 variable per function call. 
 * `load_nc_physics()` Read in physical data from Atlantis netcdf output file. Works very
 similar like load_nc.
+* `load_dietcheck()` Read in data from the `DietCheck.txt` output file. Currently only models based on the
+`bec_dev` branch are supported due to differences in data structure with `trunc` models.
+* `load_rec()` Read in data from the `*SSB.txt` and `*YOY.txt` output files. 
 * `plot_calibrate()` Plot relative timeseries of various variables (E.g. biomass@age, 
 weight@age). The start of the model run is used as reference point.
 * `preprocess()` Various model specifications are read in from the ncdf-output files
@@ -28,8 +45,6 @@ pull out the data from this file/object.
 for 'group_by' followed by 'summarise'.
 * `agg_sum()` See 'agg_mean' for further details. The summary function used her is 'sum'.
 
-## Documentation improvements
-
 ## Minor improvements
 
 * `convert_path()` Allows users to use the model with either one model folder or multiple
@@ -38,11 +53,21 @@ recommend to store all the data in one folder because then you only have to supp
 directory once and can acces all files using only the filename. If you are using multiple
 files you always have to pass the complete folder/filename-string as filename and set
 the 'dir' paramater to NULL.
+* `convert_bgm()` Convert `*.bgm` file to a dataframe using a spatial projection.
+* `convert_factor()` Convert species names in output files to long names. Therefore the plots all
+use the same labeling. Simply change the values in your `functionalGroups.csv` file in the column `LongName` 
+if you want to change the names.
+* `convert_time()` Convert from timestep (either as integer or number of days) to actual time.
 * `get_boundary()` Extract the boundary boxes from the list of boxinfos generated with 'load_box()'. 
-* `get_conv_mgnbiot()` Extract the factor to convert data from mg nitrogen to biomass in t
+* `get_conv_mgnbiot()` Extract the conversionfactor to convert data from mg nitrogen to biomass in t
 from the biol*.prm file.
-* `get_groups()` Collection of similar functions which get specific
-#' columns from the Atlantis functionalGroups.csv file. (E.g. cohort-groups, acronyms, ...)
+* `get_groups()` Collection of similar functions to extract specific
+#' columns from the Atlantis functionalGroups.csv file. (E.g. cohort-groups, acronyms, group names ...)
+* `theme_atlantis` Customised ggplot2 theme used in every plot.
 
+# Dummy x.x.x.9000
+## New features
+## Documentation improvements
+## Minor improvements
 ## Bug fixes
 
