@@ -28,7 +28,7 @@ convert_time <- function(dir = getwd(), prm_run, data, modelstart, stock_state =
   prm_run <- readLines(con = prm_run)
 
   if (!stock_state) {
-    toutinc <- extract_param(chars = prm_run, variable = "toutinc")
+    toutinc <- extract_prm(chars = prm_run, variable = "toutinc")
     if (any(names(data) == "time")) data$time <- with(data, as.Date.numeric(time * toutinc, origin = modelstart))
   } else {
     if (any(names(data) == "time")) data$time <- with(data, as.Date.numeric(time, origin = modelstart))

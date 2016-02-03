@@ -66,8 +66,8 @@ load_rec <- function(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart
   # Extract info about recruit weights from the biological parameterfile!
   string_prm_biol <- readLines(con = convert_path(dir = dir, file = prm_biol))
   acr <- get_age_acronyms(dir = dir, fgs = fgs)
-  kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_param, chars = string_prm_biol)
-  kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_param, chars = string_prm_biol)
+  kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_prm, chars = string_prm_biol)
+  kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_prm, chars = string_prm_biol)
   rec_weights <- data.frame(code = acr, rec_weights = unlist(kwrr) + unlist(kwsr), stringsAsFactors = F)
 
   # Combine with recruitment data and convert units!
