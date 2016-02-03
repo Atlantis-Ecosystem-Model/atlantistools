@@ -29,11 +29,11 @@ data <- load_rec(dir = d,
    prm_biol = "VMPA_setas_biol_fishing_New.prm",
    prm_run = "VMPA_setas_run_fishing_F_New.prm",
    modelstart = "1991-01-01")
-
 ex_data <- data
 ex_data$species <- as.character(ex_data$species)
 ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
 ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
+ex_data$time <- as.character(ex_data$time)
 ex_data$model <- "test_model"
 plot_rec(data, ex_data)
 }

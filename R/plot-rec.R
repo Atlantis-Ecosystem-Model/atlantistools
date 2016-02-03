@@ -9,22 +9,21 @@
 #' @export
 #'
 #' @examples
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-data <- load_rec(dir = d,
-   yoy = "outputSETASYOY.txt",
-   ssb = "outputSETASSSB.txt",
-   fgs = "SETasGroups.csv",
-   prm_biol = "VMPA_setas_biol_fishing_New.prm",
-   prm_run = "VMPA_setas_run_fishing_F_New.prm",
-   modelstart = "1991-01-01")
-
-ex_data <- data
-ex_data$species <- as.character(ex_data$species)
-ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
-ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
-ex_data$time <- as.character(ex_data$time)
-ex_data$model <- "test_model"
-plot_rec(data, ex_data)
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' data <- load_rec(dir = d,
+#'    yoy = "outputSETASYOY.txt",
+#'    ssb = "outputSETASSSB.txt",
+#'    fgs = "SETasGroups.csv",
+#'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
+#'    modelstart = "1991-01-01")
+#' ex_data <- data
+#' ex_data$species <- as.character(ex_data$species)
+#' ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
+#' ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
+#' ex_data$time <- as.character(ex_data$time)
+#' ex_data$model <- "test_model"
+#' plot_rec(data, ex_data)
 
 plot_rec <- function(data, ex_data) {
   check_df_names(data = data, expect = c("ssb", "rec", "time", "species"))
@@ -39,16 +38,20 @@ plot_rec <- function(data, ex_data) {
   # Atlantis as first factor level!
   comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
 
-  breaks <- c(min(as.numeric(data$time)), max(as.numeric(data$time)))
-  labels <- c(min(data$time), max(data$time))
+  # Add breaks and labels to the legend. This is really hacky... We need a continous variable for time
+  # to map rainbow colors...
+  time_numeric <- sort(unique(as.numeric(data$time)))
+  time_date <- sort(unique(data$time))
+  pos <- c(1, 1:2 * trunc(length(time_numeric)/2), length(time_numeric))
 
-  plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~ssb, y = ~rec, shape = ~model, colour = ~as.numeric(time))) +
+  plot <- ggplot2::ggplot(data = comp, ggplot2::aes_(x = ~ssb, y = ~rec, shape = ~model, colour = ~as.numeric(time))) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(~species, ncol = 8, scale = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
-    ggplot2::scale_colour_gradientn("Time", colours = rainbow(7), breaks = breaks, labels = labels) +
+    ggplot2::scale_colour_gradient("Time", low = "red", high = "green" , breaks = time_numeric[pos], labels = time_date[pos]) +
     ggplot2::labs(x = "SSB [tonnes]", y = "Recruits [thousands]") +
     theme_atlantis() +
-    ggplot2::guides(colour = ggplot2::guide_colorbar(label.theme = ggplot2::element_text(angle = 45, h)))
+    ggplot2::guides(colour = ggplot2::guide_colorbar(label.theme = ggplot2::element_text(angle = 45),
+                                                     label.hjust = 1, label.vjust = 1, title.vjust = 1))
 
   return(plot)
 }
