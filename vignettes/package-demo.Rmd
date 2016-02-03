@@ -102,7 +102,7 @@ plot_flux(setas$flux)
 
 ## Plot biomass timeseries (or any other time series!)
 
-```{r, fig.width = 14, fig.height = 5}
+```{r, fig.width = 10, fig.height = 3}
 plot_ts(setas$biomass)
 ```
 
@@ -114,7 +114,7 @@ plot_calibrate(data = setas$structn_age)
 
 The function can also be used with non-age structured data.
 
-```{r, fig.width = 14, fig.height = 5}
+```{r, fig.width = 10, fig.height = 3}
 plot_calibrate(data = setas$biomass)
 ```
 
@@ -167,7 +167,7 @@ for (i in seq_along(feeding_plots)) {
 dev.off()
 ```
 
-## Compare recruitment with recruitment data.
+## Compare recruitment with recruitment data
 
 Please note that recruitment in Atlantis differs with recruitment in most other models due to changes of recruitment
 ages (which is generally age 0-3 in stock assessment models). Thanks @ Isaac for pointing that out.
@@ -198,7 +198,7 @@ plot_rec(data = rec, ex_data)
 
 I simply add some noise to the biomass timeseries to show the resulting plot.
 
-```{r, fig.width = 7, fig.height = 5}
+```{r, fig.width = 10, fig.height = 4}
 data_comp <- setas$biomass
 data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2)
 data_comp$atoutput <- NULL
