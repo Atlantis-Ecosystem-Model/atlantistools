@@ -27,7 +27,7 @@ plot_bench <- function(data, ex_data) {
     dplyr::summarise_(time = ~max(time))
   max_time <- min(model_time$time)
 
-  comp <- subset(comp, time <= max_time)
+  comp <- comp[comp$time <= max_time, ]
 
   plot <- ggplot2::ggplot(comp, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~model)) +
     ggplot2::geom_line() +
