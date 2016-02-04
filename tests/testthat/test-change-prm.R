@@ -34,7 +34,7 @@ supported_parameters <-   c("KWSR", "KWRR", "jack_a", "jack_b", "KUP", "KLP", "R
 # Found multiple times!
 # "mL", "mQ"
 
-test_that("test scan_prm", {
+test_that("test scan_prm & extract_prm", {
   expect_error(scan_prm(chars = c("# KWRR_FVS 15"), variable = "KWRR_FVS"), "Variable KWRR_FVS always outcommented.")
 
   expect_error(scan_prm(chars = c("# KWRR_FVS 15", "# KWRR_FVS 25"), variable = "KWRR_FVS"), "Variable KWRR_FVS always outcommented.")
@@ -42,6 +42,9 @@ test_that("test scan_prm", {
   expect_error(scan_prm(chars = c("KWRR_FVS 15", "KWRR_FVS 25"), variable = "KWRR_FVS"), "Variable KWRR_FVS found multiple times.")
 
   expect_equal(extract_prm(chars = c("# KWRR_FVS 15", "KWRR_FVS 25"), variable = "KWRR_FVS"), 25)
+
+  expect_equal(extract_prm(chars = c("KWRR_FVS 15", "mL_FPS 0.01", "jmL_FPS 0.003", "KWRR_FVS 25"), variable = "mL_FPS"), 0.01)
+  expect_equal(extract_prm(chars = c("KWRR_FVS 15", "mL_FPS 0.01", "jmL_FPS 0.003", "KWRR_FVS 25"), variable = "jmL_FPS"), 0.003)
 
   for (i in seq_along(supported_parameters)) {
     expect_equal(length(scan_prm(chars = prm_old, variable = paste(supported_parameters[i], "FPS", sep = "_"))), 1)
