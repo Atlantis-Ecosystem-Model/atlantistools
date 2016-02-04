@@ -112,7 +112,7 @@ scan_prm <- function(chars, variable){
       return(pos)
     } else {
       # mL and mQ are also found in jmL and jmQ... We need to add an exception
-      # here! The order of the expectations have to match the order of the
+      # here! The order of the exceptions have to match the order of the
       # second item found (e.g. "mL_" --> "jmL_")
       if (length(pos) == 2 & any(sapply(c("mL_", "mQ_"), grepl, x = variable))) {
         # Remove juveniale mortality
