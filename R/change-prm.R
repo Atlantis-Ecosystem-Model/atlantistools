@@ -82,6 +82,8 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
   return(prm_biol_new)
 }
 
+#' @export
+#' @rdname change_prm
 # Extract value for a specific parameter from a Vector of character strings.
 extract_prm <- function(chars, variable){
   pos <- scan_prm(chars = chars, variable = variable)
@@ -90,6 +92,8 @@ extract_prm <- function(chars, variable){
   return(result)
 }
 
+#' @export
+#' @rdname change_prm
 # Extract position of variable in a Vector of character strings.
 scan_prm <- function(chars, variable){
   pos <- grep(pattern = variable, x = chars)

@@ -2,10 +2,16 @@
 % Please edit documentation in R/change-prm.R
 \name{change_prm}
 \alias{change_prm}
+\alias{extract_prm}
+\alias{scan_prm}
 \title{Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.}
 \usage{
 change_prm(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
   relative = TRUE, save_to_disc = TRUE)
+
+extract_prm(chars, variable)
+
+scan_prm(chars, variable)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
