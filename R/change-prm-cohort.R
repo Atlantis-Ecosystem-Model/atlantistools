@@ -31,7 +31,7 @@
 #' change_prm_cohort(dir = d,
 #'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
 #'    select_acronyms = c("FPS", "FVS"),
-#'    roc = c(2,3),
+#'    roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
 #'    parameter = "C",
 #'    save_to_disc = FALSE)
 
@@ -76,7 +76,7 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
   }
 
   for (i in seq_along(select_acronyms)) {
-    if (!(roc[i, ] == 1 & relative)) {
+    if (!(all(roc[i, ] == 1) & relative)) {
       prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[i, ], parameter = parameter, relative = relative)
     }
   }
