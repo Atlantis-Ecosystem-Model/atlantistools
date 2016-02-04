@@ -58,7 +58,13 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
     } else {
       new_value <- roc
     }
-    prm_biol[pos] <- paste(flag, new_value, sep = "\t")
+
+    # Update value. Some pesky expectations have to be added here.
+    if (is.element(parameter, c("mQ", "mL", "jmL", "jmQ"))) {
+      prm_biol[pos] <- paste(flag, new_value, "T15", sep = "\t")
+    } else {
+      prm_biol[pos] <- paste(flag, new_value, sep = "\t")
+    }
     return(prm_biol)
   }
 
@@ -92,6 +98,8 @@ scan_prm <- function(chars, variable){
   } else {
     if (length(pos) >= 1) {
       # Check if some lines are outcommented and remove those!
+      # Some modelers tend to add multiple lines for each flag
+      # and comment the ones they do not use out... ;)
       pos_com <- which(substr(chars[pos], 1, 1) == "#")
       if (length(pos_com) == length(pos)) {
         stop(paste("Variable", variable, "always outcommented."))
@@ -103,7 +111,19 @@ scan_prm <- function(chars, variable){
     if (length(pos) == 1) {
       return(pos)
     } else {
-      stop(paste("Variable", variable, "found multiple times."))
+      # mL and mQ are also found in jmL and jmQ... We need to add an exception
+      # here! The order of the expectations have to match the order of the
+      # second item found (e.g. "mL_" --> "jmL_")
+      if (length(pos) == 2 & any(sapply(c("mL_", "mQ_"), grepl, x = variable))) {
+        # Remove juveniale mortality
+        ex <- c("jmL_", "jmQ_")
+        for (i in seq_along(ex)) {
+          if (any(grepl(pattern = ex[i], x = chars[pos]))) pos <- pos[!grepl(pattern = ex[i], x = chars[pos])]
+        }
+        return(pos)
+      } else {
+        stop(paste("Variable", variable, "found multiple times."))
+      }
     }
   }
 }
