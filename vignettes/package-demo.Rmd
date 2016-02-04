@@ -243,7 +243,7 @@ new_prm <-  change_prm(dir = d,
                        save_to_disc = FALSE)
 ```
 
-This helps to automate the tuning and calibration of your model. In addition it is a useful tool to make your tuning
+This helps to automate the tuning and calibration of your model. In addition it is a useful tool to make the tuning
 reproduceable and transparent for other modelers.
 
 
