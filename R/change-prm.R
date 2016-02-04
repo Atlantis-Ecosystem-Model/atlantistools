@@ -60,7 +60,7 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
     }
 
     # Update value. Some pesky expectations have to be added here.
-    if (is.element(parameter, c("mQ", "mL", "jmL", "jmQ"))) {
+    if (is.element(parameter, c("mum", "c", "mQ", "mL", "jmL", "jmQ"))) {
       prm_biol[pos] <- paste(flag, new_value, "T15", sep = "\t")
     } else {
       prm_biol[pos] <- paste(flag, new_value, sep = "\t")
@@ -118,9 +118,9 @@ scan_prm <- function(chars, variable){
       # mL and mQ are also found in jmL and jmQ... We need to add an exception
       # here! The order of the exceptions have to match the order of the
       # second item found (e.g. "mL_" --> "jmL_")
-      if (length(pos) == 2 & any(sapply(c("mL_", "mQ_"), grepl, x = variable))) {
+      if (length(pos) == 2 & any(sapply(c("mL_", "mQ_", "mum_"), grepl, x = variable))) {
         # Remove juveniale mortality
-        ex <- c("jmL_", "jmQ_")
+        ex <- c("jmL_", "jmQ_", "crit_mum")
         for (i in seq_along(ex)) {
           if (any(grepl(pattern = ex[i], x = chars[pos]))) pos <- pos[!grepl(pattern = ex[i], x = chars[pos])]
         }
