@@ -206,9 +206,45 @@ data_comp$model <- "test_model"
 plot_bench(data = setas$biomass, ex_data = data_comp)
 ```
 
+## Change parameter values!
 
+Let's say you want to change a parameter in your biological parameter file. For example the recruit 
+weights for a specific fish. In our case `Small planktivorous fish` (Code = `FPS`). You can either
+change the existing valu by multilpying with a factor or set a new absolut value. In our case
+we increase the existing value by a factor of 2.
 
+```{r}
+new_prm <-  change_prm(dir = d, 
+                       prm_biol = "VMPA_setas_biol_fishing_New.prm", 
+                       select_acronyms = "FPS", 
+                       roc = 2, 
+                       parameter = "KWRR", 
+                       save_to_disc = FALSE)
+```
 
+You can you `extract_prm` to check if the resulting *.prm is correct. However, I checked the function
+thouroghly you so you would normally set `save_to_disc` to `TRUE` and overwrite your existing
+parameter file with the new one. Please make sure to backup your original model.
+
+```{r}
+prm_old <- readLines(con = file.path(d, "VMPA_setas_biol_fishing_New.prm"))
+extract_prm(chars = prm_old, variable = "KWRR_FPS")
+extract_prm(chars = new_prm, variable = "KWRR_FPS")
+```
+
+You can also pass a vector of groups to change the parameter for multiple functional groups with a single call to `change_prm`.
+
+```{r}
+new_prm <-  change_prm(dir = d, 
+                       prm_biol = "VMPA_setas_biol_fishing_New.prm", 
+                       select_acronyms = c("FPL", "FPO", "FPS", "FVD", "FVV", "FVS", "FVB", "FVT", "FVO"), 
+                       roc = runif(n = 9, min = 2, max = 5), 
+                       parameter = "KWRR", 
+                       save_to_disc = FALSE)
+```
+
+This helps to automate the tuning and calibration of your model. In addition it is a useful tool to make your tuning
+reproduceable and transparent for other modelers.
 
 
 
