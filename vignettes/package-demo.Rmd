@@ -246,5 +246,23 @@ new_prm <-  change_prm(dir = d,
 This helps to automate the tuning and calibration of your model. In addition it is a useful tool to make the tuning
 reproduceable and transparent for other modelers.
 
+In case you want to change the parameter values for cohort structured groups whose paramter expect multiple values
+(E.g. Clearance rate and mum for fish groups) please use `change_prm_cohrt`.
+
+```{r}
+new_prm <-  change_prm_cohort(dir = d, 
+                              prm_biol = "VMPA_setas_biol_fishing_New.prm", 
+                              select_acronyms = c("FPL", "FPO"), 
+                              roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10), 
+                              parameter = "C", 
+                              save_to_disc = FALSE)
+```
+
+
+
+
+
+
+
 
 
