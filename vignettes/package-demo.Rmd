@@ -18,8 +18,8 @@ d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
 
 ## Preprocess your atlantis outoput
-The first thing you should do is preprocessing the output of your atlantis simulation if you want to
-use `atlantistools`. During this process an extensive set of dataframes is created from the general-
+The first step with `atlantistools` is generally the preprocessing of the output of your atlantis simulation. 
+During this process an extensive set of dataframes is created from the general-
 and production netcdf files (e.g. individual weight, biomass, numbers at age ...). These dataframes
 can be directly passed to various plotting routines.
 
@@ -43,7 +43,7 @@ setas <- preprocess(dir = d,
                     save_to_disc = FALSE)
 ```
 
-You can also directly pass the boundary boxes or epibenthic groups as vectors instead of using the
+You can also directly pass the boundary boxes or epibenthic groups as vectors if you do not intend to use the build in
 functions `load_bps` or `get_boundary`. However, I highly recommend to use these build in functions
 as they ensure the correct output independant of model formulation.
 
@@ -73,12 +73,40 @@ setas <- preprocess(dir = d,
 ```
 
 The data can be stored on your machine if `save_to_disc` is set
-to `TRUE`. The data is stored as `RData` as a list of dataframes which all have the same format.
-This is done to save storage and to make sure that the data structure is not altered when the data is imported again.
-If you want to work with external software you should convert the dataframes to `*.txt` or `*.csv` files.
-In addition you should always set `report` to `TRUE` to activate progression bars during
-data import and transformation since this may take some time for complex models (many boxes/groups)
+to `TRUE`. The data is stored as `*.rda` format as a list of dataframes which all share the same format.
+This is done to save storage space and to make sure that the data structure is not altered when it is imported into R.
+If you want to work with external software in further steps (E.g. Excel) you should convert the dataframes to `*.txt` or `*.csv` files.
+In addition you should always set `report` to `TRUE` to activate the progression bars during
+data import and transformation since this process may take some time for complex models (many boxes/groups)
 or long simulations. 
+
+Most functions in `atlantistools` expect a directory to search for specific model files. There are 2 ways to pass the directory:
+1. All your model files are stored in one directory. The files can now be accesed via their name. The directory can be set/passed in two ways:
+* Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory.
+* Pass the directory of your Atlantis folder as Object (this is the approach which is used here) to the argument `dir`.
+2. In case you are using different folders for generic model files and output files the directory can be set as in `1.`. However you need to
+implement the output subfolder into the name of your outputfiles:
+
+```{r, eval = FALSE}
+
+setas <- preprocess(dir = d,
+                    nc_gen = "output/outputSETAS.nc",
+                    nc_prod = "output/outputSETASPROD.nc",
+                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                    prm_run = "VMPA_setas_run_fishing_F_New.prm",
+                    bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
+                                   init = "init_vmpa_setas_25032013.nc"),
+                    fgs = "SETasGroups.csv",
+                    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
+                                      "Cephalopod", "Diatom", "Zoo"),
+                    bboxes = get_boundary(boxinfo = load_box(dir = d, 
+                                                             bgm = "VMPA_setas.bgm")),
+                    check_acronyms = TRUE,
+                    modelstart = "1991-01-01",
+                    out = "preprocess.Rda",
+                    report = FALSE,
+                    save_to_disc = FALSE)
+```
 
 ## Create a map of your model for Bec!
 
@@ -143,7 +171,7 @@ diet <- load_dietcheck(dir = d,
 
 ```
 
-Please note that the plots will look much nicer if the somulation period is elongated.
+Please note that the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
@@ -169,21 +197,21 @@ dev.off()
 
 ## Compare recruitment with recruitment data
 
-Please note that recruitment in Atlantis differs with recruitment in most other models due to changes of recruitment
+Please note that recruitment in Atlantis differs from recruitment in most models due to changes of recruitment
 ages (which is generally age 0-3 in stock assessment models). Thanks @ Isaac for pointing that out.
-Both recruiment and ssb is stored in `*.txt` files like the `DietCheck.txt`. Therefore the data has to be read in first.
+Both recruiment and ssb is stored in `*.txt` files like the `DietCheck.txt`. Therefore the data has to be read in first with `load_rec`.
 
 ```{r}
 rec <- load_rec(dir = d,
-   yoy = "outputSETASYOY.txt",
-   ssb = "outputSETASSSB.txt",
-   fgs = "SETasGroups.csv",
-   prm_biol = "VMPA_setas_biol_fishing_New.prm",
-   prm_run = "VMPA_setas_run_fishing_F_New.prm",
-   modelstart = "1991-01-01")
+                yoy = "outputSETASYOY.txt",
+                ssb = "outputSETASSSB.txt",
+                fgs = "SETasGroups.csv",
+                prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                prm_run = "VMPA_setas_run_fishing_F_New.prm",
+                modelstart = "1991-01-01")
 ```
 
-As the Setas model comes without recruitment data I will create the data randomly.
+As the Setas model comes without recruitment data some noise is applied to the output files to demonstrate the plots.
 
 ```{r, fig.width = 7, fig.height = 5}
 ex_data <- rec
@@ -196,7 +224,7 @@ plot_rec(data = rec, ex_data)
 
 ## Compare your model run with other models/data!
 
-I simply add some noise to the biomass timeseries to show the resulting plot.
+Again, noise is added due to a lack of external data.
 
 ```{r, fig.width = 10, fig.height = 4}
 data_comp <- setas$biomass
@@ -210,7 +238,7 @@ plot_bench(data = setas$biomass, ex_data = data_comp)
 
 Let's say you want to change a parameter in your biological parameter file. For example the recruit 
 weights for a specific fish. In our case `Small planktivorous fish` (Code = `FPS`). You can either
-change the existing valu by multilpying with a factor or set a new absolut value. In our case
+change the existing valu by multiplication with a factor or set a new absolut value. In our case
 we increase the existing value by a factor of 2.
 
 ```{r}
@@ -222,9 +250,9 @@ new_prm <-  change_prm(dir = d,
                        save_to_disc = FALSE)
 ```
 
-You can you `extract_prm` to check if the resulting *.prm is correct. However, I checked the function
-thouroghly you so you would normally set `save_to_disc` to `TRUE` and overwrite your existing
-parameter file with the new one. Please make sure to backup your original model.
+You can use `extract_prm` to check the format of the resulting *.prm. However, I checked the function
+thouroghly so you would normally set `save_to_disc` to `TRUE` to overwrite your existing
+parameter file with the newly generated one Please make sure to backup your original files beforehand.
 
 ```{r}
 prm_old <- readLines(con = file.path(d, "VMPA_setas_biol_fishing_New.prm"))
@@ -247,7 +275,8 @@ This helps to automate the tuning and calibration of your model. In addition it 
 reproduceable and transparent for other modelers.
 
 In case you want to change the parameter values for cohort structured groups with multiple values per parameter
-(E.g. Clearance rate and mum for fish groups) please use `change_prm_cohrt`.
+(E.g. Clearance rate and mum for fish groups) please use `change_prm_cohrt`. Please note that the function only
+works with parameters whose values are stored in the next row following the flag in the *.prm file.
 
 ```{r}
 new_prm <-  change_prm_cohort(dir = d, 
