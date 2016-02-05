@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' str_split_twice(char = "Hello   15")
-#' str_split_twice(char = "flag1 15  16\t15", min_only = F)
+#' str_split_twice(char = "flag1 15  16\t15", min_only = FALSE)
 
 # Split any character string multiple times and retrun the first (min_only = T)
 # or all (min_only = F) numeric values found.
