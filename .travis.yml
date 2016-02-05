@@ -7,4 +7,5 @@ apt_packages:
 - libnetcdf-dev
 r_binary_packages:
 - proj4
-
+script:
+- sudo apt-get install fonts-inconsolata
