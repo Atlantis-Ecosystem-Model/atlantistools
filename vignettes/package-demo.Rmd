@@ -287,11 +287,3 @@ new_prm <-  change_prm_cohort(dir = d,
                               save_to_disc = FALSE)
 ```
 
-
-
-
-
-
-
-
-
