@@ -24,7 +24,7 @@ Get the development version from github:
 devtools::install_github("alketh/atlantistools")
 ```
 
-If you want to check out the vignette please use
+It is highly recommended to install the package with the vignette:
 
 ```R
 devtools::install_github("alketh/atlantistools", build_vignettes = TRUE)
