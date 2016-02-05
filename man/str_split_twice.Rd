@@ -12,6 +12,9 @@ str_split_twice(char, min_only = TRUE)
 \item{min_only}{Logical specifying if only the first numeric value (\code{TRUE}) or
 all numeric values (\code{FALSE}) should be returned.}
 }
+\value{
+numeric values forund in the passed string.
+}
 \description{
 The function splits any character string at each tab and space and returns
 all (min_only = FALSE) or only the first (min_only = T) numeric value found in the string.

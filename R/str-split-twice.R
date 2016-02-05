@@ -6,6 +6,7 @@
 #' @param char Character string.
 #' @param min_only Logical specifying if only the first numeric value (\code{TRUE}) or
 #' all numeric values (\code{FALSE}) should be returned.
+#' @return numeric values forund in the passed string.
 #' @export
 #'
 #' @examples
@@ -23,6 +24,7 @@ str_split_twice <- function(char, min_only = TRUE){
   }
   char <- suppressWarnings(as.numeric(char))
   if (all(is.na(char))) stop("No numeric value present.")
-  if (min_only) char <- char[min(which(!is.na(char)))]
+  char <- char[!is.na(char)]
+  if (min_only) char <- char[1]
   return(char)
 }
