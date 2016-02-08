@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # #' Change biological parameterfile for parameters which expect multiple values.
 # #'
 # #'
@@ -89,7 +88,6 @@
 #
 #   return(prm_biol_new)
 # }
-=======
 #' Change biological parameterfile for parameters which expect multiple values.
 #'
 #'
@@ -181,4 +179,3 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
   return(prm_biol_new)
 }
 
->>>>>>> test
