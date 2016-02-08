@@ -51,3 +51,5 @@ extract_prm <- function(chars, variable){
   result <- str_split_twice(char = result)
   return(result)
 }
+
+
