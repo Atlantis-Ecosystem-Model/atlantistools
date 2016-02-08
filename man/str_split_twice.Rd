@@ -19,4 +19,8 @@ numeric values forund in the passed string.
 The function splits any character string at each tab and space and returns
 all (min_only = FALSE) or only the first (min_only = T) numeric value found in the string.
 }
+\examples{
+str_split_twice(char = "Hello   15")
+str_split_twice(char = "flag1 15  16\\t15", min_only = FALSE)
+}
 
