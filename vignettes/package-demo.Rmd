@@ -82,12 +82,12 @@ or long simulations.
 
 Most functions in `atlantistools` expect a directory to search for specific model files. There are 2 ways to pass the directory:
 
-1. All your model files are stored in one directory. The files can now be accesed via their name. The directory can be set/passed in two ways:
+All your model files are stored in one directory. The files can now be accesed via their name. The directory can be set/passed in two ways:
 
-    + Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory.
-    + Pass the directory of your Atlantis folder as Object (this is the approach which is used here) to the argument `dir`.
+Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory.
+Pass the directory of your Atlantis folder as Object (this is the approach which is used here) to the argument `dir`.
   
-2. In case you are using different folders for generic model files and output files the directory can be set as described above. However you need to
+In case you are using different folders for generic model files and output files the directory can be set as described above. However you need to
 implement the output subfolder into the name of your outputfiles:
 
 ```{r, eval = FALSE}
