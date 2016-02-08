@@ -52,5 +52,3 @@ extract_prm <- function(chars, variable){
   return(result)
 }
 
-
-
