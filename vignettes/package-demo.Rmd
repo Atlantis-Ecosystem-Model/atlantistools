@@ -75,16 +75,17 @@ setas <- preprocess(dir = d,
 The data can be stored on your machine if `save_to_disc` is set
 to `TRUE`. The data is stored as `*.rda` format as a list of dataframes which all share the same format.
 This is done to save storage space and to make sure that the data structure is not altered when it is imported into R.
-If you want to work with external software in further steps (E.g. Excel) you should convert the dataframes to `*.txt` or `*.csv` files.
+If you want to work with external software in further steps (E.g. Excel) you should convert the dataframes to `*.txt` or `*.csv` file.
 In addition you should always set `report` to `TRUE` to activate the progression bars during
 data import and transformation since this process may take some time for complex models (many boxes/groups)
-or long simulations. 
+or long simulations.
 
 Most functions in `atlantistools` expect a directory to search for specific model files. There are 2 ways to pass the directory:
 
 1. All your model files are stored in one directory. The files can now be accesed via their name. The directory can be set/passed in two ways:
-    * Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory.
-    * Pass the directory of your Atlantis folder as Object (this is the approach which is used here) to the argument `dir`.
+
+    + Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory.
+    + Pass the directory of your Atlantis folder as Object (this is the approach which is used here) to the argument `dir`.
   
 2. In case you are using different folders for generic model files and output files the directory can be set as described above. However you need to
 implement the output subfolder into the name of your outputfiles:
@@ -123,8 +124,8 @@ plot_boxes(bgm_data)
 
 ```{r, fig.width = 7, fig.height = 10}
 plot_physics(setas$physics)
-
 ```
+
 ```{r, fig.width = 7, fig.height = 5}
 plot_flux(setas$flux)
 ```
@@ -173,7 +174,7 @@ diet <- load_dietcheck(dir = d,
 
 ```
 
-Please note that the plots will look much nicer if the simulation period is elongated.
+Please note the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
@@ -253,7 +254,7 @@ new_prm <-  change_prm(dir = d,
 ```
 
 You can use `extract_prm` to check the format of the resulting *.prm. However, I checked the function
-thouroghly so you would normally set `save_to_disc` to `TRUE` to overwrite your existing
+thoroughly so you would normally set `save_to_disc` to `TRUE` to overwrite your existing
 parameter file with the newly generated one Please make sure to backup your original files beforehand.
 
 ```{r}
