@@ -198,6 +198,7 @@ for (i in seq_along(feeding_plots)) {
 dev.off()
 ```
 
+<<<<<<< HEAD
 ## Compare recruitment with recruitment data
 
 Please note that recruitment in Atlantis differs from recruitment in most models due to changes of recruitment
@@ -289,4 +290,5 @@ new_prm <-  change_prm_cohort(dir = d,
                               parameter = "C", 
                               save_to_disc = FALSE)
 ```
+
 
