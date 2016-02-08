@@ -28,12 +28,12 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' change_prm_cohort(dir = d,
-#'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-#'    select_acronyms = c("FPS", "FVS"),
-#'    roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
-#'    parameter = "C",
-#'    save_to_disc = FALSE)
+#' new_prm <- change_prm_cohort(dir = d,
+#'                              prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'                              select_acronyms = c("FPS", "FVS"),
+#'                              roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
+#'                              parameter = "C",
+#'                              save_to_disc = FALSE)
 
 
 change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter, relative = TRUE, save_to_disc = TRUE) {

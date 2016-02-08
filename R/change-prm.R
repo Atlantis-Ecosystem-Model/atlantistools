@@ -27,12 +27,12 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' change_prm(dir = d,
-#'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-#'    select_acronyms = c("FPS", "FVS"),
-#'    roc = c(2,3),
-#'    parameter = "KWRR",
-#'    save_to_disc = FALSE)
+#' new_prm <- change_prm(dir = d,
+#'                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'                       select_acronyms = c("FPS", "FVS"),
+#'                       roc = c(2,3),
+#'                       parameter = "KWRR",
+#'                       save_to_disc = FALSE)
 
 change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter, relative = TRUE, save_to_disc = TRUE) {
   if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
