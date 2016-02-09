@@ -137,44 +137,47 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
                   "Denitrifiction", "Nitrification", "Light")
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
 
-  if (report) print("*** Start: reading in data! ***")
+  message("Start reading in data!")
   # "load_atlantis_ncdf" and "load_atlantis_ncdf_physics" are independent functions in seperate R-files!
   # NOTE: Data for new plots has to be added here if not already available!
-  if (report) print("*** Start: Reading in layerd data: structn")
+  message("01 layerd data\nstructn")
   at_structn_l <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
                           select_variable = "StructN", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
 
-  if (report) print("*** Start: Reading in layerd data: resn")
+  message("resn")
   at_resn_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
                           select_variable = "ResN", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
 
-  if (report) print("*** Start: Reading in layerd data: nums")
+  message("nums")
   at_nums_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
                           select_variable = "Nums", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
 
-  if (report) print("*** Start: Reading in layerd data: n for invert groups")
+  message("02 non-layerd data\nn for invert groups")
   at_n_pools   <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_other_groups,
                           select_variable = "N", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
 
-  if (report) print("*** Start: Reading in productivity data")
+  message("eat")
   at_eat     <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
                         select_variable = "Eat", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
 
+  message("growth")
   at_growth  <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
                         select_variable = "Growth", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
 
+  message("grazing")
   at_grazing <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_other_groups,
                         select_variable = "Grazing", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
 
-  if (report) print("*** Start: Reading in physics data")
+  message("03 physics data\nfluxes")
   flux       <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("eflux", "vflux"),
                                 bboxes = bboxes, aggregate_layers = FALSE)
 
+  message("physical variables")
   physics    <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = physic_var,
                                 bboxes = bboxes, aggregate_layers = TRUE)
 
 
-  if (report) print("*** Start: data transformations! ***")
+  if (report) message("Start data transformations!")
   # Aggregate Layers for N, Nums, ResN, StructN
 #   at_n       <- agg_mean(data = at_n,         groups = c("species", "polygon", "time"))
 #   at_resn    <- agg_mean(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"))
@@ -248,14 +251,13 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
   }
 
   # Write rest to HDD
-  if (report) print("*** Start: writing files! ***")
   if (save_to_disc) {
+    if (report) message("Write preprocessed list as *.rda")
     if (!is.null(dir)) out <- file.path(dir, out)
     save(result, file = out)
-    if (report) print("*** End: writing files!***")
   }
 
-  if (report) print("*** End: Processing of data done. HURRAY!!!***")
+  if (report) message("Finished preprocessing of data HURRAY!!!")
   return(result)
 }
 
