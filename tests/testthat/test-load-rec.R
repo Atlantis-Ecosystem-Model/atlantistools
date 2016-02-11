@@ -15,6 +15,6 @@ test <- load_rec(dir = d,
 test_that("test output numbers", {
   expect_equal(dim(test), c(8, 4))
   expect_equal(names(test), c("species", "time", "ssb", "rec"))
-  expect_true(sum(test$ssb)/1133986 > 0.999)
-  expect_equal(sum(test$rec), 357116785)
+  expect_true(sum(test$ssb)/17810.83 > 0.999)
+  expect_true(sum(test$rec)/1340230 > 0.999)
 })
