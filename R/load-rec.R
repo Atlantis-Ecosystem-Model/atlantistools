@@ -73,13 +73,13 @@ load_rec <- function(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart
   # Combine with recruitment data and convert units!
   result <- dplyr::inner_join(x = result, y = rec_weights)
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
-  result$atoutput.y <- ((result$atoutput.y / bio_conv) / result$rec_weights) / 1000
+  result$atoutput.x <- ((result$atoutput.x / bio_conv) / result$rec_weights) / 1000
 
   # Final data transformations
   result$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result$code)
   result <- convert_time(dir = dir, prm_run = prm_run, data = result, modelstart = modelstart, stock_state = TRUE)
-  names(result)[names(result) == "atoutput.x"] <- "ssb"
-  names(result)[names(result) == "atoutput.y"] <- "rec"
+  names(result)[names(result) == "atoutput.x"] <- "rec"
+  names(result)[names(result) == "atoutput.y"] <- "ssb"
   result <- result[, c("species", "time", "ssb", "rec")]
 
   return(result)
