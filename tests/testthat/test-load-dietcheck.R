@@ -19,6 +19,6 @@ test1 <- diet %>%
 test_that("test output numbers", {
   expect_true(all(abs(test1$check - 1) < 0.001))
   expect_equal(dim(diet), c(390, 5))
-  expect_is(diet$pred, "factor")
-  expect_is(diet$prey, "factor")
+  expect_is(diet$pred, "character")
+  expect_is(diet$prey, "character")
 })

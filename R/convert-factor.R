@@ -18,7 +18,7 @@ convert_factor <- function(data_fgs, col, diet = FALSE) {
       fac_levels <- c(fac_levels, "Rest")
       labels <- c(labels, "Rest")
     }
-    col <- factor(col, levels = fac_levels, labels = labels)
+    col <- as.character(factor(col, levels = fac_levels, labels = labels))
     return(col)
   }
 
