@@ -6,11 +6,11 @@
 \alias{agg_sum}
 \title{Aggregate data using dplyr functionality.}
 \usage{
-agg_mean(data, col = "atoutput", groups)
+agg_mean(data, col = "atoutput", groups, out = "atoutput")
 
-agg_sum(data, col = "atoutput", groups)
+agg_sum(data, col = "atoutput", groups, out = "atoutput")
 
-agg_perc(data, col = "atoutput", groups)
+agg_perc(data, col = "atoutput", groups, out = "atoutput")
 }
 \arguments{
 \item{data}{Dataframe the aggregation is applied to.}
@@ -19,6 +19,8 @@ agg_perc(data, col = "atoutput", groups)
 Default is 'atoutput'.}
 
 \item{groups}{Vector of character strings giving the grouping variables.}
+
+\item{out}{Character string specifying the name of the output column.}
 }
 \value{
 grouped datarame with the aggregated data.
