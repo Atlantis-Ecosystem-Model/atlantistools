@@ -60,7 +60,7 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
     }
 
     # Update value. Some pesky expectations have to be added here.
-    if (is.element(parameter, c("mum", "c", "mQ", "mL", "jmL", "jmQ"))) {
+    if (is.element(parameter, c("mum", "C", "mQ", "mL", "jmL", "jmQ"))) {
       prm_biol[pos] <- paste(flag, new_value, "T15", sep = "\t")
     } else {
       prm_biol[pos] <- paste(flag, new_value, sep = "\t")
