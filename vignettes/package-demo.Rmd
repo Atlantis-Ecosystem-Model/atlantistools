@@ -169,8 +169,7 @@ diet <- load_dietcheck(dir = d,
                        dietcheck = "outputSETASDietCheck.txt", 
                        fgs = "SETasGroups.csv", 
                        prm_run = "VMPA_setas_run_fishing_F_New.prm", 
-                       modelstart = "1991-01-01", 
-                       combine_tresh = 0.03)
+                       modelstart = "1991-01-01")
 
 ```
 
@@ -179,7 +178,7 @@ I only ran the SETAS model provided with `atlantistools` for 3 years to minimise
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model.
-feeding_plots <- plot_dietcheck(data = diet)
+feeding_plots <- plot_dietcheck(data = diet, combine_tresh = 0.03)
 feeding_plots[[1]]
 ```
 
