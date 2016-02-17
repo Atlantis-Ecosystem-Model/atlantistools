@@ -49,7 +49,12 @@
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
 #'   select_variable = "ResN",
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
-#' str(test)
+#' test <- load_nc(dir = d, nc = "outputSETAS.nc",
+#'   bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
+#'   fgs = "SETasGroups.csv",
+#'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
+#'   select_variable = "Nums",
+#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
                     select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
@@ -135,13 +140,16 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
 
   at_data <- list()
   # Initialise progress par!
-  if (report) pb <- txtProgressBar(min = 0, max = length(search_clean), style = 3)
+  # if (report) pb <- txtProgressBar(min = 0, max = length(search_clean), style = 3)
+  if (report) pb <- dplyr::progress_estimated(length(search_clean))
     for (i in seq_along(search_clean)) {
       at_data[[i]] <- RNetCDF::var.get.nc(ncfile = at_out, variable = search_clean[i])
       # update progress bar
-      if (report) setTxtProgressBar(pb, i)
+      # if (report) setTxtProgressBar(pb, i)
+      if (report) pb$tick()$print()
     }
-  if (report) close(pb)
+  # if (report) close(pb)
+  if (report) pb$stop()
 
   # at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = at_out)
 

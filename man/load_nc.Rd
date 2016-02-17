@@ -66,7 +66,12 @@ test <- load_nc(dir = d, nc = "outputSETAS.nc",
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "ResN",
   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
-str(test)
+test <- load_nc(dir = d, nc = "outputSETAS.nc",
+  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
+  fgs = "SETasGroups.csv",
+  select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
+  select_variable = "Nums",
+  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 }
 \author{
 Alexander Keth
