@@ -18,11 +18,6 @@
 #' folder/filename string and set dir to 'NULL'.
 #' @param modelstart Character string giving the start of the model run
 #' in the format \code{'yyyy-mm-dd'}.
-#' @param combine_tresh Integer indicating minimum amount to the stomach contribution.
-#' Each prey item with a lower contribution as this treshold is assigned to the
-#' grpup "Rest". This is necessary for species with a wide variety of food items
-#' in their diet. Otherwise the screen will be cluttered with colors in the
-#' dietplots.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -34,12 +29,10 @@
 #'     dietcheck = "outputSETASDietCheck.txt",
 #'     fgs = "SETasGroups.csv",
 #'     prm_run = "VMPA_setas_run_fishing_F_New.prm",
-#'     modelstart = "1991-01-01",
-#'     combine_tresh = 0.03)
+#'     modelstart = "1991-01-01")
 #' head(diet, n = 25)
-#' str(diet)
 
-load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart, combine_tresh) {
+load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
@@ -75,8 +68,8 @@ load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart, c
   diet_long <- agg_perc(data = diet_long, col = "diet", groups = c("time", "pred", "habitat"))
 
   # Combine prey groups with low contribution to the diet!
-  diet_long$prey[diet_long$atoutput <= combine_tresh] <- "Rest"
-  diet_long <- agg_sum(data = diet_long, groups = c("time", "pred", "habitat", "prey"))
+  # diet_long$prey[diet_long$atoutput <= combine_tresh] <- "Rest"
+  # diet_long <- agg_sum(data = diet_long, groups = c("time", "pred", "habitat", "prey"))
 
   diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
 

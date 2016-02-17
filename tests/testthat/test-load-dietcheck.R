@@ -8,8 +8,7 @@ diet <- load_dietcheck(dir = d,
                        dietcheck = "outputSETASDietCheck.txt",
                        fgs = "SETasGroups.csv",
                        prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                       modelstart = "1991-01-01",
-                       combine_tresh = 0)
+                       modelstart = "1991-01-01")
 
 
 test1 <- diet %>%
@@ -18,7 +17,7 @@ test1 <- diet %>%
 
 test_that("test output numbers", {
   expect_true(all(abs(test1$check - 1) < 0.001))
-  expect_equal(dim(diet), c(390, 5))
+  expect_equal(dim(diet), c(390, 6))
   expect_is(diet$pred, "character")
   expect_is(diet$prey, "character")
 })
