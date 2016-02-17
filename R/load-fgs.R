@@ -21,5 +21,7 @@ load_fgs <- function(dir = getwd(), fgs) {
   if (!is.null(dir)) fgs <- file.path(dir, fgs)
   result <- read.table(file = fgs, sep = ",",
                        header = TRUE, stringsAsFactors = FALSE)
+  # Rename column longname if space is present in raw file.
+  names(result)[names(result) == "Long.Name"] <- "LongName"
   return(result)
 }
