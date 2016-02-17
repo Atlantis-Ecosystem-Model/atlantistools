@@ -4,11 +4,17 @@
 \alias{plot_dietcheck}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_dietcheck(data)
+plot_dietcheck(data, combine_tresh = 0.03)
 }
 \arguments{
 \item{data}{Dataframe with information about diets. The dataframe
 should be generated with \code{\link{load_dietcheck}}.}
+
+\item{combine_tresh}{Integer indicating minimum amount to the stomach contribution.
+Each prey item with a lower contribution as this treshold is assigned to the
+grpup "Rest". This is necessary for species with a wide variety of food items
+in their diet. Otherwise the screen will be cluttered with colors in the
+dietplots. Default is 0.03.}
 }
 \value{
 List of ggplot2 objects.
@@ -22,9 +28,9 @@ diet <- load_dietcheck(dir = d,
     dietcheck = "outputSETASDietCheck.txt",
     fgs = "SETasGroups.csv",
     prm_run = "VMPA_setas_run_fishing_F_New.prm",
-    modelstart = "1991-01-01",
-    combine_tresh = 0.03)
-plots <- plot_dietcheck(data = diet)
+    modelstart = "1991-01-01")
+
+plots <- plot_dietcheck(data = diet, combine_tresh = 0.03)
 plots[[1]]
 }
 
