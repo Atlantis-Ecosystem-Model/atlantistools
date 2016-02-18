@@ -22,6 +22,11 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
+#' @param dietcheck Character string of the DietCheck.txt file. Usually
+#' 'output[...]DietCheck.txt'. In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' case.
 #' @param prm_biol Character string giving the filename of the biological
 #' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
@@ -223,6 +228,12 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
   growth_age  <- agg_mean(data = at_growth,    groups = c("species", "time", "agecl"))
   grazing     <- agg_mean(data = at_grazing,   groups = c("species", "time"))
 
+  # Load in diet-data!
+  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, prm_run = prm_run, modelstart = modelstart)
+
+  # load in recruitment data!
+  ssb_rec <-
+
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
     "biomass"     = biomass,
@@ -236,7 +247,8 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
     "nums_box"    = nums_box,
     "physics"     = physics,
     "resn_age"    = resn_age,
-    "structn_age" = structn_age
+    "structn_age" = structn_age,
+    "diet"        = diet
   )
 
   # Convert timestep to actual time.
@@ -252,12 +264,12 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
 
   # Write rest to HDD
   if (save_to_disc) {
-    if (report) message("Write preprocessed list as *.rda")
+    message("Write preprocessed list as *.rda")
     if (!is.null(dir)) out <- file.path(dir, out)
     save(result, file = out)
   }
 
-  if (report) message("Finished preprocessing of data HURRAY!!!")
+  message("Finished preprocessing of data HURRAY!!!")
   return(result)
 }
 

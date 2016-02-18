@@ -67,6 +67,12 @@ during function evaluation.}
 
 \item{save_to_disc}{Logical indicating if the resulting list shall be stored
 on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{dietcheck}{Character string of the DietCheck.txt file. Usually
+'output[...]DietCheck.txt'. In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string as nc. In addition set dir to 'NULL' in this
+case.}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.
