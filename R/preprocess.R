@@ -242,9 +242,11 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
   grazing     <- agg_mean(data = at_grazing,   groups = c("species", "time"))
 
   # Load in diet-data!
+  message("Read in DietCheck.txt!")
   diet <- load_dietcheck(dir = dir, dietcheck = dietcheck)
 
   # load in recruitment data!
+  message("Read in SSB/REC data!")
   ssb_rec <- load_rec(dir = dir, yoy = yoy, ssb = ssb, prm_biol = prm_biol)
 
   # WARNING: Newly created dataframes have to be added here!
