@@ -3,6 +3,15 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.2.0.9000
+
+## Minor improvements
+* `load_dietcheck()` and `load_rec()` are incorporated into `preprocess()`. The resulting dataframe are now
+part of the output and can be accessed directly from the list via `out$diet` and `out$ssb_rec`.
+`convert_factor()` was overhauled. Due to the inclusion of `load_dietcheck()` there
+is no more `Rest` group when the name conversion is performed.
+* `convert_time()` can now handle different input formats without any user specifications.
+
 # atlantistools 0.1.0.9000
 
 ## New features
