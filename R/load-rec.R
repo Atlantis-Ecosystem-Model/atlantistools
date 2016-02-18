@@ -13,20 +13,10 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
 #' @param prm_biol Character string giving the filename of the biological
 #' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string and set dir to 'NULL'.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' @param modelstart Character string giving the start of the model run
-#' in the format \code{'yyyy-mm-dd'}.
 #' @return Dataframe with information about ssb in tonnes and recruits in
 #' thousands.
 #' @export
@@ -36,12 +26,9 @@
 #' load_rec(dir = d,
 #'    yoy = "outputSETASYOY.txt",
 #'    ssb = "outputSETASSSB.txt",
-#'    fgs = "SETasGroups.csv",
-#'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-#'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
-#'    modelstart = "1991-01-01")
+#'    prm_biol = "VMPA_setas_biol_fishing_New.prm")
 
-load_rec <- function(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart) {
+load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
   load_txt <- function(dir, file) {
     file <- convert_path(dir = dir, file = file)
     data <- read.table(file, header = T)
@@ -65,7 +52,7 @@ load_rec <- function(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart
 
   # Extract info about recruit weights from the biological parameterfile!
   string_prm_biol <- readLines(con = convert_path(dir = dir, file = prm_biol))
-  acr <- get_age_acronyms(dir = dir, fgs = fgs)
+  acr <- unique(result$code)
   kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_prm, chars = string_prm_biol)
   kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_prm, chars = string_prm_biol)
   rec_weights <- data.frame(code = acr, rec_weights = unlist(kwrr) + unlist(kwsr), stringsAsFactors = F)
@@ -76,10 +63,11 @@ load_rec <- function(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart
   result$atoutput.x <- ((result$atoutput.x / bio_conv) / result$rec_weights) / 1000
 
   # Final data transformations
-  result$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result$code)
+  # result$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result$code)
   # result <- convert_time(dir = dir, prm_run = prm_run, data = result, modelstart = modelstart, stock_state = TRUE)
   names(result)[names(result) == "atoutput.x"] <- "rec"
   names(result)[names(result) == "atoutput.y"] <- "ssb"
+  names(result)[names(result) == "code"] <- "species"
   result <- result[, c("species", "time", "ssb", "rec")]
 
   return(result)

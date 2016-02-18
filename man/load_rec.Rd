@@ -4,7 +4,7 @@
 \alias{load_rec}
 \title{Load information for SSB and Recruits from an Atlantis model run.}
 \usage{
-load_rec(dir = getwd(), yoy, ssb, fgs, prm_biol, prm_run, modelstart)
+load_rec(dir = getwd(), yoy, ssb, prm_biol)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -23,23 +23,10 @@ multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
 
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
-
 \item{prm_biol}{Character string giving the filename of the biological
 parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string and set dir to 'NULL'.}
-
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{modelstart}{Character string giving the start of the model run
-in the format \code{'yyyy-mm-dd'}.}
 }
 \value{
 Dataframe with information about ssb in tonnes and recruits in
@@ -53,9 +40,6 @@ d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 load_rec(dir = d,
    yoy = "outputSETASYOY.txt",
    ssb = "outputSETASSSB.txt",
-   fgs = "SETasGroups.csv",
-   prm_biol = "VMPA_setas_biol_fishing_New.prm",
-   prm_run = "VMPA_setas_run_fishing_F_New.prm",
-   modelstart = "1991-01-01")
+   prm_biol = "VMPA_setas_biol_fishing_New.prm")
 }
 
