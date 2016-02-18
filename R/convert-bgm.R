@@ -6,7 +6,8 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+#' bgm <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+#' head(bgm)
 
 convert_bgm <- function(dir = getwd(), bgm) {
   box <- load_box(dir = dir, bgm = bgm)
