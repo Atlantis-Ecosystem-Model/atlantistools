@@ -31,8 +31,10 @@ convert_time <- function(dir = getwd(), prm_run, data, modelstart){
   if (any(names(data) == "time")) {
 
     # Check if time is composed of a complete sequence of integers!
-    # In this case there is no stockstate data!
-    if (all(sort(unique(data$time)) == seq(0, length(unique(data$time)) - 1, 1))) {
+    # In this case there is no stockstate data! Remove zero!
+    ts <- sort(unique(data$time))
+    ts <- ts[ts != 0]
+    if (all(ts == seq(1, length(ts), 1))) {
       toutinc <- extract_prm(chars = prm_run, variable = "toutinc")
 
       # Convert timesteps to actual time!
