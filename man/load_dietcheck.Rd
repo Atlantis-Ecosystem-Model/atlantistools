@@ -4,7 +4,7 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, fgs, prm_run, modelstart)
+load_dietcheck(dir = getwd(), dietcheck)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -16,19 +16,6 @@ folder) you should use 'NULL' as dir.}
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
-
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{modelstart}{Character string giving the start of the model run
-in the format \code{'yyyy-mm-dd'}.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -40,10 +27,7 @@ Read in the atlantis dietcheck.txt file and perform some basic data transformati
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 diet <- load_dietcheck(dir = d,
-    dietcheck = "outputSETASDietCheck.txt",
-    fgs = "SETasGroups.csv",
-    prm_run = "VMPA_setas_run_fishing_F_New.prm",
-    modelstart = "1991-01-01")
+    dietcheck = "outputSETASDietCheck.txt")
 head(diet, n = 25)
 }
 \seealso{

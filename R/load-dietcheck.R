@@ -8,16 +8,6 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' @param modelstart Character string giving the start of the model run
-#' in the format \code{'yyyy-mm-dd'}.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -26,13 +16,10 @@
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' diet <- load_dietcheck(dir = d,
-#'     dietcheck = "outputSETASDietCheck.txt",
-#'     fgs = "SETasGroups.csv",
-#'     prm_run = "VMPA_setas_run_fishing_F_New.prm",
-#'     modelstart = "1991-01-01")
+#'     dietcheck = "outputSETASDietCheck.txt")
 #' head(diet, n = 25)
 
-load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart) {
+load_dietcheck <- function(dir = getwd(), dietcheck) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
@@ -74,9 +61,9 @@ load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart) {
   # diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
 
   # Add factors with pretty labels
-  fgs <- load_fgs(dir = dir, fgs = fgs)
-  diet_long$pred <- convert_factor(data_fgs = fgs, col = diet_long$pred, diet = TRUE)
-  diet_long$prey <- convert_factor(data_fgs = fgs, col = diet_long$prey, diet = TRUE)
+  # fgs <- load_fgs(dir = dir, fgs = fgs)
+  # diet_long$pred <- convert_factor(data_fgs = fgs, col = diet_long$pred, diet = TRUE)
+  # diet_long$prey <- convert_factor(data_fgs = fgs, col = diet_long$prey, diet = TRUE)
 
   return(diet_long)
 }
