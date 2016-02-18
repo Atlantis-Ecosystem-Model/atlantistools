@@ -9,14 +9,7 @@
 #' @export
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' data <- load_rec(dir = d,
-#'    yoy = "outputSETASYOY.txt",
-#'    ssb = "outputSETASSSB.txt",
-#'    fgs = "SETasGroups.csv",
-#'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-#'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
-#'    modelstart = "1991-01-01")
+#' data <- preprocess_setas$ssb_rec
 #' ex_data <- data
 #' ex_data$species <- as.character(ex_data$species)
 #' ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)

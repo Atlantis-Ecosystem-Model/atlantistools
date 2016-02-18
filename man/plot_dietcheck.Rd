@@ -23,14 +23,7 @@ List of ggplot2 objects.
 Plot contribution of diet contents for each functional group.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-diet <- load_dietcheck(dir = d,
-    dietcheck = "outputSETASDietCheck.txt",
-    fgs = "SETasGroups.csv",
-    prm_run = "VMPA_setas_run_fishing_F_New.prm",
-    modelstart = "1991-01-01")
-
-plots <- plot_dietcheck(data = diet, combine_tresh = 0.03)
+plots <- plot_dietcheck(data = preprocess_setas$diet, combine_tresh = 0.03)
 plots[[1]]
 }
 
