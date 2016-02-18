@@ -5,15 +5,13 @@
 \title{Function to convert any column with information about functional groups
 to a factor whose levels use the LongName of the functional groups file.}
 \usage{
-convert_factor(data_fgs, col, diet = FALSE)
+convert_factor(data_fgs, col)
 }
 \arguments{
 \item{data_fgs}{Dataframe with information about functionalGroups.
 Usually loaded with load_fgs().}
 
 \item{col}{Column of the dataframe which is converted to a factor.}
-
-\item{diet}{Logical indicating if col originates from diet-data.}
 }
 \value{
 Column of a dataframe in factor format.
