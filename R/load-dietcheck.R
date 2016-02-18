@@ -71,7 +71,7 @@ load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, modelstart) {
   # diet_long$prey[diet_long$atoutput <= combine_tresh] <- "Rest"
   # diet_long <- agg_sum(data = diet_long, groups = c("time", "pred", "habitat", "prey"))
 
-  diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
+  # diet_long <- convert_time(dir = dir, prm_run = prm_run, data = diet_long, modelstart = modelstart, stock_state = TRUE)
 
   # Add factors with pretty labels
   fgs <- load_fgs(dir = dir, fgs = fgs)

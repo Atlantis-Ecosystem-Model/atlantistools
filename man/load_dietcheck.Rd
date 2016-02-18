@@ -45,7 +45,6 @@ diet <- load_dietcheck(dir = d,
     prm_run = "VMPA_setas_run_fishing_F_New.prm",
     modelstart = "1991-01-01")
 head(diet, n = 25)
-str(diet)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
