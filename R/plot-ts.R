@@ -16,7 +16,7 @@ plot_ts <- function(data) {
 
   plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
     ggplot2::geom_line() +
-    ggplot2::facet_wrap(~species, scales = "free_y", ncol = 8, labeller = ggplot2::label_wrap_gen(width = 15)) +
+    ggplot2::facet_wrap(~species, scales = "free_y", ncol = 9, labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::guides(col = ggplot2::guide_legend(nrow = 1)) +
     theme_atlantis()
 
