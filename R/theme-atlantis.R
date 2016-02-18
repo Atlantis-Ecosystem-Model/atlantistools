@@ -67,8 +67,8 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
     legend.box	         =	"horizontal",
     #    legend.box.just	   =	,	#	top, "bottom", "left", or "right"
     strip.background    = ggplot2::element_blank(),
-    strip.text          = ggplot2::element_text(size = medium),
-    strip.text.x        = ggplot2::element_text(size = scale_font * medium),	#	inherits from strip.text
-    strip.text.y	      = ggplot2::element_text(size = scale_font * medium, angle = ifelse(rot_strips_y, 0, 90))	#	inherits from strip.text
+    strip.text          = ggplot2::element_text(size = small),
+    strip.text.x        = ggplot2::element_text(size = scale_font * small),	#	inherits from strip.text
+    strip.text.y	      = ggplot2::element_text(size = scale_font * small, angle = ifelse(rot_strips_y, 0, 90))	#	inherits from strip.text
   )
 }
