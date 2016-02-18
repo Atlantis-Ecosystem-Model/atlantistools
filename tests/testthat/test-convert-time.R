@@ -15,11 +15,13 @@ non_ss <- load_nc(dir = d, nc = "outputSETAS.nc",
                   check_acronyms = TRUE,
                   report = FALSE)
 
+# test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
+#   select_physics = c("salt", "NO3", "volume"),
+#   aggregate_layers = FALSE,
+#   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+
 ss <- load_dietcheck(dir = d,
-                     dietcheck = "outputSETASDietCheck.txt",
-                     fgs = "SETasGroups.csv",
-                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                     modelstart = "1991-01-01")
+                     dietcheck = "outputSETASDietCheck.txt")
 
 rando <- ss
 rando$time <- rando$time * runif(n = nrow(ss), min = 0, max = 1)
