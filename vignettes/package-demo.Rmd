@@ -27,6 +27,9 @@ can be directly passed to various plotting routines.
 setas <-   preprocess(dir = d,
                       nc_gen = "outputSETAS.nc",
                       nc_prod = "outputSETASPROD.nc",
+                      dietcheck = "outputSETASDietCheck.txt",
+                      yoy = "outputSETASYOY.txt",
+                      ssb = "outputSETASSSB.txt",
                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
                       prm_run = "VMPA_setas_run_fishing_F_New.prm",
                       bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -48,6 +51,9 @@ setas <- suppressMessages(
   preprocess(dir = d,
              nc_gen = "outputSETAS.nc",
              nc_prod = "outputSETASPROD.nc",
+             dietcheck = "outputSETASDietCheck.txt",
+             yoy = "outputSETASYOY.txt",
+             ssb = "outputSETASSSB.txt",
              prm_biol = "VMPA_setas_biol_fishing_New.prm",
              prm_run = "VMPA_setas_run_fishing_F_New.prm",
              bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -72,6 +78,9 @@ as they ensure the correct output independant of model formulation.
 setas <- preprocess(dir = d,
                     nc_gen = "outputSETAS.nc",
                     nc_prod = "outputSETASPROD.nc",
+                    dietcheck = "outputSETASDietCheck.txt",
+                    yoy = "outputSETASYOY.txt",
+                    ssb = "outputSETASSSB.txt",
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
                     bps = c("Filter_Shallow", 
@@ -116,6 +125,9 @@ implement the output subfolder into the name of your outputfiles:
 setas <- preprocess(dir = d,
                     nc_gen = "output/outputSETAS.nc",
                     nc_prod = "output/outputSETASPROD.nc",
+                    dietcheck = "output/outputSETASDietCheck.txt",
+                    yoy = "output/outputSETASYOY.txt",
+                    ssb = "output/outputSETASSSB.txt",
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
                     bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -179,27 +191,12 @@ plot_struct(data = setas$nums_age)
 
 ## Plot DietCheck.txt
 
-During preprocessing of atlantis simulations data is only extracted from the nc files.
-Since information about feeding interactions is stored in the `DietCheck.txt` files the
-data has to be read in first using `load_dietcheck`. This may change in later stages of the
-package by adding `load_dietcheck` to `preprocess`.
-
-```{r}
-# Load DietCheck.txt with load_dietcheck
-diet <- load_dietcheck(dir = d, 
-                       dietcheck = "outputSETASDietCheck.txt", 
-                       fgs = "SETasGroups.csv", 
-                       prm_run = "VMPA_setas_run_fishing_F_New.prm", 
-                       modelstart = "1991-01-01")
-
-```
-
 Please note the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model.
-feeding_plots <- plot_dietcheck(data = diet, combine_tresh = 0.03)
+feeding_plots <- plot_dietcheck(data = setas$diet, combine_tresh = 0.03)
 feeding_plots[[1]]
 ```
 
@@ -222,27 +219,16 @@ dev.off()
 
 Please note that recruitment in Atlantis differs from recruitment in most models due to changes of recruitment
 ages (which is generally age 0-3 in stock assessment models). Thanks @ Isaac for pointing that out.
-Both recruiment and ssb is stored in `*.txt` files like the `DietCheck.txt`. Therefore the data has to be read in first with `load_rec`.
-
-```{r}
-rec <- load_rec(dir = d,
-                yoy = "outputSETASYOY.txt",
-                ssb = "outputSETASSSB.txt",
-                fgs = "SETasGroups.csv",
-                prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                modelstart = "1991-01-01")
-```
 
 As the Setas model comes without recruitment data some noise is applied to the output files to demonstrate the plots.
 
 ```{r, fig.width = 7, fig.height = 5}
-ex_data <- rec
+ex_data <- setas$ssb_rec
 ex_data$species <- as.character(ex_data$species)
 ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
 ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
 ex_data$model <- "test_model"
-plot_rec(data = rec, ex_data)
+plot_rec(data = setas$ssb_rec, ex_data)
 ```
 
 ## Compare your model run with other models/data!
