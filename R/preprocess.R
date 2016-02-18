@@ -27,6 +27,16 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
+#' @param yoy Character string of the YOY.txt file. Usually
+#' 'output[...]YOY.txt'. In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' case.
+#' @param ssb Character string of the SSB.txt file. Usually
+#' 'output[...]SSB.txt'. In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' case.
 #' @param prm_biol Character string giving the filename of the biological
 #' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
@@ -116,6 +126,9 @@
 #' test <- preprocess(dir = d,
 #'    nc_gen = "outputSETAS.nc",
 #'    nc_prod = "outputSETASPROD.nc",
+#'    dietcheck = "outputSETASDietCheck.txt",
+#'    yoy = "outputSETASYOY.txt",
+#'    ssb = "outputSETASSSB.txt",
 #'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
 #'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'    bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
@@ -128,7 +141,7 @@
 #'    save_to_disc = FALSE)
 #' @export
 
-preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
+preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
                        check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE){
 
   age_groups <- get_age_groups(dir = dir, fgs = fgs)
@@ -229,10 +242,10 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
   grazing     <- agg_mean(data = at_grazing,   groups = c("species", "time"))
 
   # Load in diet-data!
-  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, prm_run = prm_run, modelstart = modelstart)
+  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck)
 
   # load in recruitment data!
-  ssb_rec <-
+  ssb_rec <- load_rec(dir = dir, yoy = yoy, ssb = ssb, prm_biol = prm_biol)
 
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
@@ -248,7 +261,8 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
     "physics"     = physics,
     "resn_age"    = resn_age,
     "structn_age" = structn_age,
-    "diet"        = diet
+    "diet"        = diet,
+    "ssb_rec"     = ssb_rec
   )
 
   # Convert timestep to actual time.
@@ -256,6 +270,12 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, prm_biol, prm_run, bps, f
 
   # Convert Species names to Longnames!
   for (i in seq_along(result)) {
+    # Dietdataframe does not have column 'species' nonetheless predator and prey
+    # names should be converted!
+    if (names(result)[i] == "diet") {
+      result[[i]]$pred <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$pred)
+      result[[i]]$prey <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$prey)
+    }
     # exlude physics dataframes!
     if (is.element("species", names(result[[i]]))) {
       result[[i]]$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$species)
