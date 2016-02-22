@@ -11,6 +11,8 @@ part of the output and can be accessed directly from the list via `out$diet` and
 `convert_factor()` was overhauled. Due to the inclusion of `load_dietcheck()` there
 is no more `Rest` group when the name conversion is performed.
 * `convert_time()` can now handle different input formats without any user specifications.
+* Added vignette `model-calibration` to automatically build a pdf document with various plotting routines
+used for model tuning and calibration.
 
 # atlantistools 0.1.0.9000
 
