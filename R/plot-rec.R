@@ -15,7 +15,7 @@
 #' ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
 #' ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
 #' ex_data$time <- as.character(ex_data$time)
-#' ex_data$model <- "test_model"
+#' ex_data$model <- "dummy"
 #' plot_rec(data, ex_data)
 
 plot_rec <- function(data, ex_data) {
