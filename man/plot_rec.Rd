@@ -21,13 +21,8 @@ ggplot2 object
 Plot recruitment.
 }
 \examples{
-data <- preprocess_setas$ssb_rec
-ex_data <- data
-ex_data$species <- as.character(ex_data$species)
-ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
-ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
-ex_data$time <- as.character(ex_data$time)
-ex_data$model <- "dummy"
-plot_rec(data, ex_data)
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"))
+plot_rec(preprocess_setas$ssb_rec, ex_data)
 }
 

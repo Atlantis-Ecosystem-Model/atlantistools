@@ -18,10 +18,8 @@ ggplot2 object
 Compare Atlantis scenario with other models/data sources.
 }
 \examples{
-data_comp <- preprocess_setas$biomass
-data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2)
-data_comp$atoutput <- NULL
-data_comp$model <- "dummy"
-plot_bench(data = preprocess_setas$biomass, ex_data = data_comp)
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+ex_data <- read.csv(file.path(d, "setas-bench.csv"))
+plot_bench(data = preprocess_setas$biomass, ex_data)
 }
 
