@@ -18,7 +18,7 @@ plot_ws <- function(data, combine_thresh = 0.03) {
   data <- combine_groups(data, group_col = "species", groups = "time", combine_thresh = combine_thresh)
 
   # Arrange data according to contribution!
-  agg_data <- agg_sum(data, groups = c("time", "species"), out = "sum_at")
+  agg_data <- agg_sum(data, groups = c("species"), out = "sum_at")
   data$species <- factor(data$species, levels = agg_data$species[order(agg_data$sum_at, decreasing = TRUE)])
 
   plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~species)) +
