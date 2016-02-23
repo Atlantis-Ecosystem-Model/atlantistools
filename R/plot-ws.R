@@ -26,6 +26,7 @@ plot_ws <- function(data, combine_thresh = 0.03) {
     ggplot2::scale_fill_manual(values = get_colpal()) +
     ggplot2::labs(y = "Biomass [t]") +
     theme_atlantis() +
+    ggplot2::coord_cartesian(expand = FALSE) +
     ggplot2::theme(legend.position = "right")
 
   return(plot)

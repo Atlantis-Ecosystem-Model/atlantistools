@@ -14,6 +14,7 @@ plot_physics <- function(data) {
     ggplot2::geom_line() +
     ggplot2::facet_grid(variable ~ polygon, scales = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::labs(y = "Value [unit]") +
+    ggplot2::coord_cartesian(expand = FALSE) +
     theme_atlantis()
 
   return(plot)
