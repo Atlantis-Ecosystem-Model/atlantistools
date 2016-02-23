@@ -10,16 +10,14 @@
 plot_ws <- function(data, combine_thresh) {
   check_df_names(data = data, expect = c("time", "atoutput", "species"))
 
-  plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
-    ggplot2::geom_line() +
-    ggplot2::facet_wrap(~species, scales = "free_y", ncol = 9, labeller = ggplot2::label_wrap_gen(width = 15)) +
-    ggplot2::guides(col = ggplot2::guide_legend(nrow = 1)) +
-    theme_atlantis()
+  data <- combine_groups(data, group_col = "species", groups = "time", combine_thresh = combine_thresh)
 
-  # Allow plotting for both cohort and non-cohort data!
-  if (is.element("agecl", names(data))) {
-    plot <- plot + ggplot2::aes_(colour = ~factor(agecl))
-  }
+  plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~species)) +
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::scale_fill_manual(values = get_colpal()) +
+    ggplot2::labs(y = "Biomass [t]")
+    theme_atlantis() +
+    ggplot2::theme(legend.position = "right")
 
   return(plot)
 }
