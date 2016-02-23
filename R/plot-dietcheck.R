@@ -18,8 +18,16 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "diet", "atoutput", "prey", "pred"), optional = c("habitat", "agecl"))
 
   # Combine prey groups with low contribution to the diet!
-  data$prey[data$atoutput <= combine_thresh] <- "Rest"
-  data <- agg_sum(data, groups = c("time", "pred", "habitat", "prey"))
+  data <- combine_groups(data,
+                         group_col = "prey",
+                         groups = c("time", "pred", "habitat"),
+                         combine_thresh = combine_thresh)
+
+  # Convert diet data to percentages!
+  data <- agg_perc(data, groups = c("time", "pred", "habitat"))
+
+  # data$prey[data$atoutput <= combine_thresh] <- "Rest"
+  # data <- agg_sum(data, groups = c("time", "pred", "habitat", "prey"))
 
   plot_func <- function(data) {
     # order data according to dietcontribution
