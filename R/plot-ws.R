@@ -7,7 +7,7 @@
 #' @examples
 #' plot_ws(preprocess_setas$biomass)
 
-plot_ts <- function(data, combine_thresh) {
+plot_ws <- function(data, combine_thresh) {
   check_df_names(data = data, expect = c("time", "atoutput", "species"))
 
   plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
