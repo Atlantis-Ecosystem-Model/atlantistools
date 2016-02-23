@@ -7,7 +7,7 @@
 #' @examples
 #' plot_ws(preprocess_setas$biomass)
 
-plot_ws <- function(data, combine_thresh) {
+plot_ws <- function(data, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "atoutput", "species"))
 
   data <- combine_groups(data, group_col = "species", groups = "time", combine_thresh = combine_thresh)
