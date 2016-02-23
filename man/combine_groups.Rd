@@ -28,7 +28,7 @@ Combine values from different groups if specific groups only have a low contribu
 \examples{
 combine_groups(preprocess_setas$diet,
    group_col = "prey",
-   groups =  c("time", "pred", "habitat", "prey"),
+   groups = c("time", "pred", "habitat"),
    combine_thresh = 0.03)
 }
 
