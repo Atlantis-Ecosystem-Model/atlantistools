@@ -8,6 +8,12 @@ plot_ws(data, combine_thresh = 0.03)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
+
+\item{combine_thresh}{Integer indicating minimum amount to the stomach contribution.
+Each prey item with a lower contribution as this treshold is assigned to the
+grpup "Rest". This is necessary for species with a wide variety of food items
+in their diet. Otherwise the screen will be cluttered with colors in the
+dietplots. Default is 0.03.}
 }
 \value{
 ggplot2 object
