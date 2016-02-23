@@ -196,7 +196,7 @@ I only ran the SETAS model provided with `atlantistools` for 3 years to minimise
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model.
-feeding_plots <- plot_dietcheck(data = setas$diet, combine_tresh = 0.03)
+feeding_plots <- plot_dietcheck(data = setas$diet, combine_thresh = 0.03)
 feeding_plots[[1]]
 ```
 

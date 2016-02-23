@@ -2,7 +2,7 @@
 #'
 #' @param data Dataframe with information about diets. The dataframe
 #' should be generated with \code{\link{load_dietcheck}}.
-#' @param combine_tresh Integer indicating minimum amount to the stomach contribution.
+#' @param combine_thresh Integer indicating minimum amount to the stomach contribution.
 #' Each prey item with a lower contribution as this treshold is assigned to the
 #' grpup "Rest". This is necessary for species with a wide variety of food items
 #' in their diet. Otherwise the screen will be cluttered with colors in the
@@ -11,14 +11,14 @@
 #' @export
 #'
 #' @examples
-#' plots <- plot_dietcheck(data = preprocess_setas$diet, combine_tresh = 0.03)
+#' plots <- plot_dietcheck(data = preprocess_setas$diet, combine_thresh = 0.03)
 #' plots[[1]]
 
-plot_dietcheck <- function(data, combine_tresh = 0.03) {
+plot_dietcheck <- function(data, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "diet", "atoutput", "prey", "pred"), optional = c("habitat", "agecl"))
 
   # Combine prey groups with low contribution to the diet!
-  data$prey[data$atoutput <= combine_tresh] <- "Rest"
+  data$prey[data$atoutput <= combine_thresh] <- "Rest"
   data <- agg_sum(data, groups = c("time", "pred", "habitat", "prey"))
 
   plot_func <- function(data) {
@@ -63,7 +63,7 @@ plot_dietcheck <- function(data, combine_tresh = 0.03) {
 #                          fgs = "functionalGroups.csv",
 #                          prm_run = "NorthSea_biol_fishing.prm",
 #                          modelstart = "1991-01-01",
-#                          combine_tresh = 0.03)
+#                          combine_thresh = 0.03)
 #
 # plots <- plot_dietcheck(data = dietns)
 #

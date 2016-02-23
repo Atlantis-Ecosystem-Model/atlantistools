@@ -15,14 +15,14 @@ library("ggplot2")
 
 # Set the model path here and load in preprocessed data! The data is read on from a different 
 # directory in this case due to the fact that the vignette comes shipped with the package.
-model_path <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
 # Please comment the next line in and adjust the name of your preprocessed file!
-# load(file.path(model_path, "ns_preprocess.Rda"))
-bench_bio <- "setas-bench.csv"
-bench_rec <- "setas-ssb-rec.csv"
+load(file.path(model_path, "ns_preprocess.Rda"))
+bench_bio <- "biomass_timeseries.csv"
+bench_rec <- "ssb_r_ssa_sms.csv"
 
 # Please comment out!
-result <- preprocess_setas
+# result <- preprocess_setas
 
 # Set default plot dimensions here!
 dw1 <- 25
@@ -133,7 +133,7 @@ plot_struct(result$biomass_age)
 
   <!-- ## Feeding Plots -->
   <!-- ```{r} -->
-  <!-- feeding_plots <- plot_dietcheck(result$diet, combine_tresh = 0.03) -->
+  <!-- feeding_plots <- plot_dietcheck(result$diet, combine_thresh = 0.03) -->
   <!-- lapply(feeding_plots, print) -->
   <!-- ``` -->
 
