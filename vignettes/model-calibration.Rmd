@@ -15,11 +15,11 @@ library("ggplot2")
 
 # Set the model path here and load in preprocessed data! The data is read on from a different 
 # directory in this case due to the fact that the vignette comes shipped with the package.
-model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
+# model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
 # Please comment the next line in and adjust the name of your preprocessed file!
-load(file.path(model_path, "ns_preprocess.Rda"))
-bench_bio <- "biomass_timeseries.csv"
-bench_rec <- "ssb_r_ssa_sms.csv"
+# load(file.path(model_path, "ns_preprocess.Rda"))
+bench_bio <- "setas-bench.csv"
+bench_rec <- "setas-ssb-rec.csv"
 
 # Please comment out!
 # result <- preprocess_setas
@@ -32,102 +32,109 @@ dh2 <- 11
 
 \newpage
 
-## Biomass timeseries
-```{r, fig.width = dw1, fig.height = dh1}
-plot <- plot_ts(result$biomass)
-update_labels(p = plot, labels = list(y = "Biomass [t]"))
+## Whole system plots!
+```{r, fig.width = 14, fig.height = 8}
+plot_ws(result$biomass)
 ```
 
-\newpage
+<!-- \newpage -->
 
-## Number timeseries
-```{r, fig.width = dw1, fig.height = dh2}
-plot <- plot_ts(result$nums)
-update_labels(p = plot, labels = list(y = "Numbers"))
-```
+<!-- ## Biomass timeseries -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- plot <- plot_ts(result$biomass) -->
+<!-- update_labels(p = plot, labels = list(y = "Biomass [t]")) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## SSB & Recruitment
-```{r, fig.width = dw1, fig.height = dh1}
-ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F)
-plot_rec(result$ssb_rec, ex_data = ex)
-```
+<!-- ## Number timeseries -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot <- plot_ts(result$nums) -->
+<!-- update_labels(p = plot, labels = list(y = "Numbers")) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Biomass benchmar
-```{r, fig.width = dw1, fig.height = dh1}
-ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F)
-plot_bench(result$biomass, ex_data = ex)
+<!-- ## SSB & Recruitment -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F) -->
+<!-- plot_rec(result$ssb_rec, ex_data = ex) -->
+<!-- ``` -->
 
-```
+<!-- \newpage -->
 
-\newpage
+<!-- ## Biomass benchmar -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F) -->
+<!-- plot_bench(result$biomass, ex_data = ex) -->
 
-## Physics
-```{r, fig.width = 30, fig.height = 12}
-plot_physics(result$physics)
-```
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Fluxes
-```{r, fig.width = 30, fig.height = 12}
-plot_flux(result$flux)
-```
+<!-- ## Physics -->
+<!-- ```{r, fig.width = 30, fig.height = 12} -->
+<!-- plot_physics(result$physics) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Calibration plots
-### Structural nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$structn_age)
-```
+<!-- ## Fluxes -->
+<!-- ```{r, fig.width = 30, fig.height = 12} -->
+<!-- plot_flux(result$flux) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Reserve nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$resn_age)
-```
+<!-- ## Calibration plots -->
+<!-- ### Structural nitrogen -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$structn_age) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Biomass per ageclass
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$biomass_age)
-```
+<!-- ### Reserve nitrogen -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$resn_age) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Numbers
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$nums_age)
-```
+<!-- ### Biomass per ageclass -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$biomass_age) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ### Numbers -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$nums_age) -->
+<!-- ``` -->
 
 
-\newpage
+<!-- \newpage -->
 
-### Biomass
-```{r, fig.width = dw1, fig.height = dh1}
-plot_calibrate(result$biomass)
-```
+<!-- ### Biomass -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- plot_calibrate(result$biomass) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Distribution plots
-### Numbers @ age
-```{r, fig.width = dw1, fig.height = dh2}
-plot_struct(result$nums_age)
-```
+<!-- ## Distribution plots -->
+<!-- ### Numbers @ age -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_struct(result$nums_age) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Biomass @ age
-```{r, fig.width = dw1, fig.height = dh2}
-plot_struct(result$biomass_age)
-```
+<!-- ### Biomass @ age -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_struct(result$biomass_age) -->
+<!-- ``` -->
 
 <!-- \newpage -->
 
