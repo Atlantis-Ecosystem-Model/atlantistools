@@ -40,8 +40,15 @@ agg_perc <- function(data, col = "atoutput", groups, out = "atoutput"){
   dots = sapply(groups, . %>% {as.formula(paste0('~', .))})
   result <- as.data.frame(data) %>%
     dplyr::group_by_(.dots = dots) %>%
-    dplyr::mutate_(atoutput = lazyeval::interp(~var/sum(var), var = as.name(col)))
-  if (out != "atoutput") names(result)[names(result) == "atoutput"] <- out
+    dplyr::mutate_(xyz = lazyeval::interp(~var/sum(var), var = as.name(col)))
+  # If output column is not identical with the input column!
+  # WARNING: Reading the following lines may cause health issues... ;)
+  if (out != "atoutput") {
+    names(result)[names(result) == "xyz"] <- out
+  } else {
+    result[, col] <- NULL
+    names(result)[names(result) == "xyz"] <- "atoutput"
+  }
   return(result)
 }
 
