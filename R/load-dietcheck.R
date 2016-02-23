@@ -42,17 +42,17 @@ load_dietcheck <- function(dir = getwd(), dietcheck) {
   diet <- diet[rowSums(x = diet[, 4:ncol(diet)]) != 0,]
 
   # Convert to long dataframe and rename columns!
-  diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "diet", gather_cols = names(diet)[4:ncol(diet)])
+  diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "atoutput", gather_cols = names(diet)[4:ncol(diet)])
   names(diet_long)[names(diet_long) == "Predator"] <- "pred"
   # Only used with trunc code!
   # names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
   names(diet_long) <- tolower(names(diet_long))
 
   # Remove entries without spefific diet information
-  diet_long <- diet_long[diet_long$diet != 0, ]
+  diet_long <- diet_long[diet_long$atoutput != 0, ]
 
   # Convert to percentages!
-  diet_long <- agg_perc(data = diet_long, col = "diet", groups = c("time", "pred", "habitat"))
+  # diet_long <- agg_perc(data = diet_long, col = "diet", groups = c("time", "pred", "habitat"))
 
   return(diet_long)
 }
