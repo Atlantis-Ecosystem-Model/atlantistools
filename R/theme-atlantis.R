@@ -30,7 +30,7 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
     #    axis.text  =  element_text(),  #	inherits from text
     axis.text.x         = ggplot2::element_text(angle = ifelse(rot_xaxis_text, 45, 0), hjust = 1, size = scale_font * small, colour = "black"),
     axis.text.y         = ggplot2::element_text(size = small * scale_font, colour = "black"),
-    axis.line           = ggplot2::element_blank(),
+    axis.line           = ggplot2::element_line(),
     #    axis.line.x  =	element_line(),	#	inherits from axis.line
     #    axis.line.y	=	element_line(),	#	inherits from axis.line
     #    axis.ticks   =	element_line(),	#	inherits from line
@@ -42,7 +42,7 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
     #    plot.background     =	element_rect(),	#	inherits from rect
     #    plot.title	         =	element_text(),	#	 inherits from title
     panel.grid          = ggplot2::element_blank(),
-    panel.border        = ggplot2::element_rect(fill = NA, colour = "black"),
+    panel.border        = ggplot2::element_blank(),
     panel.background    = ggplot2::element_blank(),
     #    panel.margin  =	unit	,
     #    panel.grid.major	=	element_line(),	#	inherits from panel.grid
