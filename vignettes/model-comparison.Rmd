@@ -1,0 +1,158 @@
+---
+title: "model-calibration"
+author: "Alexander Keth"
+date: '`r Sys.Date()`'
+output: pdf_document
+toc: true
+number_sections: true
+classoption: landscape
+geometry: margin = 0.5cm
+---
+
+```{r, echo = FALSE}
+library("atlantistools")
+library("ggplot2")
+
+# Set the model paths here and load in preprocessed data! The data is read on from a different 
+# directory in this case due to the fact that the vignette comes shipped with the package.
+# model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
+model_paths <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+# Please comment the next line in and adjust the name of your preprocessed file!
+# load(file.path(model_path, "ns_preprocess.Rda"))
+bench_bio <- "setas-bench.csv"
+bench_rec <- "setas-ssb-rec.csv"
+
+# Please comment out!
+result <- preprocess_setas
+
+# Set default plot dimensions here!
+dw1 <- 25
+dh1 <- 15
+dh2 <- 11
+```
+
+<!-- \newpage -->
+
+<!-- ## Whole system plots! -->
+<!-- ```{r, fig.width = 14, fig.height = 8} -->
+<!-- plot_ws(result$biomass) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Biomass timeseries -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- plot <- plot_ts(result$biomass) -->
+<!-- update_labels(p = plot, labels = list(y = "Biomass [t]")) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Number timeseries -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot <- plot_ts(result$nums) -->
+<!-- update_labels(p = plot, labels = list(y = "Numbers")) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## SSB & Recruitment -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F) -->
+<!-- plot_rec(result$ssb_rec, ex_data = ex) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Biomass benchmark -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F) -->
+<!-- plot_bench(result$biomass, ex_data = ex) -->
+
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Physics -->
+<!-- ```{r, fig.width = 30, fig.height = 12} -->
+<!-- plot_physics(result$physics) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Fluxes -->
+<!-- ```{r, fig.width = 30, fig.height = 12} -->
+<!-- plot_flux(result$flux) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Calibration plots -->
+<!-- ### Structural nitrogen -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$structn_age) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ### Reserve nitrogen -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$resn_age) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ### Biomass per ageclass -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$biomass_age) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ### Numbers -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$nums_age) -->
+<!-- ``` -->
+
+
+<!-- \newpage -->
+
+<!-- ### Biomass -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- plot_calibrate(result$biomass) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Distribution plots -->
+<!-- ### Numbers @ age -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_struct(result$nums_age) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ### Biomass @ age -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_struct(result$biomass_age) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+
+<!-- ## Feeding Plots -->
+<!-- ```{r} -->
+<!-- feeding_plots <- plot_dietcheck(result$diet, combine_thresh = 0.03) -->
+<!-- lapply(feeding_plots, print) -->
+<!-- ``` -->
+
+
+
+
+
+
+
+
+
+
+
+
