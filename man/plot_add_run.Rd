@@ -13,15 +13,19 @@ plot_add_run(plot)
 ggplot2 plot.
 }
 \description{
-This function can be used to use plotting routines without color specification
-e.g. `plot_ts()`, `plot_calibrate()` or `plot_physics()` for model comparisons.
-Please note that `plot_ts()` and `plot_calibrate()` only work for non age based
-data. The colorcoding is based on the column run so you need to apply combine runs
-to your data first!
+This function can be used to add colour coding to plotting routines without color specification
+e.g. \code{plot_ts()}, \code{plot_calibrate()} or \code{plot_physics()}. The colorcoding is
+based on the column run so you need to apply \code{combine_runs} to your data first!
+Please note that \code{plot_ts()} and \code{plot_calibrate()} only work if they are created
+with non-age based data.
 }
 \examples{
 dummy <- preprocess_setas
-# Apply
+# Change output of dummy simulation!
 dummy$biomass$atoutput <- dummy$biomass$atoutput * 1.5
+dfs <- combine_runs(list(preprocess_setas, dummy), runs = c("setas", "dummy"))
+plot <- plot_ts(dfs$biomass)
+plot <- plot_add_run(plot)
+plot
 }
 
