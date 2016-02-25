@@ -63,8 +63,6 @@ load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
   result$atoutput.x <- ((result$atoutput.x / bio_conv) / result$rec_weights) / 1000
 
   # Final data transformations
-  # result$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result$code)
-  # result <- convert_time(dir = dir, prm_run = prm_run, data = result, modelstart = modelstart, stock_state = TRUE)
   names(result)[names(result) == "atoutput.x"] <- "rec"
   names(result)[names(result) == "atoutput.y"] <- "ssb"
   names(result)[names(result) == "code"] <- "species"
