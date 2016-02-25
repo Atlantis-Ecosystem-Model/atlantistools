@@ -17,6 +17,9 @@
 plot_dietcheck <- function(data, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "diet", "atoutput", "prey", "pred"), optional = c("habitat", "agecl"))
 
+  # Timeseries per species of absolute values!
+  ts_diet <- agg_sum(data, groups = c("time", "pred", "habitat"))
+
   # Combine prey groups with low contribution to the diet!
   data <- combine_groups(data,
                          group_col = "prey",
@@ -61,9 +64,20 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
     return(plot)
   }
 
-  data_pred <- split(data, data$pred)
-  plots <- lapply(data_pred, plot_func)
-  return(plots)
+  plot_func_ts <- function(data) {
+    plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
+      ggplot2::geom_line() +
+      ggplot2::labs(y = "DietCheck absolute") +
+      theme_atlantis() +
+      ggplot2::coord_cartesian(expand = FALSE)
+  }
+
+  plots_diet <- lapply(split(data, data$pred), plot_func)
+  plots_ts <- lapply(split(ts_diet, ts_diet$pred), plot_func_ts)
+
+  grobs <- mapply(gridExtra::arrangeGrob, plots_diet, plots_ts, MoreArgs = list(heights = unit(c(0.7, 0.3), units = "npc")))
+
+  return(grobs)
 }
 
 # dietns <- load_dietcheck(dir = file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS"),
