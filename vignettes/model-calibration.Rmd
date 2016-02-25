@@ -13,19 +13,49 @@ geometry: margin = 0.5cm
 library("atlantistools")
 library("ggplot2")
 
-# Set the model path here and load in preprocessed data! The data is read on from a different 
-# directory in this case due to the fact that the vignette comes shipped with the package.
+# This section is used to read in the data! You can do this however you like.
+# The data should be present either in your workspace as object "result" or you
+# can read the data in at this stage!
+# I demonstrate this with the stetas model files which come shipped with the package!
+# Solution1: Preprocess the data with "preprocess()".
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+result <-   preprocess(dir = d,
+                       nc_gen = "outputSETAS.nc",
+                       nc_prod = "outputSETASPROD.nc",
+                       dietcheck = "outputSETASDietCheck.txt",
+                       yoy = "outputSETASYOY.txt",
+                       ssb = "outputSETASSSB.txt",
+                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                       prm_run = "VMPA_setas_run_fishing_F_New.prm",
+                       bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
+                                      init = "init_vmpa_setas_25032013.nc"),
+                       fgs = "SETasGroups.csv",
+                       select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
+                                         "Cephalopod", "Diatom", "Zoo"),
+                       bboxes = get_boundary(boxinfo = load_box(dir = d, 
+                                                                bgm = "VMPA_setas.bgm")),
+                       check_acronyms = TRUE,
+                       modelstart = "1991-01-01",
+                       out = "preprocess.Rda",
+                       report = FALSE,
+                       save_to_disc = FALSE)
+
+# Solution2: Load in already preprocessed data! This can be done with load():
+
 # model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
-model_path <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-# Please comment the next line in and adjust the name of your preprocessed file!
 # load(file.path(model_path, "ns_preprocess.Rda"))
+
+# At this point the data is read in as object "result"
+# Unfortunately it is nearly impossible to demonstarte this with the packege because the data is 
+# already loaded as soon as you load the package with "library()". Therefore I have to 
+# assign the data by hand otherwise the vignette will fail.
+result <- preprocess_setas
+
+# All you have to do now is change the names of the following dataframes.
 bench_bio <- "setas-bench.csv"
 bench_rec <- "setas-ssb-rec.csv"
 
-# Please comment out!
-result <- preprocess_setas
-
-# Set default plot dimensions here!
+# And adjust the ploting sizes (here and throughout this document) to your likings.
 dw1 <- 25
 dh1 <- 15
 dh2 <- 11
