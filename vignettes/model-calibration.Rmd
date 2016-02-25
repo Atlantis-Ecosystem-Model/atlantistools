@@ -18,8 +18,8 @@ library("ggplot2")
 # can read the data in at this stage!
 # I demonstrate this with the stetas model files which come shipped with the package!
 # Solution1: Preprocess the data with "preprocess()".
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-result <-   preprocess(dir = d,
+model_path <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+result <-   preprocess(dir = model_path,
                        nc_gen = "outputSETAS.nc",
                        nc_prod = "outputSETASPROD.nc",
                        dietcheck = "outputSETASDietCheck.txt",
@@ -27,12 +27,12 @@ result <-   preprocess(dir = d,
                        ssb = "outputSETASSSB.txt",
                        prm_biol = "VMPA_setas_biol_fishing_New.prm",
                        prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                       bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
+                       bps = load_bps(dir = model_path, fgs = "SETasGroups.csv", 
                                       init = "init_vmpa_setas_25032013.nc"),
                        fgs = "SETasGroups.csv",
                        select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
                                          "Cephalopod", "Diatom", "Zoo"),
-                       bboxes = get_boundary(boxinfo = load_box(dir = d, 
+                       bboxes = get_boundary(boxinfo = load_box(dir = model_path, 
                                                                 bgm = "VMPA_setas.bgm")),
                        check_acronyms = TRUE,
                        modelstart = "1991-01-01",
@@ -173,3 +173,10 @@ plot_struct(result$nums_age)
 plot_struct(result$biomass_age)
 ```
 
+\newpage
+
+## Diet Plots
+
+```{r, fig.width = 14, fig.height = 7}
+plot_dietcheck(result$diet, combine_thresh = 0.03)
+```
