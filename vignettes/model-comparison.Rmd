@@ -25,7 +25,7 @@ library("ggplot2")
 #
 # Read in the preprocessed dataframes from each simulation!
 # store_data <- list()
-# for(i in seq_along(model_paths)) {
+# for (i in seq_along(model_paths)) {
 #   load(file.path(model_paths[i], "preprocess-north-sea.rda"))
 #   store_data[[i]] <- result
 # }
@@ -79,7 +79,7 @@ plot_ts(result$biomass) %>% plot_add_run(.) %>% update_labels(labels = list(y = 
 \newpage
 
 ## Relative biomass timeseries
-```{r, fig.width = dw1, fig.height = dh2}
+```{r, fig.width = dw1, fig.height = dh1}
 plot_calibrate(result$biomass) %>% plot_add_run(.)
 ```
 
