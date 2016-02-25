@@ -5,6 +5,10 @@ output: html_document
 
 # atlantistools 0.2.0.9000
 
+## New features
+* `combine_runs()` can be used to combine preprocessed data created with `preprocess()` from different 
+Atlantis simulations. The model output can be compared with the vignette code `model-comparison.Rmd`.
+
 ## Minor improvements
 * `load_dietcheck()` and `load_rec()` are incorporated into `preprocess()`. The resulting dataframe are now
 part of the output and can be accessed directly from the list via `out$diet` and `out$ssb_rec`.
