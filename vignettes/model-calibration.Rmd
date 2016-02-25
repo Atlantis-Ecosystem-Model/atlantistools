@@ -167,22 +167,3 @@ plot_struct(result$nums_age)
 plot_struct(result$biomass_age)
 ```
 
-<!-- \newpage -->
-
-<!-- ## Feeding Plots -->
-<!-- ```{r} -->
-<!-- feeding_plots <- plot_dietcheck(result$diet, combine_thresh = 0.03) -->
-<!-- lapply(feeding_plots, print) -->
-<!-- ``` -->
-
-
-
-
-
-
-
-
-
-
-
-
