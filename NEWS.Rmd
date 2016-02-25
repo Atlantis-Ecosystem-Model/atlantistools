@@ -8,6 +8,12 @@ output: html_document
 ## New features
 * `combine_runs()` can be used to combine preprocessed data created with `preprocess()` from different 
 Atlantis simulations. The model output can be compared with the vignette code `model-comparison.Rmd`.
+* The vignette `model-calibration.Rmd` can be used to create various model calibration and tuning plots
+for a single simulation. The vignette can be used as blueprint for different Atlantis models. Simply
+download the vignette code, change the first section where the data is read in to your likings,
+modify the plot dimensions and you are good to go.
+* Added `model-comparison.Rmd` to compare multiple Atlantis simulations. It works very similar to
+`model-calibration.Rmd`.
 
 ## Minor improvements
 * `load_dietcheck()` and `load_rec()` are incorporated into `preprocess()`. The resulting dataframe are now
