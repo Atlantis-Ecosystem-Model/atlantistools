@@ -12,3 +12,18 @@
 #'
 #' @examples
 #'
+
+plot <- plot_ts(preprocess_setas$biomass_age)
+plot_add_run <- function()
+if (!("run" %in% names(plot$data)) stop("Variable run not found in plot!")
+if (!ggplot2::is.ggplot(plot)) stop("Provided plot is no ggplot2 plot.")
+if ("colour" %in% names(plot$mapping)) {
+  warning("Color coding in plot already present. You probably don't want to overwrite this with model runs!")
+}
+
+plot <- plot + ggplot2::aes(colour = species)
+
+names(plot$mapping)
+
+plot <- plot + ggplot2::aes_(colour = ~run)
+
