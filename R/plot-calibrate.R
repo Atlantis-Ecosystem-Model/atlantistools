@@ -12,7 +12,7 @@ plot_calibrate <- function(data) {
     stop("Column time not found in data")
   }
 
-  check_df_names(data = data, expect = c("time", "atoutput", "species"), optional = "agecl")
+  check_df_names(data = data, expect = c("time", "atoutput", "species"), optional = c("agecl", "run"))
 
   # Divide values by reference value (time = min(time))
   ref <- data[data$time == min(data$time), ]

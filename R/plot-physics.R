@@ -8,7 +8,7 @@
 #' plot_physics(preprocess_setas$physics)
 
 plot_physics <- function(data) {
-  check_df_names(data = data, expect = c("time", "atoutput", "variable", "polygon"))
+  check_df_names(data = data, expect = c("time", "atoutput", "variable", "polygon"), optional = "run")
 
   plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
     ggplot2::geom_line() +

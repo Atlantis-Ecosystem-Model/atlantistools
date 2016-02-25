@@ -12,7 +12,7 @@ plot_ts <- function(data) {
     stop("Column time not found in data")
   }
 
-  check_df_names(data = data, expect = c("time", "atoutput", "species"), optional = "agecl")
+  check_df_names(data = data, expect = c("time", "atoutput", "species"), optional = c("agecl", "run"))
 
   plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
     ggplot2::geom_line() +
