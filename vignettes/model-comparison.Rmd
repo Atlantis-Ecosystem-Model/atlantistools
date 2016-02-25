@@ -1,5 +1,5 @@
 ---
-title: "model-calibration"
+title: "model-comparison"
 author: "Alexander Keth"
 date: '`r Sys.Date()`'
 output: pdf_document
@@ -13,137 +13,83 @@ geometry: margin = 0.5cm
 library("atlantistools")
 library("ggplot2")
 
-# Set the model paths here and load in preprocessed data! The data is read on from a different 
-# directory in this case due to the fact that the vignette comes shipped with the package.
-# model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
-model_paths <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-# Please comment the next line in and adjust the name of your preprocessed file!
-# load(file.path(model_path, "ns_preprocess.Rda"))
-bench_bio <- "setas-bench.csv"
-bench_rec <- "setas-ssb-rec.csv"
+# This section is used to read in the data! You can do this however you like.
+# I will give you an examples how this can be done. But you can chose any other way!
+# PLease keep in mind that the final list should be named "result".
 
-# Please comment out!
-result <- preprocess_setas
+# Solution:
+# Set your model paths here
+# model_paths <- c(file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS"),
+#                  file.path("Z:", "Atlantis_models", "Runs", "dummy_02_ATLANTIS_NS"),
+#                  file.path("Z:", "Atlantis_models", "Runs", "dummy_03_ATLANTIS_NS"))
+#
+# Read in the preprocessed dataframes from each simulation!
+# store_data <- list()
+# for(i in seq_along(model_paths)) {
+#   load(file.path(model_paths[i], "preprocess-north-sea.rda"))
+#   store_data[[i]] <- result
+# }
 
-# Set default plot dimensions here!
+# Unfortunately it is nearly impossible to demonstarte this with the package itself because the data is 
+# already loaded as soon as you load the package with "library()". Therefore I have to create some dummy
+# data to demonstrate the rest of the vignette. Simply comment this out in your final *.Rmd file.
+dummy_setas <- function(list, mult) {
+  for (i in seq_along(list)) {
+    mult <- rep_len(mult, length.out = nrow(list[[i]]))
+    list[[i]][, ncol(list[[i]])] <- list[[i]][, ncol(list[[i]])] * mult
+  }
+  return(list)
+}
+
+store_data <- list(preprocess_setas, 
+                   dummy_setas(preprocess_setas, mult = c(1, 1.2)),
+                   dummy_setas(preprocess_setas, mult = c(2, 2.2)))
+
+# Now we have to combine the data from the different simulations with "combine_runs()".
+# Please edit the strings passed to "runs" at this point!
+result <- combine_runs(outs = store_data, runs = c("run1", "run2", "run3"))
+
+# And adjust the ploting sizes (here and throughout this document) to your likings.
 dw1 <- 25
 dh1 <- 15
 dh2 <- 11
+
+# You should be able to build the vignette either by clicking on "Knit-PDF" or with
+# rmarkdown::render("model-comparison.Rmd")
 ```
 
-<!-- \newpage -->
+\newpage
 
-<!-- ## Whole system plots! -->
-<!-- ```{r, fig.width = 14, fig.height = 8} -->
-<!-- plot_ws(result$biomass) -->
-<!-- ``` -->
+## Whole system biomass
+```{r, fig.width = 14, fig.height = 8}
+sum_bio <- agg_sum(result$biomass, groups = c("time", "run"))
+ggplot2::ggplot(sum_bio, ggplot2::aes(x = time, y = atoutput, colour = run)) +
+  ggplot2::geom_line() +
+  ggplot2::coord_cartesian(expand = FALSE) +
+  theme_atlantis()
+```
 
-<!-- \newpage -->
+\newpage
 
-<!-- ## Biomass timeseries -->
-<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
-<!-- plot <- plot_ts(result$biomass) -->
-<!-- update_labels(p = plot, labels = list(y = "Biomass [t]")) -->
-<!-- ``` -->
+## Biomass timeseries
+```{r, fig.width = dw1, fig.height = dh1}
+plot_ts(result$biomass) %>% plot_add_run(.) %>% update_labels(labels = list(y = "Biomass [t]"))
+```
 
-<!-- \newpage -->
+\newpage
 
-<!-- ## Number timeseries -->
-<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
-<!-- plot <- plot_ts(result$nums) -->
-<!-- update_labels(p = plot, labels = list(y = "Numbers")) -->
-<!-- ``` -->
+## Relative biomass timeseries
+```{r, fig.width = dw1, fig.height = dh2}
+plot_calibrate(result$biomass) %>% plot_add_run(.)
+```
 
-<!-- \newpage -->
+\newpage
 
-<!-- ## SSB & Recruitment -->
-<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
-<!-- ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F) -->
-<!-- plot_rec(result$ssb_rec, ex_data = ex) -->
-<!-- ``` -->
+## Physics
+```{r, fig.width = 30, fig.height = 12}
+plot_physics(result$physics) %>% plot_add_run(.)
+```
 
-<!-- \newpage -->
-
-<!-- ## Biomass benchmark -->
-<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
-<!-- ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F) -->
-<!-- plot_bench(result$biomass, ex_data = ex) -->
-
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ## Physics -->
-<!-- ```{r, fig.width = 30, fig.height = 12} -->
-<!-- plot_physics(result$physics) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ## Fluxes -->
-<!-- ```{r, fig.width = 30, fig.height = 12} -->
-<!-- plot_flux(result$flux) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ## Calibration plots -->
-<!-- ### Structural nitrogen -->
-<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
-<!-- plot_calibrate(result$structn_age) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ### Reserve nitrogen -->
-<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
-<!-- plot_calibrate(result$resn_age) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ### Biomass per ageclass -->
-<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
-<!-- plot_calibrate(result$biomass_age) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ### Numbers -->
-<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
-<!-- plot_calibrate(result$nums_age) -->
-<!-- ``` -->
-
-
-<!-- \newpage -->
-
-<!-- ### Biomass -->
-<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
-<!-- plot_calibrate(result$biomass) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ## Distribution plots -->
-<!-- ### Numbers @ age -->
-<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
-<!-- plot_struct(result$nums_age) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ### Biomass @ age -->
-<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
-<!-- plot_struct(result$biomass_age) -->
-<!-- ``` -->
-
-<!-- \newpage -->
-
-<!-- ## Feeding Plots -->
-<!-- ```{r} -->
-<!-- feeding_plots <- plot_dietcheck(result$diet, combine_thresh = 0.03) -->
-<!-- lapply(feeding_plots, print) -->
-<!-- ``` -->
 
 
 
