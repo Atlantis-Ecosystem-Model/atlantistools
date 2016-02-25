@@ -66,6 +66,7 @@ sum_bio <- agg_sum(result$biomass, groups = c("time", "run"))
 ggplot2::ggplot(sum_bio, ggplot2::aes(x = time, y = atoutput, colour = run)) +
   ggplot2::geom_line() +
   ggplot2::coord_cartesian(expand = FALSE) +
+  ggplot2::guides(colour = ggplot2::guide_legend(ncol = 1)) +
   theme_atlantis()
 ```
 
@@ -87,7 +88,7 @@ plot_calibrate(result$biomass) %>% plot_add_run(.)
 
 ## Physics
 ```{r, fig.width = 30, fig.height = 12}
-plot_physics(result$physics) %>% plot_add_run(.)
+plot_physics(result$physics) %>% plot_add_run(.) %>% ggplot2::guides(colour = ggplot2::guide_legend(ncol = 1))
 ```
 
 
