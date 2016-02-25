@@ -12,6 +12,7 @@ geometry: margin = 0.5cm
 ```{r, echo = FALSE}
 library("atlantistools")
 library("ggplot2")
+library("gridExtra")
 
 # This section is used to read in the data! You can do this however you like.
 # The data should be present either in your workspace as object "result" or you
@@ -67,116 +68,116 @@ dh2 <- 11
 # rmarkdown::render("model-calibration.Rmd")
 ```
 
-\newpage
+<!-- \newpage -->
 
-## Whole system plots!
-```{r, fig.width = 14, fig.height = 8}
-plot_ws(result$biomass)
-```
+<!-- ## Whole system plots! -->
+<!-- ```{r, fig.width = 14, fig.height = 8} -->
+<!-- plot_ws(result$biomass) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Biomass timeseries
-```{r, fig.width = dw1, fig.height = dh1}
-plot <- plot_ts(result$biomass)
-update_labels(p = plot, labels = list(y = "Biomass [t]"))
-```
+<!-- ## Biomass timeseries -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- plot <- plot_ts(result$biomass) -->
+<!-- update_labels(p = plot, labels = list(y = "Biomass [t]")) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Number timeseries
-```{r, fig.width = dw1, fig.height = dh2}
-plot <- plot_ts(result$nums)
-update_labels(p = plot, labels = list(y = "Numbers"))
-```
+<!-- ## Number timeseries -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot <- plot_ts(result$nums) -->
+<!-- update_labels(p = plot, labels = list(y = "Numbers")) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## SSB & Recruitment
-```{r, fig.width = dw1, fig.height = dh1}
-ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F)
-plot_rec(result$ssb_rec, ex_data = ex)
-```
+<!-- ## SSB & Recruitment -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F) -->
+<!-- plot_rec(result$ssb_rec, ex_data = ex) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Biomass benchmark
-```{r, fig.width = dw1, fig.height = dh1}
-ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F)
-plot_bench(result$biomass, ex_data = ex)
+<!-- ## Biomass benchmark -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F) -->
+<!-- plot_bench(result$biomass, ex_data = ex) -->
 
-```
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Physics
-```{r, fig.width = 30, fig.height = 12}
-plot_physics(result$physics)
-```
+<!-- ## Physics -->
+<!-- ```{r, fig.width = 30, fig.height = 12} -->
+<!-- plot_physics(result$physics) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Fluxes
-```{r, fig.width = 30, fig.height = 12}
-plot_flux(result$flux)
-```
+<!-- ## Fluxes -->
+<!-- ```{r, fig.width = 30, fig.height = 12} -->
+<!-- plot_flux(result$flux) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Calibration plots
-### Structural nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$structn_age)
-```
+<!-- ## Calibration plots -->
+<!-- ### Structural nitrogen -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$structn_age) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Reserve nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$resn_age)
-```
+<!-- ### Reserve nitrogen -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$resn_age) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Biomass per ageclass
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$biomass_age)
-```
+<!-- ### Biomass per ageclass -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$biomass_age) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Numbers
-```{r, fig.width = dw1, fig.height = dh2}
-plot_calibrate(result$nums_age)
-```
+<!-- ### Numbers -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_calibrate(result$nums_age) -->
+<!-- ``` -->
 
 
-\newpage
+<!-- \newpage -->
 
-### Biomass
-```{r, fig.width = dw1, fig.height = dh1}
-plot_calibrate(result$biomass)
-```
+<!-- ### Biomass -->
+<!-- ```{r, fig.width = dw1, fig.height = dh1} -->
+<!-- plot_calibrate(result$biomass) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-## Distribution plots
-### Numbers @ age
-```{r, fig.width = dw1, fig.height = dh2}
-plot_struct(result$nums_age)
-```
+<!-- ## Distribution plots -->
+<!-- ### Numbers @ age -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_struct(result$nums_age) -->
+<!-- ``` -->
 
-\newpage
+<!-- \newpage -->
 
-### Biomass @ age
-```{r, fig.width = dw1, fig.height = dh2}
-plot_struct(result$biomass_age)
-```
+<!-- ### Biomass @ age -->
+<!-- ```{r, fig.width = dw1, fig.height = dh2} -->
+<!-- plot_struct(result$biomass_age) -->
+<!-- ``` -->
 
 \newpage
 
 ## Diet Plots
 
-```{r, fig.width = 14, fig.height = 7}
-plot_dietcheck(result$diet, combine_thresh = 0.03)
+```{r, fig.width = 14, fig.height = 9}
+marrangeGrob(plot_dietcheck(result$diet, combine_thresh = 0.03), nrow = 1, ncol = 1)
 ```
