@@ -41,14 +41,17 @@ result <-   preprocess(dir = d,
                        save_to_disc = FALSE)
 
 # Solution2: Load in already preprocessed data! This can be done with load():
-
+# All you have to to is comment in the next two lines and change the model_path object
+# and the name of the *.Rda file.
 # model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
 # load(file.path(model_path, "ns_preprocess.Rda"))
 
-# At this point the data is read in as object "result"
-# Unfortunately it is nearly impossible to demonstarte this with the packege because the data is 
+# At this point the data is read in as object "result".
+
+# Unfortunately it is nearly impossible to demonstarte this with the package itself because the data is 
 # already loaded as soon as you load the package with "library()". Therefore I have to 
 # assign the data by hand otherwise the vignette will fail.
+# Please comment out the next line in your personal version of this *.Rmd file.
 result <- preprocess_setas
 
 # All you have to do now is change the names of the following dataframes.
@@ -59,6 +62,9 @@ bench_rec <- "setas-ssb-rec.csv"
 dw1 <- 25
 dh1 <- 15
 dh2 <- 11
+
+# You should be able to build the vignette either by clicking on "Knit-PDF" or with
+# rmarkdown::render("model-calibration.Rmd")
 ```
 
 \newpage
