@@ -3,6 +3,7 @@ context("combine_runs tests")
 suppressMessages(library("dplyr"))
 
 test <- list(preprocess_setas, preprocess_setas, preprocess_setas)
+test_error <- list(preprocess_setas, preprocess_setas[1:13])
 
 out <- combine_runs(outs = test, runs = c("run1", "run2", "run3"))
 
@@ -20,4 +21,5 @@ test_that("test combine_runs", {
   expect_equal(sapply(out, dim)[1,], sapply(preprocess_setas, dim)[1,] * 3)
   expect_equal(preprocess_setas[[2]], test2)
   expect_equal(preprocess_setas[[12]], test12)
+  expect_error(combine_runs(outs = test_error, runs = c("a", "b")), "Different number of dataframes")
 })
