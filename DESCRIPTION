@@ -21,6 +21,7 @@ Imports:
   lazyeval,
   tidyr,
   ggplot2,
-  proj4
+  proj4,
+  gridExtra
 VignetteBuilder: knitr
 
