@@ -24,5 +24,6 @@ outs <- list(preprocess_setas, preprocess_setas)
 runs <- c("run1", "run2")
 test <- combine_runs(outs, runs)
 names(test[[1]])
+head(test[[1]])
 }
 
