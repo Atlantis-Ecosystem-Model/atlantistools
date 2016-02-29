@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' plots <- plot_dietcheck(data = preprocess_setas$diet, combine_thresh = 0.03)
-#' plots[[1]]
+#' gridExtra::grid.arrange(plots[[1]])
 
 plot_dietcheck <- function(data, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "diet", "atoutput", "prey", "pred"), optional = c("habitat", "agecl"))
@@ -75,7 +75,7 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
   plots_diet <- lapply(split(data, data$pred), plot_func)
   plots_ts <- lapply(split(ts_diet, ts_diet$pred), plot_func_ts)
 
-  grobs <- mapply(gridExtra::arrangeGrob, plots_diet, plots_ts, MoreArgs = list(heights = unit(c(0.7, 0.3), units = "npc")))
+  grobs <- mapply(gridExtra::arrangeGrob, plots_diet, plots_ts, MoreArgs = list(heights = grid::unit(c(0.7, 0.3), units = "npc")))
 
   return(grobs)
 }
