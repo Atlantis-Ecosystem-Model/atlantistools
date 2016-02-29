@@ -50,7 +50,7 @@ load_dietcheck <- function(dir = getwd(), dietcheck) {
       dplyr::mutate_(out = ~out / length(unique(diet$Time)) * 100) %>%
       tidyr::spread_(key_col = "Predator", value_col = "out") %>%
       as.data.frame()
-      message("Incomplete diet information.\nMissing diet information shown as %.\n100% means no dietinformation at any timestep.")
+      warning("Incomplete diet information.\n% timesteps without any diet information per predator.")
       print(print_diet)
   }
 
