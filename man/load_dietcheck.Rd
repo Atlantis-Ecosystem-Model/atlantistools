@@ -28,7 +28,7 @@ Read in the atlantis dietcheck.txt file and perform some basic data transformati
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 diet <- load_dietcheck(dir = d,
     dietcheck = "outputSETASDietCheck.txt")
-head(diet, n = 25)
+head(diet, n = 10)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
