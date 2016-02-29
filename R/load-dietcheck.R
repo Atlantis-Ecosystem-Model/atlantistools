@@ -17,7 +17,7 @@
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' diet <- load_dietcheck(dir = d,
 #'     dietcheck = "outputSETASDietCheck.txt")
-#' head(diet, n = 25)
+#' head(diet, n = 10)
 
 load_dietcheck <- function(dir = getwd(), dietcheck) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
@@ -39,7 +39,22 @@ load_dietcheck <- function(dir = getwd(), dietcheck) {
   # diet$Cohort <- diet$Cohort + 1
 
   # remove entries without any diet-information!
-  diet <- diet[rowSums(x = diet[, 4:ncol(diet)]) != 0,]
+  empty_rows <- rowSums(x = diet[, 4:ncol(diet)]) == 0
+  # Create intermediate dataframe to print predators without diet information!
+  print_diet <- diet[empty_rows, c("Time", "Predator", "Habitat")] %>%
+    dplyr::group_by_(~Predator, ~Habitat) %>%
+    dplyr::summarise_(out = ~dplyr::n_distinct(Time)) %>%
+    dplyr::filter_(~out != 1)
+  if (nrow(print_diet) != 0) {
+    print_diet <- print_diet %>%
+      dplyr::mutate_(out = ~out / length(unique(diet$Time)) * 100) %>%
+      tidyr::spread_(key_col = "Predator", value_col = "out") %>%
+      as.data.frame()
+      message("Incomplete diet information.\nMissing diet information shown as %.\n100% means no dietinformation at any timestep.")
+      print(print_diet)
+  }
+
+  diet <- diet[!empty_rows, ]
 
   # Convert to long dataframe and rename columns!
   diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "atoutput", gather_cols = names(diet)[4:ncol(diet)])
