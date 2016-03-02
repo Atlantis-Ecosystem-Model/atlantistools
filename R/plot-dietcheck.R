@@ -80,13 +80,15 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
   return(grobs)
 }
 
+# setwd(file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS"))
+#
 # load("preprocess-north-sea.rda")
 # data <- result$diet
 # # Combine prey groups with low contribution to the diet!
 # data <- combine_groups(data,
 #                        group_col = "prey",
 #                        groups = c("time", "pred", "habitat"),
-#                        combine_thresh = 0.00)
+#                        combine_thresh = 0.03)
 #
 # # Convert diet data to percentages!
 # data <- agg_perc(data, groups = c("time", "pred", "habitat"))
