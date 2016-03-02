@@ -29,15 +29,6 @@
 #'    prm_biol = "VMPA_setas_biol_fishing_New.prm")
 
 load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
-  load_txt <- function(dir, file) {
-    file <- convert_path(dir = dir, file = file)
-    data <- read.table(file, header = T)
-    data <- tidyr::gather_(data, key_col = "code", value_col = "atoutput", gather_cols = names(data)[2:length(names(data))])
-    data$code <- as.character(data$code)
-    names(data) <- tolower(names(data))
-    return(data)
-  }
-
   # Read in files
   ssb <- load_txt(dir = dir, file = ssb)
   yoy <- load_txt(dir = dir, file = yoy)
