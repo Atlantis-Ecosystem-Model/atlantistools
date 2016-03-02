@@ -8,7 +8,7 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
-#' @param report Logical indicating if incomplete DietCheck information shalle
+#' @param report Logical indicating if incomplete DietCheck information shall
 #' be printed \code{TRUE} or not \code{FALSE}.
 #' @family load functions
 #' @export
@@ -53,7 +53,7 @@ load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE) {
       tidyr::spread_(key_col = "Predator", value_col = "out") %>%
       as.data.frame()
     if (report) {
-      print("Incomplete diet information.\n% timesteps without any diet information per predator.")
+      warning("Incomplete diet information.\n% timesteps without any diet information per predator.")
       print(print_diet)
     }
   }

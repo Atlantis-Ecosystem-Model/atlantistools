@@ -4,7 +4,7 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck)
+load_dietcheck(dir = getwd(), dietcheck, report = TRUE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -16,6 +16,9 @@ folder) you should use 'NULL' as dir.}
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
+
+\item{report}{Logical indicating if incomplete DietCheck information shall
+be printed \code{TRUE} or not \code{FALSE}.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
