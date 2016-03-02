@@ -270,6 +270,23 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
   # Convert timestep to actual time.
   result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = modelstart)
 
+  # According to the Atlantis wiki DietCheck.txt gives an indication of how much a group is eating
+  # If the prey is an inverebrate value units are mgN/m^3 per second
+  # --> Multiply value with volume of model domain!
+  # If the prey is a vertebrate value units are nums per second
+  # --> Multiply with individual weight!
+  # Currently it is not possible to merge the dataframes vol with diet because there are different
+  # timesteps used (Diet is based on tsumout while vol is based on toutinc) which may differ for
+  # most simulations. I checked our model and tested if the volume does change significantly over
+  # time... Which it does not. Therefore we use the mean volume over the whole simulation as proxy!
+  # This is not 100% correct! In addition individual weight changes drastically over time and merging
+  # with diet data is necessary (but impossbiel due to different time steps) here! This will only
+  # work if toutinc and tsumout are equal!
+  # vol_mult <- mean(agg_sum(vol, col = "volume", groups = "time")$atoutput)
+  # vol_epi <- mean(agg_sum(subset(vol, layer == max(vol$layer)), col = "volume", groups = "time")$atoutput)
+  #
+  # result$diet$time <- result$diet$time / min(result$diet$time)
+
   # Convert Species names to Longnames!
   for (i in seq_along(result)) {
     # Dietdataframe does not have column 'species' nonetheless predator and prey
