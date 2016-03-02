@@ -20,8 +20,7 @@ non_ss <- load_nc(dir = d, nc = "outputSETAS.nc",
 #   aggregate_layers = FALSE,
 #   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 
-ss <- load_dietcheck(dir = d,
-                     dietcheck = "outputSETASDietCheck.txt")
+ss <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE)
 
 rando <- ss
 rando$time <- rando$time * runif(n = nrow(ss), min = 0, max = 1)

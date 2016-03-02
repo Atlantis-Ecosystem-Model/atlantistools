@@ -2,8 +2,7 @@ context("combine_groups tests")
 
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
-diet <- load_dietcheck(dir = d,
-                       dietcheck = "outputSETASDietCheck.txt")
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE)
 
 test_that("test combine_groups", {
   expect_equal(combine_groups(data = diet, group_col = "prey", groups = c("time", "pred", "habitat"), combine_thresh = 0), diet)

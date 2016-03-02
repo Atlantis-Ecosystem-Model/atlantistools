@@ -4,8 +4,7 @@ library("dplyr", warn.conflicts = FALSE)
 
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
-diet <- load_dietcheck(dir = d,
-                       dietcheck = "outputSETASDietCheck.txt")
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE)
 
 # test1 <- diet %>%
 #   group_by(time, pred, habitat) %>%
