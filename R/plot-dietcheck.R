@@ -80,12 +80,22 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
   return(grobs)
 }
 
-# dietns <- load_dietcheck(dir = file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS"),
-#                          dietcheck = "outputNorthSeaDietCheck.txt",
-#                          fgs = "functionalGroups.csv",
-#                          prm_run = "NorthSea_biol_fishing.prm",
-#                          modelstart = "1991-01-01",
-#                          combine_thresh = 0.03)
+# load("preprocess-north-sea.rda")
+# data <- result$diet
+# # Combine prey groups with low contribution to the diet!
+# data <- combine_groups(data,
+#                        group_col = "prey",
+#                        groups = c("time", "pred", "habitat"),
+#                        combine_thresh = 0.00)
+#
+# # Convert diet data to percentages!
+# data <- agg_perc(data, groups = c("time", "pred", "habitat"))
+#
+# ggplot2::ggplot(data = subset(data, habitat == "WC"), ggplot2::aes(x = time, y = prey, fill = atoutput)) +
+#   ggplot2::geom_tile() +
+#   ggplot2::scale_fill_gradientn(colours = rainbow(7), name = "Diet [%]") +
+#   ggplot2::facet_wrap(~pred, ncol = 9)
+#
 #
 # plots <- plot_dietcheck(data = dietns)
 #
