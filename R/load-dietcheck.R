@@ -8,6 +8,8 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
+#' @param report Logical indicating if incomplete DietCheck information shalle
+#' be printed \code{TRUE} or not \code{FALSE}.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -19,7 +21,7 @@
 #'     dietcheck = "outputSETASDietCheck.txt")
 #' head(diet, n = 10)
 
-load_dietcheck <- function(dir = getwd(), dietcheck) {
+load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE) {
   dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
@@ -50,8 +52,10 @@ load_dietcheck <- function(dir = getwd(), dietcheck) {
       dplyr::mutate_(out = ~out / length(unique(diet$Time)) * 100) %>%
       tidyr::spread_(key_col = "Predator", value_col = "out") %>%
       as.data.frame()
-      warning("Incomplete diet information.\n% timesteps without any diet information per predator.")
+    if (report) {
+      print("Incomplete diet information.\n% timesteps without any diet information per predator.")
       print(print_diet)
+    }
   }
 
   diet <- diet[!empty_rows, ]
