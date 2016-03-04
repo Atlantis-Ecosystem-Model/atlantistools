@@ -54,7 +54,7 @@ convert_time <- function(dir = getwd(), prm_run, data, modelstart){
         # Convert time in days to actual time!
         data$time <- as.Date.numeric(data$time, origin = modelstart)
       } else {
-        warning("There might be missing time.")
+        stop("Provided dataframe has column 'time' but values are corrput. PLease contact package development Team.")
       }
     }
   } else {
