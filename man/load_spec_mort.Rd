@@ -31,7 +31,8 @@ Load mortality information from outputSpecificPredMort.txt
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-load_spec_mort(dir = d,
+df <- load_spec_mort(dir = d,
    specmort = "outputSETASSpecificPredMort.txt")
+head(df)
 }
 

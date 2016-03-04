@@ -18,13 +18,27 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' load_spec_mort(dir = d,
+#' df <- load_spec_mort(dir = d,
 #'    specmort = "outputSETASSpecificPredMort.txt")
-
+#' head(df)
 
 load_spec_mort <- function(dir = getwd(), specmort) {
-  specmort <- load_txt(dir = dir, file = specmort)
-  return(specmort)
+  data <- load_txt(dir = dir, file = specmort)
+  data <- tidyr::separate_(data, col = "code", into = c("pred", "agecl", "notsure", "prey", "mort"), convert = TRUE)
+  data$agecl <- data$agecl + 1
+
+  # check uniqueness of column notsure and mort
+  if (any(sapply(data[, c("notsure", "mort")], function(x) length(unique(x))) != 1)) {
+    stop("Insufficient grouping columns!")
+  }
+
+  # Check number of empty entries per predator!
+  nr_time <- length(unique(data$time))
+  count_zero <- data %>%
+    dplyr::group_by_(~time, ~pred, ~agecl) %>%
+    dplyr::summarise_(count_zero = ~sum(atoutput == 0))
+
+  return(data)
 }
 
 
