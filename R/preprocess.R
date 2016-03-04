@@ -297,8 +297,11 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
 
 
 
-
-
+# wawa <- list()
+# for (i in seq_along(result)) {
+#   wawa[[i]] <- convert_time(dir = dir, prm_run = prm_run, data = result[[i]], modelstart = modelstart)
+#   print(i)
+# }
 
 
 
