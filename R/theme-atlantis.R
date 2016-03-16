@@ -20,7 +20,6 @@
 #'    ggplot2::facet_wrap(~species) +
 #'    theme_atlantis()}
 
-#' @export
 theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, rot_xaxis_text = TRUE, rot_strips_y = TRUE){
   ggplot2::theme(
     text                = ggplot2::element_text(family = "sans", size = large * scale_font),
