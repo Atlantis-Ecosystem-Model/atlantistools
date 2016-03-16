@@ -23,22 +23,28 @@
 #' head(df)
 
 load_spec_mort <- function(dir = getwd(), specmort) {
-  data <- load_txt(dir = dir, file = specmort)
-  data <- tidyr::separate_(data, col = "code", into = c("pred", "agecl", "notsure", "prey", "mort"), convert = TRUE)
-  data$agecl <- data$agecl + 1
+  mort <- load_txt(dir = dir, file = specmort)
+  mort <- tidyr::separate_(mort, col = "code", into = c("pred", "agecl", "notsure", "prey", "mort"), convert = TRUE)
+  mort$agecl <- mort$agecl + 1
 
   # check uniqueness of column notsure and mort
-  if (any(sapply(data[, c("notsure", "mort")], function(x) length(unique(x))) != 1)) {
+  if (any(sapply(mort[, c("notsure", "mort")], function(x) length(unique(x))) != 1)) {
     stop("Insufficient grouping columns!")
   }
 
-  # Check number of empty entries per predator!
-  nr_time <- length(unique(data$time))
-  count_zero <- data %>%
-    dplyr::group_by_(~time, ~pred, ~agecl) %>%
-    dplyr::summarise_(count_zero = ~sum(atoutput == 0))
+  # First time step
 
-  return(data)
+  # Check number of empty entries per predator!
+  nr_prey <- length(unique(mort$prey))
+  count_zero <- mort %>%
+    dplyr::group_by_(~time, ~pred, ~agecl) %>%
+    dplyr::summarise_(count_zero = ~sum(atoutput == 0) / nr_prey)
+
+  wuwu <- mort %>%
+    dplyr::group_by_(~time, ~pred, ~agecl) %>%
+    dplyr::summarise(check = length(time))
+
+  return(mort)
 }
 
 
