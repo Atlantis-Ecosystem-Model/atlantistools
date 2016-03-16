@@ -20,6 +20,9 @@
 
 load_txt <- function(dir, file, id_col = "Time") {
   file <- convert_path(dir = dir, file = file)
+  # This is the main time consuming step. Checked it with Rprof. E.g. reading in outputNorthSeaSpecificPredMort.txt
+  # showed that reading in consumes 99% of the total time. Using read_delim from "readr" results in
+  # a minor (~30%) increase in speed (not work implementing though...).
   data <- read.table(file, header = TRUE, stringsAsFactors = FALSE)
   data <- tidyr::gather_(data, key_col = "code", value_col = "atoutput", gather_cols = names(data)[!is.element(names(data), id_col)])
   data$code <- as.character(data$code)
