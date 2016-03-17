@@ -32,17 +32,18 @@ load_spec_mort <- function(dir = getwd(), specmort) {
     stop("Insufficient grouping columns!")
   }
 
-  # First time step
+  # First time step appears twice and only has 0s as entry!
+  mort <- mort[mort$time != 0, ]
 
   # Check number of empty entries per predator!
   nr_prey <- length(unique(mort$prey))
   count_zero <- mort %>%
     dplyr::group_by_(~time, ~pred, ~agecl) %>%
-    dplyr::summarise_(count_zero = ~sum(atoutput == 0) / nr_prey)
+    dplyr::summarise_(count_zero = ~sum(atoutput == 0) / nr_prey) %>%
+    dplyr::filter(count_zero == 1)
 
-  wuwu <- mort %>%
-    dplyr::group_by_(~time, ~pred, ~agecl) %>%
-    dplyr::summarise(check = length(time))
+  # Remove zeros
+  mort <- mort[mort$atoutput != 0, ]
 
   return(mort)
 }
