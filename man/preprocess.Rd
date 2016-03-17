@@ -4,9 +4,9 @@
 \alias{preprocess}
 \title{Preprocess Atlantis output (netcdf)}
 \usage{
-preprocess(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_biol,
-  prm_run, bps, fgs, select_groups, bboxes, check_acronyms, modelstart, out,
-  report = TRUE, save_to_disc = FALSE)
+preprocess(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort,
+  prm_biol, prm_run, bps, fgs, select_groups, bboxes, check_acronyms,
+  modelstart, out, report = TRUE, save_to_disc = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -41,6 +41,12 @@ case.}
 'output[...]SSB.txt'. In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as ssb. In addition set dir to 'NULL' in this
+case.}
+
+\item{specmort}{Character string of the SpecMort.txt file. Usually
+'output[...]SpecificPredMort.txt'. In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string as specmort. In addition set dir to 'NULL' in this
 case.}
 
 \item{prm_biol}{Character string giving the filename of the biological
@@ -85,12 +91,6 @@ during function evaluation.}
 
 \item{save_to_disc}{Logical indicating if the resulting list shall be stored
 on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
-
-\item{specmort}{Character string of the SpecMort.txt file. Usually
-'output[...]SpecificPredMort.txt'. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as specmort. In addition set dir to 'NULL' in this
-case.}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.
@@ -163,6 +163,7 @@ test <- preprocess(dir = d,
    dietcheck = "outputSETASDietCheck.txt",
    yoy = "outputSETASYOY.txt",
    ssb = "outputSETASSSB.txt",
+   specmort = "outputSETASSpecificPredMort.txt",
    prm_biol = "VMPA_setas_biol_fishing_New.prm",
    prm_run = "VMPA_setas_run_fishing_F_New.prm",
    bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
