@@ -261,21 +261,21 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
-    "biomass"        = biomass,
+    "biomass"        = biomass,       #1
     "biomass_age"    = biomass_age,
     "diet_dietcheck" = diet,
     "diet_specmort"  = spec_mort,
-    "eat_age"        = eat_age,
+    "eat_age"        = eat_age,       #5
     "flux"           = flux,
     "grazing"        = grazing,
     "growth_age"     = growth_age,
     "nums"           = nums,
-    "nums_age"       = nums_age,
+    "nums_age"       = nums_age,      #10
     "nums_box"       = nums_box,
     "physics"        = physics,
     "resn_age"       = resn_age,
     "ssb_rec"        = ssb_rec,
-    "structn_age"    = structn_age
+    "structn_age"    = structn_age    #15
   )
 
   # Convert timestep to actual time.
