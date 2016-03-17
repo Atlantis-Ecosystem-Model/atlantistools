@@ -22,7 +22,7 @@ Plot recruitment.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = F)
+ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 plot_rec(preprocess_setas$ssb_rec, ex_data)
 }
 
