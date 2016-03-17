@@ -32,6 +32,9 @@ load_spec_mort <- function(dir = getwd(), specmort) {
     stop("Insufficient grouping columns!")
   }
 
+  # Remove unnecessary columns
+  mort <- mort[, !is.element(names(mort), c("notsure", "mort"))]
+
   # First time step appears twice and only has 0s as entry!
   mort <- mort[mort$time != 0, ]
 
