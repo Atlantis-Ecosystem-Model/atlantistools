@@ -23,7 +23,7 @@ List of ggplot2 objects.
 Plot contribution of diet contents for each functional group.
 }
 \examples{
-plots <- plot_dietcheck(data = preprocess_setas$diet, combine_thresh = 0.03)
+plots <- plot_dietcheck(data = preprocess_setas$diet_dietcheck, combine_thresh = 0.03)
 gridExtra::grid.arrange(plots[[1]])
 }
 

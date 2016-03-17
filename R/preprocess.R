@@ -15,27 +15,32 @@
 #' @param nc_gen Character string giving the filename of the general netcdf
 #' file Usually "output[...].nc". In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' folder/filename string as nc_gen. In addition set dir to 'NULL' in this
 #' case.
 #' @param nc_prod Character string giving the filename of the productivity netcdf
 #' file. Usually "output[...]PROD.nc". In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' folder/filename string as nc_prod. In addition set dir to 'NULL' in this
 #' case.
 #' @param dietcheck Character string of the DietCheck.txt file. Usually
 #' 'output[...]DietCheck.txt'. In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' folder/filename string as dietcheck. In addition set dir to 'NULL' in this
 #' case.
 #' @param yoy Character string of the YOY.txt file. Usually
 #' 'output[...]YOY.txt'. In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' folder/filename string as yoy. In addition set dir to 'NULL' in this
 #' case.
 #' @param ssb Character string of the SSB.txt file. Usually
 #' 'output[...]SSB.txt'. In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
+#' folder/filename string as ssb. In addition set dir to 'NULL' in this
+#' case.
+#' @param specmort Character string of the SpecMort.txt file. Usually
+#' 'output[...]SpecificPredMort.txt'. In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string as specmort. In addition set dir to 'NULL' in this
 #' case.
 #' @param prm_biol Character string giving the filename of the biological
 #' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
@@ -249,22 +254,27 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
   message("Read in SSB/REC data!")
   ssb_rec <- load_rec(dir = dir, yoy = yoy, ssb = ssb, prm_biol = prm_biol)
 
+  # load in specific mortality data!
+  message("Read in SpecMort data!")
+  spec_mort <- load_spec_mort(dir = dir, specmort = specmort)
+
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
-    "biomass"     = biomass,
-    "biomass_age" = biomass_age,
-    "diet"        = diet,
-    "eat_age"     = eat_age,
-    "flux"        = flux,
-    "grazing"     = grazing,
-    "growth_age"  = growth_age,
-    "nums"        = nums,
-    "nums_age"    = nums_age,
-    "nums_box"    = nums_box,
-    "physics"     = physics,
-    "resn_age"    = resn_age,
-    "ssb_rec"     = ssb_rec,
-    "structn_age" = structn_age
+    "biomass"        = biomass,
+    "biomass_age"    = biomass_age,
+    "diet_dietcheck" = diet,
+    "diet_specmort"  = spec_mort,
+    "eat_age"        = eat_age,
+    "flux"           = flux,
+    "grazing"        = grazing,
+    "growth_age"     = growth_age,
+    "nums"           = nums,
+    "nums_age"       = nums_age,
+    "nums_box"       = nums_box,
+    "physics"        = physics,
+    "resn_age"       = resn_age,
+    "ssb_rec"        = ssb_rec,
+    "structn_age"    = structn_age
   )
 
   # Convert timestep to actual time.
@@ -291,7 +301,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
   for (i in seq_along(result)) {
     # Dietdataframe does not have column 'species' nonetheless predator and prey
     # names should be converted!
-    if (names(result)[i] == "diet") {
+    if (grepl(pattern = "diet", x = names(result)[i])) {
       result[[i]]$pred <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$pred)
       result[[i]]$prey <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$prey)
     }

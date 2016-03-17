@@ -16,31 +16,31 @@ folder) you should use 'NULL' as dir.}
 \item{nc_gen}{Character string giving the filename of the general netcdf
 file Usually "output[...].nc". In case you are using
 multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
+folder/filename string as nc_gen. In addition set dir to 'NULL' in this
 case.}
 
 \item{nc_prod}{Character string giving the filename of the productivity netcdf
 file. Usually "output[...]PROD.nc". In case you are using
 multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
+folder/filename string as nc_prod. In addition set dir to 'NULL' in this
 case.}
 
 \item{dietcheck}{Character string of the DietCheck.txt file. Usually
 'output[...]DietCheck.txt'. In case you are using
 multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
+folder/filename string as dietcheck. In addition set dir to 'NULL' in this
 case.}
 
 \item{yoy}{Character string of the YOY.txt file. Usually
 'output[...]YOY.txt'. In case you are using
 multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
+folder/filename string as yoy. In addition set dir to 'NULL' in this
 case.}
 
 \item{ssb}{Character string of the SSB.txt file. Usually
 'output[...]SSB.txt'. In case you are using
 multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
+folder/filename string as ssb. In addition set dir to 'NULL' in this
 case.}
 
 \item{prm_biol}{Character string giving the filename of the biological
@@ -85,6 +85,12 @@ during function evaluation.}
 
 \item{save_to_disc}{Logical indicating if the resulting list shall be stored
 on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{specmort}{Character string of the SpecMort.txt file. Usually
+'output[...]SpecificPredMort.txt'. In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string as specmort. In addition set dir to 'NULL' in this
+case.}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.

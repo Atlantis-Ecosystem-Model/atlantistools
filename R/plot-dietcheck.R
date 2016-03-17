@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#' plots <- plot_dietcheck(data = preprocess_setas$diet, combine_thresh = 0.03)
+#' plots <- plot_dietcheck(data = preprocess_setas$diet_dietcheck, combine_thresh = 0.03)
 #' gridExtra::grid.arrange(plots[[1]])
 
 plot_dietcheck <- function(data, combine_thresh = 0.03) {
