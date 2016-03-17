@@ -30,6 +30,7 @@ setas <-   preprocess(dir = d,
                       dietcheck = "outputSETASDietCheck.txt",
                       yoy = "outputSETASYOY.txt",
                       ssb = "outputSETASSSB.txt",
+                       specmort = "outputSETASSpecificPredMort.txt",
                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
                       prm_run = "VMPA_setas_run_fishing_F_New.prm",
                       bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -54,6 +55,7 @@ setas <- suppressMessages(
              dietcheck = "outputSETASDietCheck.txt",
              yoy = "outputSETASYOY.txt",
              ssb = "outputSETASSSB.txt",
+             specmort = "outputSETASSpecificPredMort.txt",
              prm_biol = "VMPA_setas_biol_fishing_New.prm",
              prm_run = "VMPA_setas_run_fishing_F_New.prm",
              bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -81,6 +83,7 @@ setas <- preprocess(dir = d,
                     dietcheck = "outputSETASDietCheck.txt",
                     yoy = "outputSETASYOY.txt",
                     ssb = "outputSETASSSB.txt",
+                    specmort = "outputSETASSpecificPredMort.txt",
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
                     bps = c("Filter_Shallow", 
@@ -128,6 +131,7 @@ setas <- preprocess(dir = d,
                     dietcheck = "output/outputSETASDietCheck.txt",
                     yoy = "output/outputSETASYOY.txt",
                     ssb = "output/outputSETASSSB.txt",
+                    specmort = "outputSETASSpecificPredMort.txt",
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
                     bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -196,7 +200,7 @@ I only ran the SETAS model provided with `atlantistools` for 3 years to minimise
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model.
-feeding_plots <- plot_dietcheck(data = setas$diet, combine_thresh = 0.03)
+feeding_plots <- plot_dietcheck(data = setas$diet_dietcheck, combine_thresh = 0.03)
 feeding_plots[[1]]
 ```
 

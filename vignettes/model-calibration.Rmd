@@ -26,6 +26,7 @@ result <-   preprocess(dir = model_path,
                        dietcheck = "outputSETASDietCheck.txt",
                        yoy = "outputSETASYOY.txt",
                        ssb = "outputSETASSSB.txt",
+                       specmort = "outputSETASSpecificPredMort.txt",
                        prm_biol = "VMPA_setas_biol_fishing_New.prm",
                        prm_run = "VMPA_setas_run_fishing_F_New.prm",
                        bps = load_bps(dir = model_path, fgs = "SETasGroups.csv", 
@@ -95,7 +96,7 @@ update_labels(p = plot, labels = list(y = "Numbers"))
 
 ## SSB & Recruitment
 ```{r, fig.width = dw1, fig.height = dh1}
-ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F)
+ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = FALSE)
 plot_rec(result$ssb_rec, ex_data = ex)
 ```
 
@@ -103,7 +104,7 @@ plot_rec(result$ssb_rec, ex_data = ex)
 
 ## Biomass benchmark
 ```{r, fig.width = dw1, fig.height = dh1}
-ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F)
+ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE)
 plot_bench(result$biomass, ex_data = ex)
 
 ```
@@ -179,5 +180,5 @@ plot_struct(result$biomass_age)
 ## Diet Plots
 
 ```{r, fig.width = 14, fig.height = 9}
-marrangeGrob(plot_dietcheck(result$diet, combine_thresh = 0.03), nrow = 1, ncol = 1)
+marrangeGrob(plot_dietcheck(result$diet_dietcheck, combine_thresh = 0.03), nrow = 1, ncol = 1)
 ```
