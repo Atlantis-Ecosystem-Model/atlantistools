@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#' combine_groups(preprocess_setas$diet,
+#' combine_groups(preprocess_setas$diet_dietcheck,
 #'    group_col = "prey",
 #'    groups = c("time", "pred", "habitat"),
 #'    combine_thresh = 0.03)
