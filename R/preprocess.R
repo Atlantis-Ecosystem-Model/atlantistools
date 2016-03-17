@@ -253,6 +253,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
   result <- list(
     "biomass"     = biomass,
     "biomass_age" = biomass_age,
+    "diet"        = diet,
     "eat_age"     = eat_age,
     "flux"        = flux,
     "grazing"     = grazing,
@@ -262,9 +263,8 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
     "nums_box"    = nums_box,
     "physics"     = physics,
     "resn_age"    = resn_age,
-    "structn_age" = structn_age,
-    "diet"        = diet,
-    "ssb_rec"     = ssb_rec
+    "ssb_rec"     = ssb_rec,
+    "structn_age" = structn_age
   )
 
   # Convert timestep to actual time.
