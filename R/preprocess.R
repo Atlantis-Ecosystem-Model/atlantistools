@@ -134,6 +134,7 @@
 #'    dietcheck = "outputSETASDietCheck.txt",
 #'    yoy = "outputSETASYOY.txt",
 #'    ssb = "outputSETASSSB.txt",
+#'    specmort = "outputSETASSpecificPredMort.txt",
 #'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
 #'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'    bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
@@ -146,7 +147,7 @@
 #'    save_to_disc = FALSE)
 #' @export
 
-preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
+preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
                        check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE){
 
   age_groups <- get_age_groups(dir = dir, fgs = fgs)
