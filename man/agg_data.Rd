@@ -21,6 +21,8 @@ Default is 'atoutput'.}
 \item{groups}{Vector of character strings giving the grouping variables.}
 
 \item{out}{Character string specifying the name of the output column.}
+
+\item{fun}{Aggregation function to apply.}
 }
 \value{
 grouped datarame with the aggregated data.

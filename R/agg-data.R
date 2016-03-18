@@ -8,6 +8,7 @@
 #' Default is 'atoutput'.
 #' @param groups Vector of character strings giving the grouping variables.
 #' @param out Character string specifying the name of the output column.
+#' @param fun Aggregation function to apply.
 #' @return grouped datarame with the aggregated data.
 #' @export
 #'
