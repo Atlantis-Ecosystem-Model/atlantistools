@@ -197,10 +197,10 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
 
   if (report) message("Start data transformations!")
   # Aggregate Layers for N, Nums, ResN, StructN
-#   at_n       <- agg_mean(data = at_n,         groups = c("species", "polygon", "time"))
-#   at_resn    <- agg_mean(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"))
-#   at_structn <- agg_mean(data = at_structn_l, groups = c("species", "polygon", "agecl", "time"))
-#   at_nums    <- agg_sum(data = at_nums_l,     groups = c("species", "polygon", "agecl", "time"))
+#   at_n       <- agg_data(data = at_n,         groups = c("species", "polygon", "time"), fun = mean)
+#   at_resn    <- agg_data(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"), fun = mean)
+#   at_structn <- agg_data(data = at_structn_l, groups = c("species", "polygon", "agecl", "time"), fun = mean)
+#   at_nums    <- agg_data(data = at_nums_l,     groups = c("species", "polygon", "agecl", "time"), fun = sum)
 
   # Calculate biomass for age-groups
   names(at_resn_l)[names(at_resn_l) == "atoutput"] <- "atresn"
@@ -235,11 +235,11 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
   nums_box <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "polygon", "time"), fun = sum)
 
   # Aggregate the rest of the dataframes by mean!
-  structn_age <- agg_mean(data = at_structn_l, groups = c("species", "time", "agecl"))
-  resn_age    <- agg_mean(data = at_resn_l,    groups = c("species", "time", "agecl"), col = "atresn")
-  eat_age     <- agg_mean(data = at_eat,       groups = c("species", "time", "agecl"))
-  growth_age  <- agg_mean(data = at_growth,    groups = c("species", "time", "agecl"))
-  grazing     <- agg_mean(data = at_grazing,   groups = c("species", "time"))
+  structn_age <- agg_data(data = at_structn_l, groups = c("species", "time", "agecl"), fun = mean)
+  resn_age    <- agg_data(data = at_resn_l,    groups = c("species", "time", "agecl"), col = "atresn", fun = mean)
+  eat_age     <- agg_data(data = at_eat,       groups = c("species", "time", "agecl"), fun = mean)
+  growth_age  <- agg_data(data = at_growth,    groups = c("species", "time", "agecl"), fun = mean)
+  grazing     <- agg_data(data = at_grazing,   groups = c("species", "time"), fun = mean)
 
   # Load in diet-data!
   message("Read in DietCheck.txt!")

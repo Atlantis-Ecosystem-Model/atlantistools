@@ -2,9 +2,15 @@
 % Please edit documentation in R/agg-data.R
 \name{agg_data}
 \alias{agg_data}
+\alias{agg_perc}
+\alias{group_data}
 \title{Aggregate data using dplyr functionality.}
 \usage{
 agg_data(data, col = "atoutput", groups, out = "atoutput", fun)
+
+agg_perc(data, col = "atoutput", groups, out = "atoutput")
+
+group_data(data, groups)
 }
 \arguments{
 \item{data}{Dataframe the aggregation is applied to.}
