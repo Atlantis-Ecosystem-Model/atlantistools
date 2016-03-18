@@ -208,7 +208,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
   at_structn_l <- dplyr::inner_join(at_structn_l, at_nums_l)
   at_structn_l <- dplyr::left_join(at_structn_l, at_resn_l)
   at_structn_l$biomass_ind <- with(at_structn_l, (atoutput + atresn) * atnums * bio_conv)
-  biomass_age <- agg_sum(data = at_structn_l, col = "biomass_ind", groups = c("species", "agecl", "time"))
+  biomass_age <- agg_data(data = at_structn_l, col = "biomass_ind", groups = c("species", "agecl", "time"), fun = sum)
 
   # Calculate biomass for non-age-groups
   vol <- load_nc_physics(dir = dir,
@@ -221,7 +221,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
 
   at_n_pools <- dplyr::left_join(at_n_pools, vol)
   at_n_pools$biomass_ind <- with(at_n_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
-  biomass_pools <- agg_sum(data = at_n_pools, groups = c("species", "time"))
+  biomass_pools <- agg_data(data = at_n_pools, groups = c("species", "time"), sun = sum)
 
   # Combine with biomass from age-groups
   biomass <- biomass_age %>%
@@ -230,9 +230,9 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, prm_
     rbind(biomass_pools)
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
-  nums     <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "time"))
-  nums_age <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "agecl", "time"))
-  nums_box <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "polygon", "time"))
+  nums     <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "time"), fun = sum)
+  nums_age <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "agecl", "time"), fun = sum)
+  nums_box <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "polygon", "time"), fun = sum)
 
   # Aggregate the rest of the dataframes by mean!
   structn_age <- agg_mean(data = at_structn_l, groups = c("species", "time", "agecl"))

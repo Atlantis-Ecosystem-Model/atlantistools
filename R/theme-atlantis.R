@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{nums_agg <- agg_sum(data = ref_nums, groups = c("species", "time"))
+#' \dontrun{nums_agg <- agg_data(data = ref_nums, groups = c("species", "time"), fun = sum)
 #' ggplot2::ggplot(data = nums_agg, ggplot2::aes(x = time, y = atoutput)) +
 #'    ggplot2::facet_wrap(~species) +
 #'    theme_atlantis()}
