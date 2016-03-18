@@ -19,10 +19,11 @@
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' df <- load_spec_mort(dir = d,
-#'    specmort = "outputSETASSpecificPredMort.txt")
+#'    specmort = "outputSETASSpecificPredMort.txt",
+#'    prm_biol = "VMPA_setas_biol_fishing_New.prm")
 #' head(df)
 
-load_spec_mort <- function(dir = getwd(), specmort) {
+load_spec_mort <- function(dir = getwd(), specmort, prm_biol) {
   mort <- load_txt(dir = dir, file = specmort)
   mort <- tidyr::separate_(mort, col = "code", into = c("pred", "agecl", "notsure", "prey", "mort"), convert = TRUE)
   mort$agecl <- mort$agecl + 1
@@ -48,7 +49,27 @@ load_spec_mort <- function(dir = getwd(), specmort) {
   # Remove zeros
   mort <- mort[mort$atoutput != 0, ]
 
+  # Combine ageclasses to stanzas based on maturity!
+  prm_biol <- convert_path(dir = dir, file = prm_biol)
+  prm_biol <- readLines(con = prm_biol)
+
+
+
+  extract_prm(chars = prm_biol, variable = paste0(unique(mort$pred), "_age_mat"))
+
+
   return(mort)
 }
+
+
+ggplot2::ggplot(subset(mort, pred == "COD"), ggplot2::aes(x = prey, y = atoutput, colour = factor(agecl))) +
+  ggplot2::geom_boxplot(position = "dodge") +
+  # ggplot2::geom_point()
+  ggplot2::facet_wrap(~prey, scale = "free")
+
+
+
+
+
 
 
