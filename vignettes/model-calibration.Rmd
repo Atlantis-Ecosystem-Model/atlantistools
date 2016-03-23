@@ -2,9 +2,13 @@
 title: "model-calibration"
 author: "Alexander Keth"
 date: '`r Sys.Date()`'
-output: pdf_document
-toc: true
-number_sections: true
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+    fig_width: 25
+    fig_height: 15
+    fig_caption: true
 classoption: landscape
 geometry: margin = 0.5cm
 ---
@@ -60,9 +64,7 @@ bench_bio <- "setas-bench.csv"
 bench_rec <- "setas-ssb-rec.csv"
 
 # And adjust the ploting sizes (here and throughout this document) to your likings.
-dw1 <- 25
-dh1 <- 15
-dh2 <- 11
+fig_height2 <- 11
 
 # You should be able to build the vignette either by clicking on "Knit-PDF" or with
 # rmarkdown::render("model-calibration.Rmd")
@@ -70,7 +72,8 @@ dh2 <- 11
 
 \newpage
 
-## Whole system plots!
+# Whole system plots!
+## Overall biomass
 ```{r, fig.width = 14, fig.height = 8}
 plot_ws(result$biomass)
 ```
@@ -78,7 +81,7 @@ plot_ws(result$biomass)
 \newpage
 
 ## Biomass timeseries
-```{r, fig.width = dw1, fig.height = dh1}
+```{r}
 plot <- plot_ts(result$biomass)
 update_labels(p = plot, labels = list(y = "Biomass [t]"))
 ```
@@ -86,7 +89,7 @@ update_labels(p = plot, labels = list(y = "Biomass [t]"))
 \newpage
 
 ## Number timeseries
-```{r, fig.width = dw1, fig.height = dh2}
+```{r, fig.height = fig_height2}
 plot <- plot_ts(result$nums)
 update_labels(p = plot, labels = list(y = "Numbers"))
 ```
@@ -94,7 +97,7 @@ update_labels(p = plot, labels = list(y = "Numbers"))
 \newpage
 
 ## SSB & Recruitment
-```{r, fig.width = dw1, fig.height = dh1}
+```{r}
 ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = F)
 plot_rec(result$ssb_rec, ex_data = ex)
 ```
@@ -102,7 +105,7 @@ plot_rec(result$ssb_rec, ex_data = ex)
 \newpage
 
 ## Biomass benchmark
-```{r, fig.width = dw1, fig.height = dh1}
+```{r}
 ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = F)
 plot_bench(result$biomass, ex_data = ex)
 
@@ -124,59 +127,59 @@ plot_flux(result$flux)
 
 \newpage
 
-## Calibration plots
-### Structural nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
+# Calibration plots
+## Structural nitrogen
+```{r, fig.height = fig_height2}
 plot_calibrate(result$structn_age)
 ```
 
 \newpage
 
-### Reserve nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
+## Reserve nitrogen
+```{r, fig.height = fig_height2}
 plot_calibrate(result$resn_age)
 ```
 
 \newpage
 
-### Biomass per ageclass
-```{r, fig.width = dw1, fig.height = dh2}
+## Biomass per ageclass
+```{r, fig.height = fig_height2}
 plot_calibrate(result$biomass_age)
 ```
 
 \newpage
 
-### Numbers
-```{r, fig.width = dw1, fig.height = dh2}
+## Numbers
+```{r, fig.height = fig_height2}
 plot_calibrate(result$nums_age)
 ```
 
 
 \newpage
 
-### Biomass
-```{r, fig.width = dw1, fig.height = dh1}
+## Biomass
+```{r}
 plot_calibrate(result$biomass)
 ```
 
 \newpage
 
-## Distribution plots
-### Numbers @ age
-```{r, fig.width = dw1, fig.height = dh2}
+# Distribution plots
+## Numbers @ age
+```{r, fig.height = fig_height2}
 plot_struct(result$nums_age)
 ```
 
 \newpage
 
-### Biomass @ age
-```{r, fig.width = dw1, fig.height = dh2}
+## Biomass @ age
+```{r, fig.height = fig_height2}
 plot_struct(result$biomass_age)
 ```
 
 \newpage
 
-## Diet Plots
+# Diet Plots
 
 ```{r, fig.width = 14, fig.height = 9}
 marrangeGrob(plot_dietcheck(result$diet, combine_thresh = 0.03), nrow = 1, ncol = 1)
