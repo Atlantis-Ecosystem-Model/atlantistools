@@ -93,13 +93,13 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
 }
 
 
-df <- load_txt(dir = "Z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS", file = "outputNorthSeaSpecificPredMort.txt")
-
-preds <- c("COD")
-
-ggplot2::ggplot(data = subset(mort, is.element(pred, preds)), ggplot2::aes(x = time, y = prey, fill = atoutput)) +
-  ggplot2::geom_tile() +
-  ggplot2::scale_fill_gradientn(colours = rainbow(7), name = "Diet [%]") +
-  ggplot2::facet_wrap(~ pred + agecl, ncol = 10)
+# df <- load_txt(dir = "Z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS", file = "outputNorthSeaSpecificPredMort.txt")
+#
+# preds <- c("COD")
+#
+# ggplot2::ggplot(data = subset(mort, is.element(pred, preds)), ggplot2::aes(x = time, y = prey, fill = atoutput)) +
+#   ggplot2::geom_tile() +
+#   ggplot2::scale_fill_gradientn(colours = rainbow(7), name = "Diet [%]") +
+#   ggplot2::facet_wrap(~ pred + agecl, ncol = 10)
 
 

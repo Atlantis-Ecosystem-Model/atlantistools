@@ -62,10 +62,10 @@ load_spec_mort <- function(dir = getwd(), specmort, prm_biol) {
 }
 
 
-ggplot2::ggplot(subset(mort, pred == "COD"), ggplot2::aes(x = prey, y = atoutput, colour = factor(agecl))) +
-  ggplot2::geom_boxplot(position = "dodge") +
-  # ggplot2::geom_point()
-  ggplot2::facet_wrap(~prey, scale = "free")
+# ggplot2::ggplot(subset(mort, pred == "COD"), ggplot2::aes(x = prey, y = atoutput, colour = factor(agecl))) +
+#   ggplot2::geom_boxplot(position = "dodge") +
+#   # ggplot2::geom_point()
+#   ggplot2::facet_wrap(~prey, scale = "free")
 
 
 
