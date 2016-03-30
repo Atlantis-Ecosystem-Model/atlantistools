@@ -10,10 +10,10 @@
 #' @export
 #'
 #' @examples
-#' plots <- plot_specmort(data = preprocess_setas$diet_specmort, combine_thresh = 0.03)
+#' plots <- plot_spec_mort(data = preprocess_setas$diet_specmort, combine_thresh = 0.03)
 #' gridExtra::grid.arrange(plots[[1]])
 
-plot_dietcheck <- function(data, combine_thresh = 0.03) {
+plot_spec_mort <- function(data, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "pred", "agecl", "prey", "atoutput"))
 
   # Timeseries per species of absolute values!

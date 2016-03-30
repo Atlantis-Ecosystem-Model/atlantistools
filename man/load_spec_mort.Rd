@@ -4,7 +4,7 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort)
+load_spec_mort(dir = getwd(), specmort, prm_biol)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -32,7 +32,8 @@ Load mortality information from outputSpecificPredMort.txt
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 df <- load_spec_mort(dir = d,
-   specmort = "outputSETASSpecificPredMort.txt")
+   specmort = "outputSETASSpecificPredMort.txt",
+   prm_biol = "VMPA_setas_biol_fishing_New.prm")
 head(df)
 }
 

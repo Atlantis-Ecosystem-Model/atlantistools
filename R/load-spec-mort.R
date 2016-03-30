@@ -50,12 +50,23 @@ load_spec_mort <- function(dir = getwd(), specmort, prm_biol) {
   mort <- mort[mort$atoutput != 0, ]
 
   # Combine ageclasses to stanzas based on maturity!
-  prm_biol <- convert_path(dir = dir, file = prm_biol)
-  prm_biol <- readLines(con = prm_biol)
+  # Get agebased predators. We could extract the data from the functional
+  # groups file but then we do need an additional parameter in the function call...
+  preds <- mort %>%
+    dplyr::group_by_("pred") %>%
+    dplyr::summarise_(count = ~length(unique(agecl))) %>%
 
 
+    select_("pred", "agecl") %>%
+    unique() %>%
+    filter(agecl )
+  age_mat <- convert_path(dir = dir, file = prm_biol)
+  age_mat <- readLines(con = age_mat)
 
-  extract_prm(chars = prm_biol, variable = paste0(unique(mort$pred), "_age_mat"))
+  preds <- sort(unique(mort$pred))
+  lapply(extract_prm(chars = age_mat, variable = paste0(unique(mort$pred), "_age_mat")))
+
+
 
 
   return(mort)
