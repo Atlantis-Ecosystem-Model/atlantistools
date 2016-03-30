@@ -29,9 +29,11 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
     #    axis.text  =  element_text(),  #	inherits from text
     axis.text.x         = ggplot2::element_text(angle = ifelse(rot_xaxis_text, 45, 0), hjust = 1, size = scale_font * small, colour = "black"),
     axis.text.y         = ggplot2::element_text(size = small * scale_font, colour = "black"),
-    axis.line           = ggplot2::element_line(colour = "black"),
-    #    axis.line.x  =	element_line(),	#	inherits from axis.line
-    #    axis.line.y	=	element_line(),	#	inherits from axis.line
+    # axis.line seems to be broken at the moment in ggplot...
+    # https://github.com/hadley/ggplot2/issues/1567
+    # axis.line           = ggplot2::element_line(colour = "black", size = 5),
+       axis.line.x  =	ggplot2::element_line(colour = "black"),	#	inherits from axis.line
+       axis.line.y	=	ggplot2::element_line(colour = "black"),	#	inherits from axis.line
     #    axis.ticks   =	element_line(),	#	inherits from line
     #    axis.ticks.x	=	element_line(),	#	inherits from axis.ticks
     #    axis.ticks.y	=	element_line(),	#	inherits from axis.ticks
@@ -71,3 +73,7 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
     strip.text.y	      = ggplot2::element_text(size = scale_font * small, angle = ifelse(rot_strips_y, 0, 90))	#	inherits from strip.text
   )
 }
+
+
+
+
