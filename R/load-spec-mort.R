@@ -52,29 +52,40 @@ load_spec_mort <- function(dir = getwd(), specmort, prm_biol) {
   # Combine ageclasses to stanzas based on maturity!
   # Get agebased predators. We could extract the data from the functional
   # groups file. However, doing so would add an additional parameter to the function call...
+  # Stanzas are introcued during the file loading procedure to reduce the final file size on the HDD.
   preds <- mort %>%
     dplyr::group_by_("pred") %>%
     dplyr::summarise_(count = ~length(unique(agecl))) %>%
     dplyr::filter(count == 10)
   preds <- preds$pred
 
-  # age_mat <- convert_path(dir = dir, file = prm_biol)
-  # age_mat <- readLines(con = age_mat)
-  #
-  # age_mat <- data.frame(vapply(paste0(preds, "_age_mat"), extract_prm, chars = age_mat, FUN.VALUE = numeric(1))
+  age_mat <- convert_path(dir = dir, file = prm_biol)
+  age_mat <- readLines(con = age_mat)
 
+  age_mat <- data.frame(pred = preds,
+                        age_mat = vapply(paste0(preds, "_age_mat"), extract_prm, chars = age_mat, FUN.VALUE = numeric(1)),
+                        stringsAsFactors = FALSE)
 
+  # Finally set stanzas!
+  mort <- dplyr::left_join(mort, age_mat)
+  mort$stanza <- ifelse(mort$agecl < mort$age_mat, "juvenile", "adult")
+  mort$stanza[is.na(mort$age_mat)] <- "none"
 
+  # Mean per stanza!
+  mort_stanza <- agg_data(data = mort, groups = c("time", "pred", "prey", "stanza"), fun = mean)
 
-  return(mort)
+  return(mort_stanza)
 }
 
 
-# ggplot2::ggplot(subset(mort, pred == "COD"), ggplot2::aes(x = prey, y = atoutput, colour = factor(agecl))) +
+# ggplot2::ggplot(subset(mort, pred == "COD" & prey == "COD"), ggplot2::aes(x = factor(time), y = atoutput, fill = stanza)) +
 #   ggplot2::geom_boxplot(position = "dodge") +
 #   # ggplot2::geom_point()
 #   ggplot2::facet_wrap(~prey, scale = "free")
-
+#
+# dir <- "z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
+# specmort = "outputNorthSeaSpecificPredMort.txt"
+# prm_biol = "NorthSea_biol_fishing.prm"
 
 
 
