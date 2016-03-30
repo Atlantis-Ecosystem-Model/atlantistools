@@ -58,10 +58,10 @@ load_spec_mort <- function(dir = getwd(), specmort, prm_biol) {
     dplyr::filter(count == 10)
   preds <- preds$pred
 
-  age_mat <- convert_path(dir = dir, file = prm_biol)
-  age_mat <- readLines(con = age_mat)
-
-  age_mat <- data.frame(vapply(paste0(preds, "_age_mat"), extract_prm, chars = age_mat, FUN.VALUE = numeric(1))
+  # age_mat <- convert_path(dir = dir, file = prm_biol)
+  # age_mat <- readLines(con = age_mat)
+  #
+  # age_mat <- data.frame(vapply(paste0(preds, "_age_mat"), extract_prm, chars = age_mat, FUN.VALUE = numeric(1))
 
 
 
