@@ -300,14 +300,14 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # Convert Species names to Longnames!
   for (i in seq_along(result)) {
-    # Dietdataframe does not have column 'species' nonetheless predator and prey
-    # names should be converted!
-    if (grepl(pattern = "diet", x = names(result)[i])) {
-      result[[i]]$pred <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$pred)
-      result[[i]]$prey <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$prey)
-    }
+    # Do not convert acronym names in dietdataframes! This will increase readybility of diet plots ALOT!
+    # Otherwise lots of space is lost due to long species names.
+    # if (grepl(pattern = "diet", x = names(result)[i])) {
+    #   result[[i]]$pred <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$pred)
+    #   result[[i]]$prey <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$prey)
+    # }
     # exlude physics dataframes!
-    if (is.element("species", names(result[[i]]))) {
+    if (is.element("species", names(result[[i]])) && !grepl(pattern = "diet", x = names(result)[i])) {
       result[[i]]$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$species)
     }
   }
