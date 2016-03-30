@@ -6,12 +6,13 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{package-demo}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r}
 library("atlantistools")
 library("ggplot2")
+library("gridExtra")
 
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 ```
@@ -214,7 +215,7 @@ for (i in seq_along(feeding_plots)) {
 # Save all plots to disc in one pdf!
 pdf(file.path(d, "feeding.pdf"), width = 14, height = 10)
 for (i in seq_along(feeding_plots)) {
-  print(feeding_plots[[i]])
+  grid.arrange(feeding_plots[[i]])
 }
 dev.off()
 ```

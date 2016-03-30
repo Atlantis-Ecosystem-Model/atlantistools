@@ -203,10 +203,10 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   if (report) message("Start data transformations!")
   # Aggregate Layers for N, Nums, ResN, StructN
-#   at_n       <- agg_mean(data = at_n,         groups = c("species", "polygon", "time"))
-#   at_resn    <- agg_mean(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"))
-#   at_structn <- agg_mean(data = at_structn_l, groups = c("species", "polygon", "agecl", "time"))
-#   at_nums    <- agg_sum(data = at_nums_l,     groups = c("species", "polygon", "agecl", "time"))
+#   at_n       <- agg_data(data = at_n,         groups = c("species", "polygon", "time"), fun = mean)
+#   at_resn    <- agg_data(data = at_resn_l,    groups = c("species", "polygon", "agecl", "time"), fun = mean)
+#   at_structn <- agg_data(data = at_structn_l, groups = c("species", "polygon", "agecl", "time"), fun = mean)
+#   at_nums    <- agg_data(data = at_nums_l,     groups = c("species", "polygon", "agecl", "time"), fun = sum)
 
   # Calculate biomass for age-groups
   names(at_resn_l)[names(at_resn_l) == "atoutput"] <- "atresn"
@@ -214,7 +214,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   at_structn_l <- dplyr::inner_join(at_structn_l, at_nums_l)
   at_structn_l <- dplyr::left_join(at_structn_l, at_resn_l)
   at_structn_l$biomass_ind <- with(at_structn_l, (atoutput + atresn) * atnums * bio_conv)
-  biomass_age <- agg_sum(data = at_structn_l, col = "biomass_ind", groups = c("species", "agecl", "time"))
+  biomass_age <- agg_data(data = at_structn_l, col = "biomass_ind", groups = c("species", "agecl", "time"), fun = sum)
 
   # Calculate biomass for non-age-groups
   vol <- load_nc_physics(dir = dir,
@@ -227,7 +227,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   at_n_pools <- dplyr::left_join(at_n_pools, vol)
   at_n_pools$biomass_ind <- with(at_n_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
-  biomass_pools <- agg_sum(data = at_n_pools, groups = c("species", "time"))
+  biomass_pools <- agg_data(data = at_n_pools, groups = c("species", "time"), fun = sum)
 
   # Combine with biomass from age-groups
   biomass <- biomass_age %>%
@@ -236,16 +236,16 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
     rbind(biomass_pools)
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
-  nums     <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "time"))
-  nums_age <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "agecl", "time"))
-  nums_box <- agg_sum(data = at_nums_l, col = "atnums", groups = c("species", "polygon", "time"))
+  nums     <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "time"), fun = sum)
+  nums_age <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "agecl", "time"), fun = sum)
+  nums_box <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "polygon", "time"), fun = sum)
 
   # Aggregate the rest of the dataframes by mean!
-  structn_age <- agg_mean(data = at_structn_l, groups = c("species", "time", "agecl"))
-  resn_age    <- agg_mean(data = at_resn_l,    groups = c("species", "time", "agecl"), col = "atresn")
-  eat_age     <- agg_mean(data = at_eat,       groups = c("species", "time", "agecl"))
-  growth_age  <- agg_mean(data = at_growth,    groups = c("species", "time", "agecl"))
-  grazing     <- agg_mean(data = at_grazing,   groups = c("species", "time"))
+  structn_age <- agg_data(data = at_structn_l, groups = c("species", "time", "agecl"), fun = mean)
+  resn_age    <- agg_data(data = at_resn_l,    groups = c("species", "time", "agecl"), col = "atresn", fun = mean)
+  eat_age     <- agg_data(data = at_eat,       groups = c("species", "time", "agecl"), fun = mean)
+  growth_age  <- agg_data(data = at_growth,    groups = c("species", "time", "agecl"), fun = mean)
+  grazing     <- agg_data(data = at_grazing,   groups = c("species", "time"), fun = mean)
 
   # Load in diet-data!
   message("Read in DietCheck.txt!")
@@ -325,8 +325,11 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
 
 
-
-
+# wawa <- list()
+# for (i in seq_along(result)) {
+#   wawa[[i]] <- convert_time(dir = dir, prm_run = prm_run, data = result[[i]], modelstart = modelstart)
+#   print(i)
+# }
 
 
 

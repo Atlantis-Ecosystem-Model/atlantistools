@@ -34,7 +34,9 @@ convert_time <- function(dir = getwd(), prm_run, data, modelstart){
     # In this case there is no stockstate data! Remove zero!
     ts <- sort(unique(data$time))
     ts <- ts[ts != 0]
-    if (all(ts == seq(1, length(ts), 1))) {
+    # This tests if the timestps is a sequence of integers with at max 4 missing numbers between
+    # sucessuve values. E.g. 1 6 7 8 12 is ok, 1 60 120 180 is not!
+    if (all(diff(ts) < 5)) {
       toutinc <- extract_prm(chars = prm_run, variable = "toutinc")
 
       # Convert timesteps to actual time!

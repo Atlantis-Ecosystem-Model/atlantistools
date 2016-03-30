@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{nums_agg <- agg_sum(data = ref_nums, groups = c("species", "time"))
+#' \dontrun{nums_agg <- agg_data(data = ref_nums, groups = c("species", "time"), fun = sum)
 #' ggplot2::ggplot(data = nums_agg, ggplot2::aes(x = time, y = atoutput)) +
 #'    ggplot2::facet_wrap(~species) +
 #'    theme_atlantis()}
@@ -29,7 +29,7 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
     #    axis.text  =  element_text(),  #	inherits from text
     axis.text.x         = ggplot2::element_text(angle = ifelse(rot_xaxis_text, 45, 0), hjust = 1, size = scale_font * small, colour = "black"),
     axis.text.y         = ggplot2::element_text(size = small * scale_font, colour = "black"),
-    axis.line           = ggplot2::element_line(),
+    axis.line           = ggplot2::element_line(colour = "black"),
     #    axis.line.x  =	element_line(),	#	inherits from axis.line
     #    axis.line.y	=	element_line(),	#	inherits from axis.line
     #    axis.ticks   =	element_line(),	#	inherits from line

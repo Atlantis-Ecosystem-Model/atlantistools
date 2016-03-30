@@ -21,6 +21,6 @@ combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
   # Convert values to percent!
   data <- agg_perc(data, groups = groups, out = "test")
   data[data$test <= combine_thresh, group_col] <- "Rest"
-  data <- agg_sum(data, groups = c(groups, group_col))
+  data <- agg_data(data, groups = c(groups, group_col), fun = sum)
   return(data)
 }

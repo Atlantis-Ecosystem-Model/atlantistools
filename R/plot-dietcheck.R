@@ -18,7 +18,7 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "diet", "atoutput", "prey", "pred"), optional = c("habitat", "agecl"))
 
   # Timeseries per species of absolute values!
-  ts_diet <- agg_sum(data, groups = c("time", "pred", "habitat"))
+  ts_diet <- agg_data(data, groups = c("time", "pred", "habitat"), fun = sum)
 
   # Combine prey groups with low contribution to the diet!
   data <- combine_groups(data,
@@ -34,9 +34,7 @@ plot_dietcheck <- function(data, combine_thresh = 0.03) {
 
   plot_func <- function(data) {
     # order data according to dietcontribution
-    agg_data <- data %>%
-      dplyr::group_by_(~prey) %>%
-      dplyr::summarise_(sum_diet = ~sum(atoutput))
+    agg_data <- agg_data(data, groups = "prey", out = "sum_diet", fun = sum)
     data$prey <- factor(data$prey, levels = agg_data$prey[order(agg_data$sum_diet, decreasing = TRUE)])
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~prey)) +
       ggplot2::geom_bar(stat = "identity") +

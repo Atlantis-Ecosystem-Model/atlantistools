@@ -2,11 +2,19 @@
 title: "model-calibration"
 author: "Alexander Keth"
 date: '`r Sys.Date()`'
-output: pdf_document
-toc: true
-number_sections: true
+output: 
+  pdf_document:
+    toc: true
+    number_sections: true
+    fig_width: 25
+    fig_height: 6
+    fig_caption: true
 classoption: landscape
 geometry: margin = 0.5cm
+vignette: >
+  %\VignetteIndexEntry{model-calibration}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r, echo = FALSE}
@@ -14,56 +22,26 @@ library("atlantistools")
 library("ggplot2")
 library("gridExtra")
 
-# This section is used to read in the data! You can do this however you like.
-# The data should be present either in your workspace as object "result" or you
-# can read the data in at this stage!
-# I demonstrate this with the stetas model files which come shipped with the package!
-# Solution1: Preprocess the data with "preprocess()".
-model_path <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-result <-   preprocess(dir = model_path,
-                       nc_gen = "outputSETAS.nc",
-                       nc_prod = "outputSETASPROD.nc",
-                       dietcheck = "outputSETASDietCheck.txt",
-                       yoy = "outputSETASYOY.txt",
-                       ssb = "outputSETASSSB.txt",
-                       specmort = "outputSETASSpecificPredMort.txt",
-                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                       prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                       bps = load_bps(dir = model_path, fgs = "SETasGroups.csv", 
-                                      init = "init_vmpa_setas_25032013.nc"),
-                       fgs = "SETasGroups.csv",
-                       select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
-                                         "Cephalopod", "Diatom", "Zoo"),
-                       bboxes = get_boundary(boxinfo = load_box(dir = model_path, 
-                                                                bgm = "VMPA_setas.bgm")),
-                       check_acronyms = TRUE,
-                       modelstart = "1991-01-01",
-                       out = "preprocess.Rda",
-                       report = FALSE,
-                       save_to_disc = FALSE)
+# NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
+# due to the fact that the dummy setas file have a running time of 3 years.
 
-# Solution2: Load in already preprocessed data! This can be done with load():
-# All you have to to is comment in the next two lines and change the model_path object
-# and the name of the *.Rda file.
-# model_path <- file.path("C:", "ATLANTIS_Stuff", "Baseruns", "0961_v.11.0.0_ATLANTIS_NS")
-# load(file.path(model_path, "ns_preprocess.Rda"))
-
-# At this point the data is read in as object "result".
-
+# This section is used to read in the data created with preprocess(). 
+# You can do this however you like. Either make sure the data is already
+# present in your workspace as object "result" or load the data from *.rda with load().
 # Unfortunately it is nearly impossible to demonstarte this with the package itself because the data is 
 # already loaded as soon as you load the package with "library()". Therefore I have to 
 # assign the data by hand otherwise the vignette will fail.
-# Please comment out the next line in your personal version of this *.Rmd file.
+# Please comment out/edit the next two lines in your personal version of this *.Rmd file and add your
+# personal loading technique.
 result <- preprocess_setas
+model_path <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
-# All you have to do now is change the names of the following dataframes.
+# In addition please change the names of the following dataframes.
 bench_bio <- "setas-bench.csv"
 bench_rec <- "setas-ssb-rec.csv"
 
-# And adjust the ploting sizes (here and throughout this document) to your likings.
-dw1 <- 25
-dh1 <- 15
-dh2 <- 11
+# And adjust the ploting sizes (here, at the top and throughout this document) to your likings.
+fig_height2 <- 11
 
 # You should be able to build the vignette either by clicking on "Knit-PDF" or with
 # rmarkdown::render("model-calibration.Rmd")
@@ -71,7 +49,8 @@ dh2 <- 11
 
 \newpage
 
-## Whole system plots!
+# Whole system plots!
+## Overall biomass
 ```{r, fig.width = 14, fig.height = 8}
 plot_ws(result$biomass)
 ```
@@ -79,7 +58,7 @@ plot_ws(result$biomass)
 \newpage
 
 ## Biomass timeseries
-```{r, fig.width = dw1, fig.height = dh1}
+```{r}
 plot <- plot_ts(result$biomass)
 update_labels(p = plot, labels = list(y = "Biomass [t]"))
 ```
@@ -87,7 +66,7 @@ update_labels(p = plot, labels = list(y = "Biomass [t]"))
 \newpage
 
 ## Number timeseries
-```{r, fig.width = dw1, fig.height = dh2}
+```{r, fig.height = fig_height2}
 plot <- plot_ts(result$nums)
 update_labels(p = plot, labels = list(y = "Numbers"))
 ```
@@ -95,7 +74,8 @@ update_labels(p = plot, labels = list(y = "Numbers"))
 \newpage
 
 ## SSB & Recruitment
-```{r, fig.width = dw1, fig.height = dh1}
+
+```{r}
 ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = FALSE)
 plot_rec(result$ssb_rec, ex_data = ex)
 ```
@@ -103,10 +83,9 @@ plot_rec(result$ssb_rec, ex_data = ex)
 \newpage
 
 ## Biomass benchmark
-```{r, fig.width = dw1, fig.height = dh1}
+```{r}
 ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE)
 plot_bench(result$biomass, ex_data = ex)
-
 ```
 
 \newpage
@@ -125,59 +104,59 @@ plot_flux(result$flux)
 
 \newpage
 
-## Calibration plots
-### Structural nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
+# Calibration plots
+## Structural nitrogen
+```{r, fig.height = fig_height2}
 plot_calibrate(result$structn_age)
 ```
 
 \newpage
 
-### Reserve nitrogen
-```{r, fig.width = dw1, fig.height = dh2}
+## Reserve nitrogen
+```{r, fig.height = fig_height2}
 plot_calibrate(result$resn_age)
 ```
 
 \newpage
 
-### Biomass per ageclass
-```{r, fig.width = dw1, fig.height = dh2}
+## Biomass per ageclass
+```{r, fig.height = fig_height2}
 plot_calibrate(result$biomass_age)
 ```
 
 \newpage
 
-### Numbers
-```{r, fig.width = dw1, fig.height = dh2}
+## Numbers
+```{r, fig.height = fig_height2}
 plot_calibrate(result$nums_age)
 ```
 
 
 \newpage
 
-### Biomass
-```{r, fig.width = dw1, fig.height = dh1}
+## Biomass
+```{r}
 plot_calibrate(result$biomass)
 ```
 
 \newpage
 
-## Distribution plots
-### Numbers @ age
-```{r, fig.width = dw1, fig.height = dh2}
+# Distribution plots
+## Numbers @ age
+```{r, fig.height = fig_height2}
 plot_struct(result$nums_age)
 ```
 
 \newpage
 
-### Biomass @ age
-```{r, fig.width = dw1, fig.height = dh2}
+## Biomass @ age
+```{r, fig.height = fig_height2}
 plot_struct(result$biomass_age)
 ```
 
 \newpage
 
-## Diet Plots
+# Diet Plots
 
 ```{r, fig.width = 14, fig.height = 9}
 marrangeGrob(plot_dietcheck(result$diet_dietcheck, combine_thresh = 0.03), nrow = 1, ncol = 1)
