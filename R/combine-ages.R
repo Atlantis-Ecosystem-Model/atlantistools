@@ -16,7 +16,7 @@
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' combine_ages(dir = d,
 #'              data = preprocess_setas$diet_specmort,
-#'              col = "species",
+#'              col = "pred",
 #'              prm_biol = "VMPA_setas_biol_fishing_New.prm")
 
 combine_ages <- function(dir = getwd(), data, col, prm_biol) {
