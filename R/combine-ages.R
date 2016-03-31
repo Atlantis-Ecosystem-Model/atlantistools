@@ -39,5 +39,8 @@ combine_ages <- function(dir = getwd(), data, col, prm_biol) {
   data_stanza$stanza <- ifelse(data_stanza$agecl < data_stanza$age_mat, "juvenile", "adult")
   data_stanza$stanza[is.na(data_stanza$age_mat)] <- "none"
 
+  # Remove column "age_mat"
+  data_stanza$age_mat <- NULL
+
   return(data_stanza)
 }
