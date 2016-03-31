@@ -13,7 +13,7 @@ ref_eat <- load_nc(dir = d,
                    bboxes = boundary_boxes,
                    check_acronyms = TRUE)
 
-devtools::use_data(ref_eat, pkg = "atlantistools", overwrite = TRUE)
+devtools::use_data(ref_eat, overwrite = TRUE)
 
 
 ref_grazing <- load_nc(dir = d,
@@ -25,7 +25,7 @@ ref_grazing <- load_nc(dir = d,
                        bboxes = boundary_boxes,
                        check_acronyms = TRUE)
 
-devtools::use_data(ref_grazing, pkg = "atlantistools", overwrite = TRUE)
+devtools::use_data(ref_grazing, overwrite = TRUE)
 
 
 ref_n <- load_nc(dir = d,
@@ -37,7 +37,7 @@ ref_n <- load_nc(dir = d,
                  bboxes = boundary_boxes,
                  check_acronyms = TRUE)
 
-devtools::use_data(ref_n, pkg = "atlantistools", overwrite = TRUE)
+devtools::use_data(ref_n, overwrite = TRUE)
 
 
 ref_nums <- load_nc(dir = d,
@@ -49,7 +49,7 @@ ref_nums <- load_nc(dir = d,
                     bboxes = boundary_boxes,
                     check_acronyms = TRUE)
 
-devtools::use_data(ref_nums, pkg = "atlantistools", overwrite = TRUE)
+devtools::use_data(ref_nums, overwrite = TRUE)
 
 
 preprocess_setas <- preprocess(dir = d,
@@ -71,7 +71,7 @@ preprocess_setas <- preprocess(dir = d,
    report = TRUE,
    save_to_disc = FALSE)
 
-devtools::use_data(preprocess_setas, pkg = "atlantistools", overwrite = TRUE)
+devtools::use_data(preprocess_setas, overwrite = TRUE)
 
 rm(list = ls())
 
