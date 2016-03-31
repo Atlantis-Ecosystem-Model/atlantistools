@@ -15,19 +15,20 @@
 #'
 #' @examples
 #' # Plot DietCheck.txt
-#' plots <- plot_diet(data = preprocess_setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
+#' plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
 #' gridExtra::grid.arrange(plots[[1]])
 #'
 #' # Plot SpecMort.txt per stanza First we need to transform the ageclasses to stanzas.
-#' diet_stanza <- combine_ages(dir = system.file("extdata", "setas-model-new-becdev", package = "atlantistools"),
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' diet_stanza <- combine_ages(dir = d,
 #'                             data = preprocess_setas$diet_specmort,
 #'                             col = "pred",
 #'                             prm_biol = "VMPA_setas_biol_fishing_New.prm")
-#' plots <- plot_diet(data = diet_stanza, wrap_col = "stanza", combine_thresh = 0.03)
+#' plots <- plot_diet(diet_stanza, wrap_col = "stanza", combine_thresh = 0.03)
 #' gridExtra::grid.arrange(plots[[1]])
 #'
 #' # Plot SpecMort.txt per ageclass.
-#' plots <- plot_diet(data = preprocess_setas$diet_specmort, wrap_col = "agecl", combine_thresh = 0.03)
+#' plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl", combine_thresh = 0.03)
 #' gridExtra::grid.arrange(plots[[1]])
 
 plot_diet <- function(data, wrap_col, combine_thresh = 0.03) {
