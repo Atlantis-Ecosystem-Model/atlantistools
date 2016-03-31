@@ -159,6 +159,6 @@ plot_struct(result$biomass_age)
 # Diet Plots
 
 ```{r, fig.width = 14, fig.height = 9}
-diet_data <- combine_ages(dir = model_path, data = result$diet_dietcheck, col = "pred", prm_biol = "VMPA_setas_biol_fishing_New.prm")
+diet_data <- combine_ages(dir = model_path, data = result$diet_specmort, col = "pred", prm_biol = "VMPA_setas_biol_fishing_New.prm")
 marrangeGrob(plot_diet(diet_data, wrap_col = "stanza", combine_thresh = 0.03), nrow = 1, ncol = 1)
 ```
