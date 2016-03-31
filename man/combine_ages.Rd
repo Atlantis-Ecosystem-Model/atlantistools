@@ -28,6 +28,6 @@ Combine ageclasses to juvenile and adult stanza according to age at maturity.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-combine_ages(dir = d, data = preprocess_setas$diet_specmort, group_col = "species", prm_biol = "VMPA_setas_biol_fishing_New.prm")
+combine_ages(dir = d, data = preprocess_setas$diet_specmort, col = "species", prm_biol = "VMPA_setas_biol_fishing_New.prm")
 }
 
