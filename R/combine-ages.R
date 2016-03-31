@@ -45,5 +45,8 @@ combine_ages <- function(dir = getwd(), data, col, prm_biol) {
   # Remove column "age_mat"
   data_stanza$age_mat <- NULL
 
+  # Calculate mean over ages
+  data_stanza <- agg_data(data_stanza, groups = names(data_stanza)[!is.element(names(data_stanza), c("atoutput", "agecl"))], fun = mean)
+
   return(data_stanza)
 }
