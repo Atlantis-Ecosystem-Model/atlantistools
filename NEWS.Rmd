@@ -3,6 +3,24 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.3.0.9000
+## New features
+* `plot_diet()` This functions replaces `plot_dietcheck()`. The resulting plot will give an indication
+about feeding interactions for each functional group. The upper panel shows the feeding interaction
+from the predator perspective while the lower panel focuses on the prey perspective. You can either 
+pass data from the DietCheck.txt or the SpecMort.txt file. In the first case the plots are faceted according
+to the habitat while in the latter case plots are either faceted by ageclass or stanza. 
+* `combine_ages()` can be used to convert ageclass to stanzas (juvenile/adult). Currently this only works
+for groups with exactly 10 ageclasses. The stanzas are split according to the age_mat parameter in
+the biological parameterfile. You can apply this function to convert the ageclass based specific mortality
+data to stanzas in order to simplify your plotting routines/anaylsis of the feeding interactions.
+* `load_spec_mort()` allows the extraction of predation mortalities from the SpecMort.txt file. The data is
+stored in the overall summary list generated with `preprocess()`. In order to guarantee the highest amount
+of flexibility in further analysis the data is not aggregated in any way. You may choose to aggregate
+ageclasses to stanzas with `combine_ages()` if you please. The addition of this file might blow up
+the resulting *.rda but the filesize should still be easily manageable (1GB *.nc and 100MB SpecMort.txt 
+are stored as 30MB *.rda).
+
 # atlantistools 0.2.0.9000
 
 ## New features
