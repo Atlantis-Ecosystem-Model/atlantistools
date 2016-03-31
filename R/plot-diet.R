@@ -42,7 +42,7 @@ plot_diet <- function(data, wrap_col, combine_thresh = 0.03) {
         ggplot2::geom_bar(stat = "identity") +
         ggplot2::scale_fill_manual("Group", values = get_colpal()) +
         ggplot2::facet_wrap(lazyeval::interp(~var, var = as.name(wrap_col)),
-                            ncol = 5, labeller = ggplot2::label_wrap_gen(width = 15)) +
+                            ncol = 5, labeller = "label_both") +
         ggplot2::labs(x = NULL, y = NULL, title = NULL) +
         ggplot2::coord_cartesian(expand = FALSE) +
         theme_atlantis() +
@@ -56,8 +56,12 @@ plot_diet <- function(data, wrap_col, combine_thresh = 0.03) {
   grobs <- vector("list", length = length(species))
   for (i in seq_along(species)) {
     as_pred <- plot_sp(data = data[data$pred == species[i], ], col = "prey", wrap_col = wrap_col)
+    as_pred <- as_pred + ggplot2::labs(y = "Predator perspective")
     as_prey <- plot_sp(data = data[data$prey == species[i], ], col = "pred", wrap_col = wrap_col)
-    grobs[[i]] <- gridExtra::arrangeGrob(as_pred, as_prey, heights = grid::unit(c(0.5, 0.5), units = "npc"))
+    as_prey <- as_prey + ggplot2::labs(y = "Prey perspective")
+    heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 20))
+    grobs[[i]] <- gridExtra::arrangeGrob(heading, as_pred, as_prey,
+                                         heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
   }
 
   return(grobs)
