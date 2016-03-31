@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' plots <- plot_dietcheck(data = preprocess_setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
+#' plots <- plot_diet(data = preprocess_setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
 #' gridExtra::grid.arrange(plots[[1]])
 
 plot_diet <- function(data, wrap_col, combine_thresh = 0.03) {
