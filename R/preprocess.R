@@ -257,7 +257,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # load in specific mortality data!
   message("Read in SpecMort data!")
-  spec_mort <- load_spec_mort(dir = dir, specmort = specmort, prm_biol = prm_biol)
+  spec_mort <- load_spec_mort(dir = dir, specmort = specmort)
 
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
