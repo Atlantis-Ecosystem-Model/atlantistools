@@ -194,14 +194,37 @@ plot_struct(data = setas$biomass_age)
 plot_struct(data = setas$nums_age)
 ```
 
-## Plot DietCheck.txt
+## Plot feeding interactions
 
 Please note the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
+Data about feeding interactions can be visualised with `DietCheck.txt` and `SpecificPredMort.txt` with
+`atlantistools`. Currently the differences in units (per ageclass groups and invert groups) in the `DietCheck.txt` 
+are not attributed in `atlantistools`. Therefore I highly reccommend to use the `SpecificPredMort.txt` file
+to analyse feeding interactions. Nonetheless, examples for both plotting approaches will be presented here.
+
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
-# Create a plot for each predator in your model.
-feeding_plots <- plot_dietcheck(data = setas$diet_dietcheck, combine_thresh = 0.03)
+# Create a plot for each predator in your model using DietCheck.txt.
+feeding_plots <- plot_diet(data = setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
+feeding_plots[[1]]
+```
+
+```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
+# Create a plot for each predator in your model using SpecMort.txt.
+# create a subplot for each ageclass.
+feeding_plots <- plot_diet(data = setas$diet_specmort, wrap_col = "agecl", combine_thresh = 0.03)
+feeding_plots[[1]]
+```
+
+```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
+# Create a plot for each predator in your model using SpecMort.txt.
+# create a subplot for each stanza (juvenile/adult/none).
+plot_data <- combine_ages(dir = d, 
+                          data = setas$diet_specmort, 
+                          col = "pred", 
+                          prm_biol = "VMPA_setas_biol_fishing_New.prm")
+feeding_plots <- plot_diet(data = plot_data, wrap_col = "stanza", combine_thresh = 0.03)
 feeding_plots[[1]]
 ```
 
