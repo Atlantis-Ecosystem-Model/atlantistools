@@ -4,7 +4,7 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort, prm_biol)
+load_spec_mort(dir = getwd(), specmort)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -16,11 +16,6 @@ folder) you should use 'NULL' as dir.}
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
-
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
 }
 \value{
 Dataframe with information about ssb in tonnes and recruits in
@@ -32,8 +27,7 @@ Load mortality information from outputSpecificPredMort.txt
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 df <- load_spec_mort(dir = d,
-   specmort = "outputSETASSpecificPredMort.txt",
-   prm_biol = "VMPA_setas_biol_fishing_New.prm")
+   specmort = "outputSETASSpecificPredMort.txt")
 head(df)
 }
 
