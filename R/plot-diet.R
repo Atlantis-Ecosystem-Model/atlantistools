@@ -61,7 +61,7 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 0.03) {
 
       plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = lazyeval::interp(~var, var = as.name(col)))) +
         ggplot2::geom_bar(stat = "identity") +
-        ggplot2::scale_fill_manual("Group", values = get_colpal()) +
+        ggplot2::scale_fill_manual(values = get_colpal()) +
         ggplot2::facet_wrap(lazyeval::interp(~var, var = as.name(wrap_col)),
                             ncol = 5, labeller = "label_both") +
         ggplot2::labs(x = NULL, y = NULL, title = NULL) +
