@@ -78,6 +78,7 @@ plot_diet <- function(data, wrap_col, combine_thresh = 0.03) {
                                          heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
   }
 
+  names(grobs) <- species
   return(grobs)
 }
 
