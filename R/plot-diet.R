@@ -81,7 +81,7 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 0.03) {
     as_pred <- as_pred + ggplot2::labs(y = "Predator perspective")
     as_prey <- plot_sp(data = data[data$prey == species[i], ], col = "pred", wrap_col = wrap_col)
     as_prey <- as_prey + ggplot2::labs(y = "Prey perspective")
-    heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 20))
+    heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
     grobs[[i]] <- gridExtra::arrangeGrob(heading, as_pred, as_prey,
                                          heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
   }
