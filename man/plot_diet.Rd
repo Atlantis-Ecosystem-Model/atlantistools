@@ -4,11 +4,14 @@
 \alias{plot_diet}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_diet(data, wrap_col, combine_thresh = 0.03)
+plot_diet(data, species = NULL, wrap_col, combine_thresh = 0.03)
 }
 \arguments{
 \item{data}{Dataframe with information about diets. The dataframe
 should be generated with \code{\link{load_dietcheck}}.}
+
+\item{species}{Character string giving the acronyms of the species you aim to plot. Default is
+\code{NULL} resulting in all available species being ploted.}
 
 \item{wrap_col}{Character specifying the column of the dataframe to be used as multipanel plot.
 In case you aim to plot DietCheck.txt data use "habitat".
@@ -28,7 +31,7 @@ Plot contribution of diet contents for each functional group.
 }
 \examples{
 # Plot DietCheck.txt
-plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
+plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
 gridExtra::grid.arrange(plots[[1]])
 
 # Plot SpecMort.txt per stanza First we need to transform the ageclasses to stanzas.
@@ -37,11 +40,15 @@ diet_stanza <- combine_ages(dir = d,
                             data = preprocess_setas$diet_specmort,
                             col = "pred",
                             prm_biol = "VMPA_setas_biol_fishing_New.prm")
-plots <- plot_diet(diet_stanza, wrap_col = "stanza", combine_thresh = 0.03)
+plots <- plot_diet(diet_stanza, wrap_col = "stanza")
 gridExtra::grid.arrange(plots[[1]])
 
 # Plot SpecMort.txt per ageclass.
-plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl", combine_thresh = 0.03)
+plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl")
+gridExtra::grid.arrange(plots[[1]])
+
+# Only plot specific species
+plots <- plot_diet(preprocess_setas$diet_specmort, species = "CEP", wrap_col = "agecl")
 gridExtra::grid.arrange(plots[[1]])
 }
 

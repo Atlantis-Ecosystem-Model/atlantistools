@@ -2,6 +2,8 @@
 #'
 #' @param data Dataframe with information about diets. The dataframe
 #' should be generated with \code{\link{load_dietcheck}}.
+#' @param species Character string giving the acronyms of the species you aim to plot. Default is
+#' \code{NULL} resulting in all available species being ploted.
 #' @param wrap_col Character specifying the column of the dataframe to be used as multipanel plot.
 #' In case you aim to plot DietCheck.txt data use "habitat".
 #' In case you aim to plot SpecMort.txt data use either "agecl" or "stanza".
@@ -15,7 +17,7 @@
 #'
 #' @examples
 #' # Plot DietCheck.txt
-#' plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
+#' plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
 #' gridExtra::grid.arrange(plots[[1]])
 #'
 #' # Plot SpecMort.txt per stanza First we need to transform the ageclasses to stanzas.
@@ -24,14 +26,19 @@
 #'                             data = preprocess_setas$diet_specmort,
 #'                             col = "pred",
 #'                             prm_biol = "VMPA_setas_biol_fishing_New.prm")
-#' plots <- plot_diet(diet_stanza, wrap_col = "stanza", combine_thresh = 0.03)
+#' plots <- plot_diet(diet_stanza, wrap_col = "stanza")
 #' gridExtra::grid.arrange(plots[[1]])
 #'
 #' # Plot SpecMort.txt per ageclass.
-#' plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl", combine_thresh = 0.03)
+#' plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl")
+#' gridExtra::grid.arrange(plots[[1]])
+#'
+#' # Only plot specific species
+#' plots <- plot_diet(preprocess_setas$diet_specmort, species = "CEP", wrap_col = "agecl")
 #' gridExtra::grid.arrange(plots[[1]])
 
-plot_diet <- function(data, wrap_col, combine_thresh = 0.03) {
+
+plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "atoutput", "prey", "pred"), optional = c("habitat", "agecl", "stanza"))
 
   # Species specific ploting routine!
@@ -66,7 +73,8 @@ plot_diet <- function(data, wrap_col, combine_thresh = 0.03) {
   return(plot)
   }
 
-  species <- sort(union(data$pred, data$prey))
+  # Select all available species if none have been selected!
+  if (is.null(species)) species <- sort(union(data$pred, data$prey))
   grobs <- vector("list", length = length(species))
   for (i in seq_along(species)) {
     as_pred <- plot_sp(data = data[data$pred == species[i], ], col = "prey", wrap_col = wrap_col)
