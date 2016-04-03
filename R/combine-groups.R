@@ -30,15 +30,6 @@ combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
   #   dplyr::filter_(~count == ts)
   # low_contrib$count <- NULL
   #
-  # # Get position of merge between data and low_contrib
-  # full_match <- matrix(nrow = nrow(data), ncol = ncol(low_contrib))
-  # col_names <- names(low_contrib)
-  # for (i in seq_along(col_names)) {
-  #   full_match[, i] <- !is.na(match(data[, col_names[i]][[1]], low_contrib[, col_names[i]][[1]]))
-  # }
-  #
-  # # Replace resulting entries with "Rest"
-  # data[rowSums(full_match) == ncol(full_match), group_col] <- "Rest"
 
   # restrict number of potential grouping species to 15!
   test <- data
@@ -54,6 +45,16 @@ combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
   test$atoutput <- NULL
 
   low_contrib <- dplyr::anti_join(test, wuwu)
+
+  # Get position of merge between data and low_contrib
+  full_match <- matrix(nrow = nrow(data), ncol = ncol(low_contrib))
+  col_names <- names(low_contrib)
+  for (i in seq_along(col_names)) {
+    full_match[, i] <- !is.na(match(data[, col_names[i]][[1]], low_contrib[, col_names[i]][[1]]))
+  }
+
+  # Replace resulting entries with "Rest"
+  data[rowSums(full_match) == ncol(full_match), group_col] <- "Rest"
 
 
   # data[data$test <= combine_thresh, group_col] <- "Rest"
