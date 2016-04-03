@@ -41,9 +41,20 @@ combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
   # data[rowSums(full_match) == ncol(full_match), group_col] <- "Rest"
 
   # restrict number of potential grouping species to 15!
-  test <- agg_data(data, groups = c(groups[groups != "time"], group_col), fun = sum)
-  test <- dplyr::arrange_(as.data.frame(test), ~habitat, ~pred, ~desc(atoutput))
-  test <- group_data(test, groups = names(test)[names(test) != c("atoutput", )]
+  test <- data
+  test$time <- NULL
+
+  test <- agg_data(test, groups = c(names(test)[!is.element(names(test), "atoutput")]), fun = sum)
+  # test <- agg_data(data, groups = c(groups[groups != "time"], group_col), fun = sum)
+  test <- dplyr::arrange_(as.data.frame(test), ~desc(atoutput))
+  test <- group_data(test, groups = names(test)[!is.element(names(test), c("atoutput", group_col))])
+  # 15 species with highest contribution!
+  wuwu <- dplyr::slice(test, 1:15)
+  wuwu$atoutput <- NULL
+  test$atoutput <- NULL
+
+  low_contrib <- dplyr::anti_join(test, wuwu)
+
 
   # data[data$test <= combine_thresh, group_col] <- "Rest"
   data <- agg_data(data, groups = c(groups, group_col), fun = sum)
