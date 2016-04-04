@@ -79,6 +79,6 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
     writeLines(text = prm_biol_new, con = convert_path(dir = dir, file = prm_biol), sep = "\n")
   }
 
-  return(prm_biol_new)
+  invisible(prm_biol_new)
 }
 
