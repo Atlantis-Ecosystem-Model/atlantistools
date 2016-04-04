@@ -44,7 +44,7 @@ combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
   # wuwu$atoutput <- NULL
   # test$atoutput <- NULL
 
-  low_contrib <- dplyr::anti_join(test, wuwu)
+  # low_contrib <- dplyr::anti_join(test, wuwu)
 
   # Get position of merge between data and low_contrib
   full_match <- matrix(nrow = nrow(data), ncol = ncol(low_contrib))
