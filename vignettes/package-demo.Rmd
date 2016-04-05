@@ -31,7 +31,8 @@ setas <-   preprocess(dir = d,
                       dietcheck = "outputSETASDietCheck.txt",
                       yoy = "outputSETASYOY.txt",
                       ssb = "outputSETASSSB.txt",
-                      specmort = "outputSETASSpecificPredMort.txt",
+                      specmort = "outputSETASSpecificMort.txt",
+                      specpredmort = "outputSETASSpecificPredMort.txt",
                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
                       prm_run = "VMPA_setas_run_fishing_F_New.prm",
                       bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -56,7 +57,8 @@ setas <- suppressMessages(
              dietcheck = "outputSETASDietCheck.txt",
              yoy = "outputSETASYOY.txt",
              ssb = "outputSETASSSB.txt",
-             specmort = "outputSETASSpecificPredMort.txt",
+             specmort = "outputSETASSpecificMort.txt",
+             specpredmort = "outputSETASSpecificPredMort.txt",
              prm_biol = "VMPA_setas_biol_fishing_New.prm",
              prm_run = "VMPA_setas_run_fishing_F_New.prm",
              bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -84,7 +86,8 @@ setas <- preprocess(dir = d,
                     dietcheck = "outputSETASDietCheck.txt",
                     yoy = "outputSETASYOY.txt",
                     ssb = "outputSETASSSB.txt",
-                    specmort = "outputSETASSpecificPredMort.txt",
+                    specmort = "outputSETASSpecificMort.txt",
+                    specpredmort = "outputSETASSpecificPredMort.txt",
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
                     bps = c("Filter_Shallow", 
@@ -132,7 +135,8 @@ setas <- preprocess(dir = d,
                     dietcheck = "output/outputSETASDietCheck.txt",
                     yoy = "output/outputSETASYOY.txt",
                     ssb = "output/outputSETASSSB.txt",
-                    specmort = "outputSETASSpecificPredMort.txt",
+                    specmort = "outputSETASSpecificMort.txt",
+                    specpredmort = "outputSETASSpecificPredMort.txt",
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
                     bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
@@ -217,15 +221,15 @@ feeding_plots <- plot_diet(data = setas$diet_specmort, wrap_col = "agecl", combi
 grid.arrange(feeding_plots[[1]])
 ```
 
-```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
+```{r, fig.show = 'hold', fig.width = 7, fig.height = 5, eval=FALSE}
 # Create a plot for each predator in your model using SpecMort.txt.
 # create a subplot for each stanza (juvenile/adult/none).
-plot_data <- combine_ages(dir = d, 
-                          data = setas$diet_specmort, 
-                          col = "pred", 
-                          prm_biol = "VMPA_setas_biol_fishing_New.prm")
-feeding_plots <- plot_diet(data = plot_data, wrap_col = "stanza", combine_thresh = 0.03)
-grid.arrange(feeding_plots[[1]])
+# plot_data <- combine_ages(dir = d,
+                          # data = setas$diet_specmort, 
+                          # col = "pred", 
+                          # prm_biol = "VMPA_setas_biol_fishing_New.prm")
+# feeding_plots <- plot_diet(data = plot_data, wrap_col = "stanza", combine_thresh = 0.03)
+# grid.arrange(feeding_plots[[1]])
 ```
 
 ```{r, eval = FALSE}
