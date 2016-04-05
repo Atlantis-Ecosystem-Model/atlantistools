@@ -42,6 +42,11 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as specmort. In addition set dir to 'NULL' in this
 #' case.
+#' @param specpredmort Character string of the SpecPredMort.txt file. Usually
+#' 'output[...]SpecificPredMort.txt'. In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string as specmort. In addition set dir to 'NULL' in this
+#' case.
 #' @param prm_biol Character string giving the filename of the biological
 #' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
@@ -134,7 +139,8 @@
 #'    dietcheck = "outputSETASDietCheck.txt",
 #'    yoy = "outputSETASYOY.txt",
 #'    ssb = "outputSETASSSB.txt",
-#'    specmort = "outputSETASSpecificPredMort.txt",
+#'    specmort = "outputSETASSpecificMort.txt",
+#'    specpredmort = "outputSETASSpecificPredMort.txt",
 #'    prm_biol = "VMPA_setas_biol_fishing_New.prm",
 #'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'    bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
@@ -147,7 +153,7 @@
 #'    save_to_disc = FALSE)
 #' @export
 
-preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
+preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort, specpredmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
                        check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE){
 
   age_groups <- get_age_groups(dir = dir, fgs = fgs)
@@ -256,15 +262,19 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   ssb_rec <- load_rec(dir = dir, yoy = yoy, ssb = ssb, prm_biol = prm_biol)
 
   # load in specific mortality data!
-  message("Read in SpecMort data!")
-  spec_mort <- load_spec_mort(dir = dir, specmort = specmort)
+  message("Read in SpecPredMort data!")
+  spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort)
+
+  message("Red in SpecMort data!")
+  spec_mort <- load_txt(dir = dir, file = specmort)
+  spec_mort <- preprocess_txt(df_txt = spec_mort, into = c("species", "agecl", "empty_col", "mort"))
 
   # WARNING: Newly created dataframes have to be added here!
   result <- list(
     "biomass"        = biomass,       #1
     "biomass_age"    = biomass_age,
     "diet_dietcheck" = diet,
-    "diet_specmort"  = spec_mort,
+    "diet_specmort"  = spec_pred_mort,
     "eat_age"        = eat_age,       #5
     "flux"           = flux,
     "grazing"        = grazing,
@@ -274,6 +284,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
     "nums_box"       = nums_box,
     "physics"        = physics,
     "resn_age"       = resn_age,
+    "spec_mort"      = spec_mort,
     "ssb_rec"        = ssb_rec,
     "structn_age"    = structn_age    #15
   )

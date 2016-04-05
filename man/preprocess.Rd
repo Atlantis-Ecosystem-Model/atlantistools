@@ -5,8 +5,8 @@
 \title{Preprocess Atlantis output (netcdf)}
 \usage{
 preprocess(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort,
-  prm_biol, prm_run, bps, fgs, select_groups, bboxes, check_acronyms,
-  modelstart, out, report = TRUE, save_to_disc = FALSE)
+  specpredmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
+  check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -44,6 +44,12 @@ folder/filename string as ssb. In addition set dir to 'NULL' in this
 case.}
 
 \item{specmort}{Character string of the SpecMort.txt file. Usually
+'output[...]SpecificPredMort.txt'. In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string as specmort. In addition set dir to 'NULL' in this
+case.}
+
+\item{specpredmort}{Character string of the SpecPredMort.txt file. Usually
 'output[...]SpecificPredMort.txt'. In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as specmort. In addition set dir to 'NULL' in this
@@ -163,7 +169,8 @@ test <- preprocess(dir = d,
    dietcheck = "outputSETASDietCheck.txt",
    yoy = "outputSETASYOY.txt",
    ssb = "outputSETASSSB.txt",
-   specmort = "outputSETASSpecificPredMort.txt",
+   specmort = "outputSETASSpecificMort.txt",
+   specpredmort = "outputSETASSpecificPredMort.txt",
    prm_biol = "VMPA_setas_biol_fishing_New.prm",
    prm_run = "VMPA_setas_run_fishing_F_New.prm",
    bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
