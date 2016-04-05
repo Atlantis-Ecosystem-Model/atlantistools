@@ -35,6 +35,7 @@ plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
 gridExtra::grid.arrange(plots[[1]])
 
 # Plot SpecMort.txt per stanza First we need to transform the ageclasses to stanzas.
+\dontrun{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 diet_stanza <- combine_ages(dir = d,
                             data = preprocess_setas$diet_specmort,
@@ -42,6 +43,7 @@ diet_stanza <- combine_ages(dir = d,
                             prm_biol = "VMPA_setas_biol_fishing_New.prm")
 plots <- plot_diet(diet_stanza, wrap_col = "stanza")
 gridExtra::grid.arrange(plots[[1]])
+}
 
 # Plot SpecMort.txt per ageclass.
 plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl")
