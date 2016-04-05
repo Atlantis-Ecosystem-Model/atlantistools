@@ -265,7 +265,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   message("Read in SpecPredMort data!")
   spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort)
 
-  message("Red in SpecMort data!")
+  message("Read in SpecMort data!")
   spec_mort <- load_txt(dir = dir, file = specmort)
   spec_mort <- preprocess_txt(df_txt = spec_mort, into = c("species", "agecl", "empty_col", "mort"))
 
