@@ -55,7 +55,7 @@ combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
 
   # Replace resulting entries with "Rest"
   data[rowSums(full_match) == ncol(full_match), group_col] <- "Rest"
-
+  data$test <- NULL
 
   # data[data$test <= combine_thresh, group_col] <- "Rest"
   data <- agg_data(data, groups = names(data)[!is.element(names(data), "atoutput")], fun = sum)
