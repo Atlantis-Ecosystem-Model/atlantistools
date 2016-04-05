@@ -20,7 +20,7 @@
 
 load_spec_mort <- function(dir = getwd(), specmort) {
   mort <- load_txt(dir = dir, file = specmort)
-  mort <- tidyr::separate_(mort, col = "code", into = c("pred", "agecl", "notsure", "prey", "mort"), convert = TRUE)
+  mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "notsure", "pred", "mort"), convert = TRUE)
   mort$agecl <- mort$agecl + 1
 
   # check uniqueness of column notsure and mort
