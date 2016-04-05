@@ -9,9 +9,6 @@
 #' @examples
 #' plot_mort(pre)
 
-
-dir <- "c:/backup_c/ATLANTIS_output/1237_v.13.2.1_ATLANTIS_NS/"
-
 plot_mort <- function(data) {
   mort <- load_txt(dir = dir, file = "outputNorthSeaSpecificMort.txt")
   mort <- tidyr::separate_(mort, col = "code", into = c("species", "agecl", "notsure", "mort"), convert = TRUE)
