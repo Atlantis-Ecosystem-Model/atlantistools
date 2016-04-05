@@ -17,6 +17,11 @@
 #' df <- load_txt(dir = d, file = "outputSETASSpecificPredMort.txt")
 #' df <- preprocess_txt(df_txt = df, into = c("pred", "agecl", "empty_col1", "prey", "empty_col2"))
 #' head(df)
+#'
+#' df <- load_txt(dir = d, file = "outputSETASSpecificMort.txt")
+#' df <- preprocess_txt(df_txt = df, into = c("species", "agecl", "empty_col", "mort"))
+#' head(df)
+
 
 preprocess_txt <- function(df_txt, sep_col = "code", into) {
   df_txt <- tidyr::separate_(df_txt, col = sep_col, into = into, convert = TRUE)
