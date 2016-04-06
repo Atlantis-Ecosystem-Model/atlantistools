@@ -19,10 +19,16 @@
 
 plot_add_range <- function(plot, ex_data) {
   if (!ggplot2::is.ggplot(plot)) stop("plot has to be a ggplot object.")
-  check_df_names(ex_data, expect = c("time", "species", "atoutput", "model"))
+  names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
+  ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
 
-  ex_data$time <- NULL
-  plot <- plot + ggplot2::geom_rug(data = ex_data, ggplot2::aes_(yintercept = ~atoutput, colour = ~model), alpha = 0.5)
+  check_df_names(ex_data, expect = c("time", "species", "atoutput", "model"))
+  if ("colour" %in% names(plot$mapping)) {
+    warning("Color coding in plot already present. You probably don't want to overwrite this with 'plot_add_range'.")
+  }
+
+  plot <- plot + ggplot2::geom_rug(data = ex_data, ggplot2::aes_(colour = ~model),
+                                   sides = "lr", position = "jitter", alpha = 0.5)
 
   return(plot)
 }
