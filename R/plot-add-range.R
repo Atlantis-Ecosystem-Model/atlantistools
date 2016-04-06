@@ -22,7 +22,7 @@ plot_add_range <- function(plot, ex_data) {
   check_df_names(ex_data, expect = c("time", "species", "atoutput", "model"))
 
   ex_data$time <- NULL
-  plot <- plot + ggplot2::geom_hline(data = ex_data, ggplot2::aes_(yintercept = ~atoutput, colour = ~model), alpha = 0.5)
+  plot <- plot + ggplot2::geom_rug(data = ex_data, ggplot2::aes_(yintercept = ~atoutput, colour = ~model), alpha = 0.5)
 
   return(plot)
 }
