@@ -19,32 +19,32 @@
 
 combine_groups <- function(data, group_col, groups, combine_thresh = 15) {
   # Convert values to percent!
-  # data <- agg_perc(data, groups = groups, out = "test")
+  data <- agg_perc(data, groups = groups, out = "test")
+
+  # Get species which always have a low contribution!
+  ts <- length(unique(data$time))
+  low_contrib <- data %>%
+    dplyr::filter_(~test <= combine_thresh) %>%
+    group_data(groups = c(groups[groups != "time"], group_col)) %>%
+    dplyr::summarise_(count = ~length(unique(time))) %>%
+    dplyr::filter_(~count == ts)
+  low_contrib$count <- NULL
+
+
+  # # restrict number of potential grouping species to 15!
+  # test <- data
+  # test$time <- NULL
   #
-  # # Get species which always have a low contribution!
-  # ts <- length(unique(data$time))
-  # low_contrib <- data %>%
-  #   dplyr::filter_(~test <= combine_thresh) %>%
-  #   group_data(groups = c(groups[groups != "time"], group_col)) %>%
-  #   dplyr::summarise_(count = ~length(unique(time))) %>%
-  #   dplyr::filter_(~count == ts)
-  # low_contrib$count <- NULL
-
-
-  # restrict number of potential grouping species to 15!
-  test <- data
-  test$time <- NULL
-
-  test <- agg_data(test, groups = c(names(test)[!is.element(names(test), "atoutput")]), fun = sum)
-  # test <- agg_data(data, groups = c(groups[groups != "time"], group_col), fun = sum)
-  test <- dplyr::arrange_(as.data.frame(test), ~desc(atoutput))
-  test <- group_data(test, groups = names(test)[!is.element(names(test), c("atoutput", group_col))])
-  # 15 species with highest contribution!
-  wuwu <- dplyr::slice(test, 1:combine_thresh)
-  wuwu$atoutput <- NULL
-  test$atoutput <- NULL
-
-  low_contrib <- dplyr::anti_join(test, wuwu)
+  # test <- agg_data(test, groups = c(names(test)[!is.element(names(test), "atoutput")]), fun = sum)
+  # # test <- agg_data(data, groups = c(groups[groups != "time"], group_col), fun = sum)
+  # test <- dplyr::arrange_(as.data.frame(test), ~desc(atoutput))
+  # test <- group_data(test, groups = names(test)[!is.element(names(test), c("atoutput", group_col))])
+  # # 15 species with highest contribution!
+  # wuwu <- dplyr::slice(test, 1:combine_thresh)
+  # wuwu$atoutput <- NULL
+  # test$atoutput <- NULL
+  #
+  # low_contrib <- dplyr::anti_join(test, wuwu)
 
   # Get position of merge between data and low_contrib
   full_match <- matrix(nrow = nrow(data), ncol = ncol(low_contrib))
