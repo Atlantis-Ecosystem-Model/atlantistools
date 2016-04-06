@@ -4,7 +4,7 @@
 \alias{combine_groups}
 \title{Combine values from different groups if specific groups only have a low contribution to the overall value.}
 \usage{
-combine_groups(data, group_col, groups, combine_thresh = 0.03)
+combine_groups(data, group_col, groups, combine_thresh = 15)
 }
 \arguments{
 \item{data}{Dataframe whose grouops shall be combined.}
