@@ -43,19 +43,21 @@
 plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 0.03) {
   check_df_names(data = data, expect = c("time", "atoutput", "prey", "pred"), optional = c("habitat", "agecl", "stanza"))
 
+  # group_cols <- names(data)[!is.element(names(data), c("pred", "time", "atoutput"))]
+  # data <- combine_groups(data, group_col = "pred", groups = group_cols, combine_thresh = combine_thresh)
+
   # Species specific ploting routine!
   plot_sp <- function(data, col, wrap_col) {
     # create empty plot in case no data was passed!
     if (nrow(data) == 0) {
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
     } else {
-      group_cols <- names(data)[!is.element(names(data), c(col, "atoutput"))]
 
       # Combine groups with low contribution!
-      data <- combine_groups(data, group_col = col, groups = group_cols, combine_thresh = combine_thresh)
-
-      # Convert to percentages!
-      data <- agg_perc(data, groups = group_cols)
+      # data <- combine_groups(data, group_col = col, groups = group_cols, combine_thresh = combine_thresh)
+      #
+      # # Convert to percentages!
+      # data <- agg_perc(data, groups = group_cols)
 
       # order data according to dietcontribution
       agg_data <- agg_data(data, groups = col, out = "sum_diet", fun = sum)
@@ -79,13 +81,29 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 0.03) {
   if (is.null(species)) species <- sort(union(data$pred, data$prey))
   grobs <- vector("list", length = length(species))
   for (i in seq_along(species)) {
-    as_pred <- plot_sp(data = data[data$pred == species[i], ], col = "prey", wrap_col = wrap_col)
-    as_pred <- as_pred + ggplot2::labs(y = "Predator perspective")
-    as_prey <- plot_sp(data = data[data$prey == species[i], ], col = "pred", wrap_col = wrap_col)
-    as_prey <- as_prey + ggplot2::labs(y = "Prey perspective")
+    subgrobs <- list()
+    specs <- c("pred", "prey")
+    for (j in seq_along(specs)){
+      df <- data[data[, specs[j]] == species[i], ]
+      if (nrow(df) > 0) {
+        group_cols <- names(df)[!is.element(names(data), c(specs[specs != specs[j]], "time", "atoutput"))]
+        df <- combine_groups(df, group_col = specs[specs != specs[j]], groups = group_cols, combine_thresh = combine_thresh)
+      }
+      subgrobs[[j]] <- plot_sp(df, col = specs[specs != specs[j]], wrap_col = wrap_col)
+    }
     heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
-    grobs[[i]] <- gridExtra::arrangeGrob(heading, as_pred, as_prey,
-                                         heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
+    grobs[[i]] <- gridExtra::arrangeGrob(heading, subgrobs, heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
+    # as_pred <- data[data$pred == species[i], ]
+    # as_pred <- combine_groups(as_pred, group_col = "prey", groups = group_cols, combine_thresh = combine_thresh)
+    # as_pred <- plot_sp(as_pred, col = "prey", wrap_col = wrap_col)
+    # as_pred <- as_pred + ggplot2::labs(y = "Predator perspective")
+
+    # as_prey <- data[data$prey == species[i], ]
+    # as_prey <- combine_groups(as_prey, group_col = "pred", groups = group_cols, combine_thresh = combine_thresh)
+    # as_prey <- plot_sp(data = data[data$prey == species[i], ], col = "pred", wrap_col = wrap_col)
+    # as_prey <- as_prey + ggplot2::labs(y = "Prey perspective")
+    # grobs[[i]] <- gridExtra::arrangeGrob(heading, as_pred, as_prey,
+    #                                      heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
   }
 
   names(grobs) <- species

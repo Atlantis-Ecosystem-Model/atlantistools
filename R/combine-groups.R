@@ -17,34 +17,34 @@
 #'    groups = c("time", "pred", "habitat"),
 #'    combine_thresh = 0.03)
 
-combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
+combine_groups <- function(data, group_col, groups, combine_thresh = 15) {
   # Convert values to percent!
-  data <- agg_perc(data, groups = groups, out = "test")
-
-  # Get species which always have a low contribution!
-  ts <- length(unique(data$time))
-  low_contrib <- data %>%
-    dplyr::filter_(~test <= combine_thresh) %>%
-    group_data(groups = c(groups[groups != "time"], group_col)) %>%
-    dplyr::summarise_(count = ~length(unique(time))) %>%
-    dplyr::filter_(~count == ts)
-  low_contrib$count <- NULL
+  # data <- agg_perc(data, groups = groups, out = "test")
+  #
+  # # Get species which always have a low contribution!
+  # ts <- length(unique(data$time))
+  # low_contrib <- data %>%
+  #   dplyr::filter_(~test <= combine_thresh) %>%
+  #   group_data(groups = c(groups[groups != "time"], group_col)) %>%
+  #   dplyr::summarise_(count = ~length(unique(time))) %>%
+  #   dplyr::filter_(~count == ts)
+  # low_contrib$count <- NULL
 
 
   # restrict number of potential grouping species to 15!
-  # test <- data
-  # test$time <- NULL
-  #
-  # test <- agg_data(test, groups = c(names(test)[!is.element(names(test), "atoutput")]), fun = sum)
-  # # test <- agg_data(data, groups = c(groups[groups != "time"], group_col), fun = sum)
-  # test <- dplyr::arrange_(as.data.frame(test), ~desc(atoutput))
-  # test <- group_data(test, groups = names(test)[!is.element(names(test), c("atoutput", group_col))])
-  # # 15 species with highest contribution!
-  # wuwu <- dplyr::slice(test, 1:15)
-  # wuwu$atoutput <- NULL
-  # test$atoutput <- NULL
+  test <- data
+  test$time <- NULL
 
-  # low_contrib <- dplyr::anti_join(test, wuwu)
+  test <- agg_data(test, groups = c(names(test)[!is.element(names(test), "atoutput")]), fun = sum)
+  # test <- agg_data(data, groups = c(groups[groups != "time"], group_col), fun = sum)
+  test <- dplyr::arrange_(as.data.frame(test), ~desc(atoutput))
+  test <- group_data(test, groups = names(test)[!is.element(names(test), c("atoutput", group_col))])
+  # 15 species with highest contribution!
+  wuwu <- dplyr::slice(test, 1:combine_thresh)
+  wuwu$atoutput <- NULL
+  test$atoutput <- NULL
+
+  low_contrib <- dplyr::anti_join(test, wuwu)
 
   # Get position of merge between data and low_contrib
   full_match <- matrix(nrow = nrow(data), ncol = ncol(low_contrib))
@@ -55,7 +55,7 @@ combine_groups <- function(data, group_col, groups, combine_thresh = 0.03) {
 
   # Replace resulting entries with "Rest"
   data[rowSums(full_match) == ncol(full_match), group_col] <- "Rest"
-  data$test <- NULL
+  # data$test <- NULL
 
   # data[data$test <= combine_thresh, group_col] <- "Rest"
   data <- agg_data(data, groups = names(data)[!is.element(names(data), "atoutput")], fun = sum)
