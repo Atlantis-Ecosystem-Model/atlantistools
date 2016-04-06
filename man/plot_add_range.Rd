@@ -9,7 +9,7 @@ plot_add_range(plot, ex_data)
 \arguments{
 \item{plot}{ggplot2 object.}
 
-\item{exdata}{Dataframe with observed values for the specific timeseries.}
+\item{ex_data}{Dataframe with observed values for the specific timeseries.}
 }
 \value{
 ggplot2 plot.

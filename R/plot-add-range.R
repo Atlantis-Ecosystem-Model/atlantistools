@@ -5,7 +5,7 @@
 #' of the likelihood of the value.
 #'
 #' @param plot ggplot2 object.
-#' @param exdata Dataframe with observed values for the specific timeseries.
+#' @param ex_data Dataframe with observed values for the specific timeseries.
 #' @return ggplot2 plot.
 #' @export
 #'
