@@ -9,9 +9,7 @@
 #'
 #' @examples
 #' combine_groups(preprocess_setas$diet_dietcheck,
-#'    group_col = "prey",
-#'    groups = c("time", "pred", "habitat"),
-#'    combine_thresh = 0.03)
+#'    group_col = "prey")
 
 combine_groups <- function(data,
                            group_col,
