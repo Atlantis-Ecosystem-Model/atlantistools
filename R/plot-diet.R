@@ -87,7 +87,7 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 15) {
       df <- data[data[, specs[j]] == species[i], ]
       if (nrow(df) > 0) {
         df <- combine_groups(df, group_col = specs[specs != specs[j]], combine_thresh = combine_thresh)
-        df <- agg_perc(df, groups = c(wrap_col, c("time", "pred", "prey")))
+        df <- agg_perc(df, groups = c(wrap_col, specs[j], c("time")))
       }
       subgrobs[[j + 1]] <- gridExtra::arrangeGrob(plot_sp(df, col = specs[specs != specs[j]], wrap_col = wrap_col))
     }
