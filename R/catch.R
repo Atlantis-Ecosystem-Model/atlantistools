@@ -1,4 +1,4 @@
-setwd("c:/backup_c/ATLANTIS_Stuff/Baseruns/1235_v.13.0.0_ATLANTIS_NS/")
+setwd("c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/")
 catch <- load_nc(nc = "outputNorthSeaCATCH.nc", fgs = "functionalGroups.csv", bps = load_bps(fgs = "functionalGroups.csv", init = "init_NorthSea.nc"), select_groups = get_groups(fgs = "functionalGroups.csv"), select_variable = "Catch", bboxes = get_boundary(load_box(bgm = "NorthSea.bgm")))
 
 at_out <- RNetCDF::open.nc("outputNorthSeaCATCH.nc")
