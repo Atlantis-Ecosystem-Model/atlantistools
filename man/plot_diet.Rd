@@ -4,7 +4,7 @@
 \alias{plot_diet}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_diet(data, species = NULL, wrap_col, combine_thresh = 0.03)
+plot_diet(data, species = NULL, wrap_col, combine_thresh = 15)
 }
 \arguments{
 \item{data}{Dataframe with information about diets. The dataframe
