@@ -40,7 +40,7 @@
 #' gridExtra::grid.arrange(plots[[1]])
 
 
-plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 0.03) {
+plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 15) {
   check_df_names(data = data, expect = c("time", "atoutput", "prey", "pred"), optional = c("habitat", "agecl", "stanza"))
 
   # group_cols <- names(data)[!is.element(names(data), c("pred", "time", "atoutput"))]
@@ -86,13 +86,14 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 0.03) {
     for (j in seq_along(specs)){
       df <- data[data[, specs[j]] == species[i], ]
       if (nrow(df) > 0) {
-        group_cols <- names(df)[!is.element(names(data), c(specs[specs != specs[j]], "time", "atoutput"))]
-        df <- combine_groups(df, group_col = specs[specs != specs[j]], groups = group_cols, combine_thresh = combine_thresh)
+        df <- combine_groups(df, group_col = specs[specs != specs[j]], combine_thresh = combine_thresh)
+        df <- agg_perc(df, groups = c(wrap_col, specs[j], c("time")))
       }
-      subgrobs[[j]] <- plot_sp(df, col = specs[specs != specs[j]], wrap_col = wrap_col)
+      subgrobs[[j + 1]] <- gridExtra::arrangeGrob(plot_sp(df, col = specs[specs != specs[j]], wrap_col = wrap_col))
     }
-    heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
-    grobs[[i]] <- gridExtra::arrangeGrob(heading, subgrobs, heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
+    subgrobs[[1]] <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
+    grobs[[i]] <- gridExtra::arrangeGrob(grobs = subgrobs,
+                                         heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
     # as_pred <- data[data$pred == species[i], ]
     # as_pred <- combine_groups(as_pred, group_col = "prey", groups = group_cols, combine_thresh = combine_thresh)
     # as_pred <- plot_sp(as_pred, col = "prey", wrap_col = wrap_col)
