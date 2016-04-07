@@ -4,7 +4,8 @@
 \alias{combine_groups}
 \title{Combine values from different groups if specific groups only have a low contribution to the overall value.}
 \usage{
-combine_groups(data, group_col, groups, combine_thresh = 0.03)
+combine_groups(data, group_col, groups = names(data)[!is.element(names(data),
+  c("atoutput", "time", group_col))], combine_thresh = 15)
 }
 \arguments{
 \item{data}{Dataframe whose grouops shall be combined.}
@@ -13,11 +14,7 @@ combine_groups(data, group_col, groups, combine_thresh = 0.03)
 
 \item{groups}{Vector of character strings giving the grouping variables.}
 
-\item{combine_thresh}{Numeric indicating minimum amount to the stomach contribution.
-Each prey item with a lower contribution as this treshold is assigned to the
-grpup "Rest". This is necessary for species with a wide variety of food items
-in their diet. Otherwise the screen will be cluttered with colors in the
-dietplots. Default is 0.03.}
+\item{combine_thresh}{Integer indicating the number of groups to display. Default is \code{15}.}
 }
 \value{
 dataframe with groupgs combined to "Rest" if contribution is low.
