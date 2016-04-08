@@ -2,10 +2,13 @@
 % Please edit documentation in R/change-prm-cohort.R
 \name{change_prm_cohort}
 \alias{change_prm_cohort}
+\alias{extract_prm_cohort}
 \title{Change biological parameterfile for parameters which expect multiple values.}
 \usage{
 change_prm_cohort(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
   relative = TRUE, save_to_disc = TRUE)
+
+extract_prm_cohort(dir = getwd(), prm_biol, variable)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
