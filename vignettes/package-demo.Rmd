@@ -210,14 +210,14 @@ to analyse feeding interactions. Nonetheless, examples for both plotting approac
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model using DietCheck.txt.
-feeding_plots <- plot_diet(data = setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 0.03)
+feeding_plots <- plot_diet(data = setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 15)
 grid.arrange(feeding_plots[[1]])
 ```
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model using SpecMort.txt.
 # create a subplot for each ageclass.
-feeding_plots <- plot_diet(data = setas$diet_specmort, wrap_col = "agecl", combine_thresh = 0.03)
+feeding_plots <- plot_diet(data = setas$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
 grid.arrange(feeding_plots[[1]])
 ```
 
@@ -228,7 +228,7 @@ grid.arrange(feeding_plots[[1]])
                           # data = setas$diet_specmort, 
                           # col = "pred", 
                           # prm_biol = "VMPA_setas_biol_fishing_New.prm")
-# feeding_plots <- plot_diet(data = plot_data, wrap_col = "stanza", combine_thresh = 0.03)
+# feeding_plots <- plot_diet(data = plot_data, wrap_col = "stanza", combine_thresh = 15)
 # grid.arrange(feeding_plots[[1]])
 ```
 
