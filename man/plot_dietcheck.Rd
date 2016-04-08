@@ -26,4 +26,12 @@ Plot contribution of diet contents for each functional group.
 plots <- plot_dietcheck(data = preprocess_setas$diet_dietcheck, combine_thresh = 0.03)
 gridExtra::grid.arrange(plots[[1]])
 }
+\seealso{
+Other plot functions: \code{\link{plot_bench}},
+  \code{\link{plot_boxes}}, \code{\link{plot_calibrate}},
+  \code{\link{plot_diet}}, \code{\link{plot_flux}},
+  \code{\link{plot_physics}}, \code{\link{plot_rec}},
+  \code{\link{plot_struct}}, \code{\link{plot_ts}},
+  \code{\link{plot_ws}}
+}
 

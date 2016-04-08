@@ -19,4 +19,8 @@ Column of a dataframe in factor format.
 \description{
 This function is used to match the labels of the plots!
 }
+\seealso{
+Other convert functions: \code{\link{convert_bgm}},
+  \code{\link{convert_path}}, \code{\link{convert_time}}
+}
 

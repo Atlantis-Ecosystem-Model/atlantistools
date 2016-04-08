@@ -8,6 +8,7 @@
 #' @param col Column of the dataframe which is converted to a factor.
 #' @return Column of a dataframe in factor format.
 #' @export
+#' @family convert functions
 
 convert_factor <- function(data_fgs, col) {
   set_factor <- function(col_fgs, col, data_fgs) {

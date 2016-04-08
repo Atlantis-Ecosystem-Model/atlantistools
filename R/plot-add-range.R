@@ -8,6 +8,7 @@
 #' @param ex_data Dataframe with observed values for the specific timeseries.
 #' @return ggplot2 plot.
 #' @export
+#' @family low-level-plot functions
 #'
 #' @examples
 #' ex_data <- preprocess_setas$biomass

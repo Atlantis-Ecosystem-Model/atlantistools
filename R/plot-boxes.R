@@ -3,6 +3,7 @@
 #' @param data Dataframe to be plotted.
 #' @return ggplot2 object
 #' @export
+#' @family plot functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")

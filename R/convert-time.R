@@ -12,6 +12,8 @@
 #' in the format \code{'yyyy-mm-dd'}.
 #' @return Dataframe whose column time is converted from timesteps to
 #' actual time.
+#' @family convert functions
+#'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' test <- convert_time(dir = d,

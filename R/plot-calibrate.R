@@ -3,6 +3,7 @@
 #' @param data Dataframe to be plotted.
 #' @return ggplot2 object
 #' @export
+#' @family plot functions
 #'
 #' @examples
 #' plot_calibrate(preprocess_setas$structn_age)

@@ -36,4 +36,8 @@ test <- convert_time(dir = d,
    modelstart = "1991-01-01")
 head(test)
 }
+\seealso{
+Other convert functions: \code{\link{convert_bgm}},
+  \code{\link{convert_factor}}, \code{\link{convert_path}}
+}
 

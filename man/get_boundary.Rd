@@ -27,6 +27,10 @@ Kelli Faye Johnson
 \seealso{
 \code{\link{load_box}}
 
-Other get functions: \code{\link{get_groups}}
+Other get functions: \code{\link{get_colpal}},
+  \code{\link{get_conv_mgnbiot}}, \code{\link{get_groups}}
+
+Other get functions: \code{\link{get_colpal}},
+  \code{\link{get_conv_mgnbiot}}, \code{\link{get_groups}}
 }
 

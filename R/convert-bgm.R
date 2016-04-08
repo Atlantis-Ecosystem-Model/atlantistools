@@ -3,6 +3,7 @@
 #' @param dir Path of the Atlantis model folder.
 #' @param bgm Character string giving the name of the atlantis bgm file.
 #' @export
+#' @family convert functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")

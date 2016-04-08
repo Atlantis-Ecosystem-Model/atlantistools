@@ -14,6 +14,7 @@
 #' dietplots. Default is 0.03.
 #' @return List of ggplot2 objects.
 #' @export
+#' @family plot functions
 #'
 #' @examples
 #' # Plot DietCheck.txt

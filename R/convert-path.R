@@ -12,6 +12,7 @@
 #' @return Character string of the complete dir/filename string.
 #'
 #' @export
+#' @family convert functions
 #'
 #' @examples
 #' convert_path(dir = file.path("c:", "atlantis-model"), file = "functionalGroups.csv")

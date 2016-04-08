@@ -11,6 +11,7 @@
 #' Data from all other columns will be gathered with tidyr.
 #' @return Dataframe in tidy format!
 #' @export
+#' @family load functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")

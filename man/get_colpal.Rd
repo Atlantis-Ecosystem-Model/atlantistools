@@ -15,4 +15,8 @@ The colors are derived from http://colorbrewer2.org/ using the palette
 case more than 12 categories are needed (This happens quite often
 with feeding data).
 }
+\seealso{
+Other get functions: \code{\link{get_boundary}},
+  \code{\link{get_conv_mgnbiot}}, \code{\link{get_groups}}
+}
 

@@ -6,6 +6,7 @@
 #' @return Named list with the the same format as in `preprocess()`. Each dataframe has
 #' an additional column run.
 #' @export
+#' @family combine functions
 #'
 #' @examples
 #' outs <- list(preprocess_setas, preprocess_setas)

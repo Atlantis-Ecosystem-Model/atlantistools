@@ -27,4 +27,7 @@ plot <- plot_ts(preprocess_setas$biomass)
 plot <- plot_add_range(plot, ex_data)
 plot
 }
+\seealso{
+Other low-level-plot functions: \code{\link{plot_add_run}}
+}
 

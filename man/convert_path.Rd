@@ -26,4 +26,8 @@ filename-parameters.
 convert_path(dir = file.path("c:", "atlantis-model"), file = "functionalGroups.csv")
 convert_path(dir = NULL, file = file.path("c:", "atlantis-model", "functionalGroups.csv"))
 }
+\seealso{
+Other convert functions: \code{\link{convert_bgm}},
+  \code{\link{convert_factor}}, \code{\link{convert_time}}
+}
 

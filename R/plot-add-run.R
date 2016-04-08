@@ -9,6 +9,7 @@
 #' @param plot ggplot2 object.
 #' @return ggplot2 plot.
 #' @export
+#' @family low-level-plot functions
 #'
 #' @examples
 #' dummy <- preprocess_setas

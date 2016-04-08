@@ -8,6 +8,7 @@
 #' dietplots. Default is 0.03.
 #' @return ggplot2 object
 #' @export
+#' @family plot functions
 #'
 #' @examples
 #' plot_ws(preprocess_setas$biomass)

@@ -25,4 +25,12 @@ d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 plot_rec(preprocess_setas$ssb_rec, ex_data)
 }
+\seealso{
+Other plot functions: \code{\link{plot_bench}},
+  \code{\link{plot_boxes}}, \code{\link{plot_calibrate}},
+  \code{\link{plot_dietcheck}}, \code{\link{plot_diet}},
+  \code{\link{plot_flux}}, \code{\link{plot_physics}},
+  \code{\link{plot_struct}}, \code{\link{plot_ts}},
+  \code{\link{plot_ws}}
+}
 

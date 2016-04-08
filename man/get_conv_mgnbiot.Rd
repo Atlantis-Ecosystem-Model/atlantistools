@@ -28,4 +28,8 @@ biomass in tonnes.
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm")
 }
+\seealso{
+Other get functions: \code{\link{get_boundary}},
+  \code{\link{get_colpal}}, \code{\link{get_groups}}
+}
 

@@ -28,4 +28,7 @@ plot <- plot_ts(dfs$biomass)
 plot <- plot_add_run(plot)
 plot
 }
+\seealso{
+Other low-level-plot functions: \code{\link{plot_add_range}}
+}
 

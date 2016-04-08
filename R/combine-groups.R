@@ -6,6 +6,7 @@
 #' @param combine_thresh Integer indicating the number of groups to display. Default is \code{15}.
 #' @return dataframe with groupgs combined to "Rest" if contribution is low.
 #' @export
+#' @family combine functions
 #'
 #' @examples
 #' combine_groups(preprocess_setas$diet_dietcheck,

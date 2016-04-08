@@ -20,6 +20,7 @@
 #' @return Dataframe with information about ssb in tonnes and recruits in
 #' thousands.
 #' @export
+#' @family load functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")

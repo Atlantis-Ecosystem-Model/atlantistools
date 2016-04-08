@@ -5,6 +5,7 @@
 #' case more than 12 categories are needed (This happens quite often
 #' with feeding data).
 #' @return Vector of colors in hexadecimal code.
+#' @family get functions
 #'
 #' @export
 

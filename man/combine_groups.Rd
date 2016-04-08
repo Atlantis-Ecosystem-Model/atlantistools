@@ -26,4 +26,7 @@ Combine values from different groups if specific groups only have a low contribu
 combine_groups(preprocess_setas$diet_dietcheck,
    group_col = "prey")
 }
+\seealso{
+Other combine functions: \code{\link{combine_runs}}
+}
 

@@ -55,6 +55,7 @@ get_age_groups(dir = d, fgs = "SETasGroups.csv")
 get_nonage_acronyms(dir = d, fgs = "SETasGroups.csv")
 }
 \seealso{
-Other get functions: \code{\link{get_boundary}}
+Other get functions: \code{\link{get_boundary}},
+  \code{\link{get_colpal}}, \code{\link{get_conv_mgnbiot}}
 }
 

@@ -4,6 +4,7 @@
 #' @param ex_data Dataframe to compare the atlantis run with.
 #' @return ggplot2 object
 #' @export
+#' @family plot functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")

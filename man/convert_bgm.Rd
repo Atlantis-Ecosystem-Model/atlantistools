@@ -19,4 +19,8 @@ d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 bgm <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 head(bgm)
 }
+\seealso{
+Other convert functions: \code{\link{convert_factor}},
+  \code{\link{convert_path}}, \code{\link{convert_time}}
+}
 

@@ -9,6 +9,7 @@
 #' dietplots. Default is 0.03.
 #' @return List of ggplot2 objects.
 #' @export
+#' @family plot functions
 #'
 #' @examples
 #' plots <- plot_dietcheck(data = preprocess_setas$diet_dietcheck, combine_thresh = 0.03)

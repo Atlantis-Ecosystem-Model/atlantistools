@@ -9,6 +9,8 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string and set dir to 'NULL'.
 #' @return Conversion factor as numeric value.
+#' @family get functions
+#'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm")

@@ -18,4 +18,12 @@ Function to plot time series of atlantis ncdf output.
 \examples{
 plot_ts(preprocess_setas$biomass_age)
 }
+\seealso{
+Other plot functions: \code{\link{plot_bench}},
+  \code{\link{plot_boxes}}, \code{\link{plot_calibrate}},
+  \code{\link{plot_dietcheck}}, \code{\link{plot_diet}},
+  \code{\link{plot_flux}}, \code{\link{plot_physics}},
+  \code{\link{plot_rec}}, \code{\link{plot_struct}},
+  \code{\link{plot_ws}}
+}
 
