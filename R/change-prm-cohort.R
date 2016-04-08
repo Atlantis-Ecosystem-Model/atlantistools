@@ -101,7 +101,9 @@ extract_prm_cohort <- function(dir = getwd(), prm_biol, variable) {
   pos <- pos + 1
 
   # Keep all numeric values
-  value <- str_split_twice(char = prm_biol[pos], min_only = FALSE)
+  value <- str_split_twice(char = prm_biol_new[pos], min_only = FALSE)
+  value <- do.call(rbind, value)
+  rownames(value) <- variable
   return(value)
 }
 
