@@ -16,5 +16,13 @@ cod2 <- RNetCDF::var.get.nc(ncfile = at_out, variable = "cod2_Catch")
 lapply(catch[, 1:ncol(catch)-1], unique)
 
 
+setwd("c:/backup_z/Atlantis_models/AEECmodel/output/")
+at_out <- RNetCDF::open.nc("AEECF_propDIS_survCATCH.nc")
+
+var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(at_out)$nvars - 1),
+                         function(x) RNetCDF::var.inq.nc(at_out, x)$name)
+
+cod1 <- RNetCDF::var.get.nc(ncfile = at_out, variable = "Cod1_Catch")
+cod2 <- RNetCDF::var.get.nc(ncfile = at_out, variable = "Cod2_Catch")
 
 
