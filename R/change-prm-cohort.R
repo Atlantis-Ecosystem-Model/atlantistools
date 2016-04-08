@@ -88,3 +88,20 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
 
   invisible(prm_biol_new)
 }
+
+#' @export
+#' @rdname change_prm_cohort
+# Extract value for a specific cohort parameter from a Vector of character strings.
+extract_prm_cohort <- function(dir = getwd(), prm_biol, variable) {
+  # Read in parameter file!
+  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
+  prm_biol_new <- readLines(con = prm_biol_new)
+
+  pos <- scan_prm(chars = prm_biol_new, variable = variable)
+  pos <- pos + 1
+
+  # Keep all numeric values
+  value <- str_split_twice(char = prm_biol[pos], min_only = FALSE)
+  return(value)
+}
+
