@@ -21,20 +21,6 @@
 #' gridExtra::grid.arrange(plot)
 
 plot_species <- function(data_pre, species) {
-  select_species <- function(df, species) {
-    if (any(names(df) %in% "species")) {
-      df <- df[df$species == species, ]
-      return(df)
-    }
-  }
-
-  change_theme <- function(p) {
-    p <- p + ggplot2::theme(legend.position = "none",
-                            axis.title.x = ggplot2::element_blank(),
-                            strip.text = ggplot2::element_blank())
-    return(p)
-  }
-
   # Plot timeseries of structural and reserve nitrogen
   strn <- select_species(df = data_pre$structn_age, species = species)
   resn <- select_species(df = data_pre$resn_age,    species = species)
@@ -60,6 +46,23 @@ plot_species <- function(data_pre, species) {
                                  heights = grid::unit(c(0.05, rep(0.3, 3), 0.05), units = "npc"))
 
   return(grob)
+
+  # Helper functions -----------------------------------------------------------
+  # Subset data based on species name.
+  select_species <- function(df, species) {
+    if (any(names(df) %in% "species")) {
+      df <- df[df$species == species, ]
+      return(df)
+    }
+  }
+
+  # Change specific theme elemets of plots.
+  change_theme <- function(p) {
+    p <- p + ggplot2::theme(legend.position = "none",
+                            axis.title.x = ggplot2::element_blank(),
+                            strip.text = ggplot2::element_blank())
+    return(p)
+  }
 }
 
 
