@@ -41,9 +41,10 @@ plot_species <- function(data_pre, species) {
   plots <- lapply(plots, function(x) gridExtra::arrangeGrob(change_theme(x)))
   # plots <- lapply(plots, grid::grob)
   header <- grid::textGrob(species, gp = grid::gpar(fontsize = 18))
-  grob <- gridExtra::arrangeGrob(grobs = c(list(header), plots, list(header)),
-                                 layout_matrix = matrix(c(rep(1, 2), 2:7, rep(8, 2)), nrow = 5, byrow = T),
-                                 heights = grid::unit(c(0.05, rep(0.3, 3), 0.05), units = "npc"))
+  grob <- gridExtra::arrangeGrob(
+    grobs = c(list(header), plots, list(header)),
+    layout_matrix = matrix(c(rep(1, 2), 2:(length(plots) + 1), rep(length(plots) + 2, 2)), nrow = length(plots) / 2 + 2, byrow = T),
+    heights = grid::unit(c(0.05, rep(0.3, 3), 0.05), units = "npc"))
 
   return(grob)
 
