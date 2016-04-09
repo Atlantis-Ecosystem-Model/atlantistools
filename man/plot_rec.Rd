@@ -30,7 +30,7 @@ Other plot functions: \code{\link{plot_bench}},
   \code{\link{plot_boxes}}, \code{\link{plot_calibrate}},
   \code{\link{plot_dietcheck}}, \code{\link{plot_diet}},
   \code{\link{plot_flux}}, \code{\link{plot_physics}},
-  \code{\link{plot_struct}}, \code{\link{plot_ts}},
-  \code{\link{plot_ws}}
+  \code{\link{plot_species}}, \code{\link{plot_struct}},
+  \code{\link{plot_ts}}, \code{\link{plot_ws}}
 }
 
