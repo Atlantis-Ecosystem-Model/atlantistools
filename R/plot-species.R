@@ -51,13 +51,13 @@ plot_species <- function(data_pre, species) {
   p4 <- plot_ts(select_species(df = data_pre$nums_age, species = species))
 
   # Combine plot to grob!
-  plots <- list(p1, p2, p3, p4)
+  plots <- list(p1, p2, p3, p4, p4, p4)
   plots <- lapply(plots, function(x) gridExtra::arrangeGrob(change_theme(x)))
   # plots <- lapply(plots, grid::grob)
   header <- grid::textGrob(species, gp = grid::gpar(fontsize = 18))
-  grob <- gridExtra::arrangeGrob(grobs = c(list(header), plots),
-                                 layout_matrix = matrix(c(1, 1, 2:5), nrow = 3, byrow = T),
-                                 )
+  grob <- gridExtra::arrangeGrob(grobs = c(list(header), plots, list(header)),
+                                 layout_matrix = matrix(c(rep(1, 2), 2:7, rep(8, 2)), nrow = 5, byrow = T),
+                                 heights = grid::unit(c(0.05, rep(0.3, 3), 0.05), units = "npc"))
 
   return(grob)
 }
