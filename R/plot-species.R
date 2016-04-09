@@ -26,11 +26,17 @@ plot_species <- function(data_pre, species) {
     }
   }
 
+  change_theme <- function(p) {
+    p + ggplot2::theme(legend.position = "none",
+                       x.axis.title = element_blank())
+    return(p)
+  }
+
   # Plot timeseries of structural and reserve nitrogen
   strn <- select_species(df = data_pre$structn_age, species = species)
   resn <- select_species(df = data_pre$resn_age,    species = species)
-  p1 <- plot_ts(strn)
-  p2 <- plot_ts(resn)
+  p1 <- plot_ts(strn) %>% ggplot2::update_labels(labels = list(y = "Structural nitrogen [mgN]"))
+  p2 <- plot_ts(resn) %>% ggplot2::update_labels(labels = list(y = "Reserve nitrogen [mgN"))
 
   # Plot condition of species RN/SN
   names(strn)[names(strn) == "atoutput"] <- "strn"
@@ -42,6 +48,8 @@ plot_species <- function(data_pre, species) {
   p4 <- plot_ts(select_species(df = data_pre$nums_age, species = species))
 
   # Combine plot to grob!
+  plots <- list(p1, p2, p3, p4)
+  plots <- lapply(plots, change_theme)
   grob <- gridExtra::arrangeGrob(p1, p2, p3, p4, nrow = 2)
 
   return(grob)
