@@ -29,8 +29,9 @@ plot_species <- function(data_pre, species) {
   }
 
   change_theme <- function(p) {
-    p + ggplot2::theme(legend.position = "none",
-                       x.axis.title = element_blank())
+    p <- p + ggplot2::theme(legend.position = "none",
+                            axis.title.x = ggplot2::element_blank(),
+                            strip.text = ggplot2::element_blank())
     return(p)
   }
 
@@ -51,8 +52,12 @@ plot_species <- function(data_pre, species) {
 
   # Combine plot to grob!
   plots <- list(p1, p2, p3, p4)
-  plots <- lapply(plots, change_theme)
-  grob <- gridExtra::arrangeGrob(p1, p2, p3, p4, nrow = 2)
+  plots <- lapply(plots, function(x) gridExtra::arrangeGrob(change_theme(x)))
+  # plots <- lapply(plots, grid::grob)
+  header <- grid::textGrob(species, gp = grid::gpar(fontsize = 18))
+  grob <- gridExtra::arrangeGrob(grobs = c(list(header), plots),
+                                 layout_matrix = matrix(c(1, 1, 2:5), nrow = 3, byrow = T),
+                                 )
 
   return(grob)
 }
