@@ -16,7 +16,9 @@
 #' @family plot functions
 #'
 #' @examples
-#' gridExtra::grid.arrange(plot_species(preprocess_setas, species = "Shallow piscivorous fish"))
+#' plot <- plot_species(preprocess_setas, species = "Shallow piscivorous fish")
+#' # Use grid.arrange to draw the plot on the current device
+#' gridExtra::grid.arrange(plot)
 
 plot_species <- function(data_pre, species) {
   select_species <- function(df, species) {

@@ -25,7 +25,9 @@ used during model calibration. Currently 4 plots are created by default:
 - Numbers over time per age
 }
 \examples{
-gridExtra::grid.arrange(plot_species(preprocess_setas, species = "Shallow piscivorous fish"))
+plot <- plot_species(preprocess_setas, species = "Shallow piscivorous fish")
+# Use grid.arrange to draw the plot on the current device
+gridExtra::grid.arrange(plot)
 }
 \seealso{
 Other plot functions: \code{\link{plot_bench}},
