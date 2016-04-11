@@ -62,7 +62,7 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
   # at the end. However, this requires alot more storage and the code wouldn't be highly
   # vectorised (which it is at the moment...)!
-  supported_variables <- c("N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
+  supported_variables <- c("N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing", "Catch")
   if (length(select_groups) == 0) stop("No functional groups selected.")
   if (length(select_variable) == 0) stop("No variable selected.")
   if (length(select_variable) > 1) stop("Only one variable allowed per function call.")
