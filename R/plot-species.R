@@ -1,7 +1,9 @@
 #' Create species specific overvie plot.
 #'
-#' This plotting routine is based on Raphael's (Ifremer) plotting routune
-#' used during model calibration. Currently 4 plots are created by default:
+#' This plotting routine is based on Raphael's (Ifremer) plotting routine
+#' used during model calibration. Currently 6 plots are created by default:
+#' - Biomass over time
+#' - Biomass over time per ageS
 #' - StructN over time per age
 #' - ResN over time per age
 #' - Condition over time per age
