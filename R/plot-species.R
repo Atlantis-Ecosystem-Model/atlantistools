@@ -39,33 +39,43 @@ plot_species <- function(data_pre, species) {
   }
 
   # Main function code -----------------------------------------------------------------------------
-  # Plot timeseries of structural and reserve nitrogen
-  strn <- select_species(df = data_pre$structn_age, species = species)
-  resn <- select_species(df = data_pre$resn_age,    species = species)
-  p1 <- plot_ts(strn) %>% ggplot2::update_labels(labels = list(y = "Structural nitrogen [mgN]"))
-  p2 <- plot_ts(resn) %>% ggplot2::update_labels(labels = list(y = "Reserve nitrogen [mgN"))
+  # Extract dfs from the list of preprocessed dataframes and perform some simple transformations!
+  dfs <- list(data_pre$biomass, data_pre$biomass_age, data_pre$resn_age, data_pre$structn_age, data_pre$nums_age)
+  dfs <- lapply(dfs, select_species, species = species)
+  condition <- dplyr::inner_join(dfs[[3]], dfs[[4]], by = names(dfs[[4]])[!names(dfs[[4]]) %in% "atoutput"])
+  condition$atoutput <- condition$atoutput.x / condition$atoutput.y
+  condition$atoutput.x <- NULL
+  condition$atoutput.y <- NULL
+  dfs <- c(dfs, list(condition))
 
-  # Plot condition of species RN/SN
-  names(strn)[names(strn) == "atoutput"] <- "strn"
-  condition <- dplyr::inner_join(strn, resn)
-  condition$atoutput <- condition$atoutput / condition$strn
-  p3 <- plot_ts(condition)
+  # Create plots
+  plots <- lapply(dfs, plot_ts)
 
-  # Plot timeseries of numbers
-  p4 <- plot_ts(select_species(df = data_pre$nums_age, species = species))
+  # Update y axis labels!
+  labels <- c("Biomass[t]", "Biomass [t]",
+              "Reserve nitrogen [mgN]", "Structural nitrogen [mgN]",
+              "Numbers", "Condition (optimal = 2.65)")
+  # Could be done with Maps(), however I dont know how to pass a assignment as parameter.
+  for (i in seq_along(plots)) {
+    plots[[i]] <- ggplot2::update_labels(plots[[i]], list(y = labels[i]))
+  }
 
-  # Combine plot to grob!
-  plots <- list(p1, p2, p3, p4, p4, p4)
-  plots <- lapply(plots, function(x) gridExtra::arrangeGrob(change_theme(x)))
-  # plots <- lapply(plots, grid::grob)
+  # Extract legend from age-structutred plot! Create heading.
+  g <- ggplot2::ggplotGrob(plots[[2]])$grobs
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
   header <- grid::textGrob(species, gp = grid::gpar(fontsize = 18))
+
+  # Remove theme elements and convert to grobs! Combine to single grob.
+  plots <- lapply(plots, function(x) gridExtra::arrangeGrob(change_theme(x)))
   grob <- gridExtra::arrangeGrob(
-    grobs = c(list(header), plots, list(header)),
+    grobs = c(list(header), plots, list(legend)),
     layout_matrix = matrix(c(rep(1, 2), 2:(length(plots) + 1), rep(length(plots) + 2, 2)), nrow = length(plots) / 2 + 2, byrow = T),
     heights = grid::unit(c(0.05, rep(0.3, 3), 0.05), units = "npc"))
 
   return(grob)
-
 }
+
+
+
 
 
