@@ -4,7 +4,7 @@
 \alias{plot_ws}
 \title{Function to plot whole system metrics!}
 \usage{
-plot_ws(data, combine_thresh = 0.03)
+plot_ws(data, combine_thresh = 15)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
