@@ -8,25 +8,35 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string and set dir to 'NULL'.
 #' @param data Dataframe having a column with information about the model timestep.
+#' @param as_date Convert the time into a date format (yyyy-mm-dd) \code{TRUE} or
+#' not \code{FALSE}. Default is \code{FALSE}.
 #' @param modelstart Character string giving the start of the model run
-#' in the format \code{'yyyy-mm-dd'}.
+#' in the format \code{'yyyy-mm-dd'}. Only needed in case \code{as_date} is set to \code{TRUE}.
 #' @return Dataframe whose column time is converted from timesteps to
 #' actual time.
 #' @family convert functions
 #'
 #' @examples
+#' # Convert to time given in date format.
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' test <- convert_time(dir = d,
 #'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'    data = ref_nums,
+#'    as_date = TRUE,
 #'    modelstart = "1991-01-01")
+#' head(test)
+#'
+#' # Convert time to years.
+#' test <- convert_time(dir = d,
+#'    prm_run = "VMPA_setas_run_fishing_F_New.prm",
+#'    data = ref_nums)
 #' head(test)
 
 #' @export
 
 # stock state date is given in days, nc-data is given in timesteps!
 
-convert_time <- function(dir = getwd(), prm_run, data, modelstart){
+convert_time <- function(dir = getwd(), prm_run, data, as_date = FALSE, modelstart = NULL) {
   if (!is.null(dir)) prm_run <- file.path(dir, prm_run)
   prm_run <- readLines(con = prm_run)
 
@@ -42,7 +52,11 @@ convert_time <- function(dir = getwd(), prm_run, data, modelstart){
       toutinc <- extract_prm(chars = prm_run, variable = "toutinc")
 
       # Convert timesteps to actual time!
-      data$time <- as.Date.numeric(data$time * toutinc, origin = modelstart)
+      if (as_date) {# convert time to date!
+        data$time <- as.Date.numeric(data$time * toutinc, origin = modelstart)
+      } else {# convert time to years
+        data$time <- data$time * toutinc / 365
+      }
     } else {
       # Check if data is stock-state data!
       tsumout <- extract_prm(chars = prm_run, variable = "tsumout")
@@ -54,7 +68,11 @@ convert_time <- function(dir = getwd(), prm_run, data, modelstart){
       if (all(ts %% tsumout == 0)) { # True stock state data!
 
         # Convert time in days to actual time!
-        data$time <- as.Date.numeric(data$time, origin = modelstart)
+        if (as_date) {
+          data$time <- as.Date.numeric(data$time, origin = modelstart)
+        } else {
+          data$time <- data$time / 365
+        }
       } else {
         stop("Provided dataframe has column 'time' but values are corrput. PLease contact package development Team.")
       }

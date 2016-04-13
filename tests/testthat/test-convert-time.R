@@ -37,18 +37,19 @@ ms <- "1991-01-01"
 
 test_that("test convert_time", {
   # expect_equal(min(test$time), as.Date.numeric(0, origin = ms))
-  expect_warning(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = wrong_input, modelstart = ms),
+  expect_warning(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = wrong_input, as_date = TRUE, modelstart = ms),
                  "No column 'time' present in dataframe. No time conversion applied!")
 
-  expect_error(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = rando, modelstart = ms),
+  expect_error(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = rando, as_date = TRUE, modelstart = ms),
                "Provided dataframe has column 'time' but values are corrput. PLease contact package development Team.")
 
-  expect_is(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = non_ss, modelstart = ms)$time, "Date")
+  expect_is(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = non_ss, as_date = TRUE, modelstart = ms)$time, "Date")
 
-  expect_equal(unique(sort(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = non_ss, modelstart = ms)$time)),
+  expect_equal(unique(sort(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = non_ss, as_date = TRUE, modelstart = ms)$time)),
                as.Date.numeric(0:3 * 365, origin = ms))
 
-  expect_true(all(unique(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = ss, modelstart = ms)$time) < as.Date.numeric(3 * 365, origin = ms)))
+  expect_true(all(unique(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = ss)$time) < 3))
+
 })
 
 
