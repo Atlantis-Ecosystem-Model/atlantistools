@@ -38,10 +38,10 @@ plot_rec <- function(data, ex_data) {
     ggplot2::facet_wrap(~species, ncol = 9, scale = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::scale_colour_gradient("Time", low = "red", high = "green" , breaks = time_numeric[pos], labels = time_date[pos]) +
     ggplot2::labs(x = "SSB [tonnes]", y = "Recruits [thousands]") +
-    ggplot2::coord_cartesian(expand = FALSE) +
     theme_atlantis() +
     ggplot2::guides(colour = ggplot2::guide_colorbar(label.theme = ggplot2::element_text(angle = 45),
                                                      label.hjust = 1, label.vjust = 1, title.vjust = 1))
+  plot <- ggplot_custom(plot)
 
   return(plot)
 }

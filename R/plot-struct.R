@@ -18,8 +18,8 @@ plot_struct <- function(data) {
     ggplot2::facet_wrap( ~species, ncol = 9, labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::guides(fill = ggplot2::guide_legend(nrow = 1)) +
     ggplot2::labs(y = "Distribution [%]") +
-    ggplot2::coord_cartesian(expand = FALSE) +
     theme_atlantis()
+  plot <- ggplot_custom(plot)
 
   return(plot)
 }

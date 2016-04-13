@@ -70,9 +70,9 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 15) {
         ggplot2::facet_wrap(lazyeval::interp(~var, var = as.name(wrap_col)),
                             ncol = 5, labeller = "label_both") +
         ggplot2::labs(x = NULL, y = NULL, title = NULL) +
-        ggplot2::coord_cartesian(expand = FALSE) +
         theme_atlantis() +
         ggplot2::theme(legend.position = "right")
+      plot <- ggplot_custom(plot)
     }
 
   return(plot)

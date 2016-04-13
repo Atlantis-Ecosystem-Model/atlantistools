@@ -13,7 +13,7 @@
 #' @examples
 #' plot_ws(preprocess_setas$biomass)
 
-plot_ws <- function(data, combine_thresh = 0.03) {
+plot_ws <- function(data, combine_thresh = 15) {
   check_df_names(data = data, expect = c("time", "atoutput", "species"))
 
   data <- combine_groups(data, group_col = "species", groups = "time", combine_thresh = combine_thresh)
@@ -27,8 +27,8 @@ plot_ws <- function(data, combine_thresh = 0.03) {
     ggplot2::scale_fill_manual(values = get_colpal()) +
     ggplot2::labs(y = "Biomass [t]") +
     theme_atlantis() +
-    ggplot2::coord_cartesian(expand = FALSE) +
     ggplot2::theme(legend.position = "right")
+  plot <- ggplot_custom(plot)
 
   return(plot)
 }

@@ -36,7 +36,8 @@ plot_species <- function(data_pre, species) {
   change_theme <- function(p) {
     p <- p + ggplot2::theme(legend.position = "none",
                             axis.title.x = ggplot2::element_blank(),
-                            strip.text = ggplot2::element_blank())
+                            strip.text = ggplot2::element_blank(),
+                            axis.text.y = ggplot2::element_text(angle = 90, hjust = 0.5))
     return(p)
   }
 
