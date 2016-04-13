@@ -3,6 +3,21 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.3.1.9000
+## New features
+* `plot_species()` is based on the species-specific overview plots used at CSIRO and Ifremer (Raphael).
+For each age-structured group (10 ageclasses) the biomass, individual weight, numbers and condition 
+are shown per age for the model simulation.
+
+## Minor improvements
+* `combine_groups()` can be used to combine different grouping variables within a plot to a `Rest-group`.
+Assume you want to visualise the feeding interactions of species x. The prey groups are usually
+mapped to colors in `atlantistool`. For some groups there might be high number of prey organisms (e.g. 20+).
+Therefore color-coding becomes as hassle. You can use the `combine_groups()` function to gather all
+groups with a low contribution to the overall value to a `Rest` group to minimise the number of
+grouping variables resulting in fewer colors in the final plot. The function is build into the `plot_diet()`
+function but can be used in other occasions as well.
+
 # atlantistools 0.3.0.9000
 ## New features
 * `plot_diet()` This functions replaces `plot_dietcheck()`. The resulting plot will give an indication
