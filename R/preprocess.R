@@ -69,8 +69,10 @@
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
 #' in the output.
+#' @param as_date Convert the time into a date format (yyyy-mm-dd) \code{TRUE} or
+#' not \code{FALSE}. Default is \code{FALSE}.
 #' @param modelstart Character string giving the start of the model run
-#' in the format \code{'yyyy-mm-dd'}.
+#' in the format \code{'yyyy-mm-dd'}. Only needed in case \code{as_date} is set to \code{TRUE}.
 #' @param out Character string giving the filename of the *.Rda output
 #' file. In case you are using different folders for your model data
 #' and output files please pass a complete folder/filename string and
@@ -154,7 +156,7 @@
 #' @export
 
 preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort, specpredmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
-                       check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE){
+                       check_acronyms, as_date = FALSE, modelstart = NULL, out, report = TRUE, save_to_disc = FALSE){
 
   age_groups <- get_age_groups(dir = dir, fgs = fgs)
   select_age_groups <- select_groups[is.element(select_groups, age_groups)]
@@ -290,7 +292,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   )
 
   # Convert timestep to actual time.
-  result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, modelstart = modelstart)
+  result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, as_date = as_date, modelstart = modelstart)
 
   # According to the Atlantis wiki DietCheck.txt gives an indication of how much a group is eating
   # If the prey is an inverebrate value units are mgN/m^3 per second

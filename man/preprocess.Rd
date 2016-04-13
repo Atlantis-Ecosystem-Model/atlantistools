@@ -6,7 +6,8 @@
 \usage{
 preprocess(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort,
   specpredmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
-  check_acronyms, modelstart, out, report = TRUE, save_to_disc = FALSE)
+  check_acronyms, as_date = FALSE, modelstart = NULL, out, report = TRUE,
+  save_to_disc = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -84,8 +85,11 @@ Names have to match the ones used in the ncdf file. Check column "Name" in
 select_groups are inactive in the current model run. The will be omitted
 in the output.}
 
+\item{as_date}{Convert the time into a date format (yyyy-mm-dd) \code{TRUE} or
+not \code{FALSE}. Default is \code{FALSE}.}
+
 \item{modelstart}{Character string giving the start of the model run
-in the format \code{'yyyy-mm-dd'}.}
+in the format \code{'yyyy-mm-dd'}. Only needed in case \code{as_date} is set to \code{TRUE}.}
 
 \item{out}{Character string giving the filename of the *.Rda output
 file. In case you are using different folders for your model data
