@@ -65,9 +65,25 @@ update_labels(p = plot, labels = list(y = "Biomass [t]"))
 
 \newpage
 
+## Biomass@age timeseries
+```{r}
+plot <- plot_ts(result$biomass_age)
+update_labels(p = plot, labels = list(y = "Biomass [t]"))
+```
+
+\newpage
+
 ## Number timeseries
 ```{r, fig.height = fig_height2}
 plot <- plot_ts(result$nums)
+update_labels(p = plot, labels = list(y = "Numbers"))
+```
+
+\newpage
+
+## Number@age timeseries
+```{r, fig.height = fig_height2}
+plot <- plot_ts(result$nums_age)
 update_labels(p = plot, labels = list(y = "Numbers"))
 ```
 
@@ -86,6 +102,14 @@ plot_rec(result$ssb_rec, ex_data = ex)
 ```{r}
 ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE)
 plot_bench(result$biomass, ex_data = ex)
+```
+
+\newpage
+
+## Biomass benchmark 2
+```{r}
+plot <- plot_ts(result$biomass) %>% update_labels(labels = list(y = "Biomass [t]"))
+plot_add_range(plot, ex)
 ```
 
 \newpage
@@ -126,6 +150,20 @@ plot_calibrate(result$biomass_age)
 
 \newpage
 
+## Eat per ageclass
+```{r, fig.height = fig_height2}
+plot_calibrate(result$eat_age)
+```
+
+\newpage
+
+## Growth per ageclass
+```{r, fig.height = fig_height2}
+plot_calibrate(result$growth_age)
+```
+
+\newpage
+
 ## Numbers
 ```{r, fig.height = fig_height2}
 plot_calibrate(result$nums_age)
@@ -159,6 +197,5 @@ plot_struct(result$biomass_age)
 # Diet Plots
 
 ```{r, fig.width = 14, fig.height = 9}
-# diet_data <- combine_ages(dir = model_path, data = result$diet_specmort, col = "pred", prm_biol = "VMPA_setas_biol_fishing_New.prm")
 marrangeGrob(plot_diet(result$diet_specmort, wrap_col = "agecl", combine_thresh = 15), nrow = 1, ncol = 1)
 ```
