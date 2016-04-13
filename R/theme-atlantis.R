@@ -28,7 +28,7 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
     axis.title.y        = ggplot2::element_text(hjust = .5, vjust = 0.3),
     #    axis.text  =  element_text(),  #	inherits from text
     axis.text.x         = ggplot2::element_text(angle = ifelse(rot_xaxis_text, 45, 0), hjust = ifelse(rot_xaxis_text, 1, 0.5), size = scale_font * small, colour = "black"),
-    axis.text.y         = ggplot2::element_text(size = small * scale_font, colour = "black"),
+    axis.text.y         = ggplot2::element_text(size = small * scale_font, colour = "black", angle = 90, hjust = 0.5),
     # axis.line seems to be broken at the moment in ggplot...
     # https://github.com/hadley/ggplot2/issues/1567
     # axis.line           = ggplot2::element_line(colour = "black", size = 5),

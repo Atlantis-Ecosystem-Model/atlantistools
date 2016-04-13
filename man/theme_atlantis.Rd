@@ -5,7 +5,7 @@
 \title{Customised theme used in all plots.}
 \usage{
 theme_atlantis(large = 22, medium = 18, small = 14, scale_font = 1,
-  rot_xaxis_text = TRUE, rot_strips_y = TRUE)
+  rot_xaxis_text = FALSE, rot_strips_y = TRUE)
 }
 \arguments{
 \item{large}{Integer giving the size of the font for the main parts of the plot.}
