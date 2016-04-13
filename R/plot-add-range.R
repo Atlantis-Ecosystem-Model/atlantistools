@@ -21,7 +21,7 @@
 plot_add_range <- function(plot, ex_data) {
   if (!ggplot2::is.ggplot(plot)) stop("plot has to be a ggplot object.")
   names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
-  ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
+  # ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
 
   check_df_names(ex_data, expect = c("time", "species", "atoutput", "model"))
   if ("colour" %in% names(plot$mapping)) {

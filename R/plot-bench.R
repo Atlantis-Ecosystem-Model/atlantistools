@@ -15,7 +15,7 @@ plot_bench <- function(data, ex_data) {
   check_df_names(data = data, expect = c("time", "atoutput", "species"))
 
   names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
-  ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
+  # ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
 
   data$model <- "atlantis"
   comp <- rbind(ex_data, data)
