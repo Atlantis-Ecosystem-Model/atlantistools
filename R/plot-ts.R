@@ -17,6 +17,7 @@ plot_ts <- function(data) {
     ggplot2::geom_line() +
     ggplot2::facet_wrap(~species, scales = "free_y", ncol = 9, labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::guides(col = ggplot2::guide_legend(nrow = 1)) +
+    ggplot2::scale_y_continuous(labels = abbreviate) +
     ggplot2::coord_cartesian(expand = FALSE) +
     theme_atlantis()
 
