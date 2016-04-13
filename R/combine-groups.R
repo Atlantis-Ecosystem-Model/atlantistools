@@ -23,10 +23,13 @@ combine_groups <- function(data,
 
   # Arrange by group_col and group by groups to select the 1:combinthethresh
   # group in group_col for each grouping combination.
+  if (length(groups) > 0) {
+    comb_grps <- comb_grps %>%
+      as.data.frame() %>%
+      group_data(groups = groups)
+  }
   imp_species <- comb_grps %>%
-    as.data.frame() %>%
     dplyr::arrange_(~desc(atoutput)) %>%
-    group_data(groups = groups) %>%
     dplyr::slice(1:combine_thresh)
   imp_species$atoutput <- NULL
 

@@ -5,6 +5,9 @@ wawa <- wuwu %>%
   dplyr::group_by(prey, agecl) %>%
   dplyr::summarise(count = dplyr::n_distinct(pred))
 
+# no grouping variable!
+wewe <- combine_groups(preprocess_setas$biomass, group_col = "species", combine_thresh = 1)
+
 test_that("test combine_groups", {
   expect_error(combine_groups(preprocess_setas$diet_dietcheck,
                               group_col = "prey",
@@ -17,6 +20,7 @@ test_that("test combine_groups", {
                               combine_thresh = 20),
                preprocess_setas$diet_dietcheck)
   expect_true(all(wawa$count <= 2))
+  expect_equal(length(unique(wewe$species)), 2)
 })
 
 # test_that("test combine_groups", {
