@@ -44,11 +44,8 @@ species <- c("Shallow piscivorous fish", "Small planktivorous fish")
 
 # Overview species 
 
-```{r, echo = FALSE}
+```{r}
 plots <- lapply(species, plot_species, data_pre = result)
 marrangeGrob(grobs = plots, nrow = 1, ncol = 1)
 ```
 
-library(ggplot2)
-pl <- lapply(1:11, function(.x) qplot(1:10, rnorm(10), main=paste("plot", .x)))
-ml <- marrangeGrob(pl, nrow=2, ncol=2)
