@@ -78,34 +78,30 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 15) {
   return(plot)
   }
 
-  # Select all available species if none have been selected!
+  # Select all available species if none have been selected! This is a bit hacky but it works...
   if (is.null(species)) species <- sort(union(data$pred, data$prey))
   grobs <- vector("list", length = length(species))
-  for (i in seq_along(species)) {
-    subgrobs <- list()
-    specs <- c("pred", "prey")
-    for (j in seq_along(specs)){
+  for (i in seq_along(grobs)) {
+    grobs[[i]] <- vector("list", length = 2)
+  }
+  specs <- c("pred", "prey")
+  for (j in seq_along(specs)) {
+    df <- combine_groups(data, group_col = specs[specs != specs[j]], groups = specs[j], combine_thresh = combine_thresh)
+    for (i in seq_along(species)) {
+      # subgrobs <- list()
       df <- data[data[, specs[j]] == species[i], ]
       if (nrow(df) > 0) {
-        df <- combine_groups(df, group_col = specs[specs != specs[j]], groups = specs[j], combine_thresh = combine_thresh)
         df <- agg_perc(df, groups = c(wrap_col, specs[j], c("time")))
       }
-      subgrobs[[j + 1]] <- gridExtra::arrangeGrob(plot_sp(df, col = specs[specs != specs[j]], wrap_col = wrap_col))
+      grobs[[i]][[j]] <- plot_sp(df, col = specs[specs != specs[j]], wrap_col = wrap_col)
     }
-    subgrobs[[1]] <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
-    grobs[[i]] <- gridExtra::arrangeGrob(grobs = subgrobs,
-                                         heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
-    # as_pred <- data[data$pred == species[i], ]
-    # as_pred <- combine_groups(as_pred, group_col = "prey", groups = group_cols, combine_thresh = combine_thresh)
-    # as_pred <- plot_sp(as_pred, col = "prey", wrap_col = wrap_col)
-    # as_pred <- as_pred + ggplot2::labs(y = "Predator perspective")
+  }
 
-    # as_prey <- data[data$prey == species[i], ]
-    # as_prey <- combine_groups(as_prey, group_col = "pred", groups = group_cols, combine_thresh = combine_thresh)
-    # as_prey <- plot_sp(data = data[data$prey == species[i], ], col = "pred", wrap_col = wrap_col)
-    # as_prey <- as_prey + ggplot2::labs(y = "Prey perspective")
-    # grobs[[i]] <- gridExtra::arrangeGrob(heading, as_pred, as_prey,
-    #                                      heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
+  # Convert to 3x1 grob.
+  for (i in seq_along(grobs)) {
+    heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
+    grobs[[i]] <- gridExtra::arrangeGrob(grobs = c(list(heading), grobs[[i]]),
+                                         heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
   }
 
   names(grobs) <- species
