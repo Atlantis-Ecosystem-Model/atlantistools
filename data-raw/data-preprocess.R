@@ -67,7 +67,6 @@ preprocess_setas <- preprocess(dir = d,
    select_groups = groups,
    bboxes = boundary_boxes,
    check_acronyms = TRUE,
-   modelstart = "1991-01-01",
    out = "preprocess.Rda",
    report = TRUE,
    save_to_disc = FALSE)
