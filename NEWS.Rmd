@@ -17,6 +17,9 @@ Therefore color-coding becomes as hassle. You can use the `combine_groups()` fun
 groups with a low contribution to the overall value to a `Rest` group to minimise the number of
 grouping variables resulting in fewer colors in the final plot. The function is build into the `plot_diet()`
 function but can be used in other occasions as well.
+* `convert_time()` now converts timesteps/days to years. You can still convert to time in date-format.
+In this case set `as_date` to `TRUE` and pass the `modelstart` as usual. By default `as_date` is `FALSE`
+in the new version of the package. You might need to adjust this in your plotting routines.
 
 # atlantistools 0.3.0.9000
 ## New features
