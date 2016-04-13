@@ -9,7 +9,6 @@ output:
     fig_width: 10
     fig_height: 15
     fig_caption: true
-geometry: margin = 0.5cm
 vignette: >
   %\VignetteIndexEntry{model-calibration-species}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,7 +36,7 @@ result <- preprocess_setas
 species <- c("Shallow piscivorous fish", "Small planktivorous fish")
 
 # You should be able to build the vignette either by clicking on "Knit-PDF" or with
-# rmarkdown::render("model-calibration.Rmd")
+# rmarkdown::render("model-calibration-species.Rmd")
 ```
 
 \newpage
@@ -48,4 +47,13 @@ species <- c("Shallow piscivorous fish", "Small planktivorous fish")
 plots <- lapply(species, plot_species, data_pre = result)
 marrangeGrob(grobs = plots, nrow = 1, ncol = 1)
 ```
+
+
+
+
+
+
+
+
+
 
