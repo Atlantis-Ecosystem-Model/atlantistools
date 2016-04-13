@@ -20,14 +20,14 @@
 #'    ggplot2::facet_wrap(~species) +
 #'    theme_atlantis()}
 
-theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, rot_xaxis_text = TRUE, rot_strips_y = TRUE){
+theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, rot_xaxis_text = FALSE, rot_strips_y = TRUE){
   ggplot2::theme(
     text                = ggplot2::element_text(family = "sans", size = large * scale_font),
     title               = ggplot2::element_text(hjust = .5),
     axis.title.x        = ggplot2::element_text(hjust = .5),
     axis.title.y        = ggplot2::element_text(hjust = .5, vjust = 0.3),
     #    axis.text  =  element_text(),  #	inherits from text
-    axis.text.x         = ggplot2::element_text(angle = ifelse(rot_xaxis_text, 45, 0), hjust = 1, size = scale_font * small, colour = "black"),
+    axis.text.x         = ggplot2::element_text(angle = ifelse(rot_xaxis_text, 45, 0), hjust = ifelse(rot_xaxis_text, 1, 0.5), size = scale_font * small, colour = "black"),
     axis.text.y         = ggplot2::element_text(size = small * scale_font, colour = "black"),
     # axis.line seems to be broken at the moment in ggplot...
     # https://github.com/hadley/ggplot2/issues/1567
@@ -75,5 +75,8 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
 }
 
 
-
-
+ggplot_custom <- function(plot) {
+  plot <- plot + ggplot2::coord_cartesian(expand = FALSE)
+  plot <- plot + ggplot2::scale_y_continuous(labels = abbreviate)
+  return(plot)
+}
