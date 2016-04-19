@@ -1,11 +1,7 @@
 #' Function to plot whole system metrics!
 #'
 #' @param data Dataframe to be plotted.
-#' @param combine_thresh Integer indicating minimum amount to the stomach contribution.
-#' Each prey item with a lower contribution as this treshold is assigned to the
-#' grpup "Rest". This is necessary for species with a wide variety of food items
-#' in their diet. Otherwise the screen will be cluttered with colors in the
-#' dietplots. Default is 0.03.
+#' @param combine_thresh Integer indicating the number of groups to display. Default is \code{15}.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions
