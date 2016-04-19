@@ -16,7 +16,7 @@
 plot_ws <- function(data, combine_thresh = 15) {
   check_df_names(data = data, expect = c("time", "atoutput", "species"))
 
-  data <- combine_groups(data, group_col = "species", groups = "time", combine_thresh = combine_thresh)
+  data <- combine_groups(data, group_col = "species", combine_thresh = combine_thresh)
 
   # Arrange data according to contribution!
   agg_data <- agg_data(data, groups = c("species"), out = "sum_at", fun = sum)
