@@ -100,8 +100,9 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 15) {
 
   # Convert to 3x1 grob.
   for (i in seq_along(grobs)) {
-    print(i)
     heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
+    grobs[[i]][[1]] <- grobs[[i]][[1]] + ggplot2::labs(y = "Predator perspective")
+    grobs[[i]][[2]] <- grobs[[i]][[2]] + ggplot2::labs(y = "Prey perspective")
     grobs[[i]] <- gridExtra::arrangeGrob(grobs = c(list(heading), grobs[[i]]),
                                          heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
   }
