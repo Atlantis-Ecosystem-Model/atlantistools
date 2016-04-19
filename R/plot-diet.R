@@ -85,20 +85,22 @@ plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 15) {
     grobs[[i]] <- vector("list", length = 2)
   }
   specs <- c("pred", "prey")
+
   for (j in seq_along(specs)) {
     df <- combine_groups(data, group_col = specs[specs != specs[j]], groups = specs[j], combine_thresh = combine_thresh)
     for (i in seq_along(species)) {
       # subgrobs <- list()
-      df <- data[data[, specs[j]] == species[i], ]
-      if (nrow(df) > 0) {
-        df <- agg_perc(df, groups = c(wrap_col, specs[j], c("time")))
+      df_temp <- df[df[, specs[j]] == species[i], ]
+      if (nrow(df_temp) > 0) {
+        df_temp <- agg_perc(df_temp, groups = c(wrap_col, specs[j], c("time")))
       }
-      grobs[[i]][[j]] <- plot_sp(df, col = specs[specs != specs[j]], wrap_col = wrap_col)
+      grobs[[i]][[j]] <- plot_sp(df_temp, col = specs[specs != specs[j]], wrap_col = wrap_col)
     }
   }
 
   # Convert to 3x1 grob.
   for (i in seq_along(grobs)) {
+    print(i)
     heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
     grobs[[i]] <- gridExtra::arrangeGrob(grobs = c(list(heading), grobs[[i]]),
                                          heights = grid::unit(c(0.05, 0.475, 0.475), units = "npc"))
