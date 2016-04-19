@@ -1,12 +1,12 @@
 context("combine_groups tests")
 
-wuwu <- combine_groups(preprocess_setas$diet_specmort, group_col = "pred", combine_thresh = 1)
+wuwu <- combine_groups(preprocess_setas$diet_specmort, group_col = "pred", combine_thresh = 2)
 wawa <- wuwu %>%
   dplyr::group_by(prey, agecl) %>%
   dplyr::summarise(count = dplyr::n_distinct(pred))
 
 # no grouping variable!
-wewe <- combine_groups(preprocess_setas$biomass, group_col = "species", combine_thresh = 1)
+wewe <- combine_groups(preprocess_setas$biomass, group_col = "species", combine_thresh = 2)
 
 test_that("test combine_groups", {
   expect_error(combine_groups(preprocess_setas$diet_dietcheck,
