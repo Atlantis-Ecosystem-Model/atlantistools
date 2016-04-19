@@ -117,53 +117,8 @@ Please see the details section for further information about the specific
 calculations.
 }
 \details{
-This functions performs various calculations (details below) and saves the result as a
-named list of dataframes.In addition results are saved to HDD as *.Rda file.
-
-1. structn_age
-   "StructN" for each age-structured group calculated as mean value
-   per time, species and age over layer and polygon.
-2. resn_age
-   "ResN" for each age-structured group calculated as mean value
-   per time, species and age over layer and polygon.
-3. eat_age
-   "Eat" for each age-structured group calculated as mean value
-   per time, species and age over polygon.
-4. growth_age
-   "Growth" for each age-structured group calculated as mean value
-   per time, species and age over polygon.
-7. eat
-   "Eat" for each age-structured group calculated as mean value
-   per time and species over age and polygon.
-8. growth
-   "Growth" for each age-structured group calculated as mean value
-   per time and species over age and polygon.
-9. numbers
-   "Nums" for each age-structured group calculated as summed value
-   per time and species over age, polygon and layer.
-10. numbers_age
-    "Nums" for each age-structured group calculated as summed value
-    per time, species and age over polygon and layer.
-11. numbers_box
-    "Nums" for each age-structured group calculated as summed value
-    per time, species and polygon over age and layer.
-12. physics
-    Given as mean value over all layers for each physical parameter and time.
-13. flux_layer
-    Given as raw value for each layer and timestep.
-14. grazing
-    "Grazing" for each biomasspool calculated as mean value
-    per time and species over polygon.
-15. biomass_age
-    Biomass as (StructN + ResN) * conversion_factor * Nums for each
-    age-structured group (>= 10 cohorts) calculated as summed value
-    per time, species and age over polygon and layer.
-16. biomass
-    Biomass of non age-structured groups (< 10 cohorts) calculated as
-    nitrogen * volume / dz * conversion_factor for epibenthic groups and
-    nitrogen * volume * bio_conv for non epibenthic groups.
-    Summed per time and species over polygon and layer. Combined with
-    biomass_age Summed per time and species over ages.
+This functions performs various calculations (use \code{?preprocess_setas} for details)
+and saves the result as a named list of dataframes. In addition results are saved to HDD as *.Rda file.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
