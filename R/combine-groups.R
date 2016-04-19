@@ -30,7 +30,7 @@ combine_groups <- function(data,
   }
   imp_species <- comb_grps %>%
     dplyr::arrange_(~desc(atoutput)) %>%
-    dplyr::slice(1:combine_thresh)
+    dplyr::slice(1:(combine_thresh-1))
   imp_species$atoutput <- NULL
 
   # Now we have a dataframe with the most important species (the number is defined
