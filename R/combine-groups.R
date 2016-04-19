@@ -17,7 +17,7 @@ combine_groups <- function(data,
                            groups = names(data)[!is.element(names(data), c("atoutput", "time", group_col))],
                            combine_thresh = 15) {
 
-  if (combine_thresh == 0) stop("Minimum value for 'combine_thresh' is 1.")
+  if (combine_thresh <= 1) stop("Minimum value for 'combine_thresh' is 2.")
   # Sum values over timesteps
   comb_grps <- agg_data(data, groups = c(groups, group_col), fun = sum)
 
