@@ -20,7 +20,7 @@ plot_ts <- function(data, x = "time", y = "atoutput", wrap = "species", ncol = 7
   plot <- custom_map(data = data, x = x, y = y) +
     ggplot2::geom_line() +
     theme_atlantis() +
-    ggplot2::facet_wrap(lazyeval::interp(~var, var = as.name(col)),
+    ggplot2::facet_wrap(lazyeval::interp(~var, var = as.name(wrap)),
                         scales = "free_y",
                         ncol = ncol,
                         labeller = ggplot2::label_wrap_gen(width = 15))
