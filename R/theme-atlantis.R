@@ -75,8 +75,4 @@ theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, 
 }
 
 
-ggplot_custom <- function(plot) {
-  plot <- plot + ggplot2::coord_cartesian(expand = FALSE)
-  plot <- plot + ggplot2::scale_y_continuous(labels = abbreviate)
-  return(plot)
-}
+
