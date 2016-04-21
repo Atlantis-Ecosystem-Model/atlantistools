@@ -5,6 +5,7 @@
 #' (Usually output[...]YOY.txt' & 'output[...]SSB.txt') using
 #' \code{\link{load_rec}}.
 #' @param ex_data Dataframe to compare the atlantis run with.
+#' @param ncol Number of columns in multipanel plot.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions
@@ -14,7 +15,7 @@
 #' ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 #' plot_rec(preprocess_setas$ssb_rec, ex_data)
 
-plot_rec <- function(data, ex_data) {
+plot_rec <- function(data, ex_data, ncol = 7) {
   check_df_names(data = data, expect = c("ssb", "rec", "time", "species"))
 
   # ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
@@ -35,7 +36,7 @@ plot_rec <- function(data, ex_data) {
 
   plot <- ggplot2::ggplot(data = comp, ggplot2::aes_(x = ~ssb, y = ~rec, shape = ~model, colour = ~as.numeric(time))) +
     ggplot2::geom_point() +
-    ggplot2::facet_wrap(~species, ncol = 9, scale = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
+    ggplot2::facet_wrap(~species, ncol = ncol, scale = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::scale_colour_gradient("Time", low = "red", high = "green" , breaks = time_numeric[pos], labels = time_date[pos]) +
     ggplot2::labs(x = "SSB [tonnes]", y = "Recruits [thousands]") +
     theme_atlantis() +

@@ -4,10 +4,18 @@
 \alias{plot_ts}
 \title{Function to plot time series of atlantis ncdf output.}
 \usage{
-plot_ts(data, x = "time", y = "atoutput", wrap = "species")
+plot_ts(data, x = "time", y = "atoutput", wrap = "species", ncol = 7)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
+
+\item{x}{x-variable. Default is \code{'time'}.}
+
+\item{y}{y-variable. Default is \code{'atoutput'}.}
+
+\item{wrap}{Wraping column. Default is \code{'species'}}
+
+\item{ncol}{Number of columns in multipanel plot.}
 }
 \value{
 ggplot2 object

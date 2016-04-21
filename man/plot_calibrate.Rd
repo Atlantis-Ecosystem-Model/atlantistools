@@ -4,10 +4,12 @@
 \alias{plot_calibrate}
 \title{Function to plot relative changes over time.}
 \usage{
-plot_calibrate(data)
+plot_calibrate(data, ncol = 7)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
+
+\item{ncol}{Number of columns in multipanel plot.}
 }
 \value{
 ggplot2 object

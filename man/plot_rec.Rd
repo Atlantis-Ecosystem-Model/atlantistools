@@ -4,7 +4,7 @@
 \alias{plot_rec}
 \title{Plot recruitment.}
 \usage{
-plot_rec(data, ex_data)
+plot_rec(data, ex_data, ncol = 7)
 }
 \arguments{
 \item{data}{Dataframe with information about ssb and recruits.
@@ -13,6 +13,8 @@ This is created from atlantis output files YOY.txt and SSB.txt
 \code{\link{load_rec}}.}
 
 \item{ex_data}{Dataframe to compare the atlantis run with.}
+
+\item{ncol}{Number of columns in multipanel plot.}
 }
 \value{
 ggplot2 object

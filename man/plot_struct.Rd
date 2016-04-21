@@ -4,10 +4,12 @@
 \alias{plot_struct}
 \title{Function to plot relative contribution of biomass and numbers per cohort.}
 \usage{
-plot_struct(data)
+plot_struct(data, ncol = 7)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
+
+\item{ncol}{Number of columns in multipanel plot.}
 }
 \value{
 ggplot2 object

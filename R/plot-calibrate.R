@@ -1,6 +1,7 @@
 #' Function to plot relative changes over time.
 #'
 #' @param data Dataframe to be plotted.
+#' @param ncol Number of columns in multipanel plot.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions
@@ -8,7 +9,7 @@
 #' @examples
 #' plot_calibrate(preprocess_setas$structn_age)
 
-plot_calibrate <- function(data) {
+plot_calibrate <- function(data, ncol = 7) {
   if (!any(is.element(names(data), "time"))) {
     stop("Column time not found in data")
   }
@@ -31,7 +32,7 @@ plot_calibrate <- function(data) {
     ggplot2::annotate("rect", xmin = anno[1], xmax = anno[2], ymin = 0.8, ymax = 1.2, alpha = 0.3) +
     ggplot2::geom_line() +
     ggplot2::geom_hline(yintercept = 1, linetype = "dotted") +
-    ggplot2::facet_wrap(~species, scales = "free_y", ncol = 9, labeller = ggplot2::label_wrap_gen(width = 15)) +
+    ggplot2::facet_wrap(~species, scales = "free_y", ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::guides(col = ggplot2::guide_legend(nrow = 1)) +
     ggplot2::labs(y = "Relative to model start") +
     theme_atlantis()
