@@ -4,7 +4,7 @@
 \alias{plot_ts}
 \title{Function to plot time series of atlantis ncdf output.}
 \usage{
-plot_ts(data)
+plot_ts(data, x = "time", y = "atoutput", wrap = "species")
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
