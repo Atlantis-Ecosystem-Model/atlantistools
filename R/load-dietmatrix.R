@@ -39,10 +39,10 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs) {
     # groups with NumCohorts == 10
     as.vector(t(outer(X = as.vector(outer(X = paste0(pstring, 1:2), Y = coh10, FUN = paste0)),
                       Y = 1:2, FUN = paste0))),
-    # groups with 1 < NumCohorts < 10
-    as.vector(t(outer(X = paste0(pstring, coh2), Y = 1:2, FUN = paste0))),
     # groups with NumCohorts == 1
     paste0(pstring, coh1))
+    # groups with 1 < NumCohorts < 10
+    if (length(coh2 > 0)) diet_strings <- c(diet_strings, as.vector(t(outer(X = paste0(pstring, coh2), Y = 1:2, FUN = paste0))))
 
   # Extract data from the biological parameter file.
   dietmatrix <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = diet_strings)
@@ -52,7 +52,7 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs) {
   prey_stanza[is.na(prey_stanza)] <- 2
   pred_stanza <- suppressWarnings(as.integer(substr(rownames(dietmatrix), start = nchar(rownames(dietmatrix)), stop = nchar(rownames(dietmatrix)) + 1)))
   pred_stanza[is.na(pred_stanza)] <- 2
-  pred <- c(rep(coh10, each = 4), rep(coh2, each = 2), coh1)
+  pred <- c(rep(coh10, each = 4),  coh1, rep(coh2, each = 2))
   if (length(pred) != nrow(dietmatrix)) stop("Incomplete rows in diet data.")
 
   # Extract preys
