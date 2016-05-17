@@ -2,9 +2,25 @@
 #'
 #' Extracts the diet matrix as long dataframe from the biological paremeter file
 #' of any ATLANTIS simulation.
-dir <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-prm_biol <- "VMPA_setas_biol_fishing_New.prm"
-fgs <- "SETasGroups.csv"
+#'
+#' @param dir Character string giving the path of the Atlantis model folder.
+#' If data is stored in multiple folders (e.g. main model folder and output
+#' folder) you should use 'NULL' as dir.
+#' @param prm_biol Character string giving the filename of the biological
+#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
+#' @param fgs Character string giving the filename of 'functionalGroups.csv'
+#' file. In case you are using multiple folders for your model files and
+#' outputfiles pass the complete folder/filename string as fgs.
+#' In addition set dir to 'NULL' in this case.
+#' @return dataframe of the availability matrix in long format with columns
+#' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.
+#' @export
+
+#' @examples
+#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' head(load_dietmatrix(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", fgs = "SETasGroups.csv"), n = 10)
 
 load_dietmatrix <- function(dir = getwd(), prm_biol, fgs) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
@@ -33,9 +49,9 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs) {
 
   # Extract predator, predator-stanzas and prey-stanzas.
   prey_stanza <- suppressWarnings(as.integer(substr(rownames(dietmatrix), start = nchar(pstring) + 1, stop = nchar(pstring) + 1)))
-  prey_stanza[is.na(prey_stanza)] <- 1
+  prey_stanza[is.na(prey_stanza)] <- 2
   pred_stanza <- suppressWarnings(as.integer(substr(rownames(dietmatrix), start = nchar(rownames(dietmatrix)), stop = nchar(rownames(dietmatrix)) + 1)))
-  pred_stanza[is.na(pred_stanza)] <- 1
+  pred_stanza[is.na(pred_stanza)] <- 2
   pred <- c(rep(coh10, each = 4), rep(coh2, each = 2), coh1)
   if (length(pred) != nrow(dietmatrix)) stop("Incomplete rows in diet data.")
 
@@ -50,6 +66,9 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs) {
   names(result) <- c(get_)
   result <- cbind(result, pred, pred_stanza, prey_stanza)
   result$code <- rownames(dietmatrix)
+
+  # Transform to long format
+  result <- tidyr::gather_(data = result, key = "prey", value = "avail", names(result)[!is.element(names(result), c("pred", "pred_stanza", "prey_stanza", "code"))])
 
   return(result)
 }
