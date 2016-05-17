@@ -60,11 +60,10 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs) {
   prey <- c(acronyms, paste0(acronyms[(length(acronyms) - 2):length(acronyms)], "sed"))
   if (length(prey) != ncol(dietmatrix)) stop("Incomplete columns in diet data")
 
+  # Convert to dataframe.
   result <- as.data.frame(dietmatrix, row.names = FALSE)
   names(result) <- prey
-
-  names(result) <- c(get_)
-  result <- cbind(result, pred, pred_stanza, prey_stanza)
+  result <- cbind(result, pred, pred_stanza, prey_stanza, stringsAsFactors = FALSE)
   result$code <- rownames(dietmatrix)
 
   # Transform to long format
