@@ -58,6 +58,8 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
     pos <- scan_prm(chars = prm_biol, variable = flag)
     # Values are stored in the next row in the *.prm file.
     pos <- pos + 1
+    # In case row is commented out use next column!
+    while (substr(biol_prm[pos], 1, 1) == "#") pos <- pos + 1
 
     # Keep all numeric values
     old_value <- str_split_twice(char = prm_biol[pos], min_only = FALSE)
@@ -101,6 +103,7 @@ extract_prm_cohort <- function(dir = getwd(), prm_biol, variables) {
   slice <- function(prm, variable) {
     pos <- scan_prm(chars = prm, variable = variable)
     pos <- pos + 1
+    while (substr(prm[pos], 1, 1) == "#") pos <- pos + 1
 
     # Keep all numeric values
     value <- str_split_twice(char = prm[pos], min_only = FALSE)
