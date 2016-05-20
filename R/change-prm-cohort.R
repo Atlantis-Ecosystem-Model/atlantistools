@@ -59,7 +59,7 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
     # Values are stored in the next row in the *.prm file.
     pos <- pos + 1
     # In case row is commented out use next column!
-    while (substr(biol_prm[pos], 1, 1) == "#") pos <- pos + 1
+    while (substr(prm_biol[pos], 1, 1) == "#") pos <- pos + 1
 
     # Keep all numeric values
     old_value <- str_split_twice(char = prm_biol[pos], min_only = FALSE)
