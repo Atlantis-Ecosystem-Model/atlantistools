@@ -27,7 +27,9 @@ Names have to match the ones used in the *.prm file. Check column "Code" in
 \item{roc}{Matrix of multiplication factors which shall be applied to the old set of parameters.
 Please supply one row per selected group. Each row should have as many entries as the
 parameter itself. E.g. if you want to change the clearance rate for two fish groups you
-need to supply a matrix with 2 rows and 10 columns.}
+need to supply a matrix with 2 rows and 10 columns. In case you use different cohort
+numbers for age-structured groups supply a list of multiplication factors. Each list entry
+should be group specific.}
 
 \item{parameter}{Character value of the model parameter which shall be changed.
 Only one parameter can be selected per function call.}
@@ -52,6 +54,14 @@ new_prm <- change_prm_cohort(dir = d,
                              prm_biol = "VMPA_setas_biol_fishing_New.prm",
                              select_acronyms = c("FPS", "FVS"),
                              roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
+                             parameter = "C",
+                             save_to_disc = FALSE)
+
+# Also works for lists as argument
+new_prm <- change_prm_cohort(dir = d,
+                             prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                             select_acronyms = c("FPS", "FVS"),
+                             roc = list(rep(3, times = 10), rep(2, times = 10)),
                              parameter = "C",
                              save_to_disc = FALSE)
 }

@@ -16,7 +16,9 @@
 #' @param roc Matrix of multiplication factors which shall be applied to the old set of parameters.
 #' Please supply one row per selected group. Each row should have as many entries as the
 #' parameter itself. E.g. if you want to change the clearance rate for two fish groups you
-#' need to supply a matrix with 2 rows and 10 columns.
+#' need to supply a matrix with 2 rows and 10 columns. In case you use different cohort
+#' numbers for age-structured groups supply a list of multiplication factors. Each list entry
+#' should be group specific.
 #' @param parameter Character value of the model parameter which shall be changed.
 #' Only one parameter can be selected per function call.
 #' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
@@ -35,7 +37,20 @@
 #'                              roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
 #'                              parameter = "C",
 #'                              save_to_disc = FALSE)
+#'
+#' # Also works for lists as argument
+#' new_prm <- change_prm_cohort(dir = d,
+#'                              prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'                              select_acronyms = c("FPS", "FVS"),
+#'                              roc = list(rep(3, times = 10), rep(2, times = 10)),
+#'                              parameter = "C",
+#'                              save_to_disc = FALSE)
 
+# dir <- file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")
+# prm_biol <- "NorthSea_biol_fishing.prm"
+# select_acronyms <- c("COD", "WHG")
+# roc <- list(COD = 1:12,
+#             HER = 1:8)
 
 change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter, relative = TRUE, save_to_disc = TRUE) {
   if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
@@ -43,7 +58,11 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
   # Convert to matrix if only one species is selected and roc is a vector!
   if (length(select_acronyms) == 1 & is.vector(roc)) roc <- matrix(roc, nrow = 1)
 
-  if (length(select_acronyms) != nrow(roc)) {
+  # Convert matrix to list (it is not possible to programm indexing for both lists and matrices).
+  # Therefore we convert every user input to a list.
+  if (is.matrix(roc)) roc <- lapply(seq_len(nrow(roc)), function(i) roc[i,])
+
+  if (length(select_acronyms) != length(roc)) {
     stop("Dimensions of select_acronyms and roc do not match. Please supply one row of values per group.")
   }
 
@@ -79,8 +98,8 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
   }
 
   for (i in seq_along(select_acronyms)) {
-    if (!(all(roc[i, ] == 1) & relative)) {
-      prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[i, ], parameter = parameter, relative = relative)
+    if (!(all(roc[[i]] == 1) & relative)) {
+      prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[[i]], parameter = parameter, relative = relative)
     }
   }
 
