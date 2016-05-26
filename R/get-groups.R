@@ -40,7 +40,7 @@ get_groups <- function(dir = getwd(), fgs){
 #' @rdname get_groups
 get_age_groups <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs$Name[fgs$NumCohorts == 10]
+  result <- fgs$Name[fgs$NumCohorts > 2]
   return(result)
 }
 
@@ -56,7 +56,7 @@ get_acronyms <- function(dir = getwd(), fgs){
 #' @rdname get_groups
 get_age_acronyms <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs$Code[fgs$NumCohorts == 10]
+  result <- fgs$Code[fgs$NumCohorts > 2]
   return(result)
 }
 
@@ -64,7 +64,7 @@ get_age_acronyms <- function(dir = getwd(), fgs){
 #' @rdname get_groups
 get_nonage_acronyms <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs$Code[fgs$NumCohorts != 10]
+  result <- fgs$Code[fgs$NumCohorts <= 2]
   return(result)
 }
 
