@@ -196,6 +196,12 @@ plot_struct(result$biomass_age)
 
 # Diet Plots
 
-```{r, fig.width = 14, fig.height = 9}
-marrangeGrob(plot_diet(result$diet_specmort, wrap_col = "agecl", combine_thresh = 15), nrow = 1, ncol = 1)
+```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
+plots <- plot_diet(result$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
+for (i in seq_along(plots)) {
+  cat(paste0("## Diet plot ", i, ": ", names(plots)[i]), sep = "\n")
+  gridExtra::grid.arrange(plots[[i]])
+  cat("\n\n")
+}
 ```
+
