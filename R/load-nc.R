@@ -114,7 +114,7 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   # Create vecotr of available species at the end using search_clean! This is needed to create species-names
   # lateron! This approach may seem complicate but it turns out that this approach is very robust since no
   # user input is needed as the variable names are basically extracted from the available names in the ncdf file!
-  # WARNING: Only 10 cohorts are supported at the moment!
+  # UPDATE: Different numbers of cohorts per group are supported.
   # In order to make the creation of variables as robust as possible we introduce differtent combinations
   # of groups, variable and cohort! Only combinations present in the ncdf are used lateron! This makes the
   # code both robust and fast!
