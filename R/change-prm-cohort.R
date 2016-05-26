@@ -130,8 +130,13 @@ extract_prm_cohort <- function(dir = getwd(), prm_biol, variables) {
   }
 
   values <- lapply(variables, slice, prm = prm_biol_new)
-  values <- do.call(rbind, values)
-  rownames(values) <- variables
+  # rbind to matrix in case all groups have the same number of cohorts!
+  if (length(unique(sapply(values, length))) == 1) {
+    values <- do.call(rbind, values)
+    rownames(values) <- variables
+  } else {
+    names(values) <- variables
+  }
   return(values)
 }
 
