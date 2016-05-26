@@ -39,11 +39,11 @@ convert_bgm <- function(dir = getwd(), bgm) {
 
   # Convert coordinates to map-coordinates!
   lat_long <- proj4::project(result[, 1:2], proj = proj_in, inverse = T)
-  result$lat <- lat_long$x
-  result$long <- lat_long$y
+  result$long <- lat_long$x
+  result$lat <- lat_long$y
   lat_long <- proj4::project(result[, 3:4], proj = proj_in, inverse = T)
-  result$inside_lat <- lat_long$x
-  result$inside_long <- lat_long$y
+  result$inside_long <- lat_long$x
+  result$inside_lat <- lat_long$y
 
   return(result)
 }
