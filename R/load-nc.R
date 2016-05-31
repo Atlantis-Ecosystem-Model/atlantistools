@@ -56,15 +56,23 @@
 #'   select_variable = "Nums",
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 
-# d = file.path("z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")
-# dir = d
-# nc = "outputNorthSea.nc"
-# bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "init_NorthSea.nc")
-# fgs = "functionalGroups.csv"
-# select_groups = get_groups(dir = d, fgs = "functionalGroups.csv")
-# select_variable = "Nums"
-# bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "NorthSea.bgm"))
-# check_acronyms = TRUE
+d = file.path("z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")
+dir = d
+nc = "outputNorthSea.nc"
+bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "init_NorthSea.nc")
+fgs = "functionalGroups.csv"
+select_groups = get_groups(dir = d, fgs = "functionalGroups.csv")
+select_variable = "N"
+bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "NorthSea.bgm"))
+check_acronyms = TRUE
+
+dir = d
+nc = "outputSETAS.nc"
+  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
+  fgs = "SETasGroups.csv"
+  select_groups = get_groups(dir = d, fgs = "SETasGroups.csv")
+  select_variable = "N"
+  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
                     select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
@@ -228,8 +236,8 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
     if (select_variable == "N") {
       int_fs <- final_species[!is.element(final_species, bps)]
       int_fa <- final_agecl[!is.element(final_species, bps)]
-      # Note this only works if age-structured vertebrates have 10 ageclasses!
-      int_fa[int_fa == 10] <- 1
+      # Note this only works if age-structured invertebrates have 2 ageclasses!
+      int_fa[int_fa != 2] <- 1
     }
     for (i in seq_along(at_data3d)) {# for loop over all variables!
       if (i == 1) result3d <- list()
