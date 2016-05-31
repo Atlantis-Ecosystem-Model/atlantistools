@@ -28,8 +28,8 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs) {
   agecl <- fgs_data$NumCohorts[fgs_data$isPredator == 1]
   pstring <- "pPREY"
 
-  coh10 <- acr[agecl == 10]
-  coh2 <- acr[agecl != 10 & agecl != 1]
+  coh10 <- acr[agecl > 2]
+  coh2 <- acr[agecl == 2]
   coh1 <- acr[agecl == 1]
 
   if (length(c(coh10, coh2, coh1)) != length(acr)) stop("Incomplete functional groups file.")
