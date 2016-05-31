@@ -56,24 +56,6 @@
 #'   select_variable = "Nums",
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 
-d = file.path("z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")
-dir = d
-nc = "outputNorthSea.nc"
-bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "init_NorthSea.nc")
-fgs = "functionalGroups.csv"
-select_groups = get_groups(dir = d, fgs = "functionalGroups.csv")
-select_variable = "N"
-bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "NorthSea.bgm"))
-check_acronyms = TRUE
-
-dir = d
-nc = "outputSETAS.nc"
-  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
-  fgs = "SETasGroups.csv"
-  select_groups = get_groups(dir = d, fgs = "SETasGroups.csv")
-  select_variable = "N"
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
-
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
                     select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
