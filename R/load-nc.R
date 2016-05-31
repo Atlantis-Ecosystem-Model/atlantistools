@@ -56,6 +56,16 @@
 #'   select_variable = "Nums",
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 
+# d = file.path("z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")
+# dir = d
+# nc = "outputNorthSea.nc"
+# bps = load_bps(dir = d, fgs = "functionalGroups.csv", init = "init_NorthSea.nc")
+# fgs = "functionalGroups.csv"
+# select_groups = get_groups(dir = d, fgs = "functionalGroups.csv")
+# select_variable = "Nums"
+# bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "NorthSea.bgm"))
+# check_acronyms = TRUE
+
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
                     select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
@@ -120,7 +130,7 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   # code both robust and fast!
   # Loop over select_groups to use the same ordering! This is essential otherwise species names
   # are not assigned correctly lateron!
-  cohorts <- 1:10
+  cohorts <- 1:max(fgs$NumCohorts)
   search <- list()
   for (i in seq_along(select_groups)) {
     search[[i]] <- c(unlist(lapply(paste0(select_groups[i], cohorts),                   paste0, select_variable)),           # GroupCohortVariable
@@ -229,13 +239,13 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
       }
       result3d[[i]] <- as.vector(values)
     }
-    result3d <- data.frame(species = unlist(sapply(X = mapply(FUN = rep, x = int_fs, each = int_fa, SIMPLIFY = F, USE.NAMES = F),
-                                                   FUN = rep, each = length(layers) * n_timesteps, simplify = F)),
-                           agecl = unlist(sapply(X = sapply(X = int_fa, FUN = seq, from = 1, by = 1, simplify = F, USE.NAMES = F),
-                                                 FUN = rep, each = length(layers) * n_timesteps, simplify = F)),
-                           polygon = unlist(sapply(X = n_timesteps * int_fa, FUN = rep, x = polygons, simplify = F, USE.NAMES = F)),
-                           layer = unlist(sapply(X = n_timesteps * int_fa, FUN = rep, x = layers, simplify = F, USE.NAMES = F)),
-                           time = unlist(sapply(X = int_fa, FUN = rep, x = rep(0:(n_timesteps - 1), each = length(layers)), simplify = F, USE.NAMES = F)),
+    result3d <- data.frame(species = unlist(lapply(X = mapply(FUN = rep, x = int_fs, each = int_fa, SIMPLIFY = F, USE.NAMES = F),
+                                                   FUN = rep, each = length(layers) * n_timesteps)),
+                           agecl = unlist(lapply(X = lapply(X = int_fa, FUN = seq, from = 1, by = 1),
+                                                 FUN = rep, each = length(layers) * n_timesteps)),
+                           polygon = unlist(lapply(X = n_timesteps * int_fa, FUN = rep, x = polygons)),
+                           layer = unlist(lapply(X = n_timesteps * int_fa, FUN = rep, x = layers)),
+                           time = unlist(lapply(X = int_fa, FUN = rep, x = rep(0:(n_timesteps - 1), each = length(layers)))),
                            atoutput = do.call(c, result3d),
                            stringsAsFactors = F)
   }
@@ -263,12 +273,12 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
     #                 (num cohorts per species)
     # 4. polygon  --> rep boxes times n_timesteps * final_agecl (num cohorts per species)
     # The code is highly vectorized and therefore quite effective!
-    result2d <- data.frame(species = unlist(sapply(X = mapply(FUN = rep, x = int_fs, each = int_fa, SIMPLIFY = F, USE.NAMES = F),
-                                                   FUN = rep, each = length(boxes) * n_timesteps, simplify = F)),
-                           agecl = unlist(sapply(X = sapply(X = int_fa, FUN = seq, from = 1, by = 1, simplify = F, USE.NAMES = F),
-                                                 FUN = rep, each = length(boxes) * n_timesteps, simplify = F)),
-                           polygon = unlist(sapply(X = n_timesteps * int_fa, FUN = rep, x = boxes, simplify = F, USE.NAMES = F)),
-                           time = unlist(sapply(X = int_fa, FUN = rep, x = rep(0:(n_timesteps - 1), each = length(boxes)), simplify = F, USE.NAMES = F)),
+    result2d <- data.frame(species = unlist(lapply(X = mapply(FUN = rep, x = int_fs, each = int_fa, SIMPLIFY = F, USE.NAMES = F),
+                                                   FUN = rep, each = length(boxes) * n_timesteps)),
+                           agecl = unlist(lapply(X = lapply(X = int_fa, FUN = seq, from = 1, by = 1),
+                                                 FUN = rep, each = length(boxes) * n_timesteps)),
+                           polygon = unlist(lapply(X = n_timesteps * int_fa, FUN = rep, x = boxes)),
+                           time = unlist(lapply(X = int_fa, FUN = rep, x = rep(0:(n_timesteps - 1), each = length(boxes)))),
                            atoutput = do.call(c, result2d),
                            stringsAsFactors = F)
     if (select_variable == "N") result2d$layer <- n_layers - 1
@@ -288,7 +298,7 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   if (length(min_pools) > 0) {
     # exclude 1st timestep and sediment layer from calculation! They behave differently...
     print_min_pools <- sum(min_pools) - length(result[min_pools & result$time == 1, 1]) - length(result[min_pools & result$time > 1 & result$layer == 7, 1])
-    if (print_min_pools > 0 & warn_zeros){
+    if (print_min_pools > 0 & warn_zeros) {
       warning(paste0(round(print_min_pools/dim(result)[1] * 100), "% of ", select_variable, " are true min-pools (0, 1e-08, 1e-16)"))
     }
     result <- result[!min_pools, ]
@@ -304,8 +314,8 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   #   }
 
   # Sum up N for invert cohorts if invert cohorts are present!
-  # NOTE: invert cohorts of size 10 are not considered!
-  if (select_variable == "N" & any(final_agecl != 10 & final_agecl > 1)) {
+  # NOTE: only invert cohorts of size 2 are considered!
+  if (select_variable == "N" & any(final_agecl == 2)) {
     result <- result %>%
       dplyr::group_by_("polygon", "layer", "species", "time") %>%
       dplyr::summarise_(atoutput = ~sum(atoutput))
