@@ -43,11 +43,6 @@ species <- c("Shallow piscivorous fish", "Small planktivorous fish")
 
 # Overview species 
 
-<!-- # ```{r} -->
-<!-- # plots <- lapply(species, plot_species, data_pre = result) -->
-<!-- # marrangeGrob(grobs = plots, nrow = 1, ncol = 1) -->
-<!-- # ``` -->
-
 ```{r, echo=FALSE, results = 'asis'}
 plots <- lapply(species, plot_species, data_pre = result)
 for (i in seq_along(plots)) {
