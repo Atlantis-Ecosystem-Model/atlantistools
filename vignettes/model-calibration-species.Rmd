@@ -7,7 +7,7 @@ output:
     toc: true
     number_sections: true
     fig_width: 10
-    fig_height: 15
+    fig_height: 13
     fig_caption: true
 vignette: >
   %\VignetteIndexEntry{model-calibration-species}
@@ -43,11 +43,19 @@ species <- c("Shallow piscivorous fish", "Small planktivorous fish")
 
 # Overview species 
 
-```{r}
-plots <- lapply(species, plot_species, data_pre = result)
-marrangeGrob(grobs = plots, nrow = 1, ncol = 1)
-```
+<!-- # ```{r} -->
+<!-- # plots <- lapply(species, plot_species, data_pre = result) -->
+<!-- # marrangeGrob(grobs = plots, nrow = 1, ncol = 1) -->
+<!-- # ``` -->
 
+```{r, echo=FALSE, results = 'asis'}
+plots <- lapply(species, plot_species, data_pre = result)
+for (i in seq_along(plots)) {
+  cat(paste0("## ", species[i]), sep = "\n")
+  gridExtra::grid.arrange(plots[[i]])
+  cat("\n\n")
+}
+```
 
 
 
