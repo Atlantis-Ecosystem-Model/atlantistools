@@ -53,62 +53,66 @@
 #             HER = 1:8)
 
 change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter, relative = TRUE, save_to_disc = TRUE) {
-  if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
+  if (all(roc == 1) & relative) {
+    message("All rocs 1 no changes applied to prm-file.")
+  } else {
+    if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
 
-  # Convert to matrix if only one species is selected and roc is a vector!
-  if (length(select_acronyms) == 1 & is.vector(roc)) roc <- matrix(roc, nrow = 1)
+    # Convert to matrix if only one species is selected and roc is a vector!
+    if (length(select_acronyms) == 1 & is.vector(roc)) roc <- matrix(roc, nrow = 1)
 
-  # Convert matrix to list (it is not possible to programm indexing for both lists and matrices).
-  # Therefore we convert every user input to a list.
-  if (is.matrix(roc)) roc <- lapply(seq_len(nrow(roc)), function(i) roc[i,])
+    # Convert matrix to list (it is not possible to programm indexing for both lists and matrices).
+    # Therefore we convert every user input to a list.
+    if (is.matrix(roc)) roc <- lapply(seq_len(nrow(roc)), function(i) roc[i,])
 
-  if (length(select_acronyms) != length(roc)) {
-    stop("Dimensions of select_acronyms and roc do not match. Please supply one row of values per group.")
-  }
-
-  # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
-
-  # Function to update a specific parameter composed of a parameter string
-  # a group acronym and a seperator (by default "_") found in a prm file.
-  update_prm_species <- function(prm_biol, acronym, roc, parameter, relative) {
-    flag <- paste(parameter, acronym, sep = "_")
-    pos <- scan_prm(chars = prm_biol, variable = flag)
-    # Values are stored in the next row in the *.prm file.
-    pos <- pos + 1
-    # In case row is commented out use next column!
-    while (substr(prm_biol[pos], 1, 1) == "#") pos <- pos + 1
-
-    # Keep all numeric values
-    old_value <- str_split_twice(char = prm_biol[pos], min_only = FALSE)
-    if (length(old_value) != length(roc)) {
-      stop(paste(length(old_value), "values found but only", length(roc), "new values supplied."))
+    if (length(select_acronyms) != length(roc)) {
+      stop("Dimensions of select_acronyms and roc do not match. Please supply one row of values per group.")
     }
 
-    if (relative) {
-      new_value <- old_value * roc
-    } else {
-      new_value <- roc
+    # Read in parameter file!
+    prm_biol_new <- convert_path(dir = dir, file = prm_biol)
+    prm_biol_new <- readLines(con = prm_biol_new)
+
+    # Function to update a specific parameter composed of a parameter string
+    # a group acronym and a seperator (by default "_") found in a prm file.
+    update_prm_species <- function(prm_biol, acronym, roc, parameter, relative) {
+      flag <- paste(parameter, acronym, sep = "_")
+      pos <- scan_prm(chars = prm_biol, variable = flag)
+      # Values are stored in the next row in the *.prm file.
+      pos <- pos + 1
+      # In case row is commented out use next column!
+      while (substr(prm_biol[pos], 1, 1) == "#") pos <- pos + 1
+
+      # Keep all numeric values
+      old_value <- str_split_twice(char = prm_biol[pos], min_only = FALSE)
+      if (length(old_value) != length(roc)) {
+        stop(paste(length(old_value), "values found but only", length(roc), "new values supplied."))
+      }
+
+      if (relative) {
+        new_value <- old_value * roc
+      } else {
+        new_value <- roc
+      }
+
+      # Update value. Some pesky expectations have to be added here.
+      prm_biol[pos] <- paste(new_value, collapse = "\t")
+      return(prm_biol)
     }
 
-    # Update value. Some pesky expectations have to be added here.
-    prm_biol[pos] <- paste(new_value, collapse = "\t")
-    return(prm_biol)
-  }
-
-  for (i in seq_along(select_acronyms)) {
-    if (!(all(roc[[i]] == 1) & relative)) {
-      prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[[i]], parameter = parameter, relative = relative)
+    for (i in seq_along(select_acronyms)) {
+      if (!(all(roc[[i]] == 1) & relative)) {
+        prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[[i]], parameter = parameter, relative = relative)
+      }
     }
-  }
 
-  if (save_to_disc) {
-    print("Writing new prm file!")
-    writeLines(text = prm_biol_new, con = convert_path(dir = dir, file = prm_biol), sep = "\n")
-  }
+    if (save_to_disc) {
+      print("Writing new prm file!")
+      writeLines(text = prm_biol_new, con = convert_path(dir = dir, file = prm_biol), sep = "\n")
+    }
 
-  invisible(prm_biol_new)
+    invisible(prm_biol_new)
+  }
 }
 
 #' @export
