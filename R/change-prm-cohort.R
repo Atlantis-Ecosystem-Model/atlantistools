@@ -63,7 +63,7 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
     if (is.matrix(roc)) roc <- lapply(seq_len(nrow(roc)), function(i) roc[i,])
 
     # Check if all rocs equal to 1! leave function in this case!
-    if (all(sapply(wuwu, function(x) all(x == 1))) & relative) {
+    if (all(sapply(roc, function(x) all(x == 1))) & relative) {
       message("All rocs 1 no changes applied to prm-file.")
     } else {
       if (length(select_acronyms) != length(roc)) {
