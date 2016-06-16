@@ -9,5 +9,7 @@ test_that("test str_split_twice", {
   expect_error(str_split_twice(char = "da ds\tdd", min_only = FALSE), "No numeric value present.")
 
   expect_equal(length(str_split_twice(char = "\t4   6\t12   23\t\t", min_only = FALSE)), 4)
+
+  expect_equal(length(str_split_twice("check_wc_dz: Resetting dz in box 2, layer 0 from 4.6608 to 6", min_only = FALSE)), 4)
 })
 
