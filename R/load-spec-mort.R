@@ -21,16 +21,16 @@
 
 load_spec_mort <- function(dir = getwd(), specmort) {
   mort <- load_txt(dir = dir, file = specmort)
-  mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "notsure", "pred", "mort"), convert = TRUE)
+  mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "stock", "pred", "mort"), convert = TRUE)
   mort$agecl <- mort$agecl + 1
 
   # check uniqueness of column notsure and mort
-  if (any(sapply(mort[, c("notsure", "mort")], function(x) length(unique(x))) != 1)) {
-    stop("Insufficient grouping columns!")
+  if (any(sapply(mort[, c("stock", "mort")], function(x) length(unique(x))) != 1)) {
+    stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
   }
 
   # Remove unnecessary columns
-  mort <- mort[, !is.element(names(mort), c("notsure", "mort"))]
+  mort <- mort[, !is.element(names(mort), c("stock", "mort"))]
 
   # First time step appears twice and only has 0s as entry!
   mort <- mort[mort$time != 0, ]
