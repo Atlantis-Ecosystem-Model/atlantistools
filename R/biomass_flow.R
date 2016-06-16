@@ -1,6 +1,5 @@
 #' Calculate the overall biomass flow from group x to group y.
 #'
-#' Consumed biomass is visualised as Flowdiagram using the circlise package.
 #' We calculate the biomass of prey j eaten by predator i per timesetp.
 #' Based on the consumed nitrogen per predator, ageclass and timestep
 #' (given in preprocess$eat) we calculate the consumed biomass of prey j by predator i
@@ -11,12 +10,12 @@
 #' @param preprocess List of the preprocessed Atlantis simulation generated
 #' with preprocess().
 #'
-#' @return ggplot.
+#' @return df
 
 #' @keywords gen
 #' @export
 
-biomass_flow <- function() {
+biomass_flow <- function(preprocess) {
 
 }
 
