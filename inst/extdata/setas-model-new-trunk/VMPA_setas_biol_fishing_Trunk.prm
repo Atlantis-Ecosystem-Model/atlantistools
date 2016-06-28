@@ -2281,12 +2281,11 @@ MBmax   30000  Maximum microphytobenthos biomass on sediment mg N m-2 1000
 # growth for now                       
 BGmax   1000  Maximum benthic grazer biomass mg N m-2 1000                 
 BDmax   400000  Maximum deposit feeder biomass mg N m-2 500000                 
-BCmax       1000000000    Maximum infauna carnivore biomass             mg N m-2         Unlimited
+BCmax   1000000000    Maximum infauna carnivore biomass             mg N m-2         Unlimited
 BOmax   40000  Maximum meiobenthos biomass mg N m-2 50600                  
 BFSmax   2000  Maximum shallow filter feeder biomass mg N m-2 2000                
 BFFmax   3000  Maximum other filter feeder biomass mg N m-2 3000                
 BFDmax   1000  Maximum deep filter feeder biomass mg N m-2 1000                
-BCmax             0
 BMDmax 0
 BMLmax 0
 BMSmax 0
@@ -8375,7 +8374,6 @@ KLP_BML    0.0000001  Lower prey selection size limit for megazoobenthos 0.005
 KLP_BMD    0.0000001  Lower prey selection size limit for deep macrobenthos 0.005
 
 KLP_DF     0     
-KLP_ZG     0     
 KLP_ZL     0     
 KLP_ZM     0     
 KLP_ZS     0         
@@ -8432,7 +8430,6 @@ KUP_BMS    0.1 Upper prey selection size limit for shallow macrozoobenthos   0.2
 KUP_BMD    0.1 Upper prey selection size limit for deep macrozoobenthos   0.2 - 0.7
 
 KUP_DF     0     
-KUP_ZG     0.5     
 KUP_ZL     0     
 KUP_ZM     0     
 KUP_ZS     0         
@@ -9141,42 +9138,6 @@ li_b_WHB 3   Exponent in allometic length-weight relation for baleen whales 3
 li_b_WHS 3   Exponent in allometic length-weight relation for sm. toothed whales 3               
 li_b_WHT 3   Exponent in allometic length-weight relation for toothed whales 3                
 
-min_li_mat_FPS 0
-min_li_mat_FPL 0
-min_li_mat_FPO 0
-min_li_mat_FVD 0
-min_li_mat_FVV 0
-min_li_mat_FVS 0
-min_li_mat_FVT 0
-min_li_mat_FVB 0
-min_li_mat_FVO 0
-min_li_mat_FMM 0
-min_li_mat_FMN 0
-min_li_mat_FBP 0
-min_li_mat_FDD 0
-min_li_mat_FDS 0
-min_li_mat_FDB 0
-min_li_mat_FDC 0
-min_li_mat_FDO 0
-min_li_mat_FDE 0
-min_li_mat_FDF 0
-min_li_mat_FDM 0
-min_li_mat_FDP 0
-min_li_mat_SHD 0
-min_li_mat_SHC 0
-min_li_mat_SHB 0
-min_li_mat_SHR 0
-min_li_mat_SHP 0
-min_li_mat_SSK 0
-min_li_mat_SB 0
-min_li_mat_SP 0
-min_li_mat_REP 0
-min_li_mat_WDG 0
-min_li_mat_PIN 0
-min_li_mat_WHB 0
-min_li_mat_WHS 0
-min_li_mat_WHT 0
-
 min_li_mat_FPS 0   minimum length at maturity for small planktivores 0                
 min_li_mat_FPL 0   minimum length at maturity for large planktivores 0                
 min_li_mat_FPO 0   minimum length at maturity for other planktivores 0                
@@ -9800,10 +9761,7 @@ WHT_mQ 2
 
 # Extra macrophyte mortality (based on physical environment)                   
 mS_MA_T15  100   Scour (bottom stress) macroalgae mortality d-1 120 - 180                
-mS_SG_T15  0.0000002 Excessive DIN seagrass mortality d-1 0 - 0.0002                 
-
-# Terminal (senescence mortality) for biomass pools (proportion of terminal age group dying)
-mT_CEP            1.0                                                                    0.0  
+mS_SG_T15  0.0000002 Excessive DIN seagrass mortality d-1 0 - 0.0002                                                                                 0.0  
 
 # Starvation mortality for fish (based on condition)                   
 mStarve_FPL 0.0001
@@ -9849,7 +9807,6 @@ mD_PL            1.0       Half oxygen mortality depth for settled phytoplankton
 mD_DF            1.0       Half oxygen mortality depth for settled dinoflagellate m          0.001 - 0.005
 mD_PS            1.0       Half oxygen mortality depth for settled picophytoplank m          0.001 - 0.005
 mD_PB            1.0       Half oxygen mortality depth for pelagic bacteria  m              0.001 - 0.005
-mD_PB           0
 mD_BB            0.005     Half oxygen mortality depth for sediment bacteria m              0.001 - 0.005
 mD_BO            0.005     Half oxygen mortality depth for meiobenthos       m              0.001 - 0.005
 mD_BD            0.005     Half oxygen mortality depth for deposit feeder    m              0.001 - 0.005      
@@ -9882,7 +9839,6 @@ mO_BFD           0.0001    Oxygen dependent mort. for deep filter feeder     d-1
 KO2_PL           1.0       Lethal oxygen level for settled phytoplankton     mg O2 m-3         0.0
 KO2_DF           1.0       Lethal oxygen level for settled dinoflagellates   mg O2 m-3         0.0
 KO2_PS           1.0       Lethal oxygen level for settled picophytoplankton mg O2 m-3         0.0
-KO2_BB          0
 KO2_PB           1.0       Lethal oxygen level for pelagic bact              mg O2 m-3         0.0
 KO2_BB           1.0       Lethal oxygen level for benthic bact              mg O2 m-3         0.0
 KO2_BO           1.0       Lethal oxygen level for meiobenthos               mg O2 m-3         0.0
@@ -9901,8 +9857,6 @@ KO2LIM_DF        10.0      Limiting oxygen level for settled dinoflagellate  mg 
 KO2LIM_PS        10.0      Limiting oxygen level for settled picophytoplank  mg O2 m-3         0.0
 KO2LIM_PB        10.0      Limiting oxygen level for pelagic bacteria        mg O2 m-3         0.0
 KO2LIM_BB        10.0      Limiting oxygen level for benthic bacteria        mg O2 m-3         0.0
-KO2LIM_PB         0
-KO2LIM_BB         0
 KO2LIM_BO        10.0      Limiting oxygen level for meiobenthos             mg O2 m-3         0.0
 KO2LIM_BD        10.0      Limiting oxygen level for deposit feeder          mg O2 m-3         0.0
 KO2LIM_BC        10.0      Limiting oxygen level for infaunal carnivore      mg O2 m-3         0.0         
@@ -10068,7 +10022,6 @@ FSBDR_FMN 0
 FSBDR_FBP 0
 FSBDR_FDD 0
 FSBDR_FDM 0
-FSBDR_FDB 0
 FSBDR_FDP 0
 FSBDR_FDC 0
 FSBDR_FDO 0
@@ -10165,40 +10118,6 @@ FDGDL_BMD  0.8  Detrit contrib from unassim lab detrit ingested by deep macrozoo
 FDGDL_FDS  0.8  Detrit contrib from unassim lab detrit ingested by shallow demersals 0.4 - 0.9            
 FDGDL_DF          0
 
-FDGDL_FPL 0
-FDGDL_FPS 0
-FDGDL_FPO 0
-FDGDL_FVD 0
-FDGDL_FVV 0
-FDGDL_FVS 0
-FDGDL_FVT 0
-FDGDL_FVO 0
-FDGDL_FVB 0
-FDGDL_FMM 0
-FDGDL_FMN 0
-FDGDL_FBP 0
-FDGDL_FDD 0
-FDGDL_FDB 0
-FDGDL_FDC 0
-FDGDL_FDO 0
-FDGDL_FDE 0
-FDGDL_FDF 0
-FDGDL_FDM 0
-FDGDL_FDP 0
-FDGDL_SHD 0
-FDGDL_SHB 0
-FDGDL_SHC 0
-FDGDL_SHR 0
-FDGDL_SHP 0
-FDGDL_SSK 0
-FDGDL_SB 0
-FDGDL_SP 0
-FDGDL_REP 0
-FDGDL_WDG 0
-FDGDL_PIN 0
-FDGDL_WHB 0
-FDGDL_WHS 0
-FDGDL_WHT 0
 FDGDL_FPL   0.0       Detrit contrib from unassim lab detrit                               0.0 - 0.9      
 FDGDL_FPO   0.0       Detrit contrib from unassim lab detrit                               0.0 - 0.9      
 FDGDL_FPS   0.0       Detrit contrib from unassim lab detrit                               0.0 - 0.9      
@@ -14291,3 +14210,12 @@ flag_do_var_express 0
 
 flagPHmortcase 0
 flag_satiation 0
+
+# The following flags/parameters had to be added to prevent the model from crashing.
+# There is no documentation available on the wiki for these flags.
+flag_shrinkfat 0
+flag_predratiodepend 0
+ht_FPS 0
+ht_FVS 0
+li_a_invert 0.01
+li_b_invert 3.0

@@ -1,0 +1,150 @@
+# PC Version (created by Beth Fulton and Adam Davidson)
+#
+# Hydrodynamic files - this is for 1991 to 1994, but 1991 and 1992 are
+# faked from 1993 data.
+# input directories  
+nhdfiles 5
+hd0.name inputs/forcisets/SETAS_VMPAhydroA.nc
+hd1.name inputs/forcisets/SETAS_VMPAhydroB.nc
+hd2.name inputs/forcisets/SETAS_VMPAhydroC.nc
+hd3.name inputs/forcisets/SETAS_VMPAhydroD.nc
+hd4.name inputs/forcisets/SETAS_VMPAhydroE.nc
+
+# Bottom stress
+# BottomStress inputs/stress/stress.nc
+# BottomStress inputs/stress/nxstress.nc
+
+#############################################
+# Point source\sink lists
+npointss 0
+
+##########################################
+# Rain and evaporation
+Precipitation inputs/meteor/times1.6.nc
+Evaporation   inputs/meteor/84-95.nc
+
+# Solar time series data file
+Solar_radiation inputs/forcisets/solar9195.ts
+Solar_radiation_rewind 1
+
+# Temperature time series data file
+use_tempfiles 1
+# The number of temperature input files 
+ntempfiles 1 
+Temperature0.name inputs/forcisets/SETAS_VMPAtemp.nc
+temp_rewind 1
+
+# Salinity time series data file
+use_saltfiles 1
+# The number of salinity files 
+nsaltfiles 1 
+Salinity0.name inputs/forcisets/SETAS_VMPAsalt.nc
+salt_rewind 1
+
+ts_on_hydro_time 1
+inputs_tout 10 day
+
+# Recruitment_time_series
+
+# Recruitment_enviro_forcing
+
+#############################################
+# Historical catch lists - nCatchts is the number of time series to be loaded and
+# typeCatchts is whether or not the data is to be interpolated (0) by the model
+# or just use previous record (1)
+nCatchts 11
+typeCatchts 1
+
+Catchts0.name box0catch
+Catchts0.location 4043667.571 1150676.493  0
+Catchts0.data inputs/catchts/boundary.ts
+Catchts0.rewind 0
+
+Catchts1.name box1catch
+Catchts1.location 4100099.914 1176681.599  1
+Catchts1.data inputs/catchts/catch1.ts
+Catchts1.rewind 0
+
+Catchts2.name box2catch
+Catchts2.location 4191669.42 1228857.271 2
+Catchts2.data inputs/catchts/catch2.ts
+Catchts2.rewind 0
+
+Catchts3.name box3catch
+Catchts3.location 4240609.12 1380659.6  3
+Catchts3.data inputs/catchts/catch3.ts
+Catchts3.rewind 0
+
+Catchts4.name box4catch
+Catchts4.location 4445261.219 1315655.719 4
+Catchts4.data inputs/catchts/catch4.ts
+Catchts4.rewind 0
+
+Catchts5.name box5catch
+Catchts5.location 4295691.382 1085573.101 5
+Catchts5.data inputs/catchts/catch5.ts
+Catchts5.rewind 0
+
+Catchts6.name box6catch
+Catchts6.location 4267195.266 1480676.477 6
+Catchts6.data inputs/catchts/boundary.ts
+Catchts6.rewind 0
+
+Catchts7.name box7catch
+Catchts7.location 4500570.723 1438339.614 7
+Catchts7.data inputs/catchts/boundary.ts
+Catchts7.rewind 0
+
+Catchts8.name box8catch
+Catchts8.location 4603015.595 1233723.862 8
+Catchts8.data inputs/catchts/boundary.ts
+Catchts8.rewind 0
+
+Catchts9.name box9catch
+Catchts9.location 4435544.591 993008.8211 9
+Catchts9.data inputs/catchts/boundary.ts
+Catchts9.rewind 0
+
+Catchts10.name box10catch
+Catchts10.location 4211217.116 967318.2742 10
+Catchts10.data inputs/catchts/boundary.ts
+Catchts10.rewind 0
+
+
+#############################################
+# Historical discard lists
+nDiscardts 0
+typeDiscardts 0
+
+#############################################
+# Residual lists - on market fish prices
+nResidualsts 0
+typeResidualsts 0
+
+#############################################
+# Economic statistics - GDP and fuel costs
+nEconts 0
+typeEconts 0
+
+##############################################
+# MPA (spatial management) files for cases where change through time
+# Same format as Catchts above
+nMPAts 0
+typeMPAts 0
+
+# pH time series data file
+use_phFiles 0
+
+use_force_tracers 0
+
+# The number of tracers to search for in the files and the names of those tracers. 
+nforceTracers 1
+tracerNames 1
+Arsenic
+
+
+# Now the actual files. Can have more than one tracer in a file.
+
+Arsenic_nFiles 1
+Arsenic_File0.name inputs/forcisets/SETAS_VMPAArsenic.nc
+Arsenic_rewind 0

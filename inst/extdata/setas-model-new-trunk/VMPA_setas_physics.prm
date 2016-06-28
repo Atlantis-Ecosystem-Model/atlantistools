@@ -1,0 +1,281 @@
+#
+#  10/1998, Beth Fulton, renamed for PC version tests
+#
+#############################################
+# Physics parameters
+vdiffwt_wc 1.0       # Fully implicit vertical mixing
+vdiffwt_sed 1.0       # Fully implicit vertical mixing
+
+# Tolerance for water column dz values
+# The model only allows this much fractional
+# change before dz is reset to nominal value
+wc_dz_tol 0.20    
+
+# Allow 20% change
+# PILOT MODEL - constant water column mixing cfft
+wc_kz 0.0128
+
+#############################################
+# Sediment related parameters
+# Maximum and minimum allowed sediment layer thickness
+maxseddz 0.5
+minseddz 0.1
+
+# Functional form for bioirrigarion and bioturbation activity
+# as a function of depth. Currently can be one of:
+#     constant
+#     linear
+#     parabolic
+#     gaussian
+# Only the first letter of this parameter is significant
+biosedprofile  gaussian
+
+## Functional form for oxygen profile
+# as a function of depth. Currently can be one of:
+#     constant
+#     linear
+#     parabolic
+#     gaussian
+# Only the first letter of this parameter is significant
+biooxprofile  linear 
+
+# Diffusion coefficient for bio-irrigation of sediments.
+# This value is scaled by the amount of biological
+# activity present, and also decreases with depth
+# in the sediment according to some
+# fixed profile. The value here is the value which
+# would apply at zero depth in the sediment.
+# Units are m2 s-1 per animal per m2.
+# bi_dissol_kz 0.0000001
+bi_dissol_kz 0.0000001
+
+# Exchange rate for bio-irrigation of sediments.
+# This value is scaled by the amount of biological
+# activity present, and also decreases with depth
+# in the sediment according to some
+# fixed profile. The value here is the value which
+# would apply at zero depth in the sediment.
+# Units are m s-1 per animal per m2 (in long-winded
+# terms this is volume per square metre per second
+# per animal per square metre).
+# bi_exchange 0.000001
+bi_exchange 0.000001
+
+# Injection rate for bio-irrigation of sediments.
+# This value is scaled by the amount of biological
+# activity present, and also decreases with depth
+# in the sediment according to some
+# fixed profile. The value here is the value which
+# would apply at zero depth in the sediment.
+# Units are m s-1 per animal per m2. (in long-winded
+# terms this is volume per square metre per second
+# per animal per square metre).
+bi_injection 1e-8
+
+# Diffusion coefficient for bio-turbation of sediments.
+# This value is scaled by the amount of biological
+# activity present, and also decreases with depth
+# in the sediment according to some
+# fixed profile. The value here is the value which
+# would apply at zero depth in the sediment.
+# Units are m2 s-1 per animal per m2.
+bt_partic_kz 0.00000001
+
+# Exchange rate for bio-turbation of sediments.
+# This value is scaled by the amount of biological
+# activity present, and also decreases with depth
+# in the sediment according to some
+# fixed profile. The value here is the value which
+# would apply at zero depth in the sediment.
+# Units are m s-1 per animal per m2 (in long-winded
+# terms this is volume per square metre per second
+# per animal per square metre).
+# bt_exchange 0.000001
+bt_exchange 1e-8
+
+# Expulsion rate for bio-irrigation of sediments.
+# This value is scaled by the amount of biological
+# activity present, and also decreases with depth
+# in the sediment according to some
+# fixed profile. The value here is the value which
+# would apply at zero depth in the sediment.
+# Units are m s-1 per animal per m2 (in long-winded
+# terms this is volume per square metre per second
+# per animal per square metre).
+# bt_expulsion 0.000001
+bt_expulsion 1e-8
+
+# Limit to errosion rate for a 1 cm sediment model
+max_erosion 0.005
+
+#################################################################################
+# General physical configuration parameters
+#
+# Switch indicating whether minimum water column depth constrained to 1m
+constrain_wc 0
+
+# Base line temperature for the q10 and seasonal temperature calculations
+baseline_temp 15.0
+temp_ampltiude 0
+
+# Injection rate for vertical upwelling of water column tracers
+# This value is scaled by the a box specific upwelling scalar.
+mix_injection 1e-3
+
+# Scaling coefficient to capture increased mixing rate in winter
+mix_season_kz 10.0
+
+# Deep ocean mixing on or not. Yes = 1 No = 0.
+mix_deep 1
+
+# Depth for marking deep ocean (boxes deeper than this will get deep ocean mixing)
+mix_deep_depth -1200
+
+# Switch to indicate whether or not the injection of materials from
+# point sources is used. Yes = 1, No =0.
+injection 1
+
+# Switch to indicate whether or not the injection of materials from
+# the atmosphere is used. Yes = 1, No =0.
+atmospherics 1
+
+# Switch to indicate whether or not the settling model
+# added to the transport model is used. Yes = 1, No =0.
+settling 1
+
+# Switch to indicate whether or not the bioirrigation model
+# added to the transport model is used. Yes = 1, No =0.
+bioirrigation 1
+
+# Switch to indicate whether or not the bioturbation model
+# added to the transport model is used. Yes = 1, No =0.
+bioturbation 1
+
+# Switch to indicate whether or not the vertical diffusion model
+# added to the transport model is used. Yes = 1, No =0.
+vert_diffusion 0
+horiz_diffusion 0
+
+# Switch to indicate whether or not the forced vertical mixing model
+# added to the transport model is used. Yes = 1, No =0.
+vert_mix 1
+
+# Switch to indicate whether or not the basic advect_diffusion 
+# (transport) model is used. Yes = 1, No =0.
+advect_diffusion 1
+
+use_fill_horizmix 0
+fill_zero_exchange 0
+flush_threshold 1
+
+# Switch to indicate whether or not the resuspension model
+# is used. Yes = 1, No =0.
+resuspension 0
+
+# Switch to indicate whether or not the decay model
+# is used in the water column. Yes = 1, No =0.
+decay_wc 0
+
+# Switch to indicate whether or not the decay model
+# is used in the sediment. Yes = 1, No =0.
+decay_sed 0
+ 
+# Scalar for sediment decay (proxy for additional losses due to burial)
+decay_sed_scale 1.0
+ 
+# Switch to indicate whether or not to scale exchanges. No =0, Yes = 1, Area_corrected = 2.
+scale_transport 1
+
+# Coefficient used in constant scaling of exchanges
+# (the exchanges are multiplied by this value before they are used)
+prcnt_exchange 1.0
+
+# Coefficient used in area corrected scaling of exchanges
+# (the area corrected exchanges are multiplied by
+# this value before they are used)
+ka_exchange 1000
+
+# Switch to indicate whether or not to have cascading flows (exchanges). No =0, Yes = 1
+cascade_flows 1
+
+# Switch indicating type of each box (enter 0 for internal boxes and then 
+# for boundary boxes 0=standard, 1=absorptive, 2=reflective, 3=assymetrical scaling)
+edge_type 11
+0 0 0 0 0 0 0 0 0 0 0 
+
+#############################################
+# Quarterly vectors of seasonal eddy strength
+# (model linearly interpolates between these to get eddy strength on any one day, which
+# can be used to condition primary production)
+eddy_S1   11
+1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 
+
+eddy_S2   11
+1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 
+
+eddy_S3   11
+1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 
+
+eddy_S4   11
+1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 1.0 
+
+# Eddy sclaing of vertical mixing
+eddy_vertmix 0
+
+# Coefficient used in scaling of vertical exchanges by eddies
+eddy_mixscale 10.0
+
+#############################################
+## Point source nutrient input related parameters
+
+# Switch to indicate whether or not gradual nutrient change
+# is allowed in the model
+nutrientchange 0
+
+# Flag to indicate whether the point source can be scaled
+# There must be as many entries here as for npointss in the forcing parameter
+# file
+psschange    30
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+
+# Switch to indicate whether or not nutrient change
+# is constant once increased/decreased or if falls back to original
+# i.e. pulsed or not
+pulsechange 1
+
+# Multiplier which represents degree of total change of the
+# nutrients (i.e. 3 => final amt = 3xinitial; 0.3 => final=initial/3)
+pss_mult 1.0
+
+# Period of time over which change in nutrients occurs
+# here = next 16 years of model run
+pss_period 5840
+
+# Start day of nutrient increase - here run in for 8yrs before
+# change in nutrients is started
+pss_start 2920
+
+# Switch to indicate whether or not a second gradual nutrient change
+# is allowed in the model
+nutrientchange2 0
+
+# Multiplier which represents size of nutrient levels after second change
+# So if to end at 0.5x standard input file levels then this 
+# value would be 0.5 etc.
+pss_mult2 1.0
+
+# Period of time over which second change in nutrients occurs
+# here = 1 year of model run. This value must be at least 1.
+pss_period2 1
+
+# Start day of second change in nutrients
+pss_start2 0
+
+include_atmosphere 0
+atmospheric_NH 0.017
+atmospheric_NO 0.025
+atmospheric_F 0.0
+atmospheric_O2 198.9
+atmospheric_CO2 0.0
+atmospheric_P 0.0
+atmospheric_Si 0.0

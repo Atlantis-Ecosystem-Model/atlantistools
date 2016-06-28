@@ -14,7 +14,7 @@ fishtest      0        # Count up total population for each vertebrate after eac
 flaggape      0        # Periodically list prey vs gape statistics (tuning diagnostic)
 flagchecksize 0        # Periodically list relative size (tuning diagnostic)
 flagagecheck  0        # Periodically list age structure per cohort (tuning diagnostic)
-flagdietcheck 0        # Periodically list realised diet matchups (tuning diagnostic)
+flagdietcheck 1        # Periodically list realised diet matchups (tuning diagnostic)
 checkNH       0        # Give detailed logged output for NH in checkbox
 checkDL       0        # Give detailed logged output for DL in checkbox
 checkDR       0        # Give detailed logged output for DR in checkbox
@@ -38,6 +38,7 @@ toutfinc   	365 day     # Write fisheries output with this periodicity
 tburnday   0 day
 external_box 0
 flagAllowLand 0
+check_dups 0
 
 tsumout    	30 day      # Write stock state summary with this periodicity
 flagannual_Mest 0      # Whether to write out estimates of mortality per predator annually (1) or not (0)
