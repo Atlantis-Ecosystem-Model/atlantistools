@@ -15,7 +15,18 @@
 #' @keywords gen
 #' @export
 
-biomass_flow <- function(preprocess) {
+dir <- file.path("C:", "ATLANTIS_Stuff","Baseruns", "1262_v.15.0.0_ATLANTIS_NS")
+load(file = file.path(dir, "preprocess-north-sea.rda"))
+preprocess <- result
+fgs <- "functionalGroups.csv"
+
+biomass_flow <- function(dir, preprocess, fgs) {
+  diet <- preprocess$diet_dietcheck
+
+  # Only use vertebrate prey groups in last time-step
+  age_acr <- get_age_acronyms(dir = dir, fgs = fgs)
+  diet <- dplyr::filter(diet, is.element(prey, age_acr) & time == max(time))
+
 
 }
 
