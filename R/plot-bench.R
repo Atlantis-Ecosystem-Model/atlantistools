@@ -22,9 +22,10 @@ plot_bench <- function(data, ex_data) {
 
   # Show atlantis as first factor! Restrict data selection to match in time.
   comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
-  model_time <- comp %>%
-    dplyr::group_by_(~model) %>%
-    dplyr::summarise_(time = ~max(time))
+  # model_time <- comp %>%
+  #   dplyr::group_by_(~model) %>%
+  #   dplyr::summarise_(time = ~max(time))
+  model_time <- agg_data(comp, col = "time", groups = "model", out = "time", fun = max)
   max_time <- min(model_time$time)
 
   comp <- comp[comp$time <= max_time, ]
