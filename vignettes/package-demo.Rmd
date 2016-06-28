@@ -258,17 +258,17 @@ ex_data$model <- "test_model"
 plot_rec(data = setas$ssb_rec, ex_data)
 ```
 
-## Compare your model run with other models/data!
+<!-- ## Compare your model run with other models/data! -->
 
-Again, noise is added due to a lack of external data.
+<!-- Again, noise is added due to a lack of external data. -->
 
-```{r, fig.width = 10, fig.height = 4}
-data_comp <- setas$biomass
-data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2)
-data_comp$atoutput <- NULL
-data_comp$model <- "test_model"
-plot_bench(data = setas$biomass, ex_data = data_comp)
-```
+<!-- ```{r, fig.width = 10, fig.height = 4} -->
+<!-- data_comp <- setas$biomass -->
+<!-- data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2) -->
+<!-- data_comp$atoutput <- NULL -->
+<!-- data_comp$model <- "test_model" -->
+<!-- plot_bench(data = setas$biomass, ex_data = data_comp) -->
+<!-- ``` -->
 
 ## Change parameter values!
 

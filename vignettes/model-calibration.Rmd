@@ -96,18 +96,19 @@ ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = FALSE)
 plot_rec(result$ssb_rec, ex_data = ex)
 ```
 
-\newpage
+<!-- \newpage -->
 
-## Biomass benchmark
-```{r}
-ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE)
-plot_bench(result$biomass, ex_data = ex)
-```
+<!-- ## Biomass benchmark -->
+<!-- ```{r} -->
+<!-- ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE) -->
+<!-- plot_bench(result$biomass, ex_data = ex) -->
+<!-- ``` -->
 
 \newpage
 
 ## Biomass benchmark 2
 ```{r}
+ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE)
 plot <- plot_ts(result$biomass) %>% update_labels(labels = list(y = "Biomass [t]"))
 plot_add_range(plot, ex)
 ```
