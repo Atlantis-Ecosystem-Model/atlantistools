@@ -52,7 +52,7 @@ load_nc_physics <- function(dir = getwd(),
   }
 
   # Check input of the nc file
-  if (tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
+  if (utils::tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
     stop("The argument for nc,", nc, "does not end in nc")
   }
   if (!is.null(dir)) nc <- file.path(dir, nc)
