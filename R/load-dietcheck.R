@@ -28,7 +28,7 @@ load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE) {
   }
 
   # read in diet information
-  diet <- read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
+  diet <- utils::read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
 
   # Check if multiple stocks are available per functional group! Only used with trunc code!
   #   if (all(diet$Stock) == 0) {
