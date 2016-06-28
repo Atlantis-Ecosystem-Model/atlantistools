@@ -1,7 +1,10 @@
 # Version 1.0.0 from 2016/06/28
 
 # The output files were created using the following settings.
-# The model files were checked out via SVN at revision 6042!
+# The model files were checked out via SVN at revision 6042 from
+# https://svnserv.csiro.au/svn/ext/atlantis/runFiles/trunk/SETas_model_New_Trunk/ (external users)
+# https://svnserv.csiro.au/svn/atlantis/runFiles/trunk/SETas_model_New_Trunk/ (csiro)
+# See https://confluence.csiro.au/display/Atlantis/Sample+input+files for further information.
 # 'atlantismain.exe' was build using the 'trunk' sourcecode checked out at revision 6042
 # with "atlantis_VS2010.sln".
 
@@ -46,7 +49,8 @@ flag_predratiodepend 0
 ht_FPS 0
 ht_FVS 0
 
-# Previously the size of inverts was assumed to be 1.0 when calculating selectivity. The updated code reads in two new values from the biology.prm file.
+# Previously the size of inverts was assumed to be 1.0 when calculating selectivity.
+# The updated code reads in two new values from the biology.prm file.
 # These values are used for all inverts much the same way the li_a and li_b values are set for all vertebrates.
 li_a_invert 0.01
 li_b_invert 3.0
