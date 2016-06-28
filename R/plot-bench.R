@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' ex_data <- read.csv(file.path(d, "setas-bench.csv"))
+#' ex_data <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
 #' plot_bench(data = preprocess_setas$biomass, ex_data)
 
 plot_bench <- function(data, ex_data) {
@@ -18,8 +18,9 @@ plot_bench <- function(data, ex_data) {
   # ex_data$time <- as.Date(x = ex_data$time, format = "%Y-%m-%d")
 
   data$model <- "atlantis"
-  comp <- rbind(ex_data, data)
+  comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
 
+  # Show atlantis as first factor! Restrict data selection to match in time.
   comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
   model_time <- comp %>%
     dplyr::group_by_(~model) %>%
