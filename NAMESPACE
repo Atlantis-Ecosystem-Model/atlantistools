@@ -3,7 +3,6 @@
 export("%>%")
 export(agg_data)
 export(agg_perc)
-export(biomass_flow)
 export(change_prm)
 export(change_prm_cohort)
 export(check_df_names)
