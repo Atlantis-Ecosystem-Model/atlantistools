@@ -23,6 +23,7 @@ Imports:
   tidyr,
   ggplot2,
   proj4,
-  gridExtra
+  gridExtra,
+  DBI
 VignetteBuilder: knitr
 
