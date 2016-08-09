@@ -43,14 +43,17 @@ load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE) {
   # remove entries without any diet-information!
   empty_rows <- rowSums(x = diet[, 4:ncol(diet)]) == 0
   # Create intermediate dataframe to print predators without diet information!
-  print_diet <- diet[empty_rows, c("Time", "Predator", "Habitat")] %>%
-    dplyr::group_by_(~Predator, ~Habitat) %>%
+  #print_diet <- diet[empty_rows, c("Time", "Predator", "Habitat")] %>%
+  print_diet <- diet[empty_rows, c("Time", "Group", "Cohort","Stock")] %>%
+    #dplyr::group_by_(~Predator, ~Habitat) %>%
+    dplyr::group_by_(~Group, ~Cohort,~Stock) %>%
     dplyr::summarise_(out = ~dplyr::n_distinct(Time)) %>%
     dplyr::filter_(~out != 1)
   if (nrow(print_diet) != 0) {
     print_diet <- print_diet %>%
       dplyr::mutate_(out = ~out / length(unique(diet$Time)) * 100) %>%
-      tidyr::spread_(key_col = "Predator", value_col = "out") %>%
+      #tidyr::spread_(key_col = "Predator", value_col = "out") %>%
+      tidyr::spread_(key_col = "Group", value_col = "out") %>%
       as.data.frame()
     if (report) {
       warning("Incomplete diet information.\n% timesteps without any diet information per predator.")
