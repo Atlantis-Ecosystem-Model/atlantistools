@@ -44,7 +44,7 @@ check_growth <- function(data) {
   result <- lapply(dfs, fit_lm)
   result <- do.call(rbind, result)
   row.names(result) <- NULL
-  return(res)
+  return(result)
 }
 
 
