@@ -6,29 +6,43 @@
 #' @family check functions
 #'
 #' @examples
+#' check_growth(preprocess_setas$structn_age)
 
-check_df_names(df, expect = c("species", "time", "agecl", "atoutput"))
+check_growth <- function(data) {
+  check_df_names(data, expect = c("species", "time", "agecl", "atoutput"))
 
-df <- preprocess_setas$resn_age
+  # Divide output with initial value!
+  ref <- data[data$time == min(data$time), ]
+  ref$time <- NULL
+  names(ref)[names(ref) == "atoutput"] <- "atoutput_ref"
+  result <- data %>%
+    dplyr::left_join(ref) %>%
+    dplyr::mutate_(atoutput = ~atoutput / atoutput_ref)
+  result$atoutput[result$atoutput_ref == 0] <- 0
 
-ref <- df[df$time == min(df$time), ]
-ref$time <- NULL
-names(ref)[names(ref) == "atoutput"] <- "atoutput_ref"
-result <- df %>%
-  dplyr::left_join(ref) %>%
-  dplyr::mutate_(atoutput = ~atoutput / atoutput_ref)
-result$atoutput[result$atoutput_ref == 0] <- 0
+  # Split dataframe into species and ages!
+  dfs <- split(result, data$species)
+  dfs <- lapply(dfs, function(x) split(x, x$age))
 
-dfs <- split(df, df$species)
-dfs <- lapply(dfs, function(x) split(x, x$age))
+  # Fit group specific linear model and extract slope and sign test for each age.
+  fit_lm <- function(ls) {
+    lms <- lapply(ls, lm, formula = atoutput ~ time)
+    slopes <- vapply(lms, FUN = function(x) x$coefficients[2], FUN.VALUE = numeric(1))
+    pvalues <- vapply(lms, FUN = function(x) summary(x)$coefficients[2, 4], FUN.VALUE = numeric(1))
+    return(data.frame(species = ls[[1]]$species[1],
+                      age = as.numeric(names(slopes)),
+                      slope = slopes,
+                      pvalue = pvalues))
+  }
 
-
-fit_lm <- function(ls) {
-  lm <- lm(formula = atoutput ~ time, data = result)
-
-  str(lm)
-
-  slope <- lm$coefficients[2]
-  pvalue <- summary(lm)$coefficients[2, 4]
-
+  # Combine output to dataframe.
+  res <- lapply(dfs, fit_lm)
+  res <- do.call(rbind, res)
+  return(res)
 }
+
+
+
+
+
+
