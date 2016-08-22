@@ -1,7 +1,10 @@
 #' This function is used to check the individual growth per group over time.
 #'
-#' @param df
-#' @return Output of lm fit
+#' @param data Dataframe with information about individual age based growth over time.
+#' This should be generated with \code{preprocess()}. You can test either structural or
+#' reserve weight.
+#' @return Dataframe showing the output of the linear model fit (slope & F-statistic) per
+#' group and age.
 #' @export
 #' @family check functions
 #'
