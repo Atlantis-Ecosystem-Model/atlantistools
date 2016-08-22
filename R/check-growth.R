@@ -10,7 +10,7 @@
 #'
 #' @examples
 #' check_growth(preprocess_setas$structn_age)
-#' check_growth(preprocess_setas$res_age)
+#' check_growth(preprocess_setas$resn_age)
 
 check_growth <- function(data) {
   check_df_names(data, expect = c("species", "time", "agecl", "atoutput"))
@@ -36,12 +36,13 @@ check_growth <- function(data) {
     return(data.frame(species = ls[[1]]$species[1],
                       age = as.numeric(names(slopes)),
                       slope = slopes,
-                      pvalue = pvalues))
+                      pvalue = pvalues, stringsAsFactors = FALSE))
   }
 
   # Combine output to dataframe.
-  res <- lapply(dfs, fit_lm)
-  res <- do.call(rbind, res)
+  result <- lapply(dfs, fit_lm)
+  result <- do.call(rbind, result)
+  row.names(result) <- NULL
   return(res)
 }
 
