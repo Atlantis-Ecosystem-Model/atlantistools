@@ -32,8 +32,8 @@ check_growth <- function(data) {
   fit_lm <- function(ls) {
     lms <- Map(f = function(x, y) lm(formula = atoutput ~ time - 1, data = x, offset = y),
                ls, lapply(ls, function(x) rep(1, times = nrow(x))))
-    slopes <- vapply(lms, FUN = function(x) x$coefficients[2], FUN.VALUE = numeric(1))
-    pvalues <- vapply(lms, FUN = function(x) summary(x)$coefficients[2, 4], FUN.VALUE = numeric(1))
+    slopes <- vapply(lms, FUN = function(x) x$coefficients, FUN.VALUE = numeric(1))
+    pvalues <- vapply(lms, FUN = function(x) summary(x)$coefficients[1, 4], FUN.VALUE = numeric(1))
     return(data.frame(species = ls[[1]]$species[1],
                       age = as.numeric(names(slopes)),
                       slope = slopes,
