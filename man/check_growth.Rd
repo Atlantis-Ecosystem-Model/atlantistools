@@ -4,12 +4,15 @@
 \alias{check_growth}
 \title{This function is used to check the individual growth per group over time.}
 \usage{
-check_growth(data)
+check_growth(data, yearly = FALSE)
 }
 \arguments{
 \item{data}{Dataframe with information about individual age based growth over time.
 This should be generated with \code{preprocess()}. You can test either structural or
 reserve weight.}
+
+\item{yearly}{Logical specifying if relative change in individual weight shall be calculated
+on a yearly basis (\code{TRUE}) ot not (default, \code{FALSE}).}
 }
 \value{
 Dataframe showing the output of the linear model fit (slope & F-statistic) per
