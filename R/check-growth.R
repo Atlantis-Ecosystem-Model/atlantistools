@@ -26,7 +26,7 @@ check_growth <- function(data) {
 
   # Split dataframe into species and ages!
   dfs <- split(result, data$species)
-  dfs <- lapply(dfs, function(x) split(x, x$age))
+  dfs <- lapply(dfs, function(x) split(x, x$agecl))
 
   # Fit group specific linear model and extract slope and sign test for each age.
   fit_lm <- function(ls) {
@@ -35,7 +35,7 @@ check_growth <- function(data) {
     slopes <- vapply(lms, FUN = function(x) x$coefficients, FUN.VALUE = numeric(1))
     pvalues <- vapply(lms, FUN = function(x) summary(x)$coefficients[1, 4], FUN.VALUE = numeric(1))
     return(data.frame(species = ls[[1]]$species[1],
-                      age = as.numeric(names(slopes)),
+                      agecl = as.numeric(names(slopes)),
                       slope = slopes,
                       pvalue = pvalues, stringsAsFactors = FALSE))
   }
