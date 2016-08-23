@@ -55,7 +55,7 @@ check_growth <- function(data, yearly = FALSE) {
     # Combine result to dataframe!
     data.frame(species = ls[[1]]$species[1],
                agecl = as.numeric(unlist(Map(rep, names(rcy), sapply(rcy, length)))),
-               year = gsub("^[^.]+.\\s*", "", names(unlist(rcy))),
+               year = as.numeric(gsub("^[^.]+.\\s*", "", names(unlist(rcy)))),
                relchange = unlist(rcy), stringsAsFactors = FALSE)
   }
 
