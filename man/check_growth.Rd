@@ -24,5 +24,6 @@ This function is used to check the individual growth per group over time.
 \examples{
 check_growth(preprocess_setas$structn_age)
 check_growth(preprocess_setas$resn_age)
+check_growth(preprocess_setas$resn_age, yearly = TRUE)
 }
 

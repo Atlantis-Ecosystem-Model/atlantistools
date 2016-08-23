@@ -13,6 +13,7 @@
 #' @examples
 #' check_growth(preprocess_setas$structn_age)
 #' check_growth(preprocess_setas$resn_age)
+#' check_growth(preprocess_setas$resn_age, yearly = TRUE)
 
 check_growth <- function(data, yearly = FALSE) {
   check_df_names(data, expect = c("species", "time", "agecl", "atoutput"))
