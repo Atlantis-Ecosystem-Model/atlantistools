@@ -17,9 +17,9 @@
 check_growth <- function(data, yearly = FALSE) {
   check_df_names(data, expect = c("species", "time", "agecl", "atoutput"))
 
-  if (!is.null(filter_time) & is.numeric(filter_time)) {
-    data <- data[data$time <= filter_time, ]
-  }
+  # if (!is.null(filter_time) & is.numeric(filter_time)) {
+  #   data <- data[data$time <= filter_time, ]
+  # }
 
   cleanup <- function(ls) {
     df <- do.call(rbind, ls)
@@ -35,6 +35,8 @@ check_growth <- function(data, yearly = FALSE) {
   #   dplyr::left_join(ref) %>%
   #   dplyr::mutate_(atoutput = ~atoutput / atoutput_ref)
   # result$atoutput[result$atoutput_ref == 0] <- 0
+  # outcomment in case lm procedure is used! This is a bit messy.
+  result <- data
 
   # Split dataframe into species and age specific subdataframes!
   dfs <- split(result, data$species)
