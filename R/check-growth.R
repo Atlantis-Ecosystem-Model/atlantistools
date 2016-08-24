@@ -24,6 +24,7 @@ check_growth <- function(data, yearly = FALSE) {
 
   cleanup <- function(ls) {
     df <- do.call(rbind, ls)
+    df <- as.data.frame(df, stringsAsFactors = FALSE)
     row.names(df) <- NULL
     df
   }
