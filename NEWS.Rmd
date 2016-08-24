@@ -3,6 +3,14 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.3.2.9000
+## New features
+* `check_growth()` helps to track changes in group- and age specific individual weight over time.
+You can either track the maximum relative change in individual weight over the whole simulation
+period or the relative change within each year (in case you have mukltiple outputs per year. Other
+wise the result will be 0 by default). This will allow you to easily track if individual weight is 
+consistent with provided input weights throughout the simulation.
+
 # atlantistools 0.3.1.9000
 ## New features
 * `plot_species()` is based on the species-specific overview plots used at CSIRO and Ifremer (Raphael).
