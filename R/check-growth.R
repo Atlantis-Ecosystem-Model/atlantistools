@@ -24,7 +24,6 @@ check_growth <- function(data, yearly = FALSE) {
 
   cleanup <- function(ls) {
     df <- do.call(rbind, ls)
-    df <- as.data.frame(df, stringsAsFactors = FALSE)
     row.names(df) <- NULL
     df
   }
@@ -56,7 +55,7 @@ check_growth <- function(data, yearly = FALSE) {
     # Combine result to dataframe!
     data.frame(species = ls[[1]]$species[1],
                agecl = as.numeric(unlist(Map(rep, names(rcy), sapply(rcy, length)))),
-               year = as.numeric(gsub("^[^.]+.\\s*", "", names(unlist(rcy)))),
+               time = as.numeric(gsub("^[^.]+.\\s*", "", names(unlist(rcy)))),
                relchange = unlist(rcy), stringsAsFactors = FALSE)
   }
 
