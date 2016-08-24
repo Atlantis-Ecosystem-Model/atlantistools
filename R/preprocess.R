@@ -281,6 +281,9 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
     }
   }
 
+  # Ungroup dataframes!
+  result <- lapply(result, dplyr::ungroup)
+
   # Write rest to HDD
   if (save_to_disc) {
     message("Write preprocessed list as *.rda")
