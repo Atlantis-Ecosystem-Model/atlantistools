@@ -4,7 +4,7 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, report = TRUE)
+load_dietcheck(dir = getwd(), dietcheck, report = TRUE, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -19,6 +19,8 @@ case.}
 
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
+
+\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:

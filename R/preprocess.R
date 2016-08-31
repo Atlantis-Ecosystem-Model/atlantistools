@@ -81,6 +81,7 @@
 #' during function evaluation.
 #' @param save_to_disc Logical indicating if the resulting list shall be stored
 #' on the hard-disc (\code{TRUE}) or not (\code{FALSE}).
+#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
 #'
 #' @return Named list with the dataframes as list entry saved as .Rda file.
 
@@ -108,11 +109,13 @@
 #'    check_acronyms = TRUE,
 #'    modelstart = "1991-01-01",
 #'    out = "preprocess.Rda",
-#'    save_to_disc = FALSE)
+#'    save_to_disc = FALSE,
+#'    version_flag = 1)
 #' @export
 
+#BJS 7/6/16 change to be compatible with trunk version; added version_flag
 preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort, specpredmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
-                       check_acronyms, as_date = FALSE, modelstart = NULL, out, report = TRUE, save_to_disc = FALSE){
+                       check_acronyms, as_date = FALSE, modelstart = NULL, out, report = TRUE, save_to_disc = FALSE, version_flag = 1){
 
   age_groups <- get_age_groups(dir = dir, fgs = fgs)
   select_age_groups <- select_groups[is.element(select_groups, age_groups)]
@@ -213,7 +216,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # Load in diet-data!
   message("Read in DietCheck.txt!")
-  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck)
+  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, report = report, version_flag = version_flag) #bjs pass the report flag so dietcheck doesnt always report no matter on the setting; add version_flag)
 
   # load in recruitment data!
   message("Read in SSB/REC data!")
@@ -221,7 +224,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # load in specific mortality data!
   message("Read in SpecPredMort data!")
-  spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort)
+  spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort, version_flag = version_flag) #bjs add version_flag
 
   message("Read in SpecMort data!")
   spec_mort <- load_txt(dir = dir, file = specmort)
