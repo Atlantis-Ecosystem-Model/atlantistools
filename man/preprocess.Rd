@@ -7,7 +7,7 @@
 preprocess(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, specmort,
   specpredmort, prm_biol, prm_run, bps, fgs, select_groups, bboxes,
   check_acronyms, as_date = FALSE, modelstart = NULL, out, report = TRUE,
-  save_to_disc = FALSE)
+  save_to_disc = FALSE, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -101,6 +101,8 @@ during function evaluation.}
 
 \item{save_to_disc}{Logical indicating if the resulting list shall be stored
 on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.
@@ -139,7 +141,8 @@ test <- preprocess(dir = d,
    check_acronyms = TRUE,
    modelstart = "1991-01-01",
    out = "preprocess.Rda",
-   save_to_disc = FALSE)
+   save_to_disc = FALSE,
+   version_flag = 1)
 }
 \keyword{gen}
 

@@ -4,7 +4,7 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, report = TRUE)
+load_dietcheck(dir = getwd(), dietcheck, report = TRUE, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -19,6 +19,8 @@ case.}
 
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
+
+\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -30,6 +32,9 @@ Read in the atlantis dietcheck.txt file and perform some basic data transformati
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 diet <- load_dietcheck(dir = d,
+    dietcheck = "outputSETASDietCheck.txt")
+head(diet, n = 10)
+diet <- load_dietcheck(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
     dietcheck = "outputSETASDietCheck.txt")
 head(diet, n = 10)
 }

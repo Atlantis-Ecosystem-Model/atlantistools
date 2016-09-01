@@ -10,6 +10,8 @@
 #' case.
 #' @param report Logical indicating if incomplete DietCheck information shall
 #' be printed \code{TRUE} or not \code{FALSE}.
+#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
+#'
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -20,9 +22,13 @@
 #' diet <- load_dietcheck(dir = d,
 #'     dietcheck = "outputSETASDietCheck.txt")
 #' head(diet, n = 10)
+#' diet <- load_dietcheck(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
+#'     dietcheck = "outputSETASDietCheck.txt")
+#' head(diet, n = 10)
 
-load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE) {
-  dietcheck <- convert_path(dir = dir, file = dietcheck)
+#BJS 7/6/16 change to be compatible with trunk version; added version_flag
+load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE, version_flag = 1) {
+    dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
   }
@@ -30,30 +36,43 @@ load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE) {
   # read in diet information
   diet <- utils::read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
 
-  # Check if multiple stocks are available per functional group! Only used with trunc code!
-  #   if (all(diet$Stock) == 0) {
-  #     diet$Stock <- NULL
-  #   } else {
-  #     stop("Multiple stocks present. Dietcheck only works with 1 stock per funtional group.")
-  #   }
+  #Check if multiple stocks are available per functional group for trunk branch!
+  if (version_flag == 2) {
+    if (all(diet$Stock) == 0) {
+      diet$Stock <- NULL
+    } else {
+      stop("Multiple stocks present. Dietcheck only works with 1 stock per funtional group.")
+    }
 
-  # Cohorts start with 0 in DietCheck.txt! Only used with trunc code!
-  # diet$Cohort <- diet$Cohort + 1
+    diet$Cohort <- diet$Cohort + 1 # Cohorts start with 0 in DietCheck.txt!
+  }
+
+  prey_col_start <- 4 #bjs remove magic number below
+
+
 
   # remove entries without any diet-information!
-  empty_rows <- rowSums(x = diet[, 4:ncol(diet)]) == 0
+  empty_rows <- rowSums(x = diet[, prey_col_start:ncol(diet)]) == 0
+
+  #BJS change predator/habitat to colnames(diet)[*], generalizes code to work with both trunk and bec_dev
+  #This is only being used if report==TRUE so no need to do the calculations if report flag is false
   # Create intermediate dataframe to print predators without diet information!
-  print_diet <- diet[empty_rows, c("Time", "Predator", "Habitat")] %>%
-    dplyr::group_by_(~Predator, ~Habitat) %>%
-    dplyr::summarise_(out = ~dplyr::n_distinct(Time)) %>%
-    dplyr::filter_(~out != 1)
-  if (nrow(print_diet) != 0) {
-    print_diet <- print_diet %>%
-      dplyr::mutate_(out = ~out / length(unique(diet$Time)) * 100) %>%
-      tidyr::spread_(key_col = "Predator", value_col = "out") %>%
-      as.data.frame()
-    if (report) {
-      warning("Incomplete diet information.\n% timesteps without any diet information per predator.")
+  if (report) {
+    print_diet <- diet[empty_rows, c("Time", colnames(diet)[2], colnames(diet)[3])] %>%
+      dplyr::group_by_(as.formula(paste0("~", colnames(diet)[2])), as.formula(paste0("~", colnames(diet)[3]))) %>%
+
+      dplyr::summarise_(out = ~dplyr::n_distinct(Time)) %>%
+      dplyr::filter_(~out != 1)
+
+    if (nrow(print_diet) != 0) {
+      print_diet <- print_diet %>%
+        dplyr::mutate_(out = ~out / length(unique(diet$Time)) * 100) %>%
+        #BJS predator -> colnames(diet)[2]
+        tidyr::spread_(key_col = colnames(diet)[2], value_col = "out") %>%
+        as.data.frame()
+
+
+      warning("Incomplete diet information.\n% timesteps without any diet information per predator.", immediate. = TRUE)
       print(print_diet)
     }
   }
@@ -61,10 +80,16 @@ load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE) {
   diet <- diet[!empty_rows, ]
 
   # Convert to long dataframe and rename columns!
-  diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "atoutput", gather_cols = names(diet)[4:ncol(diet)])
-  names(diet_long)[names(diet_long) == "Predator"] <- "pred"
-  # Only used with trunc code!
-  # names(diet_long)[names(diet_long) == "Cohort"] <- "agecl"
+  #bjs change 4 to prey_col_start to remove magic number
+  diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "atoutput",
+                              gather_cols = names(diet)[prey_col_start:ncol(diet)])
+  names(diet_long)[names(diet_long) == colnames(diet)[2]] <- "pred" #bjs predator -> colnames(diet)[2]
+
+  if(version_flag == 2) {
+
+    names(diet_long)[names(diet_long) == colnames(diet)[3]] <- "agecl" #bjs cohort -> colnames(diet)[3]
+  }
+
   names(diet_long) <- tolower(names(diet_long))
 
   # Remove entries without spefific diet information

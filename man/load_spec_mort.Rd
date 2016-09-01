@@ -4,7 +4,7 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort)
+load_spec_mort(dir = getwd(), specmort, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -16,6 +16,9 @@ folder) you should use 'NULL' as dir.}
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
+
+\item{version_flag}{The version of atlantis that created the output files.
+1 for bec_dev, 2 for trunk.}
 }
 \value{
 Dataframe with information about ssb in tonnes and recruits in
@@ -28,6 +31,9 @@ Load mortality information from outputSpecificPredMort.txt
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 df <- load_spec_mort(dir = d,
    specmort = "outputSETASSpecificPredMort.txt")
+head(df)
+df <- load_spec_mort(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
+                     specmort = "outputSETASSpecificPredMort.txt", version_flag = 2)
 head(df)
 }
 \seealso{
