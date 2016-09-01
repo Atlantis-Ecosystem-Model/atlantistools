@@ -34,6 +34,9 @@ d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 diet <- load_dietcheck(dir = d,
     dietcheck = "outputSETASDietCheck.txt")
 head(diet, n = 10)
+diet <- load_dietcheck(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
+    dietcheck = "outputSETASDietCheck.txt")
+head(diet, n = 10)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
