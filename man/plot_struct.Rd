@@ -4,7 +4,7 @@
 \alias{plot_struct}
 \title{Function to plot relative contribution of biomass and numbers per cohort.}
 \usage{
-plot_struct(data, ncol = 7)
+plot_struct(data, ncol = 7, combine_thresh = NULL)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
@@ -19,6 +19,7 @@ Function to plot relative contribution of biomass and numbers per cohort.
 }
 \examples{
 plot_struct(preprocess_setas$biomass_age)
+plot_struct(preprocess_setas$biomass, combine_thresh = 3)
 }
 \seealso{
 Other plot functions: \code{\link{plot_bench}},
