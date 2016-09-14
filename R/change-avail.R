@@ -131,6 +131,7 @@ change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza 
 
   # Convert to wide dataframe
   dm <- tidyr::spread(dm, key = "prey", value = "avail")
+  dm <- dplyr::select_(dm, .dots = c(names(dm)[1:4], ff$Code, "DLsed", "DRsed", "DCsed"))
 
   if (save_to_disc) {
     print("Writing new prm file!")
