@@ -167,7 +167,7 @@ write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
   } else {
     breaks <- length(dm_ids) - 2 * nrow(dietmatrix)
     avails <- apply(X = dietmatrix[, 5:ncol(dietmatrix)], FUN = paste, MARGIN = 1, collapse = "\t")
-    tags <- dietmatrix[, "code"]
+    tags <- paste(dietmatrix[, "code"], ncol(dietmatrix) - 4, sep = "\t")
     dm_paste <- unlist(Map(f = c, tags, avails, USE.NAMES = F))
     dm_paste <- c(dm_paste, rep("", times = breaks))
 
