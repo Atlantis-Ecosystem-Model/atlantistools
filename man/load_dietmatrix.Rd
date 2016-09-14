@@ -4,7 +4,7 @@
 \alias{load_dietmatrix}
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
-load_dietmatrix(dir = getwd(), prm_biol, fgs)
+load_dietmatrix(dir = getwd(), prm_biol, fgs, transform = TRUE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -20,6 +20,11 @@ folder/filename string and set dir to 'NULL'.}
 file. In case you are using multiple folders for your model files and
 outputfiles pass the complete folder/filename string as fgs.
 In addition set dir to 'NULL' in this case.}
+
+\item{transform}{Boolean indicating if the returned dataframe is displayed in
+"long" (\code{transform = TRUE, default}) or "wide" (\code{transform = FALSE})
+format. You should use the "wide" format in case you aim to change your
+diet matrix entries.}
 }
 \value{
 dataframe of the availability matrix in long format with columns

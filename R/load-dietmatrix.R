@@ -14,6 +14,10 @@
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
+#' @param transform Boolean indicating if the returned dataframe is displayed in
+#' "long" (\code{transform = TRUE, default}) or "wide" (\code{transform = FALSE})
+#' format. You should use the "wide" format in case you aim to change your
+#' diet matrix entries.
 #' @return dataframe of the availability matrix in long format with columns
 #' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.
 #' @export
