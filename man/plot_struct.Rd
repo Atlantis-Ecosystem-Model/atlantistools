@@ -10,6 +10,11 @@ plot_struct(data, ncol = 7, combine_thresh = NULL)
 \item{data}{Dataframe to be plotted.}
 
 \item{ncol}{Number of columns in multipanel plot.}
+
+\item{combine_thresh}{Integer indicating numbers of species to display in the
+final plot. The species are ranked according to their overall distribution to
+the stacked bar. Species with a low contribution are lumped together to the
+group 'Rest'.}
 }
 \value{
 ggplot2 object

@@ -3,6 +3,10 @@
 #' @param data Dataframe to be plotted.
 #' @param ncol Number of columns in multipanel plot.
 #' @return ggplot2 object
+#' @param combine_thresh Integer indicating numbers of species to display in the
+#' final plot. The species are ranked according to their overall distribution to
+#' the stacked bar. Species with a low contribution are lumped together to the
+#' group 'Rest'.
 #' @export
 #' @family plot functions
 #'
