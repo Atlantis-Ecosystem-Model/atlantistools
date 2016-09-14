@@ -79,15 +79,6 @@ change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza 
       pred_stanza <- rep(c(1, 2), each = length(pred))
       pred <- rep(pred, times = 2)
     }
-    # Repeat entries for prey and roc... messy but it does the job!
-    # dummy <- vector(mode = "list", length = length(pred))
-    # dummy2 <- dummy
-    # for (i in seq_along(dummy)) {
-    #   if (!is.null(prey)) dummy[[i]] <- prey
-    #   if (!is.null(roc)) dummy2[[i]] <- roc
-    # }
-    # prey <- dummy
-    # roc <- dummy2
   }
 
   # Predator selectd but no pred_stanza?
@@ -96,7 +87,7 @@ change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza 
     pred <- rep(pred, each = 2)
   }
 
-  # Predator select and only one species?
+  # Predator select and only one or none species?
   if (length(pred) != length(prey)) {
     dummy <- vector(mode = "list", length = length(pred))
     dummy2 <- dummy
@@ -124,26 +115,14 @@ change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza 
   roc_df <- do.call(rbind, roc_df)
   names(roc_df) <- c("pred", "pred_stanza", "prey", "roc")
 
-  # change single pred / pred_stanza
-  # change_single <- function(dm, pred, pred_stanza, prey, roc, relative) {
-  #   if (length(prey) != length(roc)) stop("Parameters roc and prey do not match.")
-  #
-  #   roc_df <- data.frame(pred = pred, pred_stanza = pred_stanza, prey = prey, roc = roc, stringsAsFactors = FALSE)
-    dm <- dplyr::left_join(dm, roc_df, by = c("pred", "pred_stanza", "prey")) # used to suppress message
-    na_roc <- is.na(dm$roc)
-    if (relative) {
-      dm$avail[!na_roc] <- dm$avail[!na_roc] * dm$roc[!na_roc]
-    } else {
-      dm$avail[!na_roc] <- dm$roc[!na_roc]
-    }
-    dm$roc <- NULL
-  # }
-
-  # Loop over predators
-  # for (i in seq_along(pred)) {
-  #   dm <- change_single(dm, pred = pred[i], pred_stanza = pred_stanza[i], prey = prey[[i]],
-  #                       roc = roc[[i]], relative = relative)
-  # }
+  dm <- dplyr::left_join(dm, roc_df, by = c("pred", "pred_stanza", "prey")) # used to suppress message
+  na_roc <- is.na(dm$roc)
+  if (relative) {
+    dm$avail[!na_roc] <- dm$avail[!na_roc] * dm$roc[!na_roc]
+  } else {
+    dm$avail[!na_roc] <- dm$roc[!na_roc]
+  }
+  dm$roc <- NULL
 
   # Convert to wide dataframe
   dm <- tidyr::spread(dm, key = "prey", value = "avail")
