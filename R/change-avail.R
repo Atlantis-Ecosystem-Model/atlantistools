@@ -14,10 +14,19 @@
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
 #' @param pred Character vector of predator Acronyms (see \code{get_acronyms()}).
+#' Selecting \code{NULL} as pred results in all predators being selected. This
+#' can be helpful if you want to increase the feeding pressure on a specific
+#' prey item by all groups.
 #' @param pred_stanza Integer vector indicating if the predator is juvenile (= 1) or
 #' adult (= 2). \code{pred} and \code{pred_stanza} need to be of the same length.
+#' In rare instances, e.g. pred_stanza being \code{NULL} or one single integer
+#' either all pred_stanzas are selected or the single pred_stanza is applied to all
+#' predators.
 #' @param prey List of character vectors of prey Acronyms (see \code{get_acronyms()}).
-#' \code{pred} and \code{prey} need to be of the same length.
+#' \code{pred} and \code{prey} need to be of the same length. Selecting \code{NULL} as
+#' prey results in all prey groups being selected. This
+#' can be helpful if you want to increase the available prey for a specific predator
+#' overall.
 #' @param roc Vector of multiplication factors which shall be applied to the old set of parameters.
 #' Please supply one value per selected group. In case relative is FALSE the new absolute values
 #' can be passed as roc.
@@ -109,7 +118,7 @@ change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza 
   roc_df <- vector(mode = "list", length = length(pred))
   for (i in seq_along(pred)) {
     if (is.null(prey[[i]])) prey[[i]] <- unique(dm$prey)
-    if (length(roc[[i]]) == 1)
+    # if (length(roc[[i]]) == 1)
     roc_df[[i]] <- data.frame(pred[i], pred_stanza[i], prey[[i]], roc[[i]], stringsAsFactors = FALSE)
   }
   roc_df <- do.call(rbind, roc_df)

@@ -59,7 +59,6 @@ dm6 <- change_avail(dir = d,
                     relative = F,
                     save_to_disc = F)
 
-
 dm1 <- dplyr::arrange(dm1, pred_stanza)
 
 ac <- 72 # switch from pred_stanza == 1 to pred_stanza == 2
