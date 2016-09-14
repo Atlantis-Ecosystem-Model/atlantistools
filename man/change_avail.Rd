@@ -66,7 +66,7 @@ dm <- change_avail(dir = d,
                    prey = "FPL",
                    roc = 0.1234,
                    relative = F,
-                   save_to_disc = F)
+                   save_to_disc = FALSE)
 # Show only rows with availability of 0.1234
 dm[apply(apply(dm[, 5:ncol(dm)], MARGIN = 2, function(x) x == 0.1234), MARGIN = 1, any), ]
 
@@ -78,7 +78,7 @@ dm <- change_avail(dir = d,
                    prey = list(c("FPL", "FPO"), c("FPS", "FVD")),
                    roc = list(c(0.1111, 0.2222), c(0.3333, 0.4444)),
                    relative = F,
-                   save_to_disc = F)
+                   save_to_disc = FALSE)
 
 # Show only rows with availability of 0.1111, 0.2222, 0.3333 or 0.4444
 dm[apply(apply(dm[, 5:ncol(dm)], MARGIN = 2, function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
