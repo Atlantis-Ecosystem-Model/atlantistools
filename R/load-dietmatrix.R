@@ -24,7 +24,10 @@
 
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' head(load_dietmatrix(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", fgs = "SETasGroups.csv"), n = 10)
+#' dm <- load_dietmatrix(dir = d,
+#'                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'                       fgs = "SETasGroups.csv")
+#' head(dm, n = 10)
 
 load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)

@@ -36,6 +36,9 @@ of any ATLANTIS simulation.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-head(load_dietmatrix(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", fgs = "SETasGroups.csv"), n = 10)
+dm <- load_dietmatrix(dir = d,
+                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                      fgs = "SETasGroups.csv")
+head(dm, n = 10)
 }
 

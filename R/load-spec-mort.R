@@ -18,10 +18,13 @@
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' df <- load_spec_mort(dir = d,
-#'    specmort = "outputSETASSpecificPredMort.txt")
+#'                      specmort = "outputSETASSpecificPredMort.txt")
 #' head(df)
-#' df <- load_spec_mort(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
-#'                      specmort = "outputSETASSpecificPredMort.txt", version_flag = 2)
+#'
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' df <- load_spec_mort(dir = d,
+#'                      specmort = "outputSETASSpecificPredMort.txt",
+#'                      version_flag = 2)
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
