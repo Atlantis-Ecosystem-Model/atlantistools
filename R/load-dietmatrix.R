@@ -86,29 +86,3 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE) {
 
 
 
-write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
-  # Find dietmatrix in biological parameterfile!
-  pstring <- "pPREY"
-  biol <- convert_path(dir = dir, file = prm_biol)
-  biol <- readLines(biol)
-  pos <- grep(pattern = pstring, x = biol)
-
-  # Remove explanatory rows
-  pos <- pos[pos != vapply(c("pPREY1FY1", "pPREY1FY2"), FUN = grep, FUN.VALUE = integer(1), x = biol)]
-
-  # Define start and end of dietmatrix
-  lags <- diff(pos)
-  dm_ids <- min(pos) : (pos[which(lags >= 4)] + 1)
-
-  if (length(dm_ids) < (2 * nrow(dietmatrix))) {
-    stop(paste0("Dietmatrix does not fit into ", prm_biol, ". Parameters are lost!"))
-  } else {
-    breaks <- length(dm_ids) - 2 * nrow(dietmatrix)
-  }
-}
-
-
-
-
-
-
