@@ -115,5 +115,17 @@ test_that("Error handling",  {
                             roc = test_val,
                             relative = F,
                             save_to_disc = F), "Parameters pred and pred_stanza do not match")
+
+  expect_warning(change_avail(dir = d,
+                              prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                              fgs = "SETasGroups.csv",
+                              pred = "FVS",
+                              pred_stanza = 2,
+                              prey = "FVO",
+                              roc = 99999999,
+                              relative = T,
+                              save_to_disc = F), "availabilities were")
+
+
 })
 

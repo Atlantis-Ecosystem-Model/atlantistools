@@ -123,6 +123,11 @@ change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza 
     dm$avail[!na_roc] <- dm$roc[!na_roc]
   }
   dm$roc <- NULL
+  id <- dm$avail > 0.9
+  if (sum(id) >= 1) {
+    warning(paste(sum(id), "availabilities were > 0.9 after the calculations. Changed to 0.9."))
+    dm$avail[id] <- 0.9
+  }
 
   # Convert to wide dataframe
   dm <- tidyr::spread(dm, key = "prey", value = "avail")
