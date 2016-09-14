@@ -59,7 +59,7 @@ load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE, version_flag
   # Create intermediate dataframe to print predators without diet information!
   if (report) {
     print_diet <- diet[empty_rows, c("Time", colnames(diet)[2], colnames(diet)[3])] %>%
-      dplyr::group_by_(as.formula(paste0("~", colnames(diet)[2])), as.formula(paste0("~", colnames(diet)[3]))) %>%
+      dplyr::group_by_(stats::as.formula(paste0("~", colnames(diet)[2])), stats::as.formula(paste0("~", colnames(diet)[3]))) %>%
 
       dplyr::summarise_(out = ~dplyr::n_distinct(Time)) %>%
       dplyr::filter_(~out != 1)
