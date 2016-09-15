@@ -46,8 +46,7 @@
 #'                    pred_stanza = 1,
 #'                    prey = "FPL",
 #'                    roc = 0.1234,
-#'                    relative = FALSE,
-#'                    save_to_disc = FALSE)
+#'                    relative = FALSE)
 #' # Show only rows with availability of 0.1234
 #' dm[apply(apply(dm[, 5:ncol(dm)], MARGIN = 2, function(x) x == 0.1234), MARGIN = 1, any), ]
 #'
@@ -58,14 +57,13 @@
 #'                    pred_stanza = c(1, 2),
 #'                    prey = list(c("FPL", "FPO"), c("FPS", "FVD")),
 #'                    roc = list(c(0.1111, 0.2222), c(0.3333, 0.4444)),
-#'                    relative = FALSE,
-#'                    save_to_disc = FALSE)
+#'                    relative = FALSE)
 #'
 #' # Show only rows with availability of 0.1111, 0.2222, 0.3333 or 0.4444
 #' dm[apply(apply(dm[, 5:ncol(dm)], MARGIN = 2, function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
 
 change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza = NULL,
-                         prey = NULL, roc, relative = TRUE, save_to_disc = TRUE) {
+                         prey = NULL, roc, relative = TRUE) {
   # Set variables in case no predators are selected!
   ff <- load_fgs(dir = dir, fgs = fgs)
 
@@ -132,11 +130,6 @@ change_avail <- function(dir = getwd(), prm_biol, fgs, pred = NULL, pred_stanza 
   # Convert to wide dataframe
   dm <- tidyr::spread(dm, key = "prey", value = "avail")
   dm <- dplyr::select_(dm, .dots = c(names(dm)[1:4], ff$Code, "DLsed", "DRsed", "DCsed"))
-
-  if (save_to_disc) {
-    print("Writing new prm file!")
-    write_diet(dir = dir, dietmatrix = dm, prm_biol = prm_biol)
-  }
 
   invisible(dm)
 }
