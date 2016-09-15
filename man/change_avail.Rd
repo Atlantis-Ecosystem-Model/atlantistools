@@ -45,9 +45,6 @@ can be passed as roc.}
 
 \item{relative}{Logical if TRUE values are changed relative to base values. If FALSE new values can
 be passed directly.}
-
-\item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
-(\code{TRUE}) or not (\code{FALSE}).}
 }
 \value{
 parameterfile *.prm file with the new parameter values.

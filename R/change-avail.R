@@ -32,8 +32,6 @@
 #' can be passed as roc.
 #' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
 #' be passed directly.
-#' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
-#' (\code{TRUE}) or not (\code{FALSE}).
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
