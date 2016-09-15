@@ -14,16 +14,14 @@ dm1 <- change_avail(dir = d,
                     pred_stanza = 1,
                     prey = "BC",
                     roc = test_val,
-                    relative = F,
-                    save_to_disc = F)
+                    relative = F)
 
 dm2 <- change_avail(dir = d,
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     fgs = "SETasGroups.csv",
                     prey = "BC",
                     roc = test_val,
-                    relative = F,
-                    save_to_disc = F)
+                    relative = F)
 
 dm3 <- change_avail(dir = d,
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
@@ -31,8 +29,7 @@ dm3 <- change_avail(dir = d,
                     pred = "FPL",
                     prey = "BC",
                     roc = test_val,
-                    relative = F,
-                    save_to_disc = F)
+                    relative = F)
 
 dm4 <- change_avail(dir = d,
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
@@ -40,24 +37,21 @@ dm4 <- change_avail(dir = d,
                     pred = c("FPL", "FPS"),
                     prey = "BC",
                     roc = test_val,
-                    relative = F,
-                    save_to_disc = F)
+                    relative = F)
 
 dm5 <- change_avail(dir = d,
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     fgs = "SETasGroups.csv",
                     pred = "FPL",
                     roc = test_val,
-                    relative = F,
-                    save_to_disc = F)
+                    relative = F)
 
 dm6 <- change_avail(dir = d,
                     prm_biol = "VMPA_setas_biol_fishing_New.prm",
                     fgs = "SETasGroups.csv",
                     pred = c("FPL", "FPO"),
                     roc = test_val,
-                    relative = F,
-                    save_to_disc = F)
+                    relative = F)
 
 dm1 <- dplyr::arrange(dm1, pred_stanza)
 
@@ -113,8 +107,7 @@ test_that("Error handling",  {
                             pred_stanza = c(1, 2, 3),
                             prey = "BC",
                             roc = test_val,
-                            relative = F,
-                            save_to_disc = F), "Parameters pred and pred_stanza do not match")
+                            relative = F), "Parameters pred and pred_stanza do not match")
 
   expect_warning(change_avail(dir = d,
                               prm_biol = "VMPA_setas_biol_fishing_New.prm",
@@ -123,8 +116,7 @@ test_that("Error handling",  {
                               pred_stanza = 2,
                               prey = "FVO",
                               roc = 99999999,
-                              relative = T,
-                              save_to_disc = F), "availabilities were")
+                              relative = T), "availabilities were")
 
 
 })
