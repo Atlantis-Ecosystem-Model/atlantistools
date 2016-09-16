@@ -25,6 +25,10 @@ In addition set dir to 'NULL' in this case.}
 "long" (\code{transform = TRUE, default}) or "wide" (\code{transform = FALSE})
 format. You should use the "wide" format in case you aim to change your
 diet matrix entries.}
+
+\item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
+with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
+'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
 }
 \value{
 dataframe of the availability matrix in long format with columns
