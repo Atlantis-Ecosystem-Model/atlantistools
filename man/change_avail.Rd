@@ -6,7 +6,7 @@
 \title{Change the availability matrix to simpliyfy automated ATLANTIS calibrations.}
 \usage{
 change_avail(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL,
-  roc, relative = TRUE)
+  roc, relative = TRUE, consecutive = FALSE)
 
 write_diet(dir = getwd(), dietmatrix, prm_biol)
 }
@@ -38,6 +38,9 @@ can be passed as roc.}
 
 \item{relative}{Logical if TRUE values are changed relative to base values. If FALSE new values can
 be passed directly.}
+
+\item{consecutive}{Boolean indicating if multiple calls to change_avail are performed one after
+another. Default is \code{FALSE}.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.

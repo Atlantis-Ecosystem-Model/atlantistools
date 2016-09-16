@@ -24,6 +24,8 @@
 #' can be passed as roc.
 #' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
 #' be passed directly.
+#' @param consecutive Boolean indicating if multiple calls to change_avail are performed one after
+#' another. Default is \code{FALSE}.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
@@ -53,7 +55,7 @@
 #' dm2[apply(apply(dm2[, 5:ncol(dm2)], MARGIN = 2,
 #' function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
 
-change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL, roc, relative = TRUE) {
+change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL, roc, relative = TRUE, consecutive = FALSE) {
   # Set variables in case no predators are selected!
   # ff <- load_fgs(dir = dir, fgs = fgs)
   dm <- dietmatrix
@@ -121,9 +123,11 @@ change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NUL
   }
 
   # Convert to wide dataframe
-  dm$prey_id <- NULL
-  dm <- tidyr::spread(dm, key = prey, value = avail)
-  dm <- dplyr::select_(dm, .dots = c(names(dm)[1:4], prey_ordered, "DLsed", "DRsed", "DCsed"))
+  if (!consecutive) {
+    dm$prey_id <- NULL
+    dm <- tidyr::spread(dm, key = prey, value = avail)
+    dm <- dplyr::select_(dm, .dots = c(names(dm)[1:4], prey_ordered, "DLsed", "DRsed", "DCsed"))
+  }
 
   invisible(dm)
 }
