@@ -45,9 +45,13 @@ scan_prm <- function(chars, variable){
 #' @export
 #' @rdname scan_prm
 # Extract value for a specific parameter from a Vector of character strings.
-extract_prm <- function(chars, variable){
-  pos <- scan_prm(chars = chars, variable = variable)
-  result <- chars[pos]
+extract_prm <- function(dir = getwd(), prm_biol, variable) {
+  # Read in parameter file!
+  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
+  prm_biol_new <- readLines(con = prm_biol_new)
+
+  pos <- scan_prm(chars = prm_biol_new, variable = variable)
+  result <- prm_biol_new[pos]
   result <- str_split_twice(char = result)
   return(result)
 }

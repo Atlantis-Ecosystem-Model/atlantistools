@@ -7,7 +7,7 @@
 \usage{
 scan_prm(chars, variable)
 
-extract_prm(chars, variable)
+extract_prm(dir = getwd(), prm_biol, variable)
 }
 \arguments{
 \item{chars}{Vector of character strings}
