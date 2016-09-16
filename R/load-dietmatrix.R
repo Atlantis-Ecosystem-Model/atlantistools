@@ -78,9 +78,8 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE) {
   if (transform) {
     result <- tidyr::gather_(data = result, key = "prey", value = "avail",
                              names(result)[!is.element(names(result), c("pred", "pred_stanza", "prey_stanza", "code"))])
-    prey_order <- dplyr::select(fgs_data, prey = Code)
-    prey_order$prey_id <- 1:nrow(prey_order)
-    result <- dplyr::inner_join(result, prey_order)
+    prey_order <- data.frame(prey = prey, prey_id = 1:length(prey), stringsAsFactors = FALSE)
+    result <- dplyr::left_join(result, prey_order)
   }
 
   return(result)
