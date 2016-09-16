@@ -5,53 +5,16 @@ context("change_avail test parameter update.")
 # }
 
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+dm <- load_dietmatrix(d, prm_biol = "VMPA_setas_biol_fishing_New.prm", fgs = "SETasGroups.csv")
 
 test_val <- 0.1234
 
-dm1 <- change_avail(dir = d,
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    fgs = "SETasGroups.csv",
-                    pred_stanza = 1,
-                    prey = "BC",
-                    roc = test_val,
-                    relative = F)
-
-dm2 <- change_avail(dir = d,
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    fgs = "SETasGroups.csv",
-                    prey = "BC",
-                    roc = test_val,
-                    relative = F)
-
-dm3 <- change_avail(dir = d,
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    fgs = "SETasGroups.csv",
-                    pred = "FPL",
-                    prey = "BC",
-                    roc = test_val,
-                    relative = F)
-
-dm4 <- change_avail(dir = d,
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    fgs = "SETasGroups.csv",
-                    pred = c("FPL", "FPS"),
-                    prey = "BC",
-                    roc = test_val,
-                    relative = F)
-
-dm5 <- change_avail(dir = d,
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    fgs = "SETasGroups.csv",
-                    pred = "FPL",
-                    roc = test_val,
-                    relative = F)
-
-dm6 <- change_avail(dir = d,
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    fgs = "SETasGroups.csv",
-                    pred = c("FPL", "FPO"),
-                    roc = test_val,
-                    relative = F)
+dm1 <- change_avail(dietmatrix = dm, pred_stanza = 1, prey = "BC", roc = test_val, relative = F)
+dm2 <- change_avail(dietmatrix = dm, prey = "BC",roc = test_val, relative = F)
+dm3 <- change_avail(dietmatrix = dm, pred = "FPL", prey = "BC", roc = test_val, relative = F)
+dm4 <- change_avail(dietmatrix = dm, pred = c("FPL", "FPS"), prey = "BC", roc = test_val, relative = F)
+dm5 <- change_avail(dietmatrix = dm, pred = "FPL", roc = test_val, relative = F)
+dm6 <- change_avail(dietmatrix = dm, pred = c("FPL", "FPO"), roc = test_val,relative = F)
 
 dm1 <- dplyr::arrange(dm1, pred_stanza)
 
@@ -100,18 +63,14 @@ test_that("Error handling",  {
   #                           relative = F,
   #                           save_to_disc = F), "Parameters roc and prey do not match")
 
-  expect_error(change_avail(dir = d,
-                            prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                            fgs = "SETasGroups.csv",
+  expect_error(change_avail(dietmatrix = dm,
                             pred = c("FPL", "FPS"),
                             pred_stanza = c(1, 2, 3),
                             prey = "BC",
                             roc = test_val,
                             relative = F), "Parameters pred and pred_stanza do not match")
 
-  expect_warning(change_avail(dir = d,
-                              prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                              fgs = "SETasGroups.csv",
+  expect_warning(change_avail(dietmatrix = dm,
                               pred = "FVS",
                               pred_stanza = 2,
                               prey = "FVO",
