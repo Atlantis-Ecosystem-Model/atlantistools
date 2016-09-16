@@ -128,6 +128,9 @@ change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NUL
   invisible(dm)
 }
 
+#' @export
+#' @rdname change_avail
+# Write dietmatrix dataframe in wide format to hdd.
 write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
   # Find dietmatrix in biological parameterfile!
   pstring <- "pPREY"

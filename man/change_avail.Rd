@@ -2,10 +2,13 @@
 % Please edit documentation in R/change-avail.R
 \name{change_avail}
 \alias{change_avail}
+\alias{write_diet}
 \title{Change the availability matrix to simpliyfy automated ATLANTIS calibrations.}
 \usage{
 change_avail(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL,
   roc, relative = TRUE)
+
+write_diet(dir = getwd(), dietmatrix, prm_biol)
 }
 \arguments{
 \item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
