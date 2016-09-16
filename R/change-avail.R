@@ -168,6 +168,7 @@ write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
 
     if (length(dm_paste) == length(dm_ids)) {
       biol[dm_ids] <- dm_paste
+      print("Writing new prm file!")
       writeLines(biol, convert_path(dir = dir, file = prm_biol))
     } else {
       stop("Dimensions do not match. Dietmatrix not updated!")
