@@ -4,23 +4,13 @@
 \alias{change_avail}
 \title{Change the availability matrix to simpliyfy automated ATLANTIS calibrations.}
 \usage{
-change_avail(dir = getwd(), prm_biol, fgs, pred = NULL,
-  pred_stanza = NULL, prey = NULL, roc, relative = TRUE)
+change_avail(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL,
+  roc, relative = TRUE)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
+\item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
+with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
+'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
 
 \item{pred}{Character vector of predator Acronyms (see \code{get_acronyms()}).
 Selecting \code{NULL} as pred results in all predators being selected. This
@@ -54,27 +44,27 @@ Change the availability of predator XXX on specific preygroups.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-dm <- change_avail(dir = d,
-                   prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                   fgs = "SETasGroups.csv",
-                   pred = "FPL",
-                   pred_stanza = 1,
-                   prey = "FPL",
-                   roc = 0.1234,
-                   relative = FALSE)
+dm <- load_dietmatrix(dir = d,
+                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                      fgs = "SETasGroups.csv")
+dm1 <- change_avail(dietmatrix = dm,
+                    pred = "FPL",
+                    pred_stanza = 1,
+                    prey = "FPL",
+                    roc = 0.1234,
+                    relative = FALSE)
 # Show only rows with availability of 0.1234
-dm[apply(apply(dm[, 5:ncol(dm)], MARGIN = 2, function(x) x == 0.1234), MARGIN = 1, any), ]
+dm1[apply(apply(dm1[, 5:ncol(dm1)], MARGIN = 2, function(x) x == 0.1234), MARGIN = 1, any), ]
 
-dm <- change_avail(dir = d,
-                   prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                   fgs = "SETasGroups.csv",
-                   pred = c("FPL", "FPO"),
-                   pred_stanza = c(1, 2),
-                   prey = list(c("FPL", "FPO"), c("FPS", "FVD")),
-                   roc = list(c(0.1111, 0.2222), c(0.3333, 0.4444)),
-                   relative = FALSE)
+dm2 <- change_avail(dietmatrix = dm,
+                    pred = c("FPL", "FPO"),
+                    pred_stanza = c(1, 2),
+                    prey = list(c("FPL", "FPO"), c("FPS", "FVD")),
+                    roc = list(c(0.1111, 0.2222), c(0.3333, 0.4444)),
+                    relative = FALSE)
 
 # Show only rows with availability of 0.1111, 0.2222, 0.3333 or 0.4444
-dm[apply(apply(dm[, 5:ncol(dm)], MARGIN = 2, function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
+dm2[apply(apply(dm2[, 5:ncol(dm2)], MARGIN = 2,
+function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
 }
 
