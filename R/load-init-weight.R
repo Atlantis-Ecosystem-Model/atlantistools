@@ -14,7 +14,6 @@
 #' @return A \code{data.frame} in long format with the following column names:
 #'   species, agecl, rn and sn.
 #'
-#' @keywords gen
 #' @author Alexander Keth
 
 #' @examples
