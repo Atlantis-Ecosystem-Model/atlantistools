@@ -57,7 +57,8 @@
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
-                    select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
+                    select_variable, bboxes = c(0), check_acronyms = TRUE,
+                    warn_zeros = FALSE, report = TRUE, init = NULL) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
   # at the end. However, this requires alot more storage and the code wouldn't be highly
@@ -157,6 +158,13 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   final_species <- select_groups[sapply(lapply(select_groups, grepl, x = search_clean), any)]
   final_agecl <- fgs$NumCohorts[sapply(final_species, function(x) which(x == fgs$Name))]
 
+  # This may allow init files to be loaded as well! Unfortunately "num_layers" is missing in
+  # the init file. Therefore we also load in the general fiel to extract the layers!
+  # nc = init-file, init = nc-file (very confusing....)
+  # if (length(init) >= 1 & is.character(init)) {
+  #   init <- convert_path(dir = dir, file = init)
+  #   at_out <- RNetCDF::open.nc(con = init)
+  # }
   num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")[,1]
   # add sediment layer!
   num_layers <- num_layers + ifelse(num_layers == 0, 0, 1)

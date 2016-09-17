@@ -6,7 +6,7 @@
 \usage{
 load_nc(dir = getwd(), nc, bps, fgs, select_groups, select_variable,
   bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE,
-  report = TRUE)
+  report = TRUE, init = NULL)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
