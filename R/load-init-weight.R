@@ -18,24 +18,32 @@
 #' @author Alexander Keth
 
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' load_init_weight(dir = d, nc = "init_vmpa_setas_25032013.nc", fgs = "SETasGroups.csv")
+#' dir <- system.file("extdata", "gns", package = "atlantistools")
+#' load_init_weight(dir = dir, nc = "init_NorthSea.nc", fgs = "functionalGroups.csv")
 
 load_init_weight <- function(dir = getwd(), nc, fgs) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
-  at_out <- RNetCDF::open.nc(con = convert_path(dir = dir, file = nc))
-  on.exit(RNetCDF::close.nc(at_out))
+  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = nc))
+  on.exit(RNetCDF::close.nc(init))
 
   # Construct vector of variable names to search!
   species <- get_age_groups(dir = dir, fgs = fgs)
-  cohorts <- lapply(fgs_data$NumCohorts[is.element(fgs_data$Name, species)], seq, from = 1)
-  search_clean <- Map(f = paste0, species, cohorts)
-  search_clean <- unlist(lapply(search_clean, function(x) outer(X = x, Y = c("_ResN", "_StructN"), FUN = paste0)))
+  numcohorts <- fgs_data$NumCohorts[is.element(fgs_data$Name, species)]
+  cohorts <- lapply(numcohorts, seq, from = 1)
+  search_clean <- unlist(Map(f = paste0, species, cohorts, USE.NAMES = FALSE))
 
-  # Extract data from init-file
-  at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = at_out)
+  # Extract data from init-file remove duplicated values and zeros!
+  extract_data <- function(tags, nc) {
+    at_data <- lapply(tags, RNetCDF::var.get.nc, ncfile = nc)
+    vapply(at_data, function(x) unique(x[x != 0]), numeric(1))
+  }
 
-  sapply(at_data, dim)
+  # Store in df
+  df <- data.frame(species = rep(species, times = numcohorts),
+                   agecl = unlist(cohorts),
+                   rn = extract_data(paste0(search_clean, "_ResN"), init),
+                   sn = extract_data(paste0(search_clean, "_StructN"), init))
 
+  return(df)
 }
