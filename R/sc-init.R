@@ -43,17 +43,28 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
   get_pred_data <- function(dir, prm_biol, predacr) {
     mum <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = paste0("mum_", predacr))[1, ]
     c <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = paste0("C_", predacr))[1, ]
-    prms <- vapply(paste0(c("E", "EPlant", "EDL", "EDR", "KWSR", "KWRR"), "_", predacr),
-                   extract_prm, dir = dir, prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
-    prms <- c(prms, extract_prm(dir = dir, prm_biol = "NorthSea_biol_fishing.prm", variable = paste0(predacr, "_AgeClassSize")))
+    # flag: parameter_XXX
+    prms1 <- vapply(paste0(c("E", "EPlant", "EDL", "EDR", "KWSR", "KWRR"), "_", predacr),
+                    extract_prm, dir = dir, prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
+    # flag: XXX_parameter
+    prms2 <- vapply(paste0(predacr, "_", c("AgeClassSize", "age_mat")),
+                    extract_prm, dir = dir, prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
+
+    prms <- c(prms1, prms2)
 
     df <- data.frame(acronym = predacr, mum = mum, c = c, stringsAsFactors = FALSE)
     df$agecl <- 1:nrow(df)
     df <- cbind(df, sapply(prms, rep, each = nrow(df)))
-    names(df)[5:ncol(df)] <- c("e", "eplant", "edl", "edr", "kwrr", "kwsr", "acs")
+    names(df)[5:ncol(df)] <- c("e", "eplant", "edl", "edr", "kwrr", "kwsr", "acs", "ageclmat")
 
     return(df)
   }
+
+  # Extract volume per box and layer!
+  vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
+    dplyr::filter(time == 0) %>%
+    dplyr::rename(vol = atoutput) %>%
+    dplyr::select(-variable)
 
   # Extract data for age based groups
   weights <- load_init_weight(dir = dir, nc = init, fgs = fgs)
@@ -61,16 +72,25 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
   nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums", fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
     dplyr::filter(time == 0)
 
+  # Convert numbers to biomass density!
+  dens <- dplyr::left_join(nums, weights) %>%
+    dplyr::left_join(vol) %>%
+    dplyr::mutate(atoutput = (rn + sn) * atoutput / vol)
+
   # Get nitrogen desity for non age based groups
   n <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest, select_variable = "N", bboxes = bboxes) %>%
     dplyr::filter(time == 0)
 
-  # Extract volume per box and layer!
-  vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
-    dplyr::filter(time == 0)
+  # Extract availability matrix and split into predator groups!
+  dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs) %>%
+    dplyr::filter(is.element(pred, acr_age) & avail != 0)
+  dm <- split(dm, dm$pred)
+  dm <- dm[acr_age]
 
+  # Calculate available prey biomass per predator
+  calc_avail <- function(agegr, nagegr) {
 
-  dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs)
+  }
 
 }
 
