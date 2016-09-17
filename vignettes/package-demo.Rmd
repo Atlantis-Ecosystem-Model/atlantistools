@@ -292,7 +292,7 @@ parameter file with the newly generated one Please make sure to backup your orig
 
 ```{r}
 extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWRR_FPS")
-extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWRR_FPS")
+extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWSR_FPS")
 ```
 
 You can also pass a vector of groups to change the parameter for multiple functional groups with a single call to `change_prm`.
