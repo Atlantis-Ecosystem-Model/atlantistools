@@ -291,9 +291,8 @@ thoroughly so you would normally set `save_to_disc` to `TRUE` to overwrite your 
 parameter file with the newly generated one Please make sure to backup your original files beforehand.
 
 ```{r}
-prm_old <- readLines(con = file.path(d, "VMPA_setas_biol_fishing_New.prm"))
-extract_prm(chars = prm_old, variable = "KWRR_FPS")
-extract_prm(chars = new_prm, variable = "KWRR_FPS")
+extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWRR_FPS")
+extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWRR_FPS")
 ```
 
 You can also pass a vector of groups to change the parameter for multiple functional groups with a single call to `change_prm`.
