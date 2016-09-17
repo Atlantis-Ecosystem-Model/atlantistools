@@ -42,7 +42,7 @@ load_init_weight <- function(dir = getwd(), nc, fgs) {
   df <- data.frame(species = rep(species, times = numcohorts),
                    agecl = unlist(cohorts),
                    rn = extract_data(paste0(search_clean, "_ResN"), init),
-                   sn = extract_data(paste0(search_clean, "_StructN"), init))
+                   sn = extract_data(paste0(search_clean, "_StructN"), init), stringsAsFactors = FALSE)
 
   return(df)
 }
