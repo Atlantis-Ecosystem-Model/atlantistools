@@ -34,7 +34,7 @@
 #' dm <- load_dietmatrix(dir = d,
 #'                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
 #'                       fgs = "SETasGroups.csv")
-
+#'
 #' dm1 <- change_avail(dietmatrix = dm,
 #'                     pred = "FPL",
 #'                     pred_stanza = 1,
@@ -57,7 +57,6 @@
 
 change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL, roc, relative = TRUE, consecutive = FALSE) {
   # Set variables in case no predators are selected!
-  # ff <- load_fgs(dir = dir, fgs = fgs)
   dm <- dietmatrix
   prey_ordered <- unique(dm$prey[order(dm$prey_id)])
 
@@ -95,8 +94,6 @@ change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NUL
   if (length(pred) != length(pred_stanza)) stop("Parameters pred and pred_stanza do not match.")
   if (length(prey) != length(roc)) stop("Parameters roc and prey do not match.")
   if (length(pred) != length(prey)) stop("Parameters pred and prey do not match.")
-
-  # dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs, transform = TRUE)
 
   # Create dataframe of rocs!
   roc_df <- vector(mode = "list", length = length(pred))

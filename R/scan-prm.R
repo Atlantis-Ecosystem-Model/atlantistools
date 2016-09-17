@@ -2,6 +2,13 @@
 #'
 #' @param chars Vector of character strings
 #' @param variable Character string giving the flag to search for.
+#' #' @param dir Character string giving the path of the Atlantis model folder.
+#' If data is stored in multiple folders (e.g. main model folder and output
+#' folder) you should use 'NULL' as dir.
+#' @param prm_biol Character string giving the filename of the biological
+#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
 #' @export
 
 # Extract position of variable in a Vector of character strings.

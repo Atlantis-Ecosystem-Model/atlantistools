@@ -2,9 +2,12 @@
 % Please edit documentation in R/load-dietmatrix.R
 \name{load_dietmatrix}
 \alias{load_dietmatrix}
+\alias{write_diet}
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
 load_dietmatrix(dir = getwd(), prm_biol, fgs, transform = TRUE)
+
+write_diet(dir = getwd(), dietmatrix, prm_biol)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.

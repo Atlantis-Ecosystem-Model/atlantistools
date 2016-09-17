@@ -90,7 +90,7 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE) {
 
 
 #' @export
-#' @rdname change_avail
+#' @rdname load_dietmatrix
 # Write dietmatrix dataframe in wide format to hdd.
 write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
   # Find dietmatrix in biological parameterfile!

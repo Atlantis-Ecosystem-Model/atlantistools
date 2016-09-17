@@ -12,7 +12,15 @@ extract_prm(dir = getwd(), prm_biol, variable)
 \arguments{
 \item{chars}{Vector of character strings}
 
-\item{variable}{Character string giving the flag to search for.}
+\item{variable}{Character string giving the flag to search for.
+#' @param dir Character string giving the path of the Atlantis model folder.
+If data is stored in multiple folders (e.g. main model folder and output
+folder) you should use 'NULL' as dir.}
+
+\item{prm_biol}{Character string giving the filename of the biological
+parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
 }
 \description{
 Scan character vector for specific flag!
