@@ -24,13 +24,12 @@
 #' @examples
 
 #' @export
-
-# dir <- base_path
-# fgs <- "functionalGroups.csv"
-# init <- "init_NorthSea.nc"
-# nc <- "outputNorthSea.nc"
-# prm_biol <- "NorthSea_biol_fishing.prm"
-# bboxes <- get_boundary(load_box(bgm = "NorthSea.bgm"))
+#' dir <- system.file("extdata", "gns", package = "atlantistools")
+#' fgs <- "functionalGroups.csv"
+#' init <- "init_NorthSea.nc"
+#' nc <- "outputNorthSea.nc"
+#' prm_biol <- "NorthSea_biol_fishing.prm"
+#' bboxes <- get_boundary(load_box(bgm = "NorthSea.bgm"))
 
 # function start
 sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
