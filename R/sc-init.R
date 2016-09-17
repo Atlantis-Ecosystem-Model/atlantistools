@@ -26,15 +26,15 @@
 #' @export
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
 #' fgs <- "functionalGroups.csv"
-#' init <- "init_NorthSea.nc"
+#' init <- "init_simple_NorthSea.nc"
 #' nc <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
-#' bboxes <- get_boundary(load_box(bgm = "NorthSea.bgm"))
+#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 
 # function start
 sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
   acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
-  bps <- load_bps(fgs = fgs, init = init)
+  bps <- load_bps(dir = dir, fgs = fgs, init = init)
 
   groups <- get_groups(dir = dir, fgs = fgs)
   groups_age <- get_age_groups(dir = dir, fgs = fgs)
@@ -44,8 +44,8 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
     mum <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = paste0("mum_", predacr))[1, ]
     c <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = paste0("C_", predacr))[1, ]
     prms <- vapply(paste0(c("E", "EPlant", "EDL", "EDR", "KWSR", "KWRR"), "_", predacr),
-                   extract_prm, dir = getwd(), prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
-    prms <- c(prms, extract_prm(prm_biol = "NorthSea_biol_fishing.prm", variable = paste0(predacr, "_AgeClassSize")))
+                   extract_prm, dir = dir, prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
+    prms <- c(prms, extract_prm(dir = dir, prm_biol = "NorthSea_biol_fishing.prm", variable = paste0(predacr, "_AgeClassSize")))
 
     df <- data.frame(acronym = predacr, mum = mum, c = c, stringsAsFactors = FALSE)
     df$agecl <- 1:nrow(df)
@@ -55,15 +55,24 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
     return(df)
   }
 
-  weights <- load_init_weight(nc = "init_NorthSea.nc", fgs = "functionalGroups.csv")
-
+  # Extract data for age based groups
+  weights <- load_init_weight(dir = dir, nc = init, fgs = fgs)
   pd <- lapply(acr_age, get_pred_data, dir = dir, prm_biol = prm_biol)
+  nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums", fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
+    dplyr::filter(time == 0)
 
-  nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums", fgs = fgs,
-                  select_groups = groups_age, bboxes = bboxes) %>%
-    filter(time == 0)
+  # Get nitrogen desity for non age based groups
+  n <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest, select_variable = "N", bboxes = bboxes) %>%
+    dplyr::filter(time == 0)
 
-  n <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
-               select_variable = "N", bboxes = bboxes) %>%
-    filter(time == 0)
+  # Extract volume per box and layer!
+  vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
+    dplyr::filter(time == 0)
+
+
+  dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs)
+
 }
+
+
+
