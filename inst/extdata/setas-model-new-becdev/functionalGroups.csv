@@ -1,0 +1,53 @@
+Code,Index,IsTurnedOn,Name,LongName,NumCohorts,NumGeneTypes,NumStages,NumSpawns,NumAgeClassSize,NumStocks,VerticallyMigrates,HorizontallyMigrates,isFished,IsImpacted,isTAC,GroupType,isPredator,IsCover,isSiliconDep,isAssessed,IsCatchGrazer,OverWinters,isCultured,isHabDepend
+BWH,0,1,baleen_whales,Baleen whales,6,1,2,1,5,1,1,1,1,1,1,MAMMAL,1,0,0,1,0,0,0,1
+TWH,1,1,toothed_whales,Toothed whales,4,1,2,1,3,1,1,1,1,1,0,MAMMAL,1,0,0,1,1,0,0,1
+SEL,2,1,seals,Seals,5,1,2,1,4,1,1,1,1,1,1,MAMMAL,1,0,0,1,1,0,0,1
+SEB,3,1,seabirds,Seabirds,6,1,2,1,5,1,1,1,1,1,1,BIRD,1,0,0,1,1,0,0,1
+PSH,4,1,piscivorous_sharks,Large pisc. sharks,5,1,2,1,5,1,1,1,1,1,1,SHARK,1,0,0,1,0,0,0,1
+OSK,5,1,other_sharks,Other small sharks,5,1,2,1,3,1,1,1,1,1,1,SHARK,1,0,0,1,0,0,0,1
+RAY,6,1,skate_ray,Skates & Rays,6,1,2,1,3,1,1,1,1,1,1,SHARK,1,0,0,1,0,0,0,1
+COD,7,1,cod,Cod,14,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+WHG,8,1,whiting,Whiting,13,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+HAD,9,1,haddock,Haddock,7,1,2,1,2,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+POK,10,1,saithe,Saithe,9,1,2,1,2,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+HKE,11,1,hake,Hake,11,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+WHB,12,1,blue_whiting,Blue whiting,9,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+NOP,13,1,norway_pout,Norway pout,6,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+OLD,14,1,other_large_demersals,Other large gadoids,4,1,2,1,4,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+OSD,15,1,other_small_demersals,Other small gadoids,5,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+MON,16,1,monkfish,Monkfish,5,1,2,1,3,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+GUR,17,1,gurnards,Gurnards,7,1,2,1,2,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+HER,18,1,herring,Herring,10,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+SPR,19,1,sprat,Sprat,5,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+MAC,20,1,mackerel,Mackerel,7,1,2,1,2,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+HOM,21,1,horse_mackerel,Horse mackerel,10,1,2,1,2,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+SAN,22,1,sandeel,Sandeels,5,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,1,0,1
+PLE,23,1,plaice,Plaice,12,1,2,1,2,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+DAB,24,1,dab,Dab,9,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+WIT,25,1,witch,Witch,8,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+SOL,26,1,sole,Sole,13,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+TUR,27,1,turbot,Turbot,5,1,2,1,3,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+ESB,28,1,bass,Seabass,6,1,2,1,5,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+MUR,29,1,red_mullet,Red mullet,5,1,2,1,3,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+SPF,30,1,small_pelagic_filterfeeders,Small pelagics,4,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
+SQZ,31,1,squid,Cephalopod,1,1,1,1,1,1,0,1,1,1,1,CEP,1,0,0,1,0,0,0,1
+PAD,32,1,pandalus,Pandalus,1,1,1,1,1,1,0,1,1,1,1,PWN,1,0,0,1,0,0,0,1
+CSH,33,1,crangon,Crangon,1,1,1,1,1,1,0,1,1,1,1,PWN,1,0,0,1,0,0,0,1
+NEP,34,1,nephrops,Nephrops,1,1,1,1,1,1,0,0,1,1,1,PWN,1,0,0,1,0,0,0,1
+LCR,35,1,large_crabs,Large crabs,1,1,1,1,1,1,0,0,1,1,1,MOB_EP_OTHER,1,0,0,1,0,0,0,1
+SEP,36,1,small_epifauna,Small mobile epifauna,1,1,1,1,1,1,0,0,1,1,1,SED_EP_OTHER,1,0,0,1,0,0,0,1
+SES,37,1,sessile_epifauna,Sessile epifauna,1,1,1,1,1,1,0,0,1,1,1,SED_EP_FF,1,0,0,1,0,0,0,1
+MEP,38,1,epifaunal_macrobenthos,Epifaunal macrobenthos,1,1,1,1,1,1,0,0,1,1,1,MOB_EP_OTHER,1,0,0,1,0,0,0,1
+MIP,39,1,infaunal_macrobenthos,Infaunal macrobenthos,1,1,1,1,1,1,0,0,1,1,1,LG_INF,1,0,0,1,0,0,0,1
+SIN,40,1,small_infauna,Small infauna,1,1,1,1,1,1,0,0,1,1,1,SM_INF,1,0,0,1,0,0,0,1
+GEL,41,1,gelantinous_zoo,Gelatinous zooplankton,1,1,1,1,1,1,0,0,1,1,1,LG_ZOO,1,0,0,1,0,0,0,1
+BB,42,1,benthic_microflora,Benthic microflora,1,1,1,1,1,1,0,0,0,0,0,SED_BACT,0,0,0,0,0,0,0,1
+MEI,43,1,meiofauna,Meiofauna,1,1,1,1,1,1,0,0,0,0,0,SM_INF,1,0,0,1,0,0,0,1
+MIZ,44,1,micro_zoo,Microzooplankton,1,1,1,1,1,1,0,0,0,0,0,SM_ZOO,1,0,0,1,0,0,0,1
+MEZ,45,1,meso_zoo,Mesozooplankton,1,1,1,1,1,1,0,0,0,0,0,MED_ZOO,1,0,0,1,0,0,0,1
+PB,46,1,planktonic_microflora,Bacteria,1,1,1,1,1,1,0,0,0,0,0,PL_BACT,0,0,0,0,0,0,0,1
+PHD,47,1,diatoms,Diatoms,1,1,1,1,1,1,0,0,0,0,0,LG_PHY,0,0,1,1,0,0,0,1
+PHO,48,1,other_phytoplankton,Other phytoplankton,1,1,1,1,1,1,0,0,0,0,0,SM_PHY,0,0,0,1,0,0,0,1
+DL,49,1,labile_detritus,Labile detritus,1,1,1,1,1,1,0,0,0,0,0,LAB_DET,0,0,0,1,0,0,0,1
+DR,50,1,refractory_detritus,Refractory detritus,1,1,1,1,1,1,0,0,0,0,0,REF_DET,0,0,0,1,0,0,0,1
+DC,51,1,carrion,Discards,1,1,1,1,1,1,0,0,0,0,0,CARRION,0,0,0,1,0,0,0,1
