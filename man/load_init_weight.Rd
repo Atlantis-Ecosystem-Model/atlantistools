@@ -28,7 +28,7 @@ This function loads weight at age data (in mgN) from the initial conditions file
 }
 \examples{
 dir <- system.file("extdata", "gns", package = "atlantistools")
-load_init_weight(dir = dir, nc = "init_NorthSea.nc", fgs = "functionalGroups.csv")
+load_init_weight(dir = dir, nc = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
 }
 \author{
 Alexander Keth
