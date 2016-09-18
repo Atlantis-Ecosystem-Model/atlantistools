@@ -85,9 +85,9 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
     df <- tidyr::gather(df, key = "species", value = "vdistrib") %>%
       dplyr::mutate(pred_stanza = as.numeric(stringr::str_sub(species, start = -1))) %>%
       dplyr::mutate(species = stringr::str_sub(species, end = stringr::str_length(species) - 1))
-    nl <- df %>%
-      dplyr::group_by(species, pred_stanza) %>%
-      dplyr::summarise(nl =
+    # nl <- df %>%
+    #   dplyr::group_by(species, pred_stanza) %>%
+    #   dplyr::summarise(nl =
 
     df$species <- stringr::str_sub(df$species, end = stringr::str_length(df$species) - 1)
     return(df)
