@@ -33,6 +33,7 @@
 
 # function start
 sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
+  fgs_data <- load_fgs(dir = dir, fgs = fgs)
   acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
   bps <- load_bps(dir = dir, fgs = fgs, init = init)
 
@@ -52,7 +53,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
 
     prms <- c(prms1, prms2)
 
-    df <- data.frame(acronym = predacr, mum = mum, c = c, stringsAsFactors = FALSE)
+    df <- data.frame(species = predacr, mum = mum, c = c, stringsAsFactors = FALSE)
     df$agecl <- 1:nrow(df)
     df <- cbind(df, sapply(prms, rep, each = nrow(df)))
     names(df)[5:ncol(df)] <- c("e", "eplant", "edl", "edr", "kwrr", "kwsr", "acs", "ageclmat")
@@ -68,20 +69,32 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes) {
 
   # Extract data for age based groups
   weights <- load_init_weight(dir = dir, nc = init, fgs = fgs)
-  pd <- do.call(rbind, lapply(acr_age, get_pred_data, dir = dir, prm_biol = prm_biol)) %>%
-    dplyr::left_join(data.frame(acronym = acr_age, species = groups_age, stringsAsFactors = FALSE)) %>%
-    dplyr::select(-acronym) %>%
-    dplyr::left_join(weights)
+  weights$species <- convert_factor(fgs_data, col = weights$species)
+  pd <- do.call(rbind, lapply(acr_age, get_pred_data, dir = dir, prm_biol = prm_biol))
+  pd$species <- convert_factor(fgs_data, col = pd$species)
+  pd <- dplyr::left_join(pd, weights)
   nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums", fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
     dplyr::filter(time == 0)
+  nums$species <- convert_factor(fgs_data, col = nums$species)
 
-  get_vert_distrib <- function(dir, predacr, prm_biol) {
-    tags <- paste("VERTday", as.vector(outer(X = predarc, Y = 1:2, FUN = paste0)), sep = "_")
-    sapply(tags, extract_prm, dir = dir, prm_biol = prm_biol, min_only = FALSE)
-    # VERTday_BWH1	7
+  get_vert_distrib <- function(dir, predacr, prm_biol, nc) {
+    tags <- as.vector(outer(X = predarc, Y = 1:2, FUN = paste0))
+    df <- as.data.frame(sapply(paste("VERTday", tags, sep = "_"),
+                               extract_prm_cohort, dir = dir, prm_biol = prm_biol))
+    names(df) <- tags
+    df <- tidyr::gather(df, key = "species", value = "vdistrib") %>%
+      dplyr::mutate(pred_stanza = as.numeric(stringr::str_sub(species, start = -1))) %>%
+      dplyr::mutate(species = stringr::str_sub(species, end = stringr::str_length(species) - 1))
+    nl <- df %>%
+      dplyr::group_by(species, pred_stanza) %>%
+      dplyr::summarise(nl =
 
-
+    df$species <- stringr::str_sub(df$species, end = stringr::str_length(df$species) - 1)
+    return(df)
   }
+
+  vdistrib <- get_vert_distrib(dir = dir, predacr = acr_age, prm_biol = prm_biol)
+  vdistrib$species <- convert_factor(fgs_data, col = vdistrib$species)
 
   # Convert numbers to biomass density! --> distribute over watercolumn!
   dens <- dplyr::left_join(nums, weights) %>%
