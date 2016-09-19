@@ -203,13 +203,15 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
     dplyr::left_join(dplyr::select(pd, pred = species, agecl, growth_req)) %>%
     dplyr::mutate(rel_growth = growth_feed / growth_req)
 
-  ggplot2::ggplot(result, ggplot2::aes(x = mult_mum, y = mult_c, fill = rel_growth))
+  plot <- ggplot2::ggplot(result, ggplot2::aes(x = factor(mult_mum), y = factor(mult_c), fill = rel_growth)) +
+    ggplot2::geom_tile() +
+    ggplot2::facet_wrap(~pred + agecl) +
+    ggplot2::scale_fill_gradient(low = "red", high = "green") +
+    theme_atlantis() +
+    ggplot2::coord_equal()
 
-  # Retrun df
-  result <- dplyr::left_join(pd, all_data, by = c("species" = "pred", "agecl"))
-
+  return(plot)
 }
-
 
 
 
