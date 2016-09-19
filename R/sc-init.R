@@ -92,20 +92,20 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   pd$pred_stanza <- ifelse(pd$agecl < pd$ageclmat, 1, 2)
   pd$growth_req <- pd$wdiff / (365 *pd$acs)
 
-  get_vert_distrib <- function(dir, predacr, prm_biol, nc) {
-    tags <- as.vector(outer(X = predacr, Y = 1:2, FUN = paste0))
-    df <- as.data.frame(sapply(paste("VERTday", tags, sep = "_"),
-                               extract_prm_cohort, dir = dir, prm_biol = prm_biol))
-    names(df) <- tags
-    df <- tidyr::gather(df, key = "species", value = "vdistrib") %>%
-      dplyr::mutate(pred_stanza = as.numeric(stringr::str_sub(species, start = -1))) %>%
-      dplyr::mutate(species = stringr::str_sub(species, end = stringr::str_length(species) - 1))
-
-    return(df)
-  }
-
-  vdistrib <- get_vert_distrib(dir = dir, predacr = acr_age, prm_biol = prm_biol)
-  vdistrib$species <- convert_factor(fgs_data, col = vdistrib$species)
+  # get_vert_distrib <- function(dir, predacr, prm_biol, nc) {
+  #   tags <- as.vector(outer(X = predacr, Y = 1:2, FUN = paste0))
+  #   df <- as.data.frame(sapply(paste("VERTday", tags, sep = "_"),
+  #                              extract_prm_cohort, dir = dir, prm_biol = prm_biol))
+  #   names(df) <- tags
+  #   df <- tidyr::gather(df, key = "species", value = "vdistrib") %>%
+  #     dplyr::mutate(pred_stanza = as.numeric(stringr::str_sub(species, start = -1))) %>%
+  #     dplyr::mutate(species = stringr::str_sub(species, end = stringr::str_length(species) - 1))
+  #
+  #   return(df)
+  # }
+  #
+  # vdistrib <- get_vert_distrib(dir = dir, predacr = acr_age, prm_biol = prm_biol)
+  # vdistrib$species <- convert_factor(fgs_data, col = vdistrib$species)
   # NOTE: STill need to combine vdistrib to the rest of the dataframes!
 
   get_ass_eff <- function(dir, prm_biol, predacr) {
