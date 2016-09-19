@@ -52,6 +52,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   if (is.null(pred)) pred <- get_age_acronyms(dir = dir, fgs = fgs)
   acr_age <- pred
 
+  bps <- load_bps(dir = dir, fgs = fgs, init = init)
   groups <- get_groups(dir = dir, fgs = fgs)
   groups_age <- get_age_groups(dir = dir, fgs = fgs)
   groups_rest <- groups[!is.element(groups, groups_age)]
