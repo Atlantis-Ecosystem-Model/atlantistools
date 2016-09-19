@@ -31,6 +31,9 @@
 #' nc <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#' mult_mum <- c(0.5, 1, 1.5, 2, 5, 10, 25)
+#' mult_c <- c(0.5, 1, 1.5, 2, 5, 10, 25)
+
 
 #' @export
 
@@ -120,7 +123,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, no_avail = F
                   fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
     dplyr::filter(time == 0) %>%
     dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
-    dplyr::left_join(unique(dplyr::select(pd, species, agecl, pred_stanza, c))) %>%
+    dplyr::left_join(unique(dplyr::select(pd, species, agecl, pred_stanza))) %>%
     dplyr::left_join(asseff)
 
   preydens_ages <- nums %>%
@@ -166,14 +169,43 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, no_avail = F
 
   # Combine everything to one dataframe! For some reason old ageclasses aren't present...
   all_data <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
-    dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
-    dplyr::mutate(atoutput = preydens * avail * asseff * c) %>%
-    agg_data(groups = c("pred", "agecl", "time", "polygon", "layer"), fun = sum) %>%
-    agg_data(groups = c("pred", "agecl", "time"), out = "growth_feed", fun = mean)
+    dplyr::inner_join(preydens) %>%  # only use prey items which are consumed (e.g. no juvenile inverts)
+    dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
+    agg_data(groups = c("pred", "agecl", "time", "polygon", "layer", "mum", "c"), out = "availbio", fun = sum) # sum up per pred/agcl/time/box/layer
 
+  calc_growth <- function(df, mult_mum, mult_c) {
+    result <- df %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(mum = mum * mult_mum) %>%
+      dplyr::mutate(c = c * mult_c) %>%
+      dplyr::mutate(atoutput = c * availbio / (1 + c / mum * availbio)) %>%  # calculate realised growth rate
+      agg_data(groups = c("pred", "agecl", "time"), out = "growth_feed", fun = mean) # mean over spatial domain
+    return(result)
+  }
 
+  mult1 <- rep(mult_mum, each = length(mult_c))
+  mult2 <- rep(mult_c, times = length(mult_mum))
+  mults <- data.frame(id = 1:length(mult1), mult_mum = mult1, mult_c = mult2)
+
+  # Would have liked to do this with Map but it does not work....
+  result <- vector(mode = "list", length = length(mult1))
+  for (i in seq_along(result)) {
+    dd <- calc_growth(df = all_data, mult_mum = mult1[i], mult_c = mult2[i])
+    dd$id <- i
+    result[[i]] <- dd
+  }
+  result <- do.call(rbind, result) %>%
+    dplyr::left_join(mults) %>%
+    dplyr::left_join(dplyr::select(pd, pred = species, agecl, growth_req)) %>%
+    dplyr::mutate(rel_growth = growth_feed / growth_req)
+
+  ggplot2::ggplot(result, ggplot2::aes(x = mult_mum, y = mult_c, fill = rel_growth))
+
+  # Retrun df
+  result <- dplyr::left_join(pd, all_data, by = c("species" = "pred", "agecl"))
 
 }
+
 
 
 
