@@ -2,7 +2,7 @@ context("load_init_weight check structure and values in output dataframe")
 
 d <- system.file("extdata", "gns", package = "atlantistools")
 
-iw <- load_init_weight(dir = d, nc = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+iw <- load_init_weight(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
 
 test_that("test output numbers", {iw
   expect_equal(dim(iw), c(24, 4))
