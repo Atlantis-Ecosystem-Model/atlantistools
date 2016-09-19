@@ -4,7 +4,8 @@
 \alias{sc_init}
 \title{Sanity check initial conditions file}
 \usage{
-sc_init(dir = getwd(), nc, init, prm_biol, fgs, bboxes, no_avail = FALSE)
+sc_init(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c,
+  no_avail = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -32,6 +33,12 @@ In addition set dir to 'NULL' in this case.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
 
+\item{mult_mum}{Numeric vector of multiplication factors applied to the initial
+mum values.}
+
+\item{mult_c}{Numeric vector of multiplication factors applied to the initial
+C values.}
+
 \item{no_avail}{Boolean indicating if all availabilities should be set to
 1 \code{TRUE} or the actual values from the availability matrix are used
 \code{FALSE}. Default is \code{FALSE}.}
@@ -49,5 +56,7 @@ init <- "init_simple_NorthSea.nc"
 nc <- "outputNorthSea.nc"
 prm_biol <- "NorthSea_biol_fishing.prm"
 bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+mult_mum <- c(0.5, 1, 1.5, 2, 5, 10, 25)
+mult_c <- c(0.5, 1, 1.5, 2, 5, 10, 25)
 }
 

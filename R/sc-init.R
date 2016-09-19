@@ -19,6 +19,10 @@
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' @param mult_mum Numeric vector of multiplication factors applied to the initial
+#' mum values.
+#' @param mult_c Numeric vector of multiplication factors applied to the initial
+#' C values.
 #' @param no_avail Boolean indicating if all availabilities should be set to
 #' 1 \code{TRUE} or the actual values from the availability matrix are used
 #' \code{FALSE}. Default is \code{FALSE}.
@@ -38,7 +42,7 @@
 #' @export
 
 # function start
-sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, no_avail = FALSE) {
+sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, no_avail = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
   acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
   bps <- load_bps(dir = dir, fgs = fgs, init = init)
