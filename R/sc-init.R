@@ -37,7 +37,8 @@
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 #' mult_mum <- c(0.5, 1, 1.5, 2, 5, 10, 25)
 #' mult_c <- c(0.5, 1, 1.5, 2, 5, 10, 25)
-
+#' no_avail <- FALSE
+#' sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c)
 
 #' @export
 
@@ -145,7 +146,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   #   dplyr::select(-rn, -sn, -vol)
   # Get nitrogen desity for non age based groups and combine with age based data
   preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
-               select_variable = "N", bboxes = bboxes) %>%
+                             select_variable = "N", bboxes = bboxes) %>%
     dplyr::filter(time == 0) %>%
     dplyr::mutate(prey_stanza = 2) %>%
     dplyr::select(-agecl) %>%
@@ -174,6 +175,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   # Combine everything to one dataframe! For some reason old ageclasses aren't present...
   all_data <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>%  # only use prey items which are consumed (e.g. no juvenile inverts)
+    dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c)) %>%
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
     agg_data(groups = c("pred", "agecl", "time", "polygon", "layer", "mum", "c"), out = "availbio", fun = sum) # sum up per pred/agcl/time/box/layer
 
@@ -207,8 +209,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
     ggplot2::geom_tile() +
     ggplot2::facet_wrap(~pred + agecl) +
     ggplot2::scale_fill_gradient(low = "red", high = "green") +
-    theme_atlantis() +
-    ggplot2::coord_equal()
+    theme_atlantis()
 
   return(plot)
 }
