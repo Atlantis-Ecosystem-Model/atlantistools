@@ -82,7 +82,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
     return(df)
   }
 
-  weights <- load_init_weight(dir = dir, nc = init, fgs = fgs)
+  weights <- load_init_weight(dir = dir, init = init, fgs = fgs)
   weights$species <- convert_factor(fgs_data, col = weights$species)
   pd <- lapply(acr_age, get_pred_data, dir = dir, prm_biol = prm_biol)
   # Calculate weight difference from one ageclass to the next!
