@@ -42,4 +42,12 @@ Named list with the dataframes as list entry saved as .Rda file.
 \description{
 Sanity check initial conditions file
 }
+\examples{
+dir <- system.file("extdata", "gns", package = "atlantistools")
+fgs <- "functionalGroups.csv"
+init <- "init_simple_NorthSea.nc"
+nc <- "outputNorthSea.nc"
+prm_biol <- "NorthSea_biol_fishing.prm"
+bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+}
 

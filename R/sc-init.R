@@ -25,14 +25,14 @@
 #' @return Named list with the dataframes as list entry saved as .Rda file.
 #'
 #' @examples
-
-#' @export
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
 #' fgs <- "functionalGroups.csv"
 #' init <- "init_simple_NorthSea.nc"
 #' nc <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+
+#' @export
 
 # function start
 sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, no_avail = FALSE) {
