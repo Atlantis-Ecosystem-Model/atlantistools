@@ -4,15 +4,15 @@
 \alias{load_init_weight}
 \title{This function loads weight at age data (in mgN) from the initial conditions file.}
 \usage{
-load_init_weight(dir = getwd(), nc, fgs)
+load_init_weight(dir = getwd(), init, fgs)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
 If data is stored in multiple folders (e.g. main model folder and output
 folder) you should use 'NULL' as dir.}
 
-\item{nc}{Character string giving the filename of netcdf file which
-shall be read in. Usually "init[...].nc".}
+\item{init}{Character string giving the filename of the initial conditions netcdf file.
+Usually "init[...].nc".}
 
 \item{fgs}{Character string giving the filename of 'functionalGroups.csv'
 file. In case you are using multiple folders for your model files and
@@ -28,7 +28,7 @@ This function loads weight at age data (in mgN) from the initial conditions file
 }
 \examples{
 dir <- system.file("extdata", "gns", package = "atlantistools")
-load_init_weight(dir = dir, nc = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+load_init_weight(dir = dir, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
 }
 \author{
 Alexander Keth

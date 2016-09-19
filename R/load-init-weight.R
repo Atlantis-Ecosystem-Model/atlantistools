@@ -3,8 +3,8 @@
 #' @param dir Character string giving the path of the Atlantis model folder.
 #' If data is stored in multiple folders (e.g. main model folder and output
 #' folder) you should use 'NULL' as dir.
-#' @param nc Character string giving the filename of netcdf file which
-#' shall be read in. Usually "init[...].nc".
+#' @param init Character string giving the filename of the initial conditions netcdf file.
+#' Usually "init[...].nc".
 #' @param fgs Character string giving the filename of 'functionalGroups.csv'
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
@@ -18,12 +18,12 @@
 
 #' @examples
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
-#' load_init_weight(dir = dir, nc = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+#' load_init_weight(dir = dir, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
 
-load_init_weight <- function(dir = getwd(), nc, fgs) {
+load_init_weight <- function(dir = getwd(), init, fgs) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
-  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = nc))
+  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
   on.exit(RNetCDF::close.nc(init))
 
   # Construct vector of variable names to search!
@@ -35,7 +35,7 @@ load_init_weight <- function(dir = getwd(), nc, fgs) {
   # Extract data from init-file remove duplicated values and zeros!
   extract_data <- function(tags, nc) {
     at_data <- lapply(tags, RNetCDF::var.get.nc, ncfile = nc)
-    vapply(at_data, function(x) unique(x[x != 0]), numeric(1))
+    vapply(at_data, function(x) unique(x[!x %in% c(0, 1e-08, 1e-16)]), numeric(1))
   }
 
   # Store in df
