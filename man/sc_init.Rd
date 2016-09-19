@@ -56,8 +56,8 @@ init <- "init_simple_NorthSea.nc"
 nc <- "outputNorthSea.nc"
 prm_biol <- "NorthSea_biol_fishing.prm"
 bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-mult_mum <- c(0.5, 1, 1.5, 2, 5, 10, 25)
-mult_c <- c(0.5, 1, 1.5, 2, 5, 10, 25)
+mult_mum <- seq(0.5, 10, by = 1)
+mult_c <- seq(0.5, 10, by = 1)
 no_avail <- FALSE
 sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c)
 }

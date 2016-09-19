@@ -35,8 +35,8 @@
 #' nc <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-#' mult_mum <- c(0.5, 1, 1.5, 2, 5, 10, 25)
-#' mult_c <- c(0.5, 1, 1.5, 2, 5, 10, 25)
+#' mult_mum <- seq(0.5, 10, by = 1)
+#' mult_c <- seq(0.5, 10, by = 1)
 #' no_avail <- FALSE
 #' sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c)
 
@@ -205,10 +205,11 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
     dplyr::left_join(dplyr::select(pd, pred = species, agecl, growth_req)) %>%
     dplyr::mutate(rel_growth = growth_feed / growth_req)
 
-  plot <- ggplot2::ggplot(result, ggplot2::aes(x = factor(mult_mum), y = factor(mult_c), fill = rel_growth)) +
-    ggplot2::geom_tile() +
-    ggplot2::facet_grid(agecl ~ pred) +
-    ggplot2::scale_fill_gradient(low = "red", high = "green") +
+  plot <- ggplot2::ggplot(result, ggplot2::aes(x = mult_mum, y = mult_c, fill = rel_growth)) +
+    ggplot2::geom_raster(interpolate = TRUE) +
+    ggplot2::facet_grid(agecl ~ pred, labeller = ggplot2::label_wrap_gen(width = 8)) +
+    ggplot2::scale_fill_gradient("growth real / growth req.", low = "red", high = "green") +
+    ggplot2::labs(x = "mult.factor MUM", y = "mult. factor C") +
     theme_atlantis()
 
   return(plot)
