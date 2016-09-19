@@ -207,7 +207,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
 
   plot <- ggplot2::ggplot(result, ggplot2::aes(x = factor(mult_mum), y = factor(mult_c), fill = rel_growth)) +
     ggplot2::geom_tile() +
-    ggplot2::facet_wrap(~pred + agecl) +
+    ggplot2::facetgrid(pred ~ agecl) +
     ggplot2::scale_fill_gradient(low = "red", high = "green") +
     theme_atlantis()
 
