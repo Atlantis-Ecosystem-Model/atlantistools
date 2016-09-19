@@ -23,6 +23,8 @@
 #' mum values.
 #' @param mult_c Numeric vector of multiplication factors applied to the initial
 #' C values.
+#' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
+#' predators are selected.
 #' @param no_avail Boolean indicating if all availabilities should be set to
 #' 1 \code{TRUE} or the actual values from the availability matrix are used
 #' \code{FALSE}. Default is \code{FALSE}.
@@ -39,14 +41,16 @@
 #' mult_c <- seq(0.5, 10, by = 1)
 #' no_avail <- FALSE
 #' sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c)
+#' sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, pred = "COD")
 
 #' @export
 
 # function start
-sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, no_avail = FALSE) {
+sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, pred = NULL, no_avail = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
-  acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
-  bps <- load_bps(dir = dir, fgs = fgs, init = init)
+
+  if (is.null(pred)) pred <- get_age_acronyms(dir = dir, fgs = fgs)
+  acr_age <- pred
 
   groups <- get_groups(dir = dir, fgs = fgs)
   groups_age <- get_age_groups(dir = dir, fgs = fgs)
