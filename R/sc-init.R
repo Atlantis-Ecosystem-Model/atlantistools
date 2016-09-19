@@ -19,6 +19,9 @@
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' @param no_avail Boolean indicating if all availabilities should be set to
+#' 1 \code{TRUE} or the actual values from the availability matrix are used
+#' \code{FALSE}. Default is \code{FALSE}.
 #' @return Named list with the dataframes as list entry saved as .Rda file.
 #'
 #' @examples

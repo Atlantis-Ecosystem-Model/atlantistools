@@ -4,7 +4,7 @@
 \alias{sc_init}
 \title{Sanity check initial conditions file}
 \usage{
-sc_init(dir = getwd(), nc, init, prm_biol, fgs, bboxes)
+sc_init(dir = getwd(), nc, init, prm_biol, fgs, bboxes, no_avail = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -31,6 +31,10 @@ outputfiles pass the complete folder/filename string as fgs.
 In addition set dir to 'NULL' in this case.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+
+\item{no_avail}{Boolean indicating if all availabilities should be set to
+1 \code{TRUE} or the actual values from the availability matrix are used
+\code{FALSE}. Default is \code{FALSE}.}
 }
 \value{
 Named list with the dataframes as list entry saved as .Rda file.
