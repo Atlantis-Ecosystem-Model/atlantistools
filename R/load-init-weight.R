@@ -35,7 +35,14 @@ load_init_weight <- function(dir = getwd(), init, fgs) {
   # Extract data from init-file remove duplicated values and zeros!
   extract_data <- function(tags, nc) {
     at_data <- lapply(tags, RNetCDF::var.get.nc, ncfile = nc)
-    vapply(at_data, function(x) unique(x[!x %in% c(0, 1e-08, 1e-16)]), numeric(1))
+    at_data <- lapply(at_data, function(x) unique(x[!x %in% c(0, 1e-08, 1e-16)]))
+    dims <- vapply(at_data, length, integer(1))
+    if (all(dims == 1)) {
+      unlist(at_data)
+    } else {
+      warning("Multiple weight at age values in initial file. Only the first value is used per group/age.")
+      vapply(at_data, function(x) x[1], numeric(1))
+    }
   }
 
   # Store in df
