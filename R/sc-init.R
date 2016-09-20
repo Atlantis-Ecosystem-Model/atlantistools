@@ -45,6 +45,17 @@
 
 #' @export
 
+# AEEC debuging
+# dir <- "c:/backup_z/Atlantis_models/AEECmodel/"
+# nc = "output/AEECF_propDIS_surv.nc"
+# init = "AEEC35_Fcalibrated.nc"
+# prm_biol = "AEEC35_setas_biol_marie.prm"
+# fgs = "SETasGroups.csv"
+# bboxes = get_boundary(load_box(dir = dir, bgm = "poly_atlantisEC35_projETRS89_LAEA_snapped0p002.bgm"))
+# mult_mum = seq(0.5, 5, by = 0.5)
+# mult_c = seq(0.5, 5, by = 0.5)
+# pred <- NULL
+
 # function start
 sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, pred = NULL, no_avail = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
@@ -57,6 +68,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   groups_age <- get_age_groups(dir = dir, fgs = fgs)
   groups_rest <- groups[!is.element(groups, groups_age)]
 
+  message("Read in data from out.nc, init.nc, prm.biol and availmatrix!")
   # Extract volume per box and layer!
   vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
     dplyr::filter(time == 0) %>%
@@ -69,10 +81,10 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
     c <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = paste0("C_", predacr))[1, ]
     # flag: parameter_XXX
     prms1 <- vapply(paste0(c("KWSR", "KWRR"), "_", predacr),
-                    extract_prm, dir = dir, prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
+                    extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
     # flag: XXX_parameter
     prms2 <- vapply(paste0(predacr, "_", c("AgeClassSize", "age_mat")),
-                    extract_prm, dir = dir, prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
+                    extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
     prms <- c(prms1, prms2)
 
     df <- data.frame(species = predacr, mum = mum, c = c, stringsAsFactors = FALSE) %>%
@@ -96,6 +108,9 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   pd <- do.call(rbind, pd)
   pd$pred_stanza <- ifelse(pd$agecl < pd$ageclmat, 1, 2)
   pd$growth_req <- pd$wdiff / (365 *pd$acs)
+  if (any(pd$growth_req < 0)) {
+    warning("Required growth negative for some groups. Please check your initial conditions files.")
+  }
 
   # get_vert_distrib <- function(dir, predacr, prm_biol, nc) {
   #   tags <- as.vector(outer(X = predacr, Y = 1:2, FUN = paste0))
@@ -116,7 +131,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   get_ass_eff <- function(dir, prm_biol, predacr) {
     # Assimilation efficiencies
     asseff <- vapply(paste0(c("E", "EPlant", "EDL", "EDR"), "_", predacr),
-                     extract_prm, dir = dir, prm_biol = "NorthSea_biol_fishing.prm", numeric(1), USE.NAMES = FALSE)
+                     extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
     asseff <- data.frame(species = predacr,
                          ass_type = c("live", "plant", "lab_det", "ref_det"),
                          asseff = asseff, stringsAsFactors = FALSE)
@@ -154,8 +169,8 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
                              select_variable = "N", bboxes = bboxes) %>%
     dplyr::filter(time == 0) %>%
     dplyr::mutate(prey_stanza = 2) %>%
-    dplyr::select(-agecl) %>%
-    dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species))
+    dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species)) %>%
+    dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
   preydens <- rbind(preydens_ages, preydens_invert) %>%
     dplyr::rename(prey = species, preydens = atoutput)
 
@@ -170,6 +185,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   ass_type$grp <- NULL
 
   dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs) %>%
+    dplyr::filter(!grepl(pattern = "sed", x = prey, ignore.case = FALSE)) %>% # Not present in fgs, therefore convert_factor will break if present.
     dplyr::filter(is.element(pred, acr_age) & avail != 0) %>%
     dplyr::left_join(ass_type) %>%
     dplyr::mutate_at(.cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
@@ -177,6 +193,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   # dm <- split(dm, dm$pred)
   # dm <- dm[acr_age]
 
+  message("Apply parameter pertubations.")
   # Combine everything to one dataframe! For some reason old ageclasses aren't present...
   all_data <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>%  # only use prey items which are consumed (e.g. no juvenile inverts)
@@ -215,7 +232,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
     ggplot2::facet_grid(agecl ~ pred, labeller = ggplot2::label_wrap_gen(width = 8)) +
     ggplot2::scale_fill_gradient("growth real / growth req.", low = "red", high = "green") +
     ggplot2::labs(x = "mult.factor MUM", y = "mult. factor C") +
-    theme_atlantis()
+    theme_atlantis(scale_font = 0.8)
 
   return(plot)
 }
