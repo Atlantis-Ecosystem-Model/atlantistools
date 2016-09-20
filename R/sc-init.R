@@ -23,11 +23,16 @@
 #' mum values.
 #' @param mult_c Numeric vector of multiplication factors applied to the initial
 #' C values.
+#' @param out Character string giving the filename of the *.Rda output
+#' file. In case you are using different folders for your model data
+#' and output files please add the output folder.
 #' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
 #' predators are selected.
 #' @param no_avail Boolean indicating if all availabilities should be set to
 #' 1 \code{TRUE} or the actual values from the availability matrix are used
 #' \code{FALSE}. Default is \code{FALSE}.
+#' @param save_to_disc Logical indicating if the resulting list shall be stored
+#' on the hard-disc (\code{TRUE}) or not (\code{FALSE}).
 #' @return Named list with the dataframes as list entry saved as .Rda file.
 #'
 #' @examples
@@ -40,7 +45,8 @@
 #' mult_mum <- seq(0.5, 10, by = 1)
 #' mult_c <- seq(0.5, 10, by = 1)
 #' no_avail <- FALSE
-#' sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c)
+#' df <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = F)
+#' plot_sc_init()
 #' sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, pred = "COD")
 
 #' @export
@@ -52,12 +58,15 @@
 # prm_biol = "AEEC35_setas_biol_marie.prm"
 # fgs = "SETasGroups.csv"
 # bboxes = get_boundary(load_box(dir = dir, bgm = "poly_atlantisEC35_projETRS89_LAEA_snapped0p002.bgm"))
-# mult_mum = seq(0.5, 5, by = 0.5)
-# mult_c = seq(0.5, 5, by = 0.5)
-# pred <- NULL
+# mult_mum = seq(0.5, 1.5, by = 0.1)
+# mult_c = seq(0.5, 1.5, by = 0.1)
+# pred <- get_age_acronyms(dir = dir, fgs = fgs)
+# pred <- pred[!pred %in% c("SB", "CET", "SXX", "SHK")]
+# sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = pred, no_avail = T)
 
 # function start
-sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, pred = NULL, no_avail = FALSE) {
+sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
+                    pred = NULL, no_avail = FALSE, save_to_disc = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
   if (is.null(pred)) pred <- get_age_acronyms(dir = dir, fgs = fgs)
@@ -195,12 +204,24 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
 
   message("Apply parameter pertubations.")
   # Combine everything to one dataframe! For some reason old ageclasses aren't present...
-  all_data <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
+  result <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>%  # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c)) %>%
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
     agg_data(groups = c("pred", "agecl", "time", "polygon", "layer", "mum", "c"), out = "availbio", fun = sum) # sum up per pred/agcl/time/box/layer
 
+  if (save_to_disc) {
+    message("Write final dataframe as *.rda")
+    if (!is.null(dir)) out <- file.path(dir, out)
+    save(result, file = out)
+  }
+
+  return(result)
+}
+
+#' @export
+#' @rdname sc_init
+plot_sc_init <- function(df, mult_mum, mult_c) {
   calc_growth <- function(df, mult_mum, mult_c) {
     result <- df %>%
       dplyr::ungroup() %>%
@@ -218,7 +239,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, mult_mum, mu
   # Would have liked to do this with Map but it does not work....
   result <- vector(mode = "list", length = length(mult1))
   for (i in seq_along(result)) {
-    dd <- calc_growth(df = all_data, mult_mum = mult1[i], mult_c = mult2[i])
+    dd <- calc_growth(df = df, mult_mum = mult1[i], mult_c = mult2[i])
     dd$id <- i
     result[[i]] <- dd
   }
