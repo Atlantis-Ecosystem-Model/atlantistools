@@ -229,11 +229,10 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
 plot_sc_init <- function(df, mult_mum, mult_c) {
   calc_growth <- function(df, mult_mum, mult_c) {
     result <- df %>%
-      dplyr::ungroup() %>%
       dplyr::mutate(mum = mum * mult_mum) %>%
       dplyr::mutate(c = c * mult_c) %>%
       dplyr::mutate(atoutput = c * availbio / (1 + c / mum * availbio)) %>%  # calculate realised growth rate
-      agg_data(groups = c("pred", "agecl", "time"), out = "growth_feed", fun = mean) # mean over spatial domain
+      agg_data(groups = c("pred", "agecl", "time", "growth_req"), out = "growth_feed", fun = mean) # mean over spatial domain
     return(result)
   }
 
