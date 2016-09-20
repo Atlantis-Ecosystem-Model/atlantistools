@@ -9,3 +9,7 @@ test_that("test output numbers", {iw
   expect_equal(iw$rn[iw$species == "cod" & iw$agecl == 7], 61272.89)
   expect_equal(iw$sn[iw$species == "herring" & iw$agecl == 9], 718.66)
 })
+
+num <- load_init_num(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+n <- load_init_n(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+
