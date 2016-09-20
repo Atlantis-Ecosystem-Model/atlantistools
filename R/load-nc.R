@@ -316,7 +316,8 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   if (select_variable == "N" & any(final_agecl == 2)) {
     result <- result %>%
       dplyr::group_by_("polygon", "layer", "species", "time") %>%
-      dplyr::summarise_(atoutput = ~sum(atoutput))
+      dplyr::summarise_(atoutput = ~sum(atoutput)) %>%
+      dplyr::ungroup()
   }
 
   return(result)
