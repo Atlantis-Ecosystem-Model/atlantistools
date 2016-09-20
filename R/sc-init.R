@@ -19,10 +19,6 @@
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
-#' @param mult_mum Numeric vector of multiplication factors applied to the initial
-#' mum values.
-#' @param mult_c Numeric vector of multiplication factors applied to the initial
-#' C values.
 #' @param out Character string giving the filename of the *.Rda output
 #' file. In case you are using different folders for your model data
 #' and output files please add the output folder.
@@ -33,7 +29,13 @@
 #' \code{FALSE}. Default is \code{FALSE}.
 #' @param save_to_disc Logical indicating if the resulting list shall be stored
 #' on the hard-disc (\code{TRUE}) or not (\code{FALSE}).
-#' @return Named list with the dataframes as list entry saved as .Rda file.
+#' @param df Dataframe to pass to \code{plot_sc_init()}. df should be generated with
+#' sc_init or read in from *.rda (also generated with sc_init()).
+#' @param mult_mum Numeric vector of multiplication factors applied to the initial
+#' mum values.
+#' @param mult_c Numeric vector of multiplication factors applied to the initial
+#' C values.
+#' @return Dataframe/ Plot.
 #'
 #' @examples
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
@@ -45,9 +47,12 @@
 #' mult_mum <- seq(0.5, 10, by = 1)
 #' mult_c <- seq(0.5, 10, by = 1)
 #' no_avail <- FALSE
-#' df <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = F)
-#' plot_sc_init()
-#' sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, pred = "COD")
+#' save_to_disc <- FALSE
+#' data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
+#' plot_sc_init(df = data, mult_mum, mult_c)
+#'
+#' data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
+#' plot_sc_init(df = data, mult_mum, mult_c)
 
 #' @export
 
@@ -202,13 +207,13 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   # dm <- split(dm, dm$pred)
   # dm <- dm[acr_age]
 
-  message("Apply parameter pertubations.")
   # Combine everything to one dataframe! For some reason old ageclasses aren't present...
   result <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
-    dplyr::inner_join(preydens) %>%  # only use prey items which are consumed (e.g. no juvenile inverts)
-    dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c)) %>%
+    dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
-    agg_data(groups = c("pred", "agecl", "time", "polygon", "layer", "mum", "c"), out = "availbio", fun = sum) # sum up per pred/agcl/time/box/layer
+    agg_data(groups = c("pred", "agecl", "time", "polygon", "layer"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
+    dplyr::ungroup() %>%
+    dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c, growth_req))
 
   if (save_to_disc) {
     message("Write final dataframe as *.rda")
