@@ -109,6 +109,16 @@ test_that("test output nitrogen", {
   expect_true(sd(test$check[!is.na(test$check)]) < 0.0000001)
 })
 
+d <- system.file("extdata", "gns", package = "atlantistools")
+bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
+bboxes <- get_boundary(load_box(dir = d, bgm = "NorthSea.bgm"))
+data <- load_nc(dir = d, nc = "init_simple_NorthSea.nc", bps = bps, fgs = "functionalGroups.csv",
+                select_groups = c("cod", "herring"), select_variable = "Nums", bboxes = bboxes)
 
 
+test_that("read in initial conditions file", {
+  expect_equal(dim(data), dim(ref_eat))
+  expect_equal(sum(is.na(test$atoutput.x)) + sum(is.na(test$atoutput.y)), 0)
+  expect_true(sd(test$check[!is.na(test$check)]) < 0.0000001)
+})
 
