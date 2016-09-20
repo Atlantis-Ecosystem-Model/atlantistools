@@ -84,7 +84,7 @@ load_init_num <- function(dir = getwd(), init, fgs) {
 
 #' @export
 #' @rdname load_init_weight
-load_init_n <- function(dir = getwd(), init, fgs) {
+load_init_n <- function(dir = getwd(), init, tags) {
   init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
   on.exit(RNetCDF::close.nc(init))
 
@@ -113,6 +113,31 @@ load_init_n <- function(dir = getwd(), init, fgs) {
   return(df)
 }
 
+#' @rdname load_init_weight
+load_init_physics <- function(dir = getwd(), init, tags) {
+  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  on.exit(RNetCDF::close.nc(init))
+
+  at_data <- lapply(tags, RNetCDF::var.get.nc, ncfile = init)
+
+  sed_id <- sapply(at_data, function(x) length(dim(x))) == 1
+
+  at_data <- at_data[!sed_id]
+  at_data <- lapply(at_data, function(x) x[1, ]) # only use 1st layer
+  at_data <- lapply(at_data, function(x) data.frame(atoutput = x, polygon = 0:(length(x) - 1), stringsAsFactors = FALSE))
+  at_data <- lapply(at_data, function(x) x[!is.element(x$atoutput, c(0, 1e-08, 1e-16)), ])
+
+  species <- groups_rest[!sed_id]
+  # Store in df
+  for (i in seq_along(at_data)) {
+    at_data[[i]]$species <- species[i]
+  }
+  df <- do.call(rbind, at_data)
+
+  return(df)
+}
+
+
 get_tags <- function(dir = getwd(), fgs) {
   # Construct vector of variable names to search!
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
@@ -122,5 +147,110 @@ get_tags <- function(dir = getwd(), fgs) {
   search_clean <- unlist(Map(f = paste0, species, cohorts, USE.NAMES = FALSE))
   return(list(tags = search_clean, species = species, cohorts = cohorts))
 }
+
+
+load_init <- function(dir = getwd(), init, vars) {
+  read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  on.exit(RNetCDF::close.nc(read_nc))
+
+  # Extract ncdf dimensions!
+  n_timesteps <- RNetCDF::dim.inq.nc(read_nc, 0)$length
+  if (n_timesteps != 1) stop("More than 1 timestep! init was not an initial conditions file.")
+  n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 1)$length
+  n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
+  num_layers <- get_layers(dir = dir, init = init)
+  layerid <- get_layerid(num_layers = num_layers, max_layer = n_layers, n_boxes = n_boxes)
+
+  at_data <- lapply(vars, RNetCDF::var.get.nc, ncfile = read_nc)
+
+  # Box and layer!
+  convert2d <- function(mat, layerid, n_boxes) {
+    if (!(is.matrix(mat) & length(dim(mat)) == 2)) {
+      stop("Wrong data format. Variable is not stored as 2d data in initial file.")
+    }
+    data.frame(atoutput = as.vector(mat),
+               polygon = rep(0:(n_boxes - 1), each = length(layerid) / n_boxes),
+               layer = layerid, stringsAsFactors = FALSE)
+  }
+
+  # Only Box data!
+  convert1d <- function(vec, n_boxes) {
+    if (!(is.vector(vec) & length(vec) != n_boxes)) {
+      stop("Wrong data format. Variable is not stored as 1d vector in initial file.")
+    }
+    data.frame(atoutput = as.vector(mat),
+               polygon = 0:(n_boxes - 1), stringsAsFactors = FALSE)
+  }
+
+  at_dim <- vapply(at_data, function(x) length(dim(x)), integer(1))
+
+  # Check cases and apply formulas!
+  if (all(at_dim == 2)) df_list <- lapply(at_data, convert2d)
+  if (all(at_dim == 1)) df_list <- lapply(at_data, convert1d)
+  if (length(unique(at_dim)) > 1) stop("Vars are stored in different dimensions. Please, either pick only 2d or 1d data.")
+
+  # Data extracted for every variable?
+  if (length(vars) != length(df_list)) stop("Starnge ncdf extraction. Please contact package development Team.")
+
+
+
+
+}
+
+get_layers <- function(dir = getwd(), init) {
+  read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  on.exit(RNetCDF::close.nc(read_nc))
+
+  num_layers <- RNetCDF::var.get.nc(ncfile = read_nc, variable = "numlayers")
+  if (length(dim(num_layers)) == 2) {
+    if (all(apply(num_layers, MARGIN = 1, FUN = function(x) length(unique)) == 1)) {
+      num_layers <- num_layers[, 1]
+    } else {
+      stop("Different numbers of layers per Box. This nc-structure is not supported.")
+    }
+  }
+  # add sediment layer! Islands are visibile by numlayers == 0.
+  # num_layers <- num_layers + ifelse(num_layers == 0, 0, 1)
+  return(num_layers)
+}
+
+get_layerid <- function(num_layers, max_layer, n_boxes) {
+  wc_id <- lapply(num_layers, function(x) rep(1, times = x))
+  wc_id <- lapply(wc_id, function(x) rev(cumsum(x) - 1)) # ids are in reverse order in the nc file
+  wc_fill <- lapply(num_layers, function(x) rep(NA, times = max_layer - x - 1))
+  wc <- Map(f = c, wc_id, wc_fill)
+  if (length(unique(sapply(wc, length))) != 1) stop("Layers inconsistent. Contact package development Team.")
+  wc <- lapply(wc, function(x) c(x, max_layer)) # add sediment layer
+  unlist(wc)
+}
+
+remove_min_pools <- function(df, col = "atoutput", min_pools = c(0, 1e-08, 1e-16)) {
+  expr <- lazyeval::interp(quote(!(x %in% y)), x = as.name(col), y = min_pools)
+  df %>% dplyr::filter_(expr)
+}
+
+remove_bboxes <- function(df, bboxes) {
+  if (!any(names(df) == "polygon")) stop("No column polygon in df. Cannot remove boundary boxes.")
+  df %>% dplyr::filter(!(polygon %in% bboxes))
+}
+
+var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(init)$nvars - 1),
+                         function(x) RNetCDF::var.inq.nc(init, x)$name)
+
+wawa <- at_data[sapply(at_data, function(x) length(dim(x)))]
+
+wuwu <- vector(mode = "list", length = length(wawa))
+for (i in seq_along(wuwu)) {
+  wuwu[[i]] <- apply(wawa[[i]], MARGIN = 2, function(x) sum(x != 0))
+}
+
+
+at_data <- lapply(var_names_ncdf, RNetCDF::var.get.nc, ncfile = nc)
+
+sapply(at_data, function(x) length(dim(x)))
+
+dim1 <- var_names_ncdf[sapply(at_data, function(x) length(dim(x))) == 1]
+dim2 <- var_names_ncdf[sapply(at_data, function(x) length(dim(x))) == 2]
+
 
 
