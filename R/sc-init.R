@@ -250,7 +250,6 @@ plot_sc_init <- function(df, mult_mum, mult_c) {
   }
   result <- do.call(rbind, result) %>%
     dplyr::left_join(mults) %>%
-    dplyr::left_join(dplyr::select(pd, pred = species, agecl, growth_req)) %>%
     dplyr::mutate(rel_growth = growth_feed / growth_req)
 
   plot <- ggplot2::ggplot(result, ggplot2::aes(x = mult_mum, y = mult_c, fill = rel_growth)) +
