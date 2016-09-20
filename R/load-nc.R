@@ -165,7 +165,14 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   #   init <- convert_path(dir = dir, file = init)
   #   at_out <- RNetCDF::open.nc(con = init)
   # }
-  num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")[,1]
+  num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")
+  if (length(dim(num_layers)) == 2) {
+    if (all(apply(num_layers, MARGIN = 1, FUN = function(x) length(unique)) == 1)) {
+      num_layers <- num_layers[, 1]
+    } else {
+      stop("Different numbers of layers per Box. This nc-structure is not supported.")
+    }
+  }
   # add sediment layer!
   num_layers <- num_layers + ifelse(num_layers == 0, 0, 1)
 
