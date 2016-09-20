@@ -82,7 +82,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   groups_age <- get_age_groups(dir = dir, fgs = fgs)
   groups_rest <- groups[!is.element(groups, groups_age)]
 
-  message("Read in data from out.nc, init.nc, prm.biol and availmatrix!")
+  message("Read in data from out.nc, init.nc and prm.biol!")
   # Extract volume per box and layer!
   vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
     dplyr::filter(time == 0) %>%
