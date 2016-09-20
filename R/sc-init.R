@@ -240,7 +240,7 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     result <- df %>%
       dplyr::mutate(mum = mum * mult_mum) %>%
       dplyr::mutate(c = c * mult_c) %>%
-      dplyr::filter(!is.na(availbio)) %>% # Only needed in case data is read in from init!
+      dplyr::filter(!is.na(availbio)) %>% # Only needed in case data is read in from init
       dplyr::mutate(atoutput = c * availbio / (1 + c / mum * availbio)) %>%  # calculate realised growth rate
       agg_data(groups = c("pred", "agecl", "growth_req"), out = "growth_feed", fun = mean) # mean over spatial domain
     return(result)
