@@ -50,6 +50,9 @@ predators are selected.}
 \item{save_to_disc}{Logical indicating if the resulting list shall be stored
 on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
 
+\item{df}{Dataframe to pass to \code{plot_sc_init()}. df should be generated with
+sc_init or read in from *.rda (also generated with sc_init()).}
+
 \item{mult_mum}{Numeric vector of multiplication factors applied to the initial
 mum values.}
 
@@ -57,7 +60,7 @@ mum values.}
 C values.}
 }
 \value{
-Named list with the dataframes as list entry saved as .Rda file.
+Dataframe/ Plot.
 }
 \description{
 Sanity check initial conditions file
@@ -72,8 +75,11 @@ bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 mult_mum <- seq(0.5, 10, by = 1)
 mult_c <- seq(0.5, 10, by = 1)
 no_avail <- FALSE
-df <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = F)
-plot_sc_init()
-sc_init(dir, nc, init, prm_biol, fgs, bboxes, mult_mum, mult_c, pred = "COD")
+save_to_disc <- FALSE
+data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
+plot_sc_init(df = data, mult_mum, mult_c)
+
+data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
+plot_sc_init(df = data, mult_mum, mult_c)
 }
 
