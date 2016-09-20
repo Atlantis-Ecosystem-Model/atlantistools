@@ -86,9 +86,9 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   message("Read in data from out.nc, init.nc and prm.biol!")
   # Extract volume per box and layer!
   vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
-    dplyr::filter(time == 0) %>%
+    dplyr::filter(time == 0 & layer == 0) %>%
     dplyr::rename(vol = atoutput) %>%
-    dplyr::select(-variable)
+    dplyr::select(-variable, -layer, -time)
 
   # Extract data for age based groups
   get_pred_data <- function(dir, prm_biol, predacr) {
@@ -159,9 +159,12 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   # Extract prey densities!
   # Convert numbers to biomass density! --> distribute over watercolumn!
   # Calculate prey density per stanza!
-  nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums",
-                  fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
-    dplyr::filter(time == 0) %>%
+
+  # Comment in to extract numbers from output!
+  # nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums",
+  #                 fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
+  #   dplyr::filter(time == 0)
+  nums <- load_init_num(dir = dir, init = init, fgs = fgs) %>%
     dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
     dplyr::left_join(unique(dplyr::select(pd, species, agecl, pred_stanza))) %>%
     dplyr::left_join(asseff)
@@ -170,7 +173,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
     dplyr::rename(prey_stanza = pred_stanza) %>%
     dplyr::left_join(weights) %>%
     dplyr::mutate(atoutput = (rn + sn) * atoutput) %>%
-    agg_data(groups = c("species", "polygon", "layer", "time", "prey_stanza"), fun = sum) %>%
+    agg_data(groups = c("species", "polygon", "prey_stanza"), fun = sum) %>%
     dplyr::left_join(vol) %>%
     dplyr::mutate(atoutput = atoutput / vol) %>%
     dplyr::select(-vol) %>%
@@ -180,9 +183,12 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   #   dplyr::mutate(atoutput = (rn + sn) * atoutput / vol) %>%
   #   dplyr::select(-rn, -sn, -vol)
   # Get nitrogen desity for non age based groups and combine with age based data
-  preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
-                             select_variable = "N", bboxes = bboxes) %>%
-    dplyr::filter(time == 0) %>%
+
+  # Comment in to get data from output file
+  # preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
+  #                            select_variable = "N", bboxes = bboxes) %>%
+  #   dplyr::filter(time == 0)
+  preydens_invert <- load_init_n(dir = dir, init = init, fgs = fgs) %>%
     dplyr::mutate(prey_stanza = 2) %>%
     dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species)) %>%
     dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
@@ -212,7 +218,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   result <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
-    agg_data(groups = c("pred", "agecl", "time", "polygon", "layer"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
+    agg_data(groups = c("pred", "agecl", "polygon"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
     dplyr::ungroup() %>%
     dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c, growth_req))
 
@@ -234,8 +240,9 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     result <- df %>%
       dplyr::mutate(mum = mum * mult_mum) %>%
       dplyr::mutate(c = c * mult_c) %>%
+      dplyr::filter(!is.na(availbio)) %>% # Only needed in case data is read in from init!
       dplyr::mutate(atoutput = c * availbio / (1 + c / mum * availbio)) %>%  # calculate realised growth rate
-      agg_data(groups = c("pred", "agecl", "time", "growth_req"), out = "growth_feed", fun = mean) # mean over spatial domain
+      agg_data(groups = c("pred", "agecl", "growth_req"), out = "growth_feed", fun = mean) # mean over spatial domain
     return(result)
   }
 

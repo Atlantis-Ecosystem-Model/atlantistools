@@ -8,7 +8,7 @@
 sc_init(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out, pred = NULL,
   no_avail = FALSE, save_to_disc = FALSE)
 
-plot_sc_init(df, mult_mum, mult_c)
+plot_sc_init(df, mult_mum, mult_c, pred = NULL)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -78,6 +78,7 @@ no_avail <- FALSE
 save_to_disc <- FALSE
 data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
 plot_sc_init(df = data, mult_mum, mult_c)
+plot_sc_init(df = data, mult_mum, mult_c, pred = "Cod")
 
 data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
 plot_sc_init(df = data, mult_mum, mult_c)
