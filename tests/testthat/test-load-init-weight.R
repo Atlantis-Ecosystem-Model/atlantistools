@@ -11,7 +11,7 @@ test_that("test output numbers", {
 })
 
 num <- load_init_num(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
-n <- load_init_n(dir = d, init = "init_simple_NorthSea.nc", groups = "crangon")
+n <- load_init_n(dir = d, init = "init_simple_NorthSea.nc", select_groups = "crangon")
 
 layers <- get_layers(dir = d, init = "init_simple_NorthSea.nc")
 

@@ -188,7 +188,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   # preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
   #                            select_variable = "N", bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
-  preydens_invert <- load_init_n(dir = dir, init = init, fgs = fgs) %>%
+  preydens_invert <- load_init_n(dir = dir, init = init, select_groups = groups_rest) %>%
     dplyr::mutate(prey_stanza = 2) %>%
     dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species)) %>%
     dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
