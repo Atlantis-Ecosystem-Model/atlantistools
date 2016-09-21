@@ -7,18 +7,6 @@
 #' Usually "init[...].nc".
 #' @param vars Vector of character strings giving the variables to extract from the
 #' netcdf file.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
-#' @param bboxes Integer vector giving the box-id of the boundary boxes.
-#' @param select_variable Character value spefifying which variable to load.
-#' Only one variable of the options available (i.e., \code{c(
-#' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
-#' }) can be loaded at a time.
-#' @param select_groups Character vector of funtional groups which shall be read in.
-#' Names have to match the ones used in the ncdf file. Check column "Name" in
-#' "functionalGroups.csv" for clarification.
 #'
 #' @family load functions
 #' @export
@@ -63,10 +51,10 @@ load_init <- function(dir = getwd(), init, vars) {
 
   # Only Box data!
   convert1d <- function(vec, n_boxes) {
-    if (!(is.vector(vec) & length(vec) != n_boxes)) {
+    if (!(is.array(vec) & length(vec) == n_boxes)) {
       stop("Wrong data format. Variable is not stored as 1d vector in initial file.")
     }
-    data.frame(atoutput = as.vector(mat),
+    data.frame(atoutput = as.vector(vec),
                polygon = 0:(n_boxes - 1), stringsAsFactors = FALSE)
   }
 
