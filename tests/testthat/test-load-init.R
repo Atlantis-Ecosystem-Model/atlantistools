@@ -1,27 +1,25 @@
-context("load_init_weight check structure and values in output dataframe")
+context("load_init check structure and values in output dataframe")
 
 d <- system.file("extdata", "gns", package = "atlantistools")
 
-iw <- load_init_weight(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
-iw2 <- load_init_age(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv", select_variable = "ResN", bboxes = get_boundary(load_box(dir = d, bgm = "NorthSea.bgm")))
-load_init_nonage(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv", bboxes = get_boundary(load_box(dir = d, bgm = "NorthSea.bgm")), bps = load_bps(d, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc"))
+dd <- load_init(dir = d, init = "init_simple_NorthSea.nc", vars = c("cod1_Nums", "cod1_ResN"))
+df <- load_init(dir = system.file("extdata", "setas-model-new-becdev", package = "atlantistools"),
+                init = "init_vmpa_setas_25032013.nc", vars = "Pisciv_D_Fish1_ResN")
+dg <- load_init(dir = system.file("extdata", "setas-model-new-becdev", package = "atlantistools"),
+                init = "init_vmpa_setas_25032013.nc", vars = "Macroalgae_N")
 
 test_that("test output numbers", {
-  expect_equal(dim(iw), c(24, 4))
-  expect_equal(iw$rn[iw$species == "cod" & iw$agecl == 7], 61272.89)
-  expect_equal(iw$sn[iw$species == "herring" & iw$agecl == 9], 718.66)
+  expect_equal(dim(dd[[1]]), c(208, 3))
+  expect_equal(dim(dd[[2]]), c(208, 3))
+  expect_equal(dim(df[[1]]), c(77, 3))
+  expect_equal(dim(dg[[1]]), c(11, 2))
 })
-
-num <- load_init_num(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
-n <- load_init_n(dir = d, init = "init_simple_NorthSea.nc", select_groups = "crangon")
 
 layers <- get_layers(dir = d, init = "init_simple_NorthSea.nc")
 
 test_that("test get_layers", {
   expect_equal(length(layers), 26)
   expect_equal(max(layers), 6)
-  expect_equal(iw$sn[iw$species == "herring" & iw$agecl == 9], 718.66)
 })
-
 
 
