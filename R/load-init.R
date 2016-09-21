@@ -5,6 +5,8 @@
 #' folder) you should use 'NULL' as dir.
 #' @param init Character string giving the filename of the initial conditions netcdf file.
 #' Usually "init[...].nc".
+#' @param vars Vector of character strings giving the variables to extract from the
+#' netcdf file.
 #' @param fgs Character string giving the filename of 'functionalGroups.csv'
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
@@ -20,8 +22,7 @@
 #'
 #' @family load functions
 #' @export
-#' @return A \code{data.frame} in long format with the following column names:
-#'   species, agecl, rn and sn.
+#' @return A list of dataframes with columns atoutput, polygon and layer (if present).
 #'
 #' @author Alexander Keth
 
@@ -96,6 +97,11 @@ get_layers <- function(dir = getwd(), init) {
   return(num_layers)
 }
 
+# Utility function used to extract the layerids from the number of layers per box.
+# Layer ids are given in 0:num_layers-1 with 0 being the layer closest to the sediment.
+# The largest id per box is the surface layer. Non existing layers (per box) are NA.
+# The sediment layer id is the maximum number of layers. E.g. in case there are 5 water
+# column layers the sediment layer has the id 6.
 get_layerid <- function(num_layers, max_layer, n_boxes) {
   wc_id <- lapply(num_layers, function(x) rep(1, times = x))
   wc_id <- lapply(wc_id, function(x) rev(cumsum(x) - 1)) # ids are in reverse order in the nc file
@@ -106,126 +112,15 @@ get_layerid <- function(num_layers, max_layer, n_boxes) {
   unlist(wc)
 }
 
+# Remove min pools (0 and almost 0) from a datframe.
 remove_min_pools <- function(df, col = "atoutput", min_pools = c(0, 1e-08, 1e-16)) {
   expr <- lazyeval::interp(quote(!(x %in% y)), x = as.name(col), y = min_pools)
   df %>% dplyr::filter_(expr)
 }
 
+# Remove boundary boxes from a dataframe. bboxes is the vector of box ids (starting with 0)
 remove_bboxes <- function(df, bboxes) {
   if (!any(names(df) == "polygon")) stop("No column polygon in df. Cannot remove boundary boxes.")
   df %>% dplyr::filter(!(polygon %in% bboxes))
-}
-
-#' @export
-#' @rdname load_init
-load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_groups = NULL, bboxes) {
-  # Consrtuct vars to search for!
-  fgs_data <- load_fgs(dir = dir, fgs = fgs)
-  age_groups <- get_age_groups(dir = dir, fgs = fgs)
-  if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a fully age-structured group.")
-  if (is.null(select_groups)) select_groups <- age_groups
-
-  num_cohorts <- fgs_data$NumCohorts[is.element(fgs_data$Name, select_groups)]
-  ages <- lapply(num_cohorts, seq, from = 1, by = 1)
-
-  vars <- NULL
-  for (i in seq_along(select_groups)) {
-    tags <- paste0(select_groups[i], ages[[i]], "_", select_variable)
-    vars <- c(vars, tags)
-  }
-
-  # Extract data
-  df_list <- load_init(dir = dir, init = init, vars = vars)
-  # Add columns!
-  for (i in seq_along(select_groups)) {
-    for (j in 1:length(ages[[i]])) {
-      if (i == 1 & j == 1) k <- 1
-      df_list[[k]]$species <- select_groups[i]
-      df_list[[k]]$agecl <- ages[[i]][j]
-      k <- k + 1
-    }
-  }
-  result <- do.call(rbind, df_list)
-
-  # Cleanup
-  result <- remove_min_pools(df = result)
-  result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter(result, !is.na(layer))
-
-  return(result)
-}
-
-#' @export
-#' @rdname load_init
-load_init_nonage <- function(dir = getwd(), init, fgs, select_variable = "N", select_groups = NULL, bboxes, bps) {
-  # Consrtuct vars to search for!
-  if (is.null(select_groups)) select_groups <- get_groups(dir = dir, fgs = fgs)
-  select_bps <- select_groups[is.element(select_groups, bps)]
-  select_groups <- select_groups[!is.element(select_groups, bps)]
-
-  # Extract data for non biomasspools!
-  if (length(select_groups) >= 1) {
-    df_list <- load_init(dir = dir, init = init, vars = paste(select_groups, select_variable, sep = "_"))
-    # Add columns!
-    for (i in seq_along(select_groups)) {
-      df_list[[i]]$species <- select_groups[i]
-    }
-    df1 <- do.call(rbind, df_list)
-  }
-
-  # Extract data for biomasspools!
-  if (length(select_bps)) {
-    read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
-    on.exit(RNetCDF::close.nc(read_nc))
-    n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
-    df_list <- load_init(dir = dir, init = init, vars = paste(select_bps, select_variable, sep = "_"))
-    # Add columns!
-    for (i in seq_along(select_bps)) {
-      df_list[[k]]$species <- select_bps[i]
-    }
-    df2 <- do.call(rbind, df_list)
-    df2$layer <- n_layers
-  }
-
-  if (exists(df1) & exists(df2)) result <- rbind(df1, df2)
-  if (exists(df1) & !exists(df2)) result <- df1
-  if (!exists(df1) & exists(df2)) result <- df2
-
-  # Cleanup
-  result <- remove_min_pools(df = result)
-  result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter(result, !is.na(layer))
-
-  return(result)
-}
-
-#' @export
-#' @rdname load_init
-load_init_physics <- function(dir = getwd(), init, select_variable, bboxes) {
-  # Extract data!
-  df_list <- load_init(dir = dir, init = init, vars = select_variable)
-  # Add columns!
-  for (i in seq_along(select_groups)) {
-    df_list[[k]]$species <- select_groups[i]
-  }
-  df1 <- do.call(rbind, df_list)
-
-  # Extract data for biomasspools!
-  df_list <- load_init(dir = dir, init = init, vars = paste(select_bps, select_variable, sep = "_"))
-  # Add columns!
-  for (i in seq_along(select_bps)) {
-    df_list[[k]]$species <- select_bps[i]
-  }
-  df2 <- do.call(rbind, df_list)
-  df2$layer <- max(df1$layer)
-
-  result <- rbind(df1, df2)
-
-  # Cleanup
-  result <- remove_min_pools(df = result)
-  result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter(result, !is.na(layer))
-
-  return(result)
 }
 
