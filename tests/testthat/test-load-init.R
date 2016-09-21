@@ -3,6 +3,8 @@ context("load_init_weight check structure and values in output dataframe")
 d <- system.file("extdata", "gns", package = "atlantistools")
 
 iw <- load_init_weight(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+iw2 <- load_init_age(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv", select_variable = "ResN", bboxes = get_boundary(load_box(dir = d, bgm = "NorthSea.bgm")))
+load_init_nonage(dir = d, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv", bboxes = get_boundary(load_box(dir = d, bgm = "NorthSea.bgm")), bps = load_bps(d, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc"))
 
 test_that("test output numbers", {
   expect_equal(dim(iw), c(24, 4))
