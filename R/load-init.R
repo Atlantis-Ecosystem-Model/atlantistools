@@ -28,7 +28,9 @@
 
 #' @examples
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
-#' load_init_weight(dir = dir, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+#' load_init(dir = dir, init = "init_simple_NorthSea.nc", vars = "cod1_Nums")
+#' load_init(dir = dir, init = "init_simple_NorthSea.nc", vars = c("herring2_ResN", "herring3_ResN"))
+#' load_init(dir = dir, init = "init_simple_NorthSea.nc", vars = "crangon_N")
 
 load_init <- function(dir = getwd(), init, vars) {
   read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
@@ -108,7 +110,7 @@ get_layerid <- function(num_layers, max_layer, n_boxes) {
   wc_fill <- lapply(num_layers, function(x) rep(NA, times = max_layer - x - 1))
   wc <- Map(f = c, wc_id, wc_fill)
   if (length(unique(sapply(wc, length))) != 1) stop("Layers inconsistent. Contact package development Team.")
-  wc <- lapply(wc, function(x) c(x, max_layer)) # add sediment layer
+  wc <- lapply(wc, function(x) c(x, max_layer - 1)) # add sediment layer
   unlist(wc)
 }
 
