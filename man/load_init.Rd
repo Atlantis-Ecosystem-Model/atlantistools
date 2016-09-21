@@ -16,22 +16,6 @@ Usually "init[...].nc".}
 
 \item{vars}{Vector of character strings giving the variables to extract from the
 netcdf file.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
-
-\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
-
-\item{select_variable}{Character value spefifying which variable to load.
-Only one variable of the options available (i.e., \code{c(
-"N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
-}) can be loaded at a time.}
-
-\item{select_groups}{Character vector of funtional groups which shall be read in.
-Names have to match the ones used in the ncdf file. Check column "Name" in
-"functionalGroups.csv" for clarification.}
 }
 \value{
 A list of dataframes with columns atoutput, polygon and layer (if present).
