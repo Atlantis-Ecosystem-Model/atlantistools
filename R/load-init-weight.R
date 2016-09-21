@@ -205,7 +205,7 @@ load_init <- function(dir = getwd(), init, vars) {
   # Data extracted for every variable?
   if (length(vars) != length(df_list)) stop("Starnge ncdf extraction. Please contact package development Team.")
 
-    return(df_list)
+  return(df_list)
 }
 
 get_layers <- function(dir = getwd(), init) {
@@ -221,7 +221,7 @@ get_layers <- function(dir = getwd(), init) {
     }
   }
 
-    return(num_layers)
+  return(num_layers)
 }
 
 get_layerid <- function(num_layers, max_layer, n_boxes) {
