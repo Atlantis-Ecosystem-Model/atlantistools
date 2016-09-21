@@ -55,7 +55,6 @@
 #'                  fgs = "functionalGroups.csv",
 #'                  bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")),
 #'                  bps = load_bps(dir = dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc"))
-# load_init
 
 load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_groups = NULL, bboxes) {
   # Consrtuct vars to search for!
@@ -156,4 +155,23 @@ load_init_physics <- function(dir = getwd(), init, select_variable, bboxes) {
 
   return(result)
 }
+
+#' @export
+#' @rdname load_init_age
+load_init_weight <- function(dir = getwd(), init, fgs, bboxes) {
+  rn <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "ResN", bboxes = bboxes) %>%
+    dplyr::select(-polygon, -layer, rn = atoutput, species, agecl) %>%
+    unique()
+  sn <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "StructN", bboxes = bboxes) %>%
+    dplyr::select(-polygon, -layer, sn = atoutput, species, agecl) %>%
+    unique()
+  df <- dplyr::inner_join(rn, sn) %>%
+    dplyr::select(species, agecl, sn, rn)
+  return(df)
+}
+
+
+
+
+
 
