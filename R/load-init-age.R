@@ -30,7 +30,32 @@
 
 #' @examples
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
-#' load_init_weight(dir = dir, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
+#' load_init_age(dir = dir,
+#'               init = "init_simple_NorthSea.nc",
+#'               fgs = "functionalGroups.csv",
+#'               select_variable = "ResN",
+#'               select_groups = "cod",
+#'               bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")))
+#'
+#' load_init_age(dir = dir,
+#'               init = "init_simple_NorthSea.nc",
+#'               fgs = "functionalGroups.csv",
+#'               select_variable = "ResN",
+#'               bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")))
+#'
+#' load_init_nonage(dir = dir,
+#'                  init = "init_simple_NorthSea.nc",
+#'                  fgs = "functionalGroups.csv",
+#'                  select_groups = "crangon",
+#'                  bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")),
+#'                  bps = load_bps(dir = dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc"))
+#'
+#' load_init_nonage(dir = dir,
+#'                  init = "init_simple_NorthSea.nc",
+#'                  fgs = "functionalGroups.csv",
+#'                  bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")),
+#'                  bps = load_bps(dir = dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc"))
+# load_init
 
 load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_groups = NULL, bboxes) {
   # Consrtuct vars to search for!
@@ -95,15 +120,15 @@ load_init_nonage <- function(dir = getwd(), init, fgs, select_variable = "N", se
     df_list <- load_init(dir = dir, init = init, vars = paste(select_bps, select_variable, sep = "_"))
     # Add columns!
     for (i in seq_along(select_bps)) {
-      df_list[[k]]$species <- select_bps[i]
+      df_list[[i]]$species <- select_bps[i]
     }
     df2 <- do.call(rbind, df_list)
-    df2$layer <- n_layers
+    df2$layer <- n_layers - 1
   }
 
-  if (exists(df1) & exists(df2)) result <- rbind(df1, df2)
-  if (exists(df1) & !exists(df2)) result <- df1
-  if (!exists(df1) & exists(df2)) result <- df2
+  if (length(select_groups) >= 1 & length(select_bps) >= 1)  result <- rbind(df1, df2)
+  if (length(select_groups) >= 1 & !length(select_bps) >= 1) result <- df1
+  if (!length(select_groups) >= 1 & length(select_bps) >= 1) result <- df2
 
   # Cleanup
   result <- remove_min_pools(df = result)
@@ -120,7 +145,7 @@ load_init_physics <- function(dir = getwd(), init, select_variable, bboxes) {
   df_list <- load_init(dir = dir, init = init, vars = select_variable)
   # Add columns!
   for (i in seq_along(select_variable)) {
-    df_list[[k]]$variable <- select_variable[i]
+    df_list[[i]]$variable <- select_variable[i]
   }
   result <- do.call(rbind, df_list)
 
