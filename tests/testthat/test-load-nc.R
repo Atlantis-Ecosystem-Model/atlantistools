@@ -116,9 +116,4 @@ data <- load_nc(dir = d, nc = "init_simple_NorthSea.nc", bps = bps, fgs = "funct
                 select_groups = c("cod", "herring"), select_variable = "Nums", bboxes = bboxes)
 
 
-test_that("read in initial conditions file", {
-  expect_equal(dim(data), dim(ref_eat))
-  expect_equal(sum(is.na(test$atoutput.x)) + sum(is.na(test$atoutput.y)), 0)
-  expect_true(sd(test$check[!is.na(test$check)]) < 0.0000001)
-})
 
