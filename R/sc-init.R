@@ -78,16 +78,9 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
 
   message("Read in data from out.nc, init.nc and prm.biol!")
   # Extract volume per box and layer!
-  vol <- load_init_physics(dir = dir, init = init, select_variable = "volume", bboxes = bboxes)
-  maxl <- max(vol$layer)
-  surface <- dplyr::group_by(vol, polygon) %>%
-    dplyr::filter(layer != maxl) %>%
-    dplyr::summarise(layer = max(layer))
-
-  vol <- vol %>%
-    dplyr::inner_join(surface) %>%
+  vol <- load_init_physics(dir = dir, init = init, select_variable = "volume", bboxes = bboxes) %>%
     dplyr::rename(vol = atoutput) %>%
-    dplyr::select(-variable, -layer)
+    dplyr::select(-variable)
 
   # Extract data for age based groups
   get_pred_data <- function(dir, prm_biol, predacr) {
@@ -109,7 +102,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     return(df)
   }
 
-  weights <- load_init_weight(dir = dir, init = init, fgs = fgs)
+  weights <- load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
   weights$species <- convert_factor(fgs_data, col = weights$species)
   pd <- lapply(acr_age, get_pred_data, dir = dir, prm_biol = prm_biol)
   # Calculate weight difference from one ageclass to the next!
@@ -126,20 +119,20 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     warning("Required growth negative for some groups. Please check your initial conditions files.")
   }
 
-  # get_vert_distrib <- function(dir, predacr, prm_biol, nc) {
-  #   tags <- as.vector(outer(X = predacr, Y = 1:2, FUN = paste0))
-  #   df <- as.data.frame(sapply(paste("VERTday", tags, sep = "_"),
-  #                              extract_prm_cohort, dir = dir, prm_biol = prm_biol))
-  #   names(df) <- tags
-  #   df <- tidyr::gather(df, key = "species", value = "vdistrib") %>%
-  #     dplyr::mutate(pred_stanza = as.numeric(stringr::str_sub(species, start = -1))) %>%
-  #     dplyr::mutate(species = stringr::str_sub(species, end = stringr::str_length(species) - 1))
-  #
-  #   return(df)
-  # }
-  #
-  # vdistrib <- get_vert_distrib(dir = dir, predacr = acr_age, prm_biol = prm_biol)
-  # vdistrib$species <- convert_factor(fgs_data, col = vdistrib$species)
+  get_vert_distrib <- function(dir, predacr, prm_biol, nc) {
+    tags <- as.vector(outer(X = predacr, Y = 1:2, FUN = paste0))
+    df <- as.data.frame(sapply(paste("VERTday", tags, sep = "_"),
+                               extract_prm_cohort, dir = dir, prm_biol = prm_biol))
+    names(df) <- tags
+    df <- tidyr::gather(df, key = "species", value = "vdistrib") %>%
+      dplyr::mutate(pred_stanza = as.numeric(stringr::str_sub(species, start = -1))) %>%
+      dplyr::mutate(species = stringr::str_sub(species, end = stringr::str_length(species) - 1))
+
+    return(df)
+  }
+
+  vdistrib <- get_vert_distrib(dir = dir, predacr = acr_age, prm_biol = prm_biol)
+  vdistrib$species <- convert_factor(fgs_data, col = vdistrib$species)
   # NOTE: STill need to combine vdistrib to the rest of the dataframes!
 
   get_ass_eff <- function(dir, prm_biol, predacr) {
@@ -163,7 +156,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums",
   #                 fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
-  nums <- load_init_num(dir = dir, init = init, fgs = fgs) %>%
+  nums <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
     dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
     dplyr::left_join(unique(dplyr::select(pd, species, agecl, pred_stanza))) %>%
     dplyr::left_join(asseff)
