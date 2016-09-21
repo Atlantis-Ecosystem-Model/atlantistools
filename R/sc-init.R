@@ -3,11 +3,6 @@
 #' @param dir Character string giving the path of the Atlantis model folder.
 #' If data is stored in multiple folders (e.g. main model folder and output
 #' folder) you should use 'NULL' as dir.
-#' @param nc Character string giving the filename of the general netcdf
-#' file Usually "output[...].nc". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc_gen. In addition set dir to 'NULL' in this
-#' case.
 #' @param init Character string giving the filename of the initial conditions netcdf
 #' file Usually "init[...].nc".
 #' @param prm_biol Character string giving the filename of the biological
@@ -41,25 +36,23 @@
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
 #' fgs <- "functionalGroups.csv"
 #' init <- "init_simple_NorthSea.nc"
-#' nc <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 #' mult_mum <- seq(0.5, 10, by = 1)
 #' mult_c <- seq(0.5, 10, by = 1)
 #' no_avail <- FALSE
 #' save_to_disc <- FALSE
-#' data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
+#' data <- sc_init(dir, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
 #' plot_sc_init(df = data, mult_mum, mult_c)
 #' plot_sc_init(df = data, mult_mum, mult_c, pred = "Cod")
 #'
-#' data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
+#' data <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
 #' plot_sc_init(df = data, mult_mum, mult_c)
 
 #' @export
 
 # AEEC debuging
 # dir <- "c:/backup_z/Atlantis_models/AEECmodel/"
-# nc = "output/AEECF_propDIS_surv.nc"
 # init = "AEEC35_Fcalibrated.nc"
 # prm_biol = "AEEC35_setas_biol_marie.prm"
 # fgs = "SETasGroups.csv"
@@ -71,7 +64,7 @@
 # sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = pred, no_avail = T)
 
 # function start
-sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
+sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
                     pred = NULL, no_avail = FALSE, save_to_disc = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
@@ -85,10 +78,16 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
 
   message("Read in data from out.nc, init.nc and prm.biol!")
   # Extract volume per box and layer!
-  vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
-    dplyr::filter(time == 0 & layer == 0) %>%
+  vol <- load_init_physics(dir = dir, init = init, select_variable = "volume", bboxes = bboxes)
+  maxl <- max(vol$layer)
+  surface <- dplyr::group_by(vol, polygon) %>%
+    dplyr::filter(layer != maxl) %>%
+    dplyr::summarise(layer = max(layer))
+
+  vol <- vol %>%
+    dplyr::inner_join(surface) %>%
     dplyr::rename(vol = atoutput) %>%
-    dplyr::select(-variable, -layer, -time)
+    dplyr::select(-variable, -layer)
 
   # Extract data for age based groups
   get_pred_data <- function(dir, prm_biol, predacr) {
