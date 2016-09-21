@@ -3,6 +3,7 @@
 \name{load_init_weight}
 \alias{load_init_n}
 \alias{load_init_num}
+\alias{load_init_physics}
 \alias{load_init_weight}
 \title{This function loads weight at age data (in mgN) from the initial conditions file.}
 \usage{
@@ -10,7 +11,9 @@ load_init_weight(dir = getwd(), init, fgs)
 
 load_init_num(dir = getwd(), init, fgs)
 
-load_init_n(dir = getwd(), init, fgs)
+load_init_n(dir = getwd(), init, select_groups)
+
+load_init_physics(dir = getwd(), init, select_variable, bboxes)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -24,6 +27,17 @@ Usually "init[...].nc".}
 file. In case you are using multiple folders for your model files and
 outputfiles pass the complete folder/filename string as fgs.
 In addition set dir to 'NULL' in this case.}
+
+\item{select_groups}{Character vector of funtional groups which shall be read in.
+Names have to match the ones used in the ncdf file. Check column "Name" in
+"functionalGroups.csv" for clarification.}
+
+\item{select_variable}{Character value spefifying which variable to load.
+Only one variable of the options available (i.e., \code{c(
+"N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
+}) can be loaded at a time.}
+
+\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
 }
 \value{
 A \code{data.frame} in long format with the following column names:

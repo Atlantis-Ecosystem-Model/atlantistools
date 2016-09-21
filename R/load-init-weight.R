@@ -9,6 +9,15 @@
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
+#' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' @param select_variable Character value spefifying which variable to load.
+#' Only one variable of the options available (i.e., \code{c(
+#' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
+#' }) can be loaded at a time.
+#' @param select_groups Character vector of funtional groups which shall be read in.
+#' Names have to match the ones used in the ncdf file. Check column "Name" in
+#' "functionalGroups.csv" for clarification.
+#'
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following column names:
@@ -21,8 +30,8 @@
 #' load_init_weight(dir = dir, init = "init_simple_NorthSea.nc", fgs = "functionalGroups.csv")
 
 load_init_weight <- function(dir = getwd(), init, fgs) {
-  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
-  on.exit(RNetCDF::close.nc(init))
+  init_read <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  on.exit(RNetCDF::close.nc(init_read))
 
   # Construct vector of variable names to search!
   search_clean <- get_tags(dir = dir, fgs = fgs)
@@ -43,8 +52,8 @@ load_init_weight <- function(dir = getwd(), init, fgs) {
   # Store in df
   df <- data.frame(species = rep(search_clean$species, times = sapply(search_clean$cohorts, length)),
                    agecl = unlist(search_clean$cohorts),
-                   rn = extract_data(paste0(search_clean$tags, "_ResN"), init),
-                   sn = extract_data(paste0(search_clean$tags, "_StructN"), init), stringsAsFactors = FALSE)
+                   rn = extract_data(paste0(search_clean$tags, "_ResN"), init_read),
+                   sn = extract_data(paste0(search_clean$tags, "_StructN"), init_read), stringsAsFactors = FALSE)
 
   return(df)
 }
@@ -52,8 +61,8 @@ load_init_weight <- function(dir = getwd(), init, fgs) {
 #' @export
 #' @rdname load_init_weight
 load_init_num <- function(dir = getwd(), init, fgs) {
-  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
-  on.exit(RNetCDF::close.nc(init))
+  init_read <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  on.exit(RNetCDF::close.nc(init_read))
 
   # Construct vector of variable names to search!
   search_clean <- get_tags(dir = dir, fgs = fgs)
@@ -68,7 +77,7 @@ load_init_num <- function(dir = getwd(), init, fgs) {
   }
 
   # Store in df
-  wuwu <- extract_data(paste0(search_clean$tags, "_Nums"), nc = init)
+  wuwu <- extract_data(paste0(search_clean$tags, "_Nums"), nc = init_read)
   for (i in seq_along(search_clean[[2]])) {
     for (j in 1:length(search_clean[[3]][[i]])) {
       if (i == 1 & j == 1) k <- 1
@@ -84,41 +93,40 @@ load_init_num <- function(dir = getwd(), init, fgs) {
 
 #' @export
 #' @rdname load_init_weight
-load_init_n <- function(dir = getwd(), init, tags) {
-  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
-  on.exit(RNetCDF::close.nc(init))
+load_init_n <- function(dir = getwd(), init, select_groups) {
+  init_read <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  on.exit(RNetCDF::close.nc(init_read))
 
-  # Construct vector of variable names to search!
-  groups <- get_groups(dir = dir, fgs = fgs)
-  groups_age <- get_age_groups(dir = dir, fgs = fgs)
-  groups_rest <- groups[!is.element(groups, groups_age)]
-
-  search_clean <- paste0(groups_rest, "_N")
-  at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = init)
+  search_clean <- paste0(select_groups, "_N")
+  at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = init_read)
 
   sed_id <- sapply(at_data, function(x) length(dim(x))) == 1
 
   at_data <- at_data[!sed_id]
-  at_data <- lapply(at_data, function(x) x[1, ]) # only use 1st layer
-  at_data <- lapply(at_data, function(x) data.frame(atoutput = x, polygon = 0:(length(x) - 1), stringsAsFactors = FALSE))
-  at_data <- lapply(at_data, function(x) x[!is.element(x$atoutput, c(0, 1e-08, 1e-16)), ])
+  if (length(at_data) >= 1) {
+    at_data <- lapply(at_data, function(x) x[1, ]) # only use 1st layer
+    at_data <- lapply(at_data, function(x) data.frame(atoutput = x, polygon = 0:(length(x) - 1), stringsAsFactors = FALSE))
+    at_data <- lapply(at_data, function(x) x[!is.element(x$atoutput, c(0, 1e-08, 1e-16)), ])
 
-  species <- groups_rest[!sed_id]
-  # Store in df
-  for (i in seq_along(at_data)) {
-    at_data[[i]]$species <- species[i]
+    species <- select_groups[!sed_id]
+    # Store in df
+    for (i in seq_along(at_data)) {
+      at_data[[i]]$species <- species[i]
+    }
+    df <- do.call(rbind, at_data)
+
+    return(df)
+  } else {
+    stop("Only sediment groups selected. No extraction performed.")
   }
-  df <- do.call(rbind, at_data)
-
-  return(df)
 }
 
 #' @rdname load_init_weight
 load_init_physics <- function(dir = getwd(), init, tags) {
-  init <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
-  on.exit(RNetCDF::close.nc(init))
+  init_read <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  on.exit(RNetCDF::close.nc(init_read))
 
-  at_data <- lapply(tags, RNetCDF::var.get.nc, ncfile = init)
+  at_data <- lapply(tags, RNetCDF::var.get.nc, ncfile = init_read)
 
   sed_id <- sapply(at_data, function(x) length(dim(x))) == 1
 
@@ -160,6 +168,11 @@ load_init <- function(dir = getwd(), init, vars) {
   n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
   num_layers <- get_layers(dir = dir, init = init)
   layerid <- get_layerid(num_layers = num_layers, max_layer = n_layers, n_boxes = n_boxes)
+  var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(read_nc)$nvars - 1),
+                           function(x) RNetCDF::var.inq.nc(read_nc, x)$name)
+
+  wrong_var <- vars[!vars %in% var_names_ncdf]
+  if (length(wrong_var) >= 1) stop(paste("Variable", paste(wrong_var, collapse = " "), "not found in init file."))
 
   at_data <- lapply(vars, RNetCDF::var.get.nc, ncfile = read_nc)
 
@@ -185,16 +198,14 @@ load_init <- function(dir = getwd(), init, vars) {
   at_dim <- vapply(at_data, function(x) length(dim(x)), integer(1))
 
   # Check cases and apply formulas!
-  if (all(at_dim == 2)) df_list <- lapply(at_data, convert2d)
-  if (all(at_dim == 1)) df_list <- lapply(at_data, convert1d)
+  if (all(at_dim == 2)) df_list <- lapply(at_data, convert2d, layerid, n_boxes)
+  if (all(at_dim == 1)) df_list <- lapply(at_data, convert1d, n_boxes)
   if (length(unique(at_dim)) > 1) stop("Vars are stored in different dimensions. Please, either pick only 2d or 1d data.")
 
   # Data extracted for every variable?
   if (length(vars) != length(df_list)) stop("Starnge ncdf extraction. Please contact package development Team.")
 
-
-
-
+    return(df_list)
 }
 
 get_layers <- function(dir = getwd(), init) {
@@ -209,9 +220,8 @@ get_layers <- function(dir = getwd(), init) {
       stop("Different numbers of layers per Box. This nc-structure is not supported.")
     }
   }
-  # add sediment layer! Islands are visibile by numlayers == 0.
-  # num_layers <- num_layers + ifelse(num_layers == 0, 0, 1)
-  return(num_layers)
+
+    return(num_layers)
 }
 
 get_layerid <- function(num_layers, max_layer, n_boxes) {
@@ -234,23 +244,133 @@ remove_bboxes <- function(df, bboxes) {
   df %>% dplyr::filter(!(polygon %in% bboxes))
 }
 
-var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(init)$nvars - 1),
-                         function(x) RNetCDF::var.inq.nc(init, x)$name)
 
-wawa <- at_data[sapply(at_data, function(x) length(dim(x)))]
+load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_groups = NULL, bboxes) {
+  # Consrtuct vars to search for!
+  fgs_data <- load_fgs(dir = dir, fgs = fgs)
+  age_groups <- get_age_groups(dir = dir, fgs = fgs)
+  if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a fully age-structured group.")
+  if (is.null(select_groups)) select_groups <- age_groups
 
-wuwu <- vector(mode = "list", length = length(wawa))
-for (i in seq_along(wuwu)) {
-  wuwu[[i]] <- apply(wawa[[i]], MARGIN = 2, function(x) sum(x != 0))
+  num_cohorts <- fgs_data$NumCohorts[is.element(fgs_data$Name, select_groups)]
+  ages <- lapply(num_cohorts, seq, from = 1, by = 1)
+
+  vars <- NULL
+  for (i in seq_along(select_groups)) {
+    tags <- paste0(select_groups[i], ages[[i]], "_", select_variable)
+    vars <- c(vars, tags)
+  }
+
+  # Extract data
+  df_list <- load_init(dir = dir, init = init, vars = vars)
+  # Add columns!
+  for (i in seq_along(select_groups)) {
+    for (j in 1:length(ages[[i]])) {
+      if (i == 1 & j == 1) k <- 1
+      df_list[[k]]$species <- select_groups[i]
+      df_list[[k]]$agecl <- ages[[i]][j]
+      k <- k + 1
+    }
+  }
+  result <- do.call(rbind, df_list)
+
+  # Cleanup
+  result <- remove_min_pools(df = result)
+  result <- remove_bboxes(df = result, bboxes = bboxes)
+  result <- dplyr::filter(result, !is.na(layer))
+
+  return(result)
 }
 
+load_init_nonage <- function(dir = getwd(), init, fgs, select_variable = "N", select_groups = NULL, bboxes, bps) {
+  # Consrtuct vars to search for!
+  if (is.null(select_groups)) select_groups <- get_groups(dir = dir, fgs = fgs)
+  select_bps <- select_groups[is.element(select_groups, bps)]
+  select_groups <- select_groups[!is.element(select_groups, bps)]
 
-at_data <- lapply(var_names_ncdf, RNetCDF::var.get.nc, ncfile = nc)
+  # Extract data for non biomasspools!
+  if (length(select_groups) >= 1) {
+    df_list <- load_init(dir = dir, init = init, vars = paste(select_roups, select_variable, sep = "_"))
+    # Add columns!
+    for (i in seq_along(select_groups)) {
+      df_list[[k]]$species <- select_groups[i]
+    }
+    df1 <- do.call(rbind, df_list)
+  }
 
-sapply(at_data, function(x) length(dim(x)))
+  # Extract data for biomasspools!
+  if (length(select_bps)) {
+    read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+    on.exit(RNetCDF::close.nc(read_nc))
+    n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
+    df_list <- load_init(dir = dir, init = init, vars = paste(select_bps, select_variable, sep = "_"))
+    # Add columns!
+    for (i in seq_along(select_bps)) {
+      df_list[[k]]$species <- select_bps[i]
+    }
+    df2 <- do.call(rbind, df_list)
+    df2$layer <- n_layers
+  }
 
-dim1 <- var_names_ncdf[sapply(at_data, function(x) length(dim(x))) == 1]
-dim2 <- var_names_ncdf[sapply(at_data, function(x) length(dim(x))) == 2]
+  if (exists(df1) & exists(df2)) result <- rbind(df1, df2)
+  if (exists(df1) & !exists(df2)) result <- df1
+  if (!exists(df1) & exists(df2)) result <- df2
 
+  # Cleanup
+  result <- remove_min_pools(df = result)
+  result <- remove_bboxes(df = result, bboxes = bboxes)
+  result <- dplyr::filter(result, !is.na(layer))
+
+  return(result)
+}
+
+load_init_physics <- function(dir = getwd(), init, select_variable, bboxes) {
+  # Extract data!
+  df_list <- load_init(dir = dir, init = init, vars = select_variable)
+  # Add columns!
+  for (i in seq_along(select_groups)) {
+    df_list[[k]]$species <- select_groups[i]
+  }
+  df1 <- do.call(rbind, df_list)
+
+  # Extract data for biomasspools!
+  df_list <- load_init(dir = dir, init = init, vars = paste(select_bps, select_variable, sep = "_"))
+  # Add columns!
+  for (i in seq_along(select_bps)) {
+    df_list[[k]]$species <- select_bps[i]
+  }
+  df2 <- do.call(rbind, df_list)
+  df2$layer <- max(df1$layer)
+
+  result <- rbind(df1, df2)
+
+  # Cleanup
+  result <- remove_min_pools(df = result)
+  result <- remove_bboxes(df = result, bboxes = bboxes)
+  result <- dplyr::filter(result, !is.na(layer))
+
+  return(result)
+}
+
+# stringr::str_sub(string, start = -1)
+#
+# var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(read_nc)$nvars - 1),
+#                          function(x) RNetCDF::var.inq.nc(read_nc, x)$name)
+#
+# wawa <- at_data[sapply(at_data, function(x) length(dim(x)))]
+#
+# wuwu <- vector(mode = "list", length = length(wawa))
+# for (i in seq_along(wuwu)) {
+#   wuwu[[i]] <- apply(wawa[[i]], MARGIN = 2, function(x) sum(x != 0))
+# }
+#
+#
+# at_data <- lapply(var_names_ncdf, RNetCDF::var.get.nc, ncfile = nc)
+#
+# sapply(at_data, function(x) length(dim(x)))
+#
+# dim1 <- var_names_ncdf[sapply(at_data, function(x) length(dim(x))) == 1]
+# dim2 <- var_names_ncdf[sapply(at_data, function(x) length(dim(x))) == 2]
+#
 
 
