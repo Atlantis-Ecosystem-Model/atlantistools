@@ -284,7 +284,7 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
   plot <- ggplot2::ggplot(result, ggplot2::aes_(x = ~mult_mum, y = ~mult_c, fill = ~rel_growth)) +
     # ggplot2::geom_raster(interpolate = TRUE) +
     ggplot2::geom_tile() +
-    ggplot2::facet_grid(agecl ~ pred, labeller = ggplot2::label_wrap_gen(width = 8)) +
+    ggplot2::facet_wrap(~pred + agecl, labeller = ggplot2::label_wrap_gen(width = 15, multi_line = FALSE)) +
     ggplot2::scale_fill_gradient("growth real / growth req.", low = "red", high = "green") +
     ggplot2::labs(x = "mult.factor MUM", y = "mult. factor C") +
     theme_atlantis(scale_font = 0.8)
