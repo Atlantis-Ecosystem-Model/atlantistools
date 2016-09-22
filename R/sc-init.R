@@ -19,9 +19,8 @@
 #' and output files please add the output folder.
 #' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
 #' predators are selected.
-#' @param no_avail Boolean indicating if all availabilities should be set to
-#' 1 \code{TRUE} or the actual values from the availability matrix are used
-#' \code{FALSE}. Default is \code{FALSE}.
+#' @param set_avail Numeric value. All present availabilities can be set to a spefiic value.
+#' Default value is \code{NULL} which results in no changes to the present availability matrix.
 #' @param save_to_disc Logical indicating if the resulting list shall be stored
 #' on the hard-disc (\code{TRUE}) or not (\code{FALSE}).
 #' @param df Dataframe to pass to \code{plot_sc_init()}. df should be generated with
@@ -65,7 +64,7 @@
 
 # function start
 sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
-                    pred = NULL, no_avail = FALSE, save_to_disc = FALSE) {
+                    pred = NULL, set_avail = NULL, save_to_disc = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
   if (is.null(pred)) {
@@ -223,7 +222,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     dplyr::filter(is.element(pred, acr_age) & avail != 0) %>%
     dplyr::left_join(ass_type, by = "prey") %>%
     dplyr::mutate_at(.cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
-  if (no_avail) dm$avail <- 1
+  if (!is.null(set_avail)) dm$avail <- set_avail
   # dm <- split(dm, dm$pred)
   # dm <- dm[acr_age]
 

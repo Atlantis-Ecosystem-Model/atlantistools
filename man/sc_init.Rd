@@ -6,7 +6,7 @@
 \title{Sanity check initial conditions file}
 \usage{
 sc_init(dir = getwd(), init, prm_biol, fgs, bboxes, out, pred = NULL,
-  no_avail = FALSE, save_to_disc = FALSE)
+  set_avail = NULL, save_to_disc = FALSE)
 
 plot_sc_init(df, mult_mum, mult_c, pred = NULL)
 }
@@ -37,9 +37,8 @@ and output files please add the output folder.}
 \item{pred}{Vector of predator acronyms to check. If \code{NULL} (default) all age based
 predators are selected.}
 
-\item{no_avail}{Boolean indicating if all availabilities should be set to
-1 \code{TRUE} or the actual values from the availability matrix are used
-\code{FALSE}. Default is \code{FALSE}.}
+\item{set_avail}{Numeric value. All present availabilities can be set to a spefiic value.
+Default value is \code{NULL} which results in no changes to the present availability matrix.}
 
 \item{save_to_disc}{Logical indicating if the resulting list shall be stored
 on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
