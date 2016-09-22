@@ -282,8 +282,8 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     dplyr::mutate(rel_growth = growth_feed / growth_req)
 
   plot <- ggplot2::ggplot(result, ggplot2::aes_(x = ~mult_mum, y = ~mult_c, fill = ~rel_growth)) +
-    # ggplot2::geom_raster(interpolate = TRUE) +
-    ggplot2::geom_tile() +
+    ggplot2::geom_raster(interpolate = TRUE) +
+    # ggplot2::geom_tile() +
     ggplot2::facet_wrap(~pred + agecl, labeller = ggplot2::label_wrap_gen(width = 15, multi_line = FALSE)) +
     ggplot2::scale_fill_gradient("growth real / growth req.", low = "red", high = "green") +
     ggplot2::labs(x = "mult.factor MUM", y = "mult. factor C") +
