@@ -43,11 +43,11 @@
 #' no_avail <- FALSE
 #' save_to_disc <- FALSE
 #' data1 <- sc_init(dir, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
-#' plot_sc_init(df = data, mult_mum, mult_c)
-#' plot_sc_init(df = data, mult_mum, mult_c, pred = "Cod")
+#' plot_sc_init(df = data1, mult_mum, mult_c)
+#' plot_sc_init(df = data1, mult_mum, mult_c, pred = "Cod")
 #'
 #' data2 <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "Cod", save_to_disc = FALSE)
-#' plot_sc_init(df = data, mult_mum, mult_c)
+#' plot_sc_init(df = data2, mult_mum, mult_c)
 
 #' @export
 
@@ -227,7 +227,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # dm <- dm[acr_age]
 
   # Combine everything to one dataframe!
-  result <- dplyr::select(pd, species, mum, c, agecl, pred_stanza, growth_req) %>%
+  result <- dplyr::select(pd, species, agecl, pred_stanza) %>%
     dplyr::left_join(asseff) %>%
     dplyr::left_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
