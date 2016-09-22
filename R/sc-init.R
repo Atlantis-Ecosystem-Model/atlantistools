@@ -42,11 +42,11 @@
 #' mult_c <- seq(0.5, 10, by = 1)
 #' no_avail <- FALSE
 #' save_to_disc <- FALSE
-#' data <- sc_init(dir, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
+#' data1 <- sc_init(dir, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
 #' plot_sc_init(df = data, mult_mum, mult_c)
 #' plot_sc_init(df = data, mult_mum, mult_c, pred = "Cod")
 #'
-#' data <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
+#' data2 <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "Cod", save_to_disc = FALSE)
 #' plot_sc_init(df = data, mult_mum, mult_c)
 
 #' @export
@@ -68,8 +68,13 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
                     pred = NULL, no_avail = FALSE, save_to_disc = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
-  if (is.null(pred)) pred <- get_age_acronyms(dir = dir, fgs = fgs)
-  acr_age <- pred
+  if (is.null(pred)) {
+    acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
+  } else {
+    acr_age <- fgs_data$Code[is.element(fgs_data$LongName, pred)]
+    if (length(acr_age) == 0) stop("Please provide pred as LongName.")
+    if (length(acr_age) != length(pred)) stop("Not all predators present in functionalGroups file")
+  }
 
   bps <- load_bps(dir = dir, fgs = fgs, init = init)
   groups <- get_groups(dir = dir, fgs = fgs)
@@ -165,11 +170,17 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   #   dplyr::filter(time == 0)
   nums <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
     dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
-    dplyr::left_join(unique(dplyr::select(pd, species, agecl, pred_stanza))) %>%
     dplyr::inner_join(surface) # not needed in case numbers are already only in surface in init file
 
+  # Add stanzas for all age-based groups!
+  all_age_acr <- get_age_acronyms(dir = dir, fgs = fgs)
+  stanzas <- vapply(paste0(all_age_acr, "_", "age_mat"), extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
+  stanzas <- data.frame(species = all_age_acr, ageclmat = stanzas, stringsAsFactors = FALSE)
+  stanzas$species <- convert_factor(fgs_data, col = stanzas$species)
+  nums <- dplyr::left_join(nums, stanzas)
+  nums$prey_stanza <- ifelse(nums$agecl < nums$ageclmat, 1, 2)
+
   preydens_ages <- nums %>%
-    dplyr::rename(prey_stanza = pred_stanza) %>%
     dplyr::left_join(weights) %>%
     dplyr::mutate(atoutput = (rn + sn) * atoutput) %>%
     agg_data(groups = c("species", "polygon", "prey_stanza", "layer"), fun = sum) %>%
@@ -215,8 +226,9 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # dm <- split(dm, dm$pred)
   # dm <- dm[acr_age]
 
-  # Combine everything to one dataframe! For some reason old ageclasses aren't present...
-  result <- dplyr::left_join(nums, asseff) %>%
+  # Combine everything to one dataframe!
+  result <- dplyr::select(pd, species, mum, c, agecl, pred_stanza, growth_req) %>%
+    dplyr::left_join(asseff) %>%
     dplyr::left_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::rename(pred = species) %>%
