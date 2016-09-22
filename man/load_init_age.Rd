@@ -4,6 +4,7 @@
 \alias{load_init_age}
 \alias{load_init_nonage}
 \alias{load_init_physics}
+\alias{load_init_weight}
 \title{This function loads weight at age data (in mgN) from the initial conditions file.}
 \usage{
 load_init_age(dir = getwd(), init, fgs, select_variable,
@@ -13,6 +14,8 @@ load_init_nonage(dir = getwd(), init, fgs, select_variable = "N",
   select_groups = NULL, bboxes, bps)
 
 load_init_physics(dir = getwd(), init, select_variable, bboxes)
+
+load_init_weight(dir = getwd(), init, fgs, bboxes)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.

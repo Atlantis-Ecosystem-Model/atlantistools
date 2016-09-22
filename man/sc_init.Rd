@@ -5,7 +5,7 @@
 \alias{sc_init}
 \title{Sanity check initial conditions file}
 \usage{
-sc_init(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out, pred = NULL,
+sc_init(dir = getwd(), init, prm_biol, fgs, bboxes, out, pred = NULL,
   no_avail = FALSE, save_to_disc = FALSE)
 
 plot_sc_init(df, mult_mum, mult_c, pred = NULL)
@@ -14,12 +14,6 @@ plot_sc_init(df, mult_mum, mult_c, pred = NULL)
 \item{dir}{Character string giving the path of the Atlantis model folder.
 If data is stored in multiple folders (e.g. main model folder and output
 folder) you should use 'NULL' as dir.}
-
-\item{nc}{Character string giving the filename of the general netcdf
-file Usually "output[...].nc". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc_gen. In addition set dir to 'NULL' in this
-case.}
 
 \item{init}{Character string giving the filename of the initial conditions netcdf
 file Usually "init[...].nc".}
@@ -69,18 +63,17 @@ Sanity check initial conditions file
 dir <- system.file("extdata", "gns", package = "atlantistools")
 fgs <- "functionalGroups.csv"
 init <- "init_simple_NorthSea.nc"
-nc <- "outputNorthSea.nc"
 prm_biol <- "NorthSea_biol_fishing.prm"
 bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 mult_mum <- seq(0.5, 10, by = 1)
 mult_c <- seq(0.5, 10, by = 1)
 no_avail <- FALSE
 save_to_disc <- FALSE
-data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
+data1 <- sc_init(dir, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
 plot_sc_init(df = data, mult_mum, mult_c)
 plot_sc_init(df = data, mult_mum, mult_c, pred = "Cod")
 
-data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
+data2 <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "Cod", save_to_disc = FALSE)
 plot_sc_init(df = data, mult_mum, mult_c)
 }
 
