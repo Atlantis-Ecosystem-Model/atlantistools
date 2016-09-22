@@ -86,9 +86,10 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # Extract volume per box and layer!
   vol <- load_init_physics(dir = dir, init = init, select_variable = "volume", bboxes = bboxes)
 
-  surface <- dplyr::group_by(vol, polygon) %>%
-    dplyr::filter(layer != maxl) %>%
-    dplyr::summarise(layer = max(layer))
+  surface <- vol %>%
+    dplyr::filter_(~layer != maxl) %>%
+    agg_data(col = "layer", groups = "polygon", fun = max, out = "layer")
+
   vol <- vol %>%
     dplyr::inner_join(surface) %>%
     dplyr::rename(vol = atoutput) %>%
@@ -227,15 +228,19 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # dm <- dm[acr_age]
 
   # Combine everything to one dataframe!
-  result <- dplyr::select(pd, species, agecl, pred_stanza) %>%
+  result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) %>%
     dplyr::left_join(asseff) %>%
     dplyr::left_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
-    dplyr::rename(pred = species) %>%
+    dplyr::rename_(.dots = c("pred" = "species")) %>%
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
     agg_data(groups = c("pred", "agecl", "polygon", "layer"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
-    dplyr::ungroup() %>%
-    dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c, growth_req))
+    dplyr::ungroup()
+
+  # Add mum and C
+  pd <- dplyr::rename_(pd, .dots = c("pred" = "species")) %>%
+    dplyr::select_(.dots = c("pred", "agecl", "mum", "c", "growth_req"))
+  result <- dplyr::left_join(result, pd)
 
   if (save_to_disc) {
     message("Write final dataframe as *.rda")
@@ -276,7 +281,7 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     dplyr::left_join(mults) %>%
     dplyr::mutate(rel_growth = growth_feed / growth_req)
 
-  plot <- ggplot2::ggplot(result, ggplot2::aes(x = mult_mum, y = mult_c, fill = rel_growth)) +
+  plot <- ggplot2::ggplot(result, ggplot2::aes_(x = ~mult_mum, y = ~mult_c, fill = ~rel_growth)) +
     # ggplot2::geom_raster(interpolate = TRUE) +
     ggplot2::geom_tile() +
     ggplot2::facet_grid(agecl ~ pred, labeller = ggplot2::label_wrap_gen(width = 8)) +
