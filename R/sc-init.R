@@ -3,11 +3,6 @@
 #' @param dir Character string giving the path of the Atlantis model folder.
 #' If data is stored in multiple folders (e.g. main model folder and output
 #' folder) you should use 'NULL' as dir.
-#' @param nc Character string giving the filename of the general netcdf
-#' file Usually "output[...].nc". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc_gen. In addition set dir to 'NULL' in this
-#' case.
 #' @param init Character string giving the filename of the initial conditions netcdf
 #' file Usually "init[...].nc".
 #' @param prm_biol Character string giving the filename of the biological
@@ -41,25 +36,23 @@
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
 #' fgs <- "functionalGroups.csv"
 #' init <- "init_simple_NorthSea.nc"
-#' nc <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 #' mult_mum <- seq(0.5, 10, by = 1)
 #' mult_c <- seq(0.5, 10, by = 1)
 #' no_avail <- FALSE
 #' save_to_disc <- FALSE
-#' data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
-#' plot_sc_init(df = data, mult_mum, mult_c)
-#' plot_sc_init(df = data, mult_mum, mult_c, pred = "Cod")
+#' data1 <- sc_init(dir, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
+#' plot_sc_init(df = data1, mult_mum, mult_c)
+#' plot_sc_init(df = data1, mult_mum, mult_c, pred = "Cod")
 #'
-#' data <- sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = "COD", save_to_disc = FALSE)
-#' plot_sc_init(df = data, mult_mum, mult_c)
+#' data2 <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "Cod", save_to_disc = FALSE)
+#' plot_sc_init(df = data2, mult_mum, mult_c)
 
 #' @export
 
 # AEEC debuging
 # dir <- "c:/backup_z/Atlantis_models/AEECmodel/"
-# nc = "output/AEECF_propDIS_surv.nc"
 # init = "AEEC35_Fcalibrated.nc"
 # prm_biol = "AEEC35_setas_biol_marie.prm"
 # fgs = "SETasGroups.csv"
@@ -71,24 +64,35 @@
 # sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = pred, no_avail = T)
 
 # function start
-sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
+sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
                     pred = NULL, no_avail = FALSE, save_to_disc = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
-  if (is.null(pred)) pred <- get_age_acronyms(dir = dir, fgs = fgs)
-  acr_age <- pred
+  if (is.null(pred)) {
+    acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
+  } else {
+    acr_age <- fgs_data$Code[is.element(fgs_data$LongName, pred)]
+    if (length(acr_age) == 0) stop("Please provide pred as LongName.")
+    if (length(acr_age) != length(pred)) stop("Not all predators present in functionalGroups file")
+  }
 
   bps <- load_bps(dir = dir, fgs = fgs, init = init)
   groups <- get_groups(dir = dir, fgs = fgs)
   groups_age <- get_age_groups(dir = dir, fgs = fgs)
   groups_rest <- groups[!is.element(groups, groups_age)]
+  maxl <- max(get_layers(dir = dir, init = init)) + 1
 
   message("Read in data from out.nc, init.nc and prm.biol!")
   # Extract volume per box and layer!
-  vol <- load_nc_physics(dir = dir, nc = nc, select_physics = "volume", bboxes = bboxes, aggregate_layers = F) %>%
-    dplyr::filter(time == 0 & layer == 0) %>%
+  vol <- load_init_physics(dir = dir, init = init, select_variable = "volume", bboxes = bboxes)
+
+  surface <- dplyr::group_by(vol, polygon) %>%
+    dplyr::filter(layer != maxl) %>%
+    dplyr::summarise(layer = max(layer))
+  vol <- vol %>%
+    dplyr::inner_join(surface) %>%
     dplyr::rename(vol = atoutput) %>%
-    dplyr::select(-variable, -layer, -time)
+    dplyr::select(-variable)
 
   # Extract data for age based groups
   get_pred_data <- function(dir, prm_biol, predacr) {
@@ -110,7 +114,7 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
     return(df)
   }
 
-  weights <- load_init_weight(dir = dir, init = init, fgs = fgs)
+  weights <- load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
   weights$species <- convert_factor(fgs_data, col = weights$species)
   pd <- lapply(acr_age, get_pred_data, dir = dir, prm_biol = prm_biol)
   # Calculate weight difference from one ageclass to the next!
@@ -164,16 +168,22 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   # nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums",
   #                 fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
-  nums <- load_init_num(dir = dir, init = init, fgs = fgs) %>%
+  nums <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
     dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
-    dplyr::left_join(unique(dplyr::select(pd, species, agecl, pred_stanza))) %>%
-    dplyr::left_join(asseff)
+    dplyr::inner_join(surface) # not needed in case numbers are already only in surface in init file
+
+  # Add stanzas for all age-based groups!
+  all_age_acr <- get_age_acronyms(dir = dir, fgs = fgs)
+  stanzas <- vapply(paste0(all_age_acr, "_", "age_mat"), extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
+  stanzas <- data.frame(species = all_age_acr, ageclmat = stanzas, stringsAsFactors = FALSE)
+  stanzas$species <- convert_factor(fgs_data, col = stanzas$species)
+  nums <- dplyr::left_join(nums, stanzas)
+  nums$prey_stanza <- ifelse(nums$agecl < nums$ageclmat, 1, 2)
 
   preydens_ages <- nums %>%
-    dplyr::rename(prey_stanza = pred_stanza) %>%
     dplyr::left_join(weights) %>%
     dplyr::mutate(atoutput = (rn + sn) * atoutput) %>%
-    agg_data(groups = c("species", "polygon", "prey_stanza"), fun = sum) %>%
+    agg_data(groups = c("species", "polygon", "prey_stanza", "layer"), fun = sum) %>%
     dplyr::left_join(vol) %>%
     dplyr::mutate(atoutput = atoutput / vol) %>%
     dplyr::select(-vol) %>%
@@ -188,10 +198,12 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   # preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
   #                            select_variable = "N", bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
-  preydens_invert <- load_init_n(dir = dir, init = init, select_groups = groups_rest) %>%
+  preydens_invert <- load_init_nonage(dir = dir, init = init, fgs = fgs, select_groups = groups_rest,
+                                      bboxes = bboxes, bps = load_bps(dir = dir, fgs = fgs, init = init)) %>%
     dplyr::mutate(prey_stanza = 2) %>%
     dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species)) %>%
-    dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
+    dplyr::inner_join(surface)
+    # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
   preydens <- rbind(preydens_ages, preydens_invert) %>%
     dplyr::rename(prey = species, preydens = atoutput)
 
@@ -214,11 +226,14 @@ sc_init <- function(dir = getwd(), nc, init, prm_biol, fgs, bboxes, out,
   # dm <- split(dm, dm$pred)
   # dm <- dm[acr_age]
 
-  # Combine everything to one dataframe! For some reason old ageclasses aren't present...
-  result <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
+  # Combine everything to one dataframe!
+  result <- dplyr::select(pd, species, agecl, pred_stanza) %>%
+    dplyr::left_join(asseff) %>%
+    dplyr::left_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
+    dplyr::rename(pred = species) %>%
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
-    agg_data(groups = c("pred", "agecl", "polygon"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
+    agg_data(groups = c("pred", "agecl", "polygon", "layer"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
     dplyr::ungroup() %>%
     dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c, growth_req))
 
