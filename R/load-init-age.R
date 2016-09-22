@@ -167,7 +167,7 @@ load_init_weight <- function(dir = getwd(), init, fgs, bboxes) {
     dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
     dplyr::rename_(.dots = c("sn" = "atoutput")) %>%
     unique()
-  df <- dplyr::inner_join(rn, sn) %>%
+  df <- dplyr::inner_join(rn, sn, by = c("species", "agecl")) %>%
     dplyr::select_(.dots = c("species", "agecl", "sn", "rn"))
   return(df)
 }
