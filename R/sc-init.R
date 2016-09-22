@@ -91,7 +91,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     agg_data(col = "layer", groups = "polygon", fun = max, out = "layer")
 
   vol <- vol %>%
-    dplyr::inner_join(surface) %>%
+    dplyr::inner_join(surface, by = c("polygon", "layer")) %>%
     dplyr::rename(vol = atoutput) %>%
     dplyr::select(-variable)
 
@@ -171,21 +171,21 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   #   dplyr::filter(time == 0)
   nums <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
     dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
-    dplyr::inner_join(surface) # not needed in case numbers are already only in surface in init file
+    dplyr::inner_join(surface, by = c("polygon", "layer")) # not needed in case numbers are already only in surface in init file
 
   # Add stanzas for all age-based groups!
   all_age_acr <- get_age_acronyms(dir = dir, fgs = fgs)
   stanzas <- vapply(paste0(all_age_acr, "_", "age_mat"), extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
   stanzas <- data.frame(species = all_age_acr, ageclmat = stanzas, stringsAsFactors = FALSE)
   stanzas$species <- convert_factor(fgs_data, col = stanzas$species)
-  nums <- dplyr::left_join(nums, stanzas)
+  nums <- dplyr::left_join(nums, stanzas, by = "species")
   nums$prey_stanza <- ifelse(nums$agecl < nums$ageclmat, 1, 2)
 
   preydens_ages <- nums %>%
-    dplyr::left_join(weights) %>%
+    dplyr::left_join(weights, by = c("species", "agecl")) %>%
     dplyr::mutate(atoutput = (rn + sn) * atoutput) %>%
     agg_data(groups = c("species", "polygon", "prey_stanza", "layer"), fun = sum) %>%
-    dplyr::left_join(vol) %>%
+    dplyr::left_join(vol, by = c("polygon", "layer")) %>%
     dplyr::mutate(atoutput = atoutput / vol) %>%
     dplyr::select(-vol) %>%
     dplyr::ungroup()
@@ -203,7 +203,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
                                       bboxes = bboxes, bps = load_bps(dir = dir, fgs = fgs, init = init)) %>%
     dplyr::mutate(prey_stanza = 2) %>%
     dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species)) %>%
-    dplyr::inner_join(surface)
+    dplyr::inner_join(surface, by = c("polygon", "layer"))
     # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
   preydens <- rbind(preydens_ages, preydens_invert) %>%
     dplyr::rename(prey = species, preydens = atoutput)
@@ -221,7 +221,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs) %>%
     dplyr::filter(!grepl(pattern = "sed", x = prey, ignore.case = FALSE)) %>% # Not present in fgs, therefore convert_factor will break if present.
     dplyr::filter(is.element(pred, acr_age) & avail != 0) %>%
-    dplyr::left_join(ass_type) %>%
+    dplyr::left_join(ass_type, by = "prey") %>%
     dplyr::mutate_at(.cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
   if (no_avail) dm$avail <- 1
   # dm <- split(dm, dm$pred)
@@ -229,9 +229,9 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
 
   # Combine everything to one dataframe!
   result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) %>%
-    dplyr::left_join(asseff) %>%
+    dplyr::left_join(asseff, by = "species") %>%
     dplyr::left_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
-    dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
+    dplyr::inner_join(preydens, by = c("prey_stanza", "prey")) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::rename_(.dots = c("pred" = "species")) %>%
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
     agg_data(groups = c("pred", "agecl", "polygon", "layer"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
@@ -240,7 +240,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # Add mum and C
   pd <- dplyr::rename_(pd, .dots = c("pred" = "species")) %>%
     dplyr::select_(.dots = c("pred", "agecl", "mum", "c", "growth_req"))
-  result <- dplyr::left_join(result, pd)
+  result <- dplyr::left_join(result, pd, by = c("pred", "agecl"))
 
   if (save_to_disc) {
     message("Write final dataframe as *.rda")
@@ -278,7 +278,7 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     result[[i]] <- dd
   }
   result <- do.call(rbind, result) %>%
-    dplyr::left_join(mults) %>%
+    dplyr::left_join(mults, by = "id") %>%
     dplyr::mutate(rel_growth = growth_feed / growth_req)
 
   plot <- ggplot2::ggplot(result, ggplot2::aes_(x = ~mult_mum, y = ~mult_c, fill = ~rel_growth)) +
