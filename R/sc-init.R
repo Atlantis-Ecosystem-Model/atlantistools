@@ -166,14 +166,13 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   nums <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
     dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
     dplyr::left_join(unique(dplyr::select(pd, species, agecl, pred_stanza))) %>%
-    dplyr::left_join(asseff) %>%
     dplyr::inner_join(surface) # not needed in case numbers are already only in surface in init file
 
   preydens_ages <- nums %>%
     dplyr::rename(prey_stanza = pred_stanza) %>%
-    dplyr::left_join(weights)
+    dplyr::left_join(weights) %>%
     dplyr::mutate(atoutput = (rn + sn) * atoutput) %>%
-    agg_data(groups = c("species", "polygon", "prey_stanza"), fun = sum) %>%
+    agg_data(groups = c("species", "polygon", "prey_stanza", "layer"), fun = sum) %>%
     dplyr::left_join(vol) %>%
     dplyr::mutate(atoutput = atoutput / vol) %>%
     dplyr::select(-vol) %>%
@@ -188,10 +187,12 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
   #                            select_variable = "N", bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
-  preydens_invert <- load_init_n(dir = dir, init = init, select_groups = groups_rest) %>%
+  preydens_invert <- load_init_nonage(dir = dir, init = init, fgs = fgs, select_groups = groups_rest,
+                                      bboxes = bboxes, bps = load_bps(dir = dir, fgs = fgs, init = init)) %>%
     dplyr::mutate(prey_stanza = 2) %>%
     dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species)) %>%
-    dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
+    dplyr::inner_join(surface)
+    # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
   preydens <- rbind(preydens_ages, preydens_invert) %>%
     dplyr::rename(prey = species, preydens = atoutput)
 
@@ -215,10 +216,12 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # dm <- dm[acr_age]
 
   # Combine everything to one dataframe! For some reason old ageclasses aren't present...
-  result <- dplyr::left_join(dm, nums, by = c("pred" = "species", "pred_stanza", "ass_type")) %>%
+  result <- dplyr::left_join(nums, asseff) %>%
+    dplyr::left_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
+    dplyr::rename(pred = species) %>%
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
-    agg_data(groups = c("pred", "agecl", "polygon"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
+    agg_data(groups = c("pred", "agecl", "polygon", "layer"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
     dplyr::ungroup() %>%
     dplyr::left_join(dplyr::select(pd, pred = species, agecl, mum, c, growth_req))
 
