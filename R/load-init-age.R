@@ -88,7 +88,7 @@ load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_grou
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter(result, !is.na(layer))
+  result <- dplyr::filter_(result, ~!is.na(layer))
 
   return(result)
 }
@@ -132,7 +132,7 @@ load_init_nonage <- function(dir = getwd(), init, fgs, select_variable = "N", se
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter(result, !is.na(layer))
+  result <- dplyr::filter_(result, ~!is.na(layer))
 
   return(result)
 }
@@ -151,7 +151,7 @@ load_init_physics <- function(dir = getwd(), init, select_variable, bboxes) {
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter(result, !is.na(layer))
+  result <- dplyr::filter_(result, ~!is.na(layer))
 
   return(result)
 }
@@ -160,13 +160,15 @@ load_init_physics <- function(dir = getwd(), init, select_variable, bboxes) {
 #' @rdname load_init_age
 load_init_weight <- function(dir = getwd(), init, fgs, bboxes) {
   rn <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "ResN", bboxes = bboxes) %>%
-    dplyr::select(-polygon, -layer, rn = atoutput, species, agecl) %>%
+    dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
+    dplyr::rename_(.dots = c("rn" = "atoutput")) %>%
     unique()
   sn <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "StructN", bboxes = bboxes) %>%
-    dplyr::select(-polygon, -layer, sn = atoutput, species, agecl) %>%
+    dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
+    dplyr::rename_(.dots = c("sn" = "atoutput")) %>%
     unique()
   df <- dplyr::inner_join(rn, sn) %>%
-    dplyr::select(species, agecl, sn, rn)
+    dplyr::select_(.dots = c("species", "agecl", "sn", "rn"))
   return(df)
 }
 
