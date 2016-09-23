@@ -265,6 +265,9 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     return(result)
   }
 
+  # wuwu <- dplyr::mutate_(data1, .dots = stats::setNames(list(lazyeval::interp(~var * x, x = mult_mum), var = as.name("mum")), "mum"))
+  # wuwu <- dplyr::mutate_(data1, .dots = stats::setNames((~mum * mult_mum), "mum"))
+
   mult1 <- rep(mult_mum, each = length(mult_c))
   mult2 <- rep(mult_c, times = length(mult_mum))
   mults <- data.frame(id = 1:length(mult1), mult_mum = mult1, mult_c = mult2)
