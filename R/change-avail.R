@@ -122,7 +122,7 @@ change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NUL
   # Convert to wide dataframe
   if (!consecutive) {
     dm$prey_id <- NULL
-    dm <- tidyr::spread(dm, key = prey, value = avail)
+    dm <- tidyr::spread_(dm, key_col = "prey", value_col = "avail")
     dm <- dplyr::select_(dm, .dots = c(names(dm)[1:4], prey_ordered, "DLsed", "DRsed", "DCsed"))
   }
 
