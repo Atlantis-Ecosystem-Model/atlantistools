@@ -257,16 +257,13 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
 
   calc_growth <- function(df, mult_mum, mult_c) {
     result <- df %>%
-      dplyr::mutate(mum = mum * mult_mum) %>%
-      dplyr::mutate(c = c * mult_c) %>%
-      dplyr::filter(!is.na(availbio)) %>% # Only needed in case data is read in from init
-      dplyr::mutate(atoutput = c * availbio / (1 + c / mum * availbio)) %>%  # calculate realised growth rate
+      dplyr::mutate_(.dots = stats::setNames(list(~mum * mult_mum), "mum")) %>%
+      dplyr::mutate_(.dots = stats::setNames(list(~c * mult_c), "c")) %>%
+      dplyr::filter_(~!is.na(availbio)) %>% # Only needed in case data is read in from init
+      dplyr::mutate_(.dots = stats::setNames(list(lazyeval::interp(~c * availbio / (x + c / mum * availbio), x = 1)), "atoutput")) %>%  # calculate realised growth rate
       agg_data(groups = c("pred", "agecl", "growth_req"), out = "growth_feed", fun = mean) # mean over spatial domain
     return(result)
   }
-
-  # wuwu <- dplyr::mutate_(data1, .dots = stats::setNames(list(lazyeval::interp(~var * x, x = mult_mum), var = as.name("mum")), "mum"))
-  # wuwu <- dplyr::mutate_(data1, .dots = stats::setNames((~mum * mult_mum), "mum"))
 
   mult1 <- rep(mult_mum, each = length(mult_c))
   mult2 <- rep(mult_c, times = length(mult_mum))
@@ -281,7 +278,7 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
   }
   result <- do.call(rbind, result) %>%
     dplyr::left_join(mults, by = "id") %>%
-    dplyr::mutate(rel_growth = growth_feed / growth_req)
+    dplyr::mutate_(.dots = stats::setNames(list(~growth_feed / growth_req), "rel_growth"))
 
   plot <- ggplot2::ggplot(result, ggplot2::aes_(x = ~mult_mum, y = ~mult_c, fill = ~rel_growth)) +
     ggplot2::geom_raster(interpolate = TRUE) +
