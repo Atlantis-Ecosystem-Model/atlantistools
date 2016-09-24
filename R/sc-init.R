@@ -182,7 +182,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
 
   preydens_ages <- nums %>%
     dplyr::left_join(weights, by = c("species", "agecl")) %>%
-    dplyr::mutate(atoutput = (rn + sn) * atoutput) %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~(rn + sn) * atoutput), "atoutput")) %>%
     agg_data(groups = c("species", "polygon", "prey_stanza", "layer"), fun = sum) %>%
     dplyr::left_join(vol, by = c("polygon", "layer")) %>%
     dplyr::mutate(atoutput = atoutput / vol) %>%
