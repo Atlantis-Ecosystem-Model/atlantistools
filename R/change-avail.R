@@ -56,9 +56,10 @@
 #' function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
 
 change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL, roc, relative = TRUE, consecutive = FALSE) {
-  # Set variables in case no predators are selected!
+  # Set variables in case no predators are selected! Need to update!
   dm <- dietmatrix
   prey_ordered <- unique(dm$prey[order(dm$prey_id)])
+
 
   # No predator selectd --> select all
   if (is.null(pred)) {
