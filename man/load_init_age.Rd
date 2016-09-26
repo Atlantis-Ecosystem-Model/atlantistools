@@ -73,13 +73,15 @@ load_init_nonage(dir = dir,
                  fgs = "functionalGroups.csv",
                  select_groups = "crangon",
                  bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")),
-                 bps = load_bps(dir = dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc"))
+                 bps = load_bps(dir = dir, fgs = "functionalGroups.csv",
+                                init = "init_simple_NorthSea.nc"))
 
 load_init_nonage(dir = dir,
                  init = "init_simple_NorthSea.nc",
                  fgs = "functionalGroups.csv",
                  bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")),
-                 bps = load_bps(dir = dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc"))
+                 bps = load_bps(dir = dir, fgs = "functionalGroups.csv",
+                                init = "init_simple_NorthSea.nc"))
 }
 \author{
 Alexander Keth
