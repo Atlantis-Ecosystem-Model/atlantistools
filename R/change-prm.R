@@ -48,7 +48,7 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
   # Function to update a specific parameter composed of a parameter string
   # a group acronym and a seperator (by default "_") found in a prm file.
   update_prm_species <- function(prm_biol, acronym, roc, parameter, relative) {
-    if (parameter == "AgeClassSize") {
+    if (parameter %in% c("mL", "mQ", "AgeClassSize")) {
       flag <- paste(acronym, parameter, sep = "_")
     } else {
       flag <- paste(parameter, acronym, sep = "_")
