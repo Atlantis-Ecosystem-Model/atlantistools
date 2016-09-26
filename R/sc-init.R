@@ -62,6 +62,20 @@
 # pred <- pred[!pred %in% c("SB", "CET", "SXX", "SHK")]
 # sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = pred, no_avail = T)
 
+# GNS debuging
+# dir <- "c:/backup_z/Atlantis_models/baserun/"
+# init = "init_NorthSea.nc"
+# prm_biol = "NorthSea_biol_fishing.prm"
+# fgs = "functionalGroups.csv"
+# bboxes = get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+
+# mult_mum = seq(0.5, 1.5, by = 0.1)
+# mult_c = seq(0.5, 1.5, by = 0.1)
+# pred <- get_age_acronyms(dir = dir, fgs = fgs)
+# pred <- pred[!pred %in% c("SB", "CET", "SXX", "SHK")]
+# sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = pred, no_avail = T)
+
+
 # function start
 sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
                     pred = NULL, set_avail = NULL, save_to_disc = FALSE) {
