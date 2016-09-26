@@ -22,6 +22,7 @@
 #' be passed directly.
 #' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
 #' (\code{TRUE}) or not (\code{FALSE}).
+#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
@@ -34,7 +35,8 @@
 #'                       parameter = "KWRR",
 #'                       save_to_disc = FALSE)
 
-change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter, relative = TRUE, save_to_disc = TRUE) {
+change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
+                       relative = TRUE, save_to_disc = TRUE, version_flag = 1) {
   if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
 
   if (length(select_acronyms) != length(roc)) {
@@ -64,7 +66,7 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
     }
 
     # Update value. Some pesky expectations have to be added here.
-    if (is.element(parameter, c("mum", "C", "mQ", "mL", "jmL", "jmQ"))) {
+    if (is.element(parameter, c("mum", "C", "mQ", "mL", "jmL", "jmQ")) & version_flag == 1) {
       prm_biol[pos] <- paste(paste0(flag, "_T15"), new_value, sep = "\t")
     } else {
       prm_biol[pos] <- paste(flag, new_value, sep = "\t")

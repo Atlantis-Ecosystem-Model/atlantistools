@@ -5,7 +5,7 @@
 \title{Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.}
 \usage{
 change_prm(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
-  relative = TRUE, save_to_disc = TRUE)
+  relative = TRUE, save_to_disc = TRUE, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -33,6 +33,8 @@ be passed directly.}
 
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
 (\code{TRUE}) or not (\code{FALSE}).}
+
+\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.
