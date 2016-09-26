@@ -106,7 +106,8 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
 
       for (i in seq_along(select_acronyms)) {
         if (!(all(roc[[i]] == 1) & relative)) {
-          prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[[i]], parameter = parameter, relative = relative)
+          prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i],
+                                             roc = roc[[i]], parameter = parameter, relative = relative)
         }
       }
 
