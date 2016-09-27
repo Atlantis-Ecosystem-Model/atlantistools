@@ -31,11 +31,11 @@ format. You should use the "wide" format in case you aim to change your
 diet matrix entries.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-or not (default = \code{FALSE}).
-'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
+or not (default = \code{FALSE}).}
 
 \item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
-with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and}
+with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
+'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
 }
 \value{
 dataframe of the availability matrix in long format with columns
