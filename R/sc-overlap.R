@@ -98,6 +98,9 @@ sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
     # Combine predator data with prey data!
     # WARNING: This may lead to a very huge dataframe... all (even non existing)
     # pred/prey combinations are combined!
+    si2 <- dplyr::left_join(df_avail, df_pred, by = c("pred" = "species", "pred_stanza")) %>%
+      dplyr::full_join(biomass, by = c("prey" = "species", "prey_stanza" = "pred_stanza", "time", "polygon", "layer"))
+
     si <- dplyr::full_join(df_pred, biomass, by = c("time", "polygon", "layer"))
     names(si)[names(si) == "species.x"] <- "pred"
     names(si)[names(si) == "species.y"] <- "prey"
