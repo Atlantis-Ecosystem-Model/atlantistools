@@ -77,6 +77,13 @@ sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
   biomass <- dplyr::bind_rows(biomass_age, biomass_pools) %>%
     agg_perc(col = "bio", groups = c("species", "time", "pred_stanza"), out = "perc_bio")
 
+  # Fill data gaps to make sure that both combinations:
+  # - pred/stanza present in box/layer combination & prey/stanza absent
+  # - prey/stanza present in box/layer combination $ pred/stanza absent
+  full_df <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("polygon", "layer"))) %>%
+    merge(dplyr::select_(dplyr::ungroup(biomass)))
+  test <- dplyr::full_join(biomass, full_df)
+
   # 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
   # - pred: %biomass per predator ageclass per time, box, layer
   # - avail: availability matrix
@@ -100,6 +107,8 @@ sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
     # pred/prey combinations are combined!
     si2 <- dplyr::left_join(df_avail, df_pred, by = c("pred" = "species", "pred_stanza")) %>%
       dplyr::full_join(biomass, by = c("prey" = "species", "prey_stanza" = "pred_stanza", "time", "polygon", "layer"))
+
+    # Need to split prey data into group/stanza to fill gaps!
 
     si <- dplyr::full_join(df_pred, biomass, by = c("time", "polygon", "layer"))
     names(si)[names(si) == "species.x"] <- "pred"
