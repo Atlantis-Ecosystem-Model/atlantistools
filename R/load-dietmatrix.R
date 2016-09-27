@@ -18,6 +18,8 @@
 #' "long" (\code{transform = TRUE, default}) or "wide" (\code{transform = FALSE})
 #' format. You should use the "wide" format in case you aim to change your
 #' diet matrix entries.
+#' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+#' or not (default = \code{FALSE}).
 #' @param dietmatrix Dataframe in 'long' format containing information about availabilities
 #' with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
 #' 'avail'. The dataframe should be generated with \code{load_dietmatrix()}.
@@ -32,7 +34,7 @@
 #'                       fgs = "SETasGroups.csv")
 #' head(dm, n = 10)
 
-load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE) {
+load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, convert_names = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
   acr <- fgs_data$Code[fgs_data$isPredator == 1]
   agecl <- fgs_data$NumCohorts[fgs_data$isPredator == 1]
@@ -83,6 +85,9 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE) {
                              names(result)[!is.element(names(result), c("pred", "pred_stanza", "prey_stanza", "code"))])
     prey_order <- data.frame(prey = prey, prey_id = 1:length(prey), stringsAsFactors = FALSE)
     result <- dplyr::left_join(result, prey_order)
+    if (convert_names) {
+      result <- dplyr::mutate_at(result, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
+    }
   }
 
   return(result)

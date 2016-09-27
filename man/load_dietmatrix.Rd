@@ -5,7 +5,8 @@
 \alias{write_diet}
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
-load_dietmatrix(dir = getwd(), prm_biol, fgs, transform = TRUE)
+load_dietmatrix(dir = getwd(), prm_biol, fgs, transform = TRUE,
+  convert_names = FALSE)
 
 write_diet(dir = getwd(), dietmatrix, prm_biol)
 }
@@ -29,9 +30,12 @@ In addition set dir to 'NULL' in this case.}
 format. You should use the "wide" format in case you aim to change your
 diet matrix entries.}
 
-\item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
-with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
+\item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+or not (default = \code{FALSE}).
 'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
+
+\item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
+with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and}
 }
 \value{
 dataframe of the availability matrix in long format with columns
