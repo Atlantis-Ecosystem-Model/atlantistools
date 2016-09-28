@@ -39,6 +39,9 @@ file. In case you are using different folders for your model data
 and output files please pass a complete folder/filename string and
 set dir to 'NULL'.}
 
+\item{pred}{Vector of predator acronyms to check. If \code{NULL} (default) all age based
+predators are selected.}
+
 \item{save_to_disc}{Logical indicating if the resulting list shall be stored
 on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
 }

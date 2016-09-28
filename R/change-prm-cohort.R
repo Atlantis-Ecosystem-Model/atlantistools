@@ -25,7 +25,6 @@
 #' be passed directly.
 #' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
 #' (\code{TRUE}) or not (\code{FALSE}).
-#' @param variables Character vector of the variables to extract from the file.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'

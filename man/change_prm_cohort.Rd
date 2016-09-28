@@ -36,8 +36,6 @@ be passed directly.}
 
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
 (\code{TRUE}) or not (\code{FALSE}).}
-
-\item{variables}{Character vector of the variables to extract from the file.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.
