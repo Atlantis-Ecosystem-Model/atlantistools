@@ -25,4 +25,14 @@ test_that("test structure of fs", {
   expect_equal(dim(d7), c(20, 4))
 })
 
+d <- system.file("extdata", "gns", package = "atlantistools")
+prm <- "NorthSea_biol_fishing.prm"
+fgs <- "functionalGroups.csv"
+
+d4 <- prm_to_df_ages(dir = d, prm_biol = prm, fgs = fgs, group = "COD", parameter = "mum")
+d5 <- prm_to_df_ages(dir = d, prm_biol = prm, fgs = fgs, group = "COD", parameter = c("mum", "C"))
+d6 <- prm_to_df_ages(dir = d, prm_biol = prm, fgs = fgs, group = c("HER", "COD"), parameter = "mum")
+d7 <- prm_to_df_ages(dir = d, prm_biol = prm, fgs = fgs, group = c("COD", "HER"), parameter = c("mum", "C"))
+
+
 
