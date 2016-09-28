@@ -120,32 +120,4 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
   }
 }
 
-#' @export
-#' @rdname change_prm_cohort
-# Extract value for a specific cohort parameter from a Vector of character strings.
-extract_prm_cohort <- function(dir = getwd(), prm_biol, variables) {
-  # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
-
-  slice <- function(prm, variable) {
-    pos <- scan_prm(chars = prm, variable = variable)
-    pos <- pos + 1
-    while (substr(prm[pos], 1, 1) == "#") pos <- pos + 1
-
-    # Keep all numeric values
-    value <- str_split_twice(char = prm[pos], min_only = FALSE)
-    return(value)
-  }
-
-  values <- lapply(variables, slice, prm = prm_biol_new)
-  # rbind to matrix in case all groups have the same number of cohorts!
-  if (length(unique(sapply(values, length))) == 1) {
-    values <- do.call(rbind, values)
-    rownames(values) <- variables
-  } else {
-    names(values) <- variables
-  }
-  return(values)
-}
 

@@ -2,13 +2,6 @@
 #'
 #' @param chars Vector of character strings
 #' @param variable Character string giving the flag to search for.
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
 #' @export
 
 # Extract position of variable in a Vector of character strings.
@@ -47,19 +40,5 @@ scan_prm <- function(chars, variable){
       }
     }
   }
-}
-
-#' @export
-#' @rdname scan_prm
-# Extract value for a specific parameter from a Vector of character strings.
-extract_prm <- function(dir = getwd(), prm_biol, variable) {
-  # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
-
-  pos <- scan_prm(chars = prm_biol_new, variable = variable)
-  result <- prm_biol_new[pos]
-  result <- str_split_twice(char = result)
-  return(result)
 }
 
