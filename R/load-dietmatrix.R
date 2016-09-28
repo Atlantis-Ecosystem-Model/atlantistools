@@ -58,6 +58,11 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
 
   # Extract data from the biological parameter file.
   dietmatrix <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = diet_strings)
+  if (length(unique(sapply(dietmatrix, length))) != 1) {
+    stop("Number of entries in dietmatrix are not equal. Check your dietmatrix.")
+  } else {
+    dietmatrix <- do.call(rbind, dietmatrix)
+  }
 
   # Extract predator, predator-stanzas and prey-stanzas.
   prey_stanza <- suppressWarnings(as.integer(substr(rownames(dietmatrix), start = nchar(pstring) + 1, stop = nchar(pstring) + 1)))
