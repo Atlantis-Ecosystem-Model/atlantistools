@@ -27,7 +27,7 @@ data <- de %>%
 
 test_that("test output numbers", {
   expect_equal(dim(data), c(24, 3))
-  expect_equal(data$out[data$species == "cod" & data$agecl == 7], 61272.89)
-  expect_equal(unique(df$atoutput[df$species == "herring" & df$agecl == 9]), 718.66)
+  expect_equal(data$out[data$species == "Cod" & data$agecl == 7], 61272.89)
+  expect_equal(unique(df$atoutput[df$species == "Herring" & df$agecl == 9]), 718.66)
 })
 
