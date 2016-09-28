@@ -5,14 +5,15 @@
 #' predators are selected.
 #'
 #' @export
-
-# dir <- "c:/backup_z/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
-# nc <- "outputNorthSea.nc"
-# prm_biol <- "NorthSea_biol_fishing.prm"
-# fgs <- "functionalGroups.csv"
-# bps <- load_bps(dir = dir, fgs = fgs, init = "init_NorthSea.nc")
-# bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-# pred <- NULL
+#'
+#' @examples
+#' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
+#' nc_gen <- "outputNorthSea.nc"
+#' prm_biol <- "NorthSea_biol_fishing.prm"
+#' fgs <- "functionalGroups.csv"
+#' bps <- load_bps(dir = dir, fgs = fgs, init = "init_NorthSea.nc")
+#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#' pred <- NULL
 
 sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
                        pred = NULL, save_to_disc = FALSE) {
@@ -44,19 +45,14 @@ sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
                   MoreArgs = list(dir, nc = nc_gen, bps = bps, fgs = fgs, bboxes = bboxes))
   names(data_bio) <- tolower(vars)
 
-  dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs) %>%
-    dplyr::filter(!grepl(pattern = "sed", x = prey, ignore.case = FALSE)) %>% # Not present in fgs, therefore convert_factor will break if present.
-    dplyr::filter(is.element(pred, acr_age) & avail != 0) %>%
-    dplyr::mutate_at(.cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
+  data_dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs, convert_names = TRUE) %>%
+    dplyr::filter_(~avail != 0)
 
   vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"), bboxes = bboxes, aggregate_layers = F)
 
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
 
-  age_mat <- vapply(paste0(acr_age, "_", "age_mat"), extract_prm,
-                    dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
-  age_mat <- data.frame(species = acr_age, age_mat = age_mat, stringsAsFactors = FALSE)
-  age_mat$species <- convert_factor(data_fgs = fgs_data, col = age_mat$species)
+  age_mat <-  prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = "age_mat")
 
   # 2nd step: Calculate relative biomass per box and layer per group and stanza!
   # - Age based groups!
@@ -82,12 +78,17 @@ sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
   biomass <- dplyr::bind_rows(biomass_age, biomass_pools) %>%
     agg_perc(col = "bio", groups = c("species", "time", "pred_stanza"), out = "perc_bio")
 
-  # Fill data gaps to make sure that both combinations are present:
+  # Fill data gaps to make sure that both combinations are present later:
   # - pred/stanza present in box/layer combination & prey/stanza absent
   # - prey/stanza present in box/layer combination $ pred/stanza absent
-  full_df <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("polygon", "layer"))) %>%
-    merge(dplyr::select_(dplyr::ungroup(biomass)))
-  test <- dplyr::full_join(biomass, full_df)
+  ac_box_layer <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("polygon", "layer")))
+  ac_pred_stan <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("species", "pred_stanza")))
+  ac_time <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("time")))
+
+  data_bio <- merge(ac_box_layer, ac_pred_stan)
+  data_bio <- merge(data_bio, ac_time) %>%
+    dplyr::left_join(biomass)
+  data_bio$perc_bio[is.na(data_bio$perc_bio)] <- 0
 
   # 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
   # - pred: %biomass per predator ageclass per time, box, layer
@@ -104,33 +105,16 @@ sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
     df_pred <- biomass[biomass$pred_stanza == pred_stanza & biomass$species == pred, ]
 
     df_avail <- avail[avail$pred == pred & avail$pred_stanza == pred_stanza, ]
-    df_avail$avail <- NULL
-    # df_avail <- dplyr::mutate_(df_avail, .dots = stats::setNames(list(~avail/sum(avail)), "avail"))
 
     # Combine predator data with prey data!
     # WARNING: This may lead to a very huge dataframe... all (even non existing)
     # pred/prey combinations are combined!
-    si2 <- dplyr::left_join(df_avail, df_pred, by = c("pred" = "species", "pred_stanza")) %>%
-      dplyr::full_join(biomass, by = c("prey" = "species", "prey_stanza" = "pred_stanza", "time", "polygon", "layer"))
+    # The 2nd join has to be an inner_join to make sure only available prey groups are
+    # used to calculate the overlap index!
+    si <- dplyr::left_join(df_avail, df_pred, by = c("pred" = "species", "pred_stanza")) %>%
+      dplyr::inner_join(biomass, by = c("prey" = "species", "prey_stanza" = "pred_stanza", "time", "polygon", "layer"))
 
-    # Need to split prey data into group/stanza to fill gaps!
-
-    si <- dplyr::full_join(df_pred, biomass, by = c("time", "polygon", "layer"))
-    names(si)[names(si) == "species.x"] <- "pred"
-    names(si)[names(si) == "species.y"] <- "prey"
-    names(si)[names(si) == "pred_stanza.x"] <- "pred_stanza"
-    names(si)[names(si) == "pred_stanza.y"] <- "prey_stanza"
-    names(si)[names(si) == "perc_bio.x"] <- "perc_bio_pred"
-    names(si)[names(si) == "perc_bio.y"] <- "perc_bio_prey"
-    # Fill predator data-gaps! How to handle mising prey overlap?
-    ids <- is.na(si$pred)
-    if (sum(ids) > 0) {
-      si$pred[ids] <- pred
-      si$pred_stanza[ids] <- pred_stanza
-      si$perc_bio_pred[ids] <- 0
-    }
-    si <- dplyr::inner_join(si, df_avail, by = c("pred", "pred_stanza", "prey", "prey_stanza"))
-    si$si <- with(si, abs(perc_bio_pred - perc_bio_prey))
+    si$si <- with(si, abs(perc_bio.x - perc_bio.y))
 
     # Schoner index per pred/predstanza/prey/preystanza combination!
     si_spec <- si %>%
@@ -151,8 +135,18 @@ sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
   }
 
   # Apply calculations to all predators!
-  preds <- rep(acr_age, each = 2)
+  preds <- rep(convert_factor(data_fgs = fgs_data, col = acr_age), each = 2)
   stanzas <- rep(1:2, times = length(acr_age))
-  sis <- Map(schoener, pred = preds, pred_stanza = stanzas, MoreArgs = list(biomass = biomass, avail = data_dm))
+  sis <- Map(schoener, pred = preds, pred_stanza = stanzas, MoreArgs = list(biomass = data_bio, avail = data_dm))
 }
+
+
+
+
+ggplot2::ggplot(sis[[1]][[1]], ggplot2::aes(x = time, y = si, group = time)) +
+  ggplot2::geom_violin() +
+  ggplot2::geom_point(data = sis[[1]][[2]], colour = "red")
+
+
+
 
