@@ -109,70 +109,30 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     dplyr::select(-variable)
 
   # Extract data for age based groups
-  get_pred_data <- function(dir, prm_biol, predacr) {
-    mum <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = paste0("mum_", predacr))[1, ]
-    c <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = paste0("C_", predacr))[1, ]
-    # flag: parameter_XXX
-    prms1 <- vapply(paste0(c("KWSR", "KWRR"), "_", predacr),
-                    extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
-    # flag: XXX_parameter
-    prms2 <- vapply(paste0(predacr, "_", c("AgeClassSize", "age_mat")),
-                    extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
-    prms <- c(prms1, prms2)
-
-    df <- data.frame(species = predacr, mum = mum, c = c, stringsAsFactors = FALSE) %>%
-      dplyr::mutate(agecl = 1:nrow(.)) %>%
-      cbind(sapply(prms, rep, each = nrow(.)))
-    names(df)[5:ncol(df)] <- c("kwsr", "kwrr", "acs", "ageclmat")
-
-    return(df)
-  }
+  pd1 <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age,
+                   parameter = c("KWRR", "KWSR", "AgeClassSize", "age_mat"))
+  pd2 <- prm_to_df_ages(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("mum", "C"))
+  pd <- dplyr::left_join(pd1, pd2, by = c("species"))
+  pd <- split(pd, pd$species)
 
   weights <- load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
-  weights$species <- convert_factor(fgs_data, col = weights$species)
-  pd <- lapply(acr_age, get_pred_data, dir = dir, prm_biol = prm_biol)
+
   # Calculate weight difference from one ageclass to the next!
   for (i in seq_along(pd)) {
-    pd[[i]]$species <- convert_factor(fgs_data, col = pd[[i]]$species)
     pd[[i]] <- dplyr::left_join(pd[[i]], weights, by = c("species", "agecl"))
     pd[[i]]$wdiff <- c((pd[[i]]$rn[1] + pd[[i]]$sn[1]) - (pd[[i]]$kwrr[1] + pd[[i]]$kwsr[1]),
                        diff(pd[[i]]$rn + pd[[i]]$sn))
   }
   pd <- do.call(rbind, pd)
-  pd$pred_stanza <- ifelse(pd$agecl < pd$ageclmat, 1, 2)
-  pd$growth_req <- pd$wdiff / (365 *pd$acs)
+  pd$pred_stanza <- ifelse(pd$agecl < pd$age_mat, 1, 2)
+  pd$growth_req <- pd$wdiff / (365 *pd$ageclasssize)
   if (any(pd$growth_req < 0)) {
     warning("Required growth negative for some groups. Please check your initial conditions files.")
   }
 
-  # get_vert_distrib <- function(dir, predacr, prm_biol, nc) {
-  #   tags <- as.vector(outer(X = predacr, Y = 1:2, FUN = paste0))
-  #   df <- as.data.frame(sapply(paste("VERTday", tags, sep = "_"),
-  #                              extract_prm_cohort, dir = dir, prm_biol = prm_biol))
-  #   names(df) <- tags
-  #   df <- tidyr::gather(df, key = "species", value = "vdistrib") %>%
-  #     dplyr::mutate(pred_stanza = as.numeric(stringr::str_sub(species, start = -1))) %>%
-  #     dplyr::mutate(species = stringr::str_sub(species, end = stringr::str_length(species) - 1))
-  #
-  #   return(df)
-  # }
-  #
-  # vdistrib <- get_vert_distrib(dir = dir, predacr = acr_age, prm_biol = prm_biol)
-  # vdistrib$species <- convert_factor(fgs_data, col = vdistrib$species)
-  # NOTE: STill need to combine vdistrib to the rest of the dataframes!
-
-  get_ass_eff <- function(dir, prm_biol, predacr) {
-    # Assimilation efficiencies
-    asseff <- vapply(paste0(c("E", "EPlant", "EDL", "EDR"), "_", predacr),
-                     extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
-    asseff <- data.frame(species = predacr,
-                         ass_type = c("live", "plant", "lab_det", "ref_det"),
-                         asseff = asseff, stringsAsFactors = FALSE)
-    return(asseff)
-  }
-
-  asseff <- do.call(rbind, lapply(acr_age, get_ass_eff, dir = dir, prm_biol = prm_biol))
-  asseff$species <- convert_factor(fgs_data, col = asseff$species)
+  # Extract assimilation efficiencies per predator group!
+  asseff <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("E", "EPlant", "EDL", "EDR")) %>%
+    tidyr::gather_(key_col = "ass_type", value_col = "asseff", gather_cols = names(.)[names(.) != "species"])
 
   # Extract prey densities!
   # Convert numbers to biomass density! --> distribute over watercolumn!
@@ -183,16 +143,13 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   #                 fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
   nums <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
-    dplyr::mutate(species = convert_factor(fgs_data, col = species)) %>%
     dplyr::inner_join(surface, by = c("polygon", "layer")) # not needed in case numbers are already only in surface in init file
 
   # Add stanzas for all age-based groups!
   all_age_acr <- get_age_acronyms(dir = dir, fgs = fgs)
-  stanzas <- vapply(paste0(all_age_acr, "_", "age_mat"), extract_prm, dir = dir, prm_biol = prm_biol, numeric(1), USE.NAMES = FALSE)
-  stanzas <- data.frame(species = all_age_acr, ageclmat = stanzas, stringsAsFactors = FALSE)
-  stanzas$species <- convert_factor(fgs_data, col = stanzas$species)
+  stanzas <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = all_age_acr, parameter = "age_mat")
   nums <- dplyr::left_join(nums, stanzas, by = "species")
-  nums$prey_stanza <- ifelse(nums$agecl < nums$ageclmat, 1, 2)
+  nums$prey_stanza <- ifelse(nums$agecl < nums$age_mat, 1, 2)
 
   preydens_ages <- nums %>%
     dplyr::left_join(weights, by = c("species", "agecl")) %>%
@@ -202,10 +159,6 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     dplyr::mutate(atoutput = atoutput / vol) %>%
     dplyr::select(-vol) %>%
     dplyr::ungroup()
-  # dens <- dplyr::left_join(nums, weights) %>%
-  #   dplyr::left_join(vol) %>%
-  #   dplyr::mutate(atoutput = (rn + sn) * atoutput / vol) %>%
-  #   dplyr::select(-rn, -sn, -vol)
   # Get nitrogen desity for non age based groups and combine with age based data
 
   # Comment in to get data from output file
@@ -215,7 +168,6 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   preydens_invert <- load_init_nonage(dir = dir, init = init, fgs = fgs, select_groups = groups_rest,
                                       bboxes = bboxes, bps = load_bps(dir = dir, fgs = fgs, init = init)) %>%
     dplyr::mutate(prey_stanza = 2) %>%
-    dplyr::mutate(species = convert_factor(data_fgs = fgs_data, col = species)) %>%
     dplyr::inner_join(surface, by = c("polygon", "layer"))
     # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
   preydens <- rbind(preydens_ages, preydens_invert) %>%
@@ -224,26 +176,23 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   # Extract availability matrix and combine with assimilation types
   ass_type <- dplyr::select_(fgs_data, .dots = c("Code", names(fgs_data)[is.element(names(fgs_data), c("GroupType", "InvertType"))]))
   names(ass_type) <- c("prey", "grp")
-  ass_type$ass_type <- "live"
-  ass_type$ass_type[ass_type$grp == "LAB_DET"] <- "lab_det"
-  ass_type$ass_type[ass_type$grp == "REF_DET"] <- "ref_det"
+  ass_type$ass_type <- "e"
+  ass_type$ass_type[ass_type$grp == "LAB_DET"] <- "edl"
+  ass_type$ass_type[ass_type$grp == "REF_DET"] <- "edr"
   # NOTE: This may not work for all models out there!
-  ass_type$ass_type[unlist(sapply(c("PHY", "SEAGRAS"), grep, x = ass_type$grp))] <- "plant"
+  ass_type$ass_type[unlist(sapply(c("PHY", "SEAGRAS"), grep, x = ass_type$grp))] <- "eplant"
   ass_type$grp <- NULL
+  ass_type$prey <- convert_factor(data_fgs = fgs_data, col = ass_type$prey)
 
-  dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs) %>%
-    dplyr::filter(!grepl(pattern = "sed", x = prey, ignore.case = FALSE)) %>% # Not present in fgs, therefore convert_factor will break if present.
-    dplyr::filter(is.element(pred, acr_age) & avail != 0) %>%
-    dplyr::left_join(ass_type, by = "prey") %>%
-    dplyr::mutate_at(.cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
+  dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs, convert_names = TRUE) %>%
+    dplyr::filter(avail != 0) %>%
+    dplyr::left_join(ass_type, by = "prey")
   if (!is.null(set_avail)) dm$avail <- set_avail
-  # dm <- split(dm, dm$pred)
-  # dm <- dm[acr_age]
 
   # Combine everything to one dataframe!
   result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) %>%
     dplyr::left_join(asseff, by = "species") %>%
-    dplyr::left_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
+    dplyr::inner_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens, by = c("prey_stanza", "prey")) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::rename_(.dots = c("pred" = "species")) %>%
     dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
