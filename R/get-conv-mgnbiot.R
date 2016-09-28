@@ -18,8 +18,8 @@
 #' @export
 
 get_conv_mgnbiot <- function(dir = getwd(), prm_biol){
-  x_cn <- extract_prm(dir = dir, prm_biol = prm_biol, variable = "X_CN")
-  k_wetdry <- extract_prm(dir = dir, prm_biol = prm_biol, variable = "k_wetdry")
+  x_cn <- extract_prm(dir = dir, prm_biol = prm_biol, variables = "X_CN")
+  k_wetdry <- extract_prm(dir = dir, prm_biol = prm_biol, variables = "k_wetdry")
   conv <- x_cn * k_wetdry / 1000000000
   return(conv)
 }

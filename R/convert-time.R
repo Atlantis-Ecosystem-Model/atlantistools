@@ -46,7 +46,7 @@ convert_time <- function(dir = getwd(), prm_run, data, as_date = FALSE, modelsta
     # This tests if the timestps is a sequence of integers with at max 4 missing numbers between
     # sucessuve values. E.g. 1 6 7 8 12 is ok, 1 60 120 180 is not!
     if (all(diff(ts) < 5)) {
-      toutinc <- extract_prm(dir = dir, prm_biol = prm_run, variable = "toutinc")
+      toutinc <- extract_prm(dir = dir, prm_biol = prm_run, variables = "toutinc")
 
       # Convert timesteps to actual time!
       if (as_date) {# convert time to date!
@@ -56,7 +56,7 @@ convert_time <- function(dir = getwd(), prm_run, data, as_date = FALSE, modelsta
       }
     } else {
       # Check if data is stock-state data!
-      tsumout <- extract_prm(dir = dir, prm_biol = prm_run, variable = "tsumout")
+      tsumout <- extract_prm(dir = dir, prm_biol = prm_run, variables = "tsumout")
       # remove entries in time which represent end of the year values in case tsumount != 365!
       # In addition also remove the last entry as it may neither be an end of the year value
       # nor a multiple of the stock-state timestep!
