@@ -105,8 +105,8 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
 
   vol <- vol %>%
     dplyr::inner_join(surface, by = c("polygon", "layer")) %>%
-    dplyr::rename(vol = atoutput) %>%
-    dplyr::select(-variable)
+    dplyr::rename_(.dots = c("vol" = "atoutput")) %>%
+    dplyr::select_(quote(-variable))
 
   # Extract data for age based groups
   pd1 <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age,
@@ -156,7 +156,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     dplyr::mutate_(.dots = stats::setNames(list(~(rn + sn) * atoutput), "atoutput")) %>%
     agg_data(groups = c("species", "polygon", "prey_stanza", "layer"), fun = sum) %>%
     dplyr::left_join(vol, by = c("polygon", "layer")) %>%
-    dplyr::mutate(atoutput = atoutput / vol) %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput / vol), "atoutput")) %>%
     dplyr::select(-vol) %>%
     dplyr::ungroup()
   # Get nitrogen desity for non age based groups and combine with age based data
@@ -171,7 +171,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     dplyr::inner_join(surface, by = c("polygon", "layer"))
     # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
   preydens <- rbind(preydens_ages, preydens_invert) %>%
-    dplyr::rename(prey = species, preydens = atoutput)
+    dplyr::rename_(.dots = c("prey" = "species", "preydens" = "atoutput"))
 
   # Extract availability matrix and combine with assimilation types
   ass_type <- dplyr::select_(fgs_data, .dots = c("Code", names(fgs_data)[is.element(names(fgs_data), c("GroupType", "InvertType"))]))
@@ -185,7 +185,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   ass_type$prey <- convert_factor(data_fgs = fgs_data, col = ass_type$prey)
 
   dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs, convert_names = TRUE) %>%
-    dplyr::filter(avail != 0) %>%
+    dplyr::filter_(~avail != 0) %>%
     dplyr::left_join(ass_type, by = "prey")
   if (!is.null(set_avail)) dm$avail <- set_avail
 
@@ -195,7 +195,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
     dplyr::inner_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
     dplyr::inner_join(preydens, by = c("prey_stanza", "prey")) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::rename_(.dots = c("pred" = "species")) %>%
-    dplyr::mutate(atoutput = preydens * avail * asseff) %>% # available biomass
+    dplyr::mutate_(.dots = stats::setNames(list(~preydens * avail * asseff), "atoutput")) %>% # available biomass
     agg_data(groups = c("pred", "agecl", "polygon", "layer"), out = "availbio", fun = sum) %>% # sum up per pred/agcl/time/box/layer
     dplyr::ungroup()
 
