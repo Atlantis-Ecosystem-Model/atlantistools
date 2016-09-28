@@ -33,7 +33,7 @@ agg_perc <- function(data, col = "atoutput", groups, out = "atoutput"){
 #' @rdname agg_data
 group_data <- function(data, groups) {
   dots = sapply(groups, . %>% {stats::as.formula(paste0('~', .))})
-  grouped_df <- as.data.frame(data) %>%
+  grouped_df <- dplyr::ungroup(data) %>%
     dplyr::group_by_(.dots = dots)
   return(grouped_df)
 }
