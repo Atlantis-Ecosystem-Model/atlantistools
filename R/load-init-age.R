@@ -91,6 +91,7 @@ load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_grou
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
   result <- dplyr::filter_(result, ~!is.na(layer))
+  result$species <- convert_factor(data_fgs = fgs_data, col = result$species)
 
   return(result)
 }
@@ -135,6 +136,7 @@ load_init_nonage <- function(dir = getwd(), init, fgs, select_variable = "N", se
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
   result <- dplyr::filter_(result, ~!is.na(layer))
+  result$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result$species)
 
   return(result)
 }
