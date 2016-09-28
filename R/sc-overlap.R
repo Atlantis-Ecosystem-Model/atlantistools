@@ -1,13 +1,13 @@
 #' Calculate 3d overlap of predators groups with their prey over time.
 #'
 
-dir <- "c:/backup_z/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
-nc <- "outputNorthSea.nc"
-prm_biol <- "NorthSea_biol_fishing.prm"
-fgs <- "functionalGroups.csv"
-bps <- load_bps(dir = dir, fgs = fgs, init = "init_NorthSea.nc")
-bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-pred <- NULL
+# dir <- "c:/backup_z/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
+# nc <- "outputNorthSea.nc"
+# prm_biol <- "NorthSea_biol_fishing.prm"
+# fgs <- "functionalGroups.csv"
+# bps <- load_bps(dir = dir, fgs = fgs, init = "init_NorthSea.nc")
+# bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+# pred <- NULL
 
 sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
                        pred = NULL, save_to_disc = FALSE) {
@@ -77,7 +77,7 @@ sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
   biomass <- dplyr::bind_rows(biomass_age, biomass_pools) %>%
     agg_perc(col = "bio", groups = c("species", "time", "pred_stanza"), out = "perc_bio")
 
-  # Fill data gaps to make sure that both combinations:
+  # Fill data gaps to make sure that both combinations are present:
   # - pred/stanza present in box/layer combination & prey/stanza absent
   # - prey/stanza present in box/layer combination $ pred/stanza absent
   full_df <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("polygon", "layer"))) %>%
