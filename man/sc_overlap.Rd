@@ -4,8 +4,43 @@
 \alias{sc_overlap}
 \title{Calculate 3d overlap of predators groups with their prey over time.}
 \usage{
-sc_overlap(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out, pred = NULL,
-  save_to_disc = FALSE)
+sc_overlap(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
+  pred = NULL, save_to_disc = FALSE)
+}
+\arguments{
+\item{dir}{Character string giving the path of the Atlantis model folder.
+If data is stored in multiple folders (e.g. main model folder and output
+folder) you should use 'NULL' as dir.}
+
+\item{nc_gen}{Character string giving the filename of the general netcdf
+file Usually "output[...].nc". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string as nc_gen. In addition set dir to 'NULL' in this
+case.}
+
+\item{prm_biol}{Character string giving the filename of the biological
+parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
+
+\item{bps}{Vector of character strings giving the complete list of epibenthic
+functional groups (Only present in the sediment layer). The names have to match
+the column 'Name' in the 'functionalGroups.csv' file.}
+
+\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
+file. In case you are using multiple folders for your model files and
+outputfiles pass the complete folder/filename string as fgs.
+In addition set dir to 'NULL' in this case.}
+
+\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+
+\item{out}{Character string giving the filename of the *.Rda output
+file. In case you are using different folders for your model data
+and output files please pass a complete folder/filename string and
+set dir to 'NULL'.}
+
+\item{save_to_disc}{Logical indicating if the resulting list shall be stored
+on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
 }
 \description{
 Calculate 3d overlap of predators groups with their prey over time.

@@ -1,5 +1,10 @@
 #' Calculate 3d overlap of predators groups with their prey over time.
 #'
+#' @inheritParams preprocess
+#' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
+#' predators are selected.
+#'
+#' @export
 
 # dir <- "c:/backup_z/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
 # nc <- "outputNorthSea.nc"
@@ -9,7 +14,7 @@
 # bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 # pred <- NULL
 
-sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
+sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
                        pred = NULL, save_to_disc = FALSE) {
 
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
@@ -36,7 +41,7 @@ sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
   grps <- list(groups_age, groups_age, groups_age, groups_rest)
 
   data_bio <- Map(load_nc, select_variable = vars, select_groups = grps,
-                  MoreArgs = list(dir, nc = nc, bps = bps, fgs = fgs, bboxes = bboxes))
+                  MoreArgs = list(dir, nc = nc_gen, bps = bps, fgs = fgs, bboxes = bboxes))
   names(data_bio) <- tolower(vars)
 
   dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs) %>%
@@ -44,7 +49,7 @@ sc_overlap <- function(dir = getwd(), nc, prm_biol, bps, fgs, bboxes, out,
     dplyr::filter(is.element(pred, acr_age) & avail != 0) %>%
     dplyr::mutate_at(.cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
 
-  vol <- load_nc_physics(dir = dir, nc = nc, select_physics = c("volume", "dz"), bboxes = bboxes, aggregate_layers = F)
+  vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"), bboxes = bboxes, aggregate_layers = F)
 
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
 
