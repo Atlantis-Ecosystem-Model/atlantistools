@@ -43,12 +43,12 @@ extract_prm_cohort <- function(dir = getwd(), prm_biol, variables) {
 
   values <- lapply(variables, slice, prm = prm_biol_new)
   # rbind to matrix in case all groups have the same number of cohorts!
-  if (length(unique(sapply(values, length))) == 1) {
-    values <- do.call(rbind, values)
-    rownames(values) <- variables
-  } else {
+  # if (length(unique(sapply(values, length))) == 1) {
+  #   values <- do.call(rbind, values)
+  #   rownames(values) <- variables
+  # } else {
     names(values) <- variables
-  }
+  # }
   return(values)
 }
 
@@ -80,7 +80,13 @@ prm_to_df_ages <- function(dir = getwd(), prm_biol, fgs, group, parameter) {
   values <- lapply(prms, extract_prm_cohort, dir = dir, prm_biol = prm_biol)
 
   # Combine to df!
-  nc <- sapply(values, function(x) sapply(x, length), USE.NAMES = FALSE)[, 1]
+  nc <- sapply(values, function(x) sapply(x, length), USE.NAMES = FALSE)
+  if (length(group) > 1) {
+    nc <- nc[, 1]
+  } else {
+    nc <- nc[1]
+  }
+
   df <- data.frame(values = unlist(values))
   df$species <- rep(unlist(Map(rep, group, nc)), times = length(parameter))
   df$agecl <- rep(unlist(sapply(nc, seq, from = 1)), times = length(parameter))
