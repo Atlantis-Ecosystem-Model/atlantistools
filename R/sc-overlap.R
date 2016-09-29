@@ -143,9 +143,9 @@ sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
 
 
 
-ggplot2::ggplot(sis[[1]][[1]], ggplot2::aes(x = time, y = si, group = time)) +
+ggplot2::ggplot(sis[[18]][[1]], ggplot2::aes(x = time, y = si, group = time)) +
   ggplot2::geom_violin() +
-  ggplot2::geom_point(data = sis[[1]][[2]], colour = "red")
+  ggplot2::geom_point(data = sis[[18]][[2]], colour = "red")
 
 
 
