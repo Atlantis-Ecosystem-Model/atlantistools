@@ -23,11 +23,12 @@
 #' nc_gen <- "outputNorthSea.nc"
 #' dietcheck <- "outputNorthSeaDietCheck.txt"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
+#' prm_run <- "NorthSea_run_fishing_F.prm"
 #' fgs <- "functionalGroups.csv"
 #' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 
-biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, bps, fgs, bboxes) {
+biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes) {
   # Setup group variables
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
@@ -43,10 +44,26 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, bp
                   MoreArgs = list(dir, nc = nc_prod, bps = bps, fgs = fgs, bboxes = bboxes))
   data_eat <- do.call(rbind, data_eat)
   data_eat$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = data_eat$species)
+  data_eat <- convert_time(dir = dir, prm_run = prm_run, data = data_eat)
 
   vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume", bboxes = bboxes, aggregate_layers = F)
+  vol <- convert_time(dir = dir, prm_run = prm_run, data = vol)
 
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
+
+  data_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck, report = F, version_flag = 2)
+  data_dm <- convert_time(dir = dir, prm_run = prm_run, data = data_dm)
+  data_dm <- dplyr::mutate_at(data_dm, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
+
+  # Check DietCheck.txt
+  check <- agg_data(data_dm, groups = c("time", "pred", "agecl"), fun = sum)
+  if (!all(abs(check$atoutput -1) < 0.001)) stop("DietCheck.txt does not sum to 1 for all predators.")
+
+  # Check timesteps!
+  ts_eat <- sort(unique(data_eat$time))
+  ts_dm <- sort(unique(data_dm$time))
+  matching <- sum(ts_eat %in% ts_dm) / length(ts_eat)
+  message(paste0(100 * round(matching, digits = 2), "% matching timesteps between PROD.nc and DietCheck.txt"))
 
   # Step1: Calculate consumed biomass as Eat (or Grazing) * boxvolume per time, pred, agecl, box.
   # Weired stuff is happening here... Epibenthic groups consume the bulk of biomass!
@@ -54,7 +71,18 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, bp
   boxvol <- agg_data(vol, groups = c("polygon", "time"), out = "vol", fun = sum)
   consumed_bio <- dplyr::left_join(data_eat, boxvol, by = c("polygon", "time")) %>%
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput * vol), "atoutput")) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput * bio_conv), "atoutput"))
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput * bio_conv), "atoutput")) %>%
+  # Setp2: Aggregate spatially
+    agg_data(groups = c("species", "time", "agecl"), fun = sum) %>%
+  # Step3: Combine with diet contribution. We need a full join to make sure no data is lost!
+    dplyr::full_join(data_dm, by = c("species" = "pred", "time", "agecl")) %>%
+  # Restrict timesteps to netcdf data!
+    dplyr::filter_(~time %in% ts_eat)
+
+  # Some detective work is needed here!
+  det_eat <- consumed_bio[is.na(consumed_bio$atoutput.x), ]
+  det_dm <- consumed_bio[is.na(consumed_bio$atoutput.y), ]
+
 
 }
 
