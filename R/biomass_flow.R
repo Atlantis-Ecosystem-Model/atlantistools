@@ -114,36 +114,65 @@ plot_biomass_flow <- function(df, select_time) {
     dplyr::ungroup() %>%
     dplyr::select_(.dots = c("prey", "pred", "atoutput"))
 
+  # remove prey only groups.
   grps <- unique(one_time$pred)
+  plot_df <- one_time %>%
+    dplyr::filter(is.element(prey, grps)) %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
+    dplyr::arrange_(quote(desc(perc)))
 
+  main_links <- plot_df[1:min(which(cumsum(plot_df$perc) > 0.95)), ]
+  clean_df <- plot_df
+  clean_df$pred[!is.element(clean_df$pred, c(main_links$pred, main_links$prey))] <- "Rest"
+  clean_df$prey[!is.element(clean_df$pred, c(main_links$pred, main_links$prey))] <- "Rest"
+
+  clean_df <- agg_data(clean_df, groups = c("pred", "prey"), fun = sum)
+
+  # Select main links!
+
+  ggplot2::ggplot(one_time, ggplot2::aes(x = pred, y = atoutput, fill = prey)) +
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+
+  # remove pred only groups.
+  grps <- unique(one_time$prey)
+  plot_df <- one_time %>%
+    dplyr::filter(is.element(pred, grps))
+
+  # Does not work
+  circlize::chordDiagram(plot_df)
+  circlize::chordDiagram(clean_df)
+
+  # Does work!
   test <- tidyr::spread_(one_time, key_col = "prey", value_col = "atoutput", fill = 0)
   test <- dplyr::filter(test, is.element(pred, c("Cod", "Crangon", "Dab")))
   test <- dplyr::select(test, pred, Cod, Crangon, Dab)
   dd <- data.frame(pred = rep(test$pred, 3), prey = rep(test$pred, each = 3), value = unlist(test[1:3, 2:4]))
 
-  circlize::chordDiagram(plot_df)
-
-    dplyr::filter(is.element(pred, grps) & is.element(prey, grps))
-    dplyr::filter_(~is.element(prey, grps))
-
-  plot_df <- one_time %>%
-    dplyr::filter(is.element(prey, grps))
-
-  cols <- data.frame(pred = unique(dd$pred), col = get_colpal()[1:3], stringsAsFactors = FALSE)
-  cols <- data.frame(pred = grps, col = rep(get_colpal(), 3)[1:length(grps)], stringsAsFactors = FALSE)
-
-  plot_df <- dplyr::left_join(dd, cols)
-  plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
-
-  circlize::circos.clear()
-  circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
-                       cell.padding = c(0,0), points.overflow.warning = FALSE)
-  par(mar = rep(0, 4), bg = "black")
-
-  circlize::chordDiagram(x = plot_df, col = plot_df$col, grid.col = get_colpal()[1:3], transparency = 0.1, directional = 1,
-                         direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-                         annotationTrack = "grid", annotationTrackHeight = c(0.01, 0.01),
-                         link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
+  # circlize::chordDiagram(dd)
+  #
+  #   dplyr::filter(is.element(pred, grps) & is.element(prey, grps))
+  #   dplyr::filter_(~is.element(prey, grps))
+  #
+  # plot_df <- one_time %>%
+  #   dplyr::filter(is.element(prey, grps))
+  #
+  # cols <- data.frame(pred = unique(dd$pred), col = get_colpal()[1:3], stringsAsFactors = FALSE)
+  # cols <- data.frame(pred = grps, col = rep(get_colpal(), 3)[1:length(grps)], stringsAsFactors = FALSE)
+  #
+  # plot_df <- dplyr::left_join(dd, cols)
+  # plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
+  #
+  # circlize::circos.clear()
+  # circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
+  #                      cell.padding = c(0,0), points.overflow.warning = FALSE)
+  # par(mar = rep(0, 4), bg = "black")
+  #
+  # circlize::chordDiagram(x = plot_df, col = plot_df$col, grid.col = get_colpal()[1:3], transparency = 0.1, directional = 1,
+  #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+  #                        annotationTrack = "grid", annotationTrackHeight = c(0.01, 0.01),
+  #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
 
 
 
