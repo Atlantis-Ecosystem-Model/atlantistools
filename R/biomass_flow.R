@@ -77,12 +77,82 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
   # Step3: Combine with diet contribution. We need a full join to make sure no data is lost!
     dplyr::full_join(data_dm, by = c("species" = "pred", "time", "agecl")) %>%
   # Restrict timesteps to netcdf data!
-    dplyr::filter_(~time %in% ts_eat)
+    dplyr::filter_(~time %in% ts_eat) %>%
+    dplyr::rename_(.dots = c("pred" = "species"))
 
   # Some detective work is needed here!
   det_eat <- consumed_bio[is.na(consumed_bio$atoutput.x), ]
   det_dm <- consumed_bio[is.na(consumed_bio$atoutput.y), ]
 
+  # Remove NAs!
+  if (nrow(det_eat) > 0) {
+    message(paste0(100 * round(nrow(det_eat)/nrow(consumed_bio), digits = 2),
+                   "% data is lost due to missing diet data despite available eat data."))
+  }
+  if (nrow(det_dm) > 0) {
+    message(paste0(100 * round(nrow(det_dm)/nrow(consumed_bio), digits = 2),
+                   "% data is lost due to missing eat data despite available diet data."))
+  }
+
+  # atoutput.x = eat, atoutput.y = diet
+  # Setp4: Calculate consumed biomass of prey species.
+  data_cons <- consumed_bio %>%
+    dplyr::filter_(~!is.na(atoutput.x)) %>%
+    dplyr::filter_(~!is.na(atoutput.y)) %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput")) %>%
+  # Setp5: Sum up consumed biomass over ages per time, pred and prey!
+    agg_data(groups = c("time", "pred", "prey"), fun = sum)
+
+  return(data_cons)
+}
+
+
+df <- data_cons
+select_time <- 5
+plot_biomass_flow <- function(df, select_time) {
+  one_time <- dplyr::filter(df, time == select_time) %>%
+    dplyr::ungroup() %>%
+    dplyr::select_(.dots = c("prey", "pred", "atoutput"))
+
+  grps <- unique(one_time$pred)
+
+  test <- tidyr::spread_(one_time, key_col = "prey", value_col = "atoutput", fill = 0)
+  test <- dplyr::filter(test, is.element(pred, c("Cod", "Crangon", "Dab")))
+  test <- dplyr::select(test, pred, Cod, Crangon, Dab)
+  dd <- data.frame(pred = rep(test$pred, 3), prey = rep(test$pred, each = 3), value = unlist(test[1:3, 2:4]))
+
+  circlize::chordDiagram(plot_df)
+
+    dplyr::filter(is.element(pred, grps) & is.element(prey, grps))
+    dplyr::filter_(~is.element(prey, grps))
+
+  plot_df <- one_time %>%
+    dplyr::filter(is.element(prey, grps))
+
+  cols <- data.frame(pred = unique(dd$pred), col = get_colpal()[1:3], stringsAsFactors = FALSE)
+  cols <- data.frame(pred = grps, col = rep(get_colpal(), 3)[1:length(grps)], stringsAsFactors = FALSE)
+
+  plot_df <- dplyr::left_join(dd, cols)
+  plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
+
+  circlize::circos.clear()
+  circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
+                       cell.padding = c(0,0), points.overflow.warning = FALSE)
+  par(mar = rep(0, 4), bg = "black")
+
+  circlize::chordDiagram(x = plot_df, col = plot_df$col, grid.col = get_colpal()[1:3], transparency = 0.1, directional = 1,
+                         direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+                         annotationTrack = "grid", annotationTrackHeight = c(0.01, 0.01),
+                         link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
+
+
 
 }
+
+
+
+
+
+
+
 
