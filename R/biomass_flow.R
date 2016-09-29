@@ -13,20 +13,19 @@
 #' - Sum consumed biomass over the model domain per pred, time, agecl.
 #' - Combine with diet contributions and calculate consumed biomass of prey species.
 #' - Sum up consumed biomass per pred, time, prey.
-#'
-#' @return df
+#' @inheritParams preprocess
+#' @return Dataframe
 
-#' @keywords gen
 #' @export
-
-dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
-nc_prod <- "outputNorthSeaPROD.nc"
-nc_gen <- "outputNorthSea.nc"
-dietcheck <- "outputNorthSeaDietCheck.txt"
-prm_biol <- "NorthSea_biol_fishing.prm"
-fgs <- "functionalGroups.csv"
-bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#' @examples
+#' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
+#' nc_prod <- "outputNorthSeaPROD.nc"
+#' nc_gen <- "outputNorthSea.nc"
+#' dietcheck <- "outputNorthSeaDietCheck.txt"
+#' prm_biol <- "NorthSea_biol_fishing.prm"
+#' fgs <- "functionalGroups.csv"
+#' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 
 biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, bps, fgs, bboxes) {
   # Setup group variables
