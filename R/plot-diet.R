@@ -26,29 +26,31 @@
 #' @family plot functions
 #'
 #' @examples
-#' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
-#' nc_prod <- "outputNorthSeaPROD.nc"
-#' nc_gen <- "outputNorthSea.nc"
-#' dietcheck <- "outputNorthSeaDietCheck.txt"
-#' prm_biol <- "NorthSea_biol_fishing.prm"
-#' prm_run <- "NorthSea_run_fishing_F.prm"
-#' fgs <- "functionalGroups.csv"
-#' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-#' preddata <- load_dietcheck(dir = dir, dietcheck = "outputNorthSeaDietCheck.txt", report = FALSE, version_flag = 2)
-#' preydata <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = TRUE)
-#' species <- "Cod"
-#' wrap_col <- "agecl"
-#' combine_thresh <- 7
-
 #' plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
 #' gridExtra::grid.arrange(plots[[1]])
 
-plot_diet <- function(preddata, preydata, species = NULL, wrap_col, combine_thresh = 15) {
-  check_df_names(data = data, expect = c("time", "atoutput", "prey", "pred"), optional = c("habitat", "agecl", "stanza"))
+# dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
+# nc_prod <- "outputNorthSeaPROD.nc"
+# nc_gen <- "outputNorthSea.nc"
+# dietcheck <- "outputNorthSeaDietCheck.txt"
+# prm_biol <- "NorthSea_biol_fishing.prm"
+# prm_run <- "NorthSea_run_fishing_F.prm"
+# fgs <- "functionalGroups.csv"
+# bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+# bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+# preddata <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, report = FALSE, version_flag = 2)
+# preydata <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = TRUE)
+# species <- "Cod"
+# wrap_col <- "agecl"
+# combine_thresh <- 7
 
-  # group_cols <- names(data)[!is.element(names(data), c("pred", "time", "atoutput"))]
-  # data <- combine_groups(data, group_col = "pred", groups = group_cols, combine_thresh = combine_thresh)
+plot_diet <- function(preddata, preydata, species = NULL, wrap_col, combine_thresh = 7) {
+  check_df_names(data = preddata, expect = c("time", "atoutput", "prey", "pred", "agecl"))
+  check_df_names(data = preydata, expect = c("time", "atoutput", "prey", "pred", "agecl"))
+
+  # Combine groups for both dataframes!
+  pred_comb <- combine_groups(preddata, group_col = "prey", groups = c("time", "pred", "agecl"), combine_thresh = combine_thresh)
+  prey_comb <- combine_groups(preydata, group_col = "pred", groups = c("time", "prey", "agecl"), combine_thresh = combine_thresh)
 
   # Species specific ploting routine!
   plot_sp <- function(data, col, wrap_col) {
@@ -56,12 +58,6 @@ plot_diet <- function(preddata, preydata, species = NULL, wrap_col, combine_thre
     if (nrow(data) == 0) {
       plot <- ggplot2::ggplot() + ggplot2::theme_void()
     } else {
-
-      # Combine groups with low contribution!
-      # data <- combine_groups(data, group_col = col, groups = group_cols, combine_thresh = combine_thresh)
-      #
-      # # Convert to percentages!
-      # data <- agg_perc(data, groups = group_cols)
 
       # order data according to dietcontribution
       agg_data <- agg_data(data, groups = col, out = "sum_diet", fun = sum)
@@ -82,28 +78,23 @@ plot_diet <- function(preddata, preydata, species = NULL, wrap_col, combine_thre
   }
 
   # Select all available species if none have been selected! This is a bit hacky but it works...
-  if (is.null(species)) species <- sort(union(data$pred, data$prey))
+  if (is.null(species)) species <- sort(union(union(union(preddata$pred, preddata$prey), preydata$pred), preydata$prey))
   grobs <- vector("list", length = length(species))
   for (i in seq_along(grobs)) {
     grobs[[i]] <- vector("list", length = 2)
   }
-  specs <- c("pred", "prey")
 
-  for (j in seq_along(specs)) {
-    df <- combine_groups(data, group_col = specs[specs != specs[j]], groups = specs[j], combine_thresh = combine_thresh)
-    for (i in seq_along(species)) {
-      # subgrobs <- list()
-      df_temp <- df[df[, specs[j]] == species[i], ]
-      if (nrow(df_temp) > 0) {
-        df_temp <- agg_perc(df_temp, groups = c(wrap_col, specs[j], c("time")))
-      }
-      grobs[[i]][[j]] <- plot_sp(df_temp, col = specs[specs != specs[j]], wrap_col = wrap_col)
-    }
+  for (i in seq_along(species)) {
+    # Select species!
+    df_pred <- dplyr::filter_(pred_comb, ~pred == species[i])
+    df_prey <- dplyr::filter_(prey_comb, ~prey == species[i])
+    grobs[[i]][[1]] <- plot_sp(df_pred, col = "prey", wrap_col = wrap_col)
+    grobs[[i]][[2]] <- plot_sp(df_prey, col = "pred", wrap_col = wrap_col)
   }
 
   # Convert to 3x1 grob.
   for (i in seq_along(grobs)) {
-    heading <- grid::textGrob(paste("Indication of feeding interaction:", species[i]), gp = grid::gpar(fontsize = 18))
+    heading <- grid::textGrob(paste("Diet proportions for species:", species[i]), gp = grid::gpar(fontsize = 14))
     grobs[[i]][[1]] <- grobs[[i]][[1]] + ggplot2::labs(y = "Predator perspective")
     grobs[[i]][[2]] <- grobs[[i]][[2]] + ggplot2::labs(y = "Prey perspective")
     grobs[[i]] <- gridExtra::arrangeGrob(grobs = c(list(heading), grobs[[i]]),

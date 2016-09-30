@@ -4,7 +4,7 @@
 \alias{plot_diet}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_diet(preddata, preydata, species = NULL, wrap_col, combine_thresh = 15)
+plot_diet(preddata, preydata, species = NULL, wrap_col, combine_thresh = 7)
 }
 \arguments{
 \item{preddata}{Diet proportion of prey species in the stomach of a specific
@@ -38,20 +38,6 @@ based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to g
 of the feeding interactions.
 }
 \examples{
-dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
-nc_prod <- "outputNorthSeaPROD.nc"
-nc_gen <- "outputNorthSea.nc"
-dietcheck <- "outputNorthSeaDietCheck.txt"
-prm_biol <- "NorthSea_biol_fishing.prm"
-prm_run <- "NorthSea_run_fishing_F.prm"
-fgs <- "functionalGroups.csv"
-bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-preddata <- load_dietcheck(dir = dir, dietcheck = "outputNorthSeaDietCheck.txt", report = FALSE, version_flag = 2)
-preydata <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = TRUE)
-species <- "Cod"
-wrap_col <- "agecl"
-combine_thresh <- 7
 plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
 gridExtra::grid.arrange(plots[[1]])
 }
