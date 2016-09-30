@@ -1,23 +1,33 @@
 #' Plot contribution of diet contents for each functional group.
 #'
-#' @param data Dataframe with information about diets. The dataframe
-#' should be generated with \code{\link{load_dietcheck}}.
+#' Visualise diet proportions form predator and prey perspective. The upper panel
+#' plot shows the predator perspective while the lower panel plot shows the prey perspective
+#' for a given group. Please note that this function only works properly with models
+#' based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to get an indication
+#' of the feeding interactions.
+#'
+#' @param preddata Diet proportion of prey species in the stomach of a specific
+#' predator/ageclass combination per time. This dataframe
+#' should be generated with \code{\link{load_dietcheck}} or read in from a preprocessd
+#' *.rda generated with \code{\link{preprocess}}.
+#' @param preydata Proportion of consumed biomass of a preygroup by different predator/ageclass
+#' combinations. This dataframe should be generated with \code{\link{biomass_flow}} with
+#' \code{plot_diet} set to \code{TRUE}.
 #' @param species Character string giving the acronyms of the species you aim to plot. Default is
 #' \code{NULL} resulting in all available species being ploted.
 #' @param wrap_col Character specifying the column of the dataframe to be used as multipanel plot.
 #' In case you aim to plot DietCheck.txt data use "habitat".
 #' In case you aim to plot SpecMort.txt data use either "agecl" or "stanza".
-#' @param combine_thresh Integer indicating minimum amount to the stomach contribution.
-#' Each prey item with a lower contribution as this treshold is assigned to the
-#' grpup "Rest". This is necessary for species with a wide variety of food items
-#' in their diet. Otherwise the screen will be cluttered with colors in the
-#' dietplots. Default is 0.03.
+#' @param combine_thresh Number of different categories to plot. Lets say predator X has eaten
+#' 20 different prey items. If you only want to show the 3 most important prey items set
+#' \code{combine_thresh} to 3. As rule of thumb values < 10 are useful otherwise to many
+#' colors are used in the plots.
 #' @return List of ggplot2 objects.
 #' @export
 #' @family plot functions
 #'
 #' @examples
-#' # Plot DietCheck.txt
+#'
 #' plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
 #' gridExtra::grid.arrange(plots[[1]])
 #'
@@ -41,7 +51,7 @@
 #' gridExtra::grid.arrange(plots[[1]])
 
 
-plot_diet <- function(data, species = NULL, wrap_col, combine_thresh = 15) {
+plot_diet <- function(preddata, preydata, species = NULL, wrap_col, combine_thresh = 15) {
   check_df_names(data = data, expect = c("time", "atoutput", "prey", "pred"), optional = c("habitat", "agecl", "stanza"))
 
   # group_cols <- names(data)[!is.element(names(data), c("pred", "time", "atoutput"))]

@@ -4,11 +4,17 @@
 \alias{plot_diet}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_diet(data, species = NULL, wrap_col, combine_thresh = 15)
+plot_diet(preddata, preydata, species = NULL, wrap_col, combine_thresh = 15)
 }
 \arguments{
-\item{data}{Dataframe with information about diets. The dataframe
-should be generated with \code{\link{load_dietcheck}}.}
+\item{preddata}{Diet proportion of prey species in the stomach of a specific
+predator/ageclass combination per time. This dataframe
+should be generated with \code{\link{load_dietcheck}} or read in from a preprocessd
+*.rda generated with \code{\link{preprocess}}.}
+
+\item{preydata}{Proportion of consumed biomass of a preygroup by different predator/ageclass
+combinations. This dataframe should be generated with \code{\link{biomass_flow}} with
+\code{plot_diet} set to \code{TRUE}.}
 
 \item{species}{Character string giving the acronyms of the species you aim to plot. Default is
 \code{NULL} resulting in all available species being ploted.}
@@ -17,20 +23,23 @@ should be generated with \code{\link{load_dietcheck}}.}
 In case you aim to plot DietCheck.txt data use "habitat".
 In case you aim to plot SpecMort.txt data use either "agecl" or "stanza".}
 
-\item{combine_thresh}{Integer indicating minimum amount to the stomach contribution.
-Each prey item with a lower contribution as this treshold is assigned to the
-grpup "Rest". This is necessary for species with a wide variety of food items
-in their diet. Otherwise the screen will be cluttered with colors in the
-dietplots. Default is 0.03.}
+\item{combine_thresh}{Number of different categories to plot. Lets say predator X has eaten
+20 different prey items. If you only want to show the 3 most important prey items set
+\code{combine_thresh} to 3. As rule of thumb values < 10 are useful otherwise to many
+colors are used in the plots.}
 }
 \value{
 List of ggplot2 objects.
 }
 \description{
-Plot contribution of diet contents for each functional group.
+Visualise diet proportions form predator and prey perspective. The upper panel
+plot shows the predator perspective while the lower panel plot shows the prey perspective
+for a given group. Please note that this function only works properly with models
+based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to get an indication
+of the feeding interactions.
 }
 \examples{
-# Plot DietCheck.txt
+
 plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
 gridExtra::grid.arrange(plots[[1]])
 
@@ -56,9 +65,9 @@ gridExtra::grid.arrange(plots[[1]])
 \seealso{
 Other plot functions: \code{\link{plot_bench}},
   \code{\link{plot_boxes}}, \code{\link{plot_calibrate}},
-  \code{\link{plot_flux}}, \code{\link{plot_physics}},
-  \code{\link{plot_rec}}, \code{\link{plot_species}},
-  \code{\link{plot_struct}}, \code{\link{plot_ts}},
-  \code{\link{plot_ws}}
+  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_flux}},
+  \code{\link{plot_physics}}, \code{\link{plot_rec}},
+  \code{\link{plot_species}}, \code{\link{plot_struct}},
+  \code{\link{plot_ts}}, \code{\link{plot_ws}}
 }
 
