@@ -5,7 +5,7 @@
 \title{Calculate the consumed biomass from predator x to prey Y.}
 \usage{
 biomass_flow(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run,
-  bps, fgs, bboxes)
+  bps, fgs, bboxes, plot_diet = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -50,6 +50,9 @@ outputfiles pass the complete folder/filename string as fgs.
 In addition set dir to 'NULL' in this case.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+
+\item{plot_diet}{Logical indicating if you want to apply the \code{plot_diet} function or not.
+Default is \code{FALSE}.}
 }
 \value{
 Dataframe

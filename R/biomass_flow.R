@@ -14,6 +14,8 @@
 #' - Combine with diet contributions and calculate consumed biomass of prey species.
 #' - Sum up consumed biomass per pred, time, prey.
 #' @inheritParams preprocess
+#' @param plot_diet Logical indicating if you want to apply the \code{plot_diet} function or not.
+#' Default is \code{FALSE}.
 #' @return Dataframe
 
 #' @export
@@ -28,7 +30,7 @@
 # bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
 # bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 
-biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes) {
+biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = FALSE) {
   # Setup group variables
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
@@ -99,13 +101,25 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
   data_cons <- consumed_bio %>%
     dplyr::filter_(~!is.na(atoutput.x)) %>%
     dplyr::filter_(~!is.na(atoutput.y)) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput")) %>%
-  # Setp5: Sum up consumed biomass over ages per time, pred and prey!
-    agg_data(groups = c("time", "pred", "prey"), fun = sum)
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput"))
+
+  if (plot_diet) {
+    data_cons <- agg_perc(data_cons, groups = c("time", "prey", "agecl"))
+    df$atoutput.x <- NULL
+    df$atoutput.y <- NULL
+  } else {
+    data_cons <- agg_data(data_cons, groups = c("time", "pred", "prey"), fun = sum)
+  }
 
   return(data_cons)
 }
 
+# Calculate amount of prey consumed by different predators.S
+# diet_contr_prey <- function(data_cons) {
+#   return(df)
+# }
+
+# Setp5: Sum up consumed biomass over ages per time, pred and prey!
 
 # df <- data_cons
 # select_time <- 5
