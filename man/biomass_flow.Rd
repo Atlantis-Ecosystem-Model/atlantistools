@@ -4,8 +4,8 @@
 \alias{biomass_flow}
 \title{Calculate the consumed biomass from predator x to prey Y.}
 \usage{
-biomass_flow(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, bps, fgs,
-  bboxes)
+biomass_flow(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run,
+  bps, fgs, bboxes)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -32,6 +32,11 @@ case.}
 
 \item{prm_biol}{Character string giving the filename of the biological
 parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string and set dir to 'NULL'.}
 
@@ -70,8 +75,7 @@ nc_prod <- "outputNorthSeaPROD.nc"
 nc_gen <- "outputNorthSea.nc"
 dietcheck <- "outputNorthSeaDietCheck.txt"
 prm_biol <- "NorthSea_biol_fishing.prm"
+prm_run <- "NorthSea_run_fishing_F.prm"
 fgs <- "functionalGroups.csv"
-bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 }
 

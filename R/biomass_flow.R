@@ -25,8 +25,8 @@
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' prm_run <- "NorthSea_run_fishing_F.prm"
 #' fgs <- "functionalGroups.csv"
-#' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+# bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+# bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 
 biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes) {
   # Setup group variables
