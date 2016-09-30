@@ -38,7 +38,15 @@ based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to g
 of the feeding interactions.
 }
 \examples{
-plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+df_pred <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE, fgs = "SETasGroupsDem_NoCep.csv")
+df_orey <- biomass_flow(nc_prod = "outputSETASPROD.nc",
+                        nc_gen <- "outputSETAS.nc",
+                        dietcheck = "outputSETASDietCheck.txt",
+                        prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                        prm_run = "VMPA_setas_run_fishing_F_New.prm",
+                        fgs = "SETasGroupsDem_NoCep.csv")
+plots <- plot_diet(preddate = df_pred, preydata = df_prey, wrap_col = "agecl")
 gridExtra::grid.arrange(plots[[1]])
 }
 \seealso{
