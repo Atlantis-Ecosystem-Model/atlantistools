@@ -8,6 +8,10 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
+#' @param fgs Character string giving the filename of 'functionalGroups.csv'
+#' file. In case you are using multiple folders for your model files and
+#' outputfiles pass the complete folder/filename string as fgs.
+#' In addition set dir to 'NULL' in this case.
 #' @param report Logical indicating if incomplete DietCheck information shall
 #' be printed \code{TRUE} or not \code{FALSE}.
 #' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
@@ -19,15 +23,15 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt")
+#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv")
 #' head(diet, n = 10)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt")
+#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv")
 #' head(diet, n = 10)
 
 #BJS 7/6/16 change to be compatible with trunk version; added version_flag
-load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE, version_flag = 1) {
+load_dietcheck <- function(dir = getwd(), dietcheck, fgs, report = TRUE, version_flag = 1) {
     dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
@@ -94,9 +98,8 @@ load_dietcheck <- function(dir = getwd(), dietcheck, report = TRUE, version_flag
 
   # Remove entries without spefific diet information
   diet_long <- diet_long[diet_long$atoutput != 0, ]
-
-  # Convert to percentages!
-  # diet_long <- agg_perc(data = diet_long, col = "diet", groups = c("time", "pred", "habitat"))
+  diet_long <- dplyr::mutate_at(diet_long, .cols = c("pred", "prey"), .funs = convert_factor,
+                                data_fgs = load_fgs(dir = dir, fgs = fgs))
 
   return(diet_long)
 }
