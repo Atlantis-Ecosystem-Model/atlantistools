@@ -53,9 +53,8 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
 
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
 
-  data_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck, report = F, version_flag = 2)
+  data_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, report = F, version_flag = 2)
   data_dm <- convert_time(dir = dir, prm_run = prm_run, data = data_dm)
-  data_dm <- dplyr::mutate_at(data_dm, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = fgs_data)
 
   # Check DietCheck.txt
   check <- agg_data(data_dm, groups = c("time", "pred", "agecl"), fun = sum)
