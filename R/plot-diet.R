@@ -26,7 +26,7 @@
 #' @family plot functions
 #'
 #' @examples
-# d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 # df_pred <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE, fgs = "SETasGroupsDem_NoCep.csv")
 # df_orey <- biomass_flow(dir = d,
 #                         nc_prod = "outputSETASPROD.nc",
