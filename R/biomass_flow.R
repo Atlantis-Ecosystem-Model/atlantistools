@@ -27,9 +27,11 @@
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' prm_run <- "NorthSea_run_fishing_F.prm"
 #' fgs <- "functionalGroups.csv"
-
+#
 # bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
 # bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#
+# data_cons <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
 
 biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = FALSE) {
   # Setup group variables
@@ -109,18 +111,13 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
     data_cons$atoutput.x <- NULL
     data_cons$atoutput.y <- NULL
   } else {
+    # Setp5: Sum up consumed biomass over ages per time, pred and prey!
     data_cons <- agg_data(data_cons, groups = c("time", "pred", "prey"), fun = sum)
   }
 
   return(data_cons)
 }
 
-# Calculate amount of prey consumed by different predators.S
-# diet_contr_prey <- function(data_cons) {
-#   return(df)
-# }
-
-# Setp5: Sum up consumed biomass over ages per time, pred and prey!
 
 # df <- data_cons
 # select_time <- 5
@@ -132,11 +129,11 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
 #   # remove prey only groups.
 #   grps <- unique(one_time$pred)
 #   plot_df <- one_time %>%
-#     dplyr::filter(is.element(prey, grps)) %>%
+#     # dplyr::filter(is.element(prey, grps)) %>%
 #     dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
 #     dplyr::arrange_(quote(desc(perc)))
 #
-#   main_links <- plot_df[1:min(which(cumsum(plot_df$perc) > 0.95)), ]
+#   main_links <- plot_df[1:min(which(cumsum(plot_df$perc) > 0.99)), ]
 #   clean_df <- plot_df
 #   clean_df$pred[!is.element(clean_df$pred, unique(c(main_links$pred, main_links$prey)))] <- "Rest"
 #   clean_df$prey[!is.element(clean_df$prey, main_links$prey)] <- "Rest"
@@ -151,69 +148,69 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
 #
 #
 #   # remove pred only groups.
-#   grps <- unique(one_time$prey)
-#   plot_df <- one_time %>%
-#     dplyr::filter(is.element(pred, grps))
+#   # grps <- unique(one_time$prey)
+#   # plot_df <- one_time %>%
+#   #   dplyr::filter(is.element(pred, grps))
 #
 #   # Does not work
-#   circlize::chordDiagram(plot_df)
+#   # circlize::chordDiagram(plot_df)
 #   circlize::chordDiagram(clean_df)
 #
 #   # Does work!
-#   test <- tidyr::spread_(one_time, key_col = "prey", value_col = "atoutput", fill = 0)
-#   test <- dplyr::filter(test, is.element(pred, c("Cod", "Crangon", "Dab")))
-#   test <- dplyr::select(test, pred, Cod, Crangon, Dab)
-#   dd <- data.frame(pred = rep(test$pred, 3), prey = rep(test$pred, each = 3), value = unlist(test[1:3, 2:4]))
+#   # test <- tidyr::spread_(one_time, key_col = "prey", value_col = "atoutput", fill = 0)
+#   # test <- dplyr::filter(test, is.element(pred, c("Cod", "Crangon", "Dab")))
+#   # test <- dplyr::select(test, pred, Cod, Crangon, Dab)
+#   # dd <- data.frame(pred = rep(test$pred, 3), prey = rep(test$pred, each = 3), value = unlist(test[1:3, 2:4]))
+#   #
+#   # circlize::chordDiagram(dd)
+#   #
+#   # dd2 <- rbind(dd, data.frame(pred = "Cod", prey = "xxx", value = 2000))
+#   #
+#   # circlize::chordDiagram(dd2)
+#   #
+#   # dd3 <- rbind(dd, data.frame(pred = "xxx", prey = "Cod", value = 2000))
+#   #
+#   # circlize::chordDiagram(dd3)
+#   #
+#   # dd4 <- dd
+#   # dd4$value <- dd4$value/100000000000000
+#   #
+#   # circlize::chordDiagram(dd4)
+#   #
+#   # dd5 <- dplyr::filter(dd, value != 0)
+#   # circlize::chordDiagram(dd5)
+#   #
+#   #
+#   #   dplyr::filter(is.element(pred, grps) & is.element(prey, grps))
+#   #   dplyr::filter_(~is.element(prey, grps))
+#   #
+#   # plot_df <- one_time %>%
+#   #   dplyr::filter(is.element(prey, grps))
 #
-#   circlize::chordDiagram(dd)
+#   preds <- unique(clean_df$pred)
+#   cols <- data.frame(pred = preds, col = rep(get_colpal(), 3)[1:length(preds)], stringsAsFactors = FALSE)
 #
-#   dd2 <- rbind(dd, data.frame(pred = "Cod", prey = "xxx", value = 2000))
+#   plot_df <- dplyr::left_join(clean_df, cols)
+#   plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
 #
-#   circlize::chordDiagram(dd2)
+#   circlize::circos.clear()
+#   circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
+#                        cell.padding = c(0,0), points.overflow.warning = FALSE)
+#   par(mar = rep(0, 4))
 #
-#   dd3 <- rbind(dd, data.frame(pred = "xxx", prey = "Cod", value = 2000))
+#   circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
+#                          direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+#                          annotationTrack = "grid", annotationTrackHeight = c(0.01, 0.01),
+#                          link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
 #
-#   circlize::chordDiagram(dd3)
+#   circlize::chordDiagram(x = plot_df)
 #
-#   dd4 <- dd
-#   dd4$value <- dd4$value/100000000000000
-#
-#   circlize::chordDiagram(dd4)
-#
-#   dd5 <- dplyr::filter(dd, value != 0)
-#   circlize::chordDiagram(dd5)
-
-
-  #   dplyr::filter(is.element(pred, grps) & is.element(prey, grps))
-  #   dplyr::filter_(~is.element(prey, grps))
-  #
-  # plot_df <- one_time %>%
-  #   dplyr::filter(is.element(prey, grps))
-  #
-  # cols <- data.frame(pred = unique(dd$pred), col = get_colpal()[1:3], stringsAsFactors = FALSE)
-  # cols <- data.frame(pred = grps, col = rep(get_colpal(), 3)[1:length(grps)], stringsAsFactors = FALSE)
-  #
-  # plot_df <- dplyr::left_join(dd, cols)
-  # plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
-  #
-  # circlize::circos.clear()
-  # circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
-  #                      cell.padding = c(0,0), points.overflow.warning = FALSE)
-  # par(mar = rep(0, 4), bg = "black")
-  #
-  # circlize::chordDiagram(x = plot_df, col = plot_df$col, grid.col = get_colpal()[1:3], transparency = 0.1, directional = 1,
-  #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-  #                        annotationTrack = "grid", annotationTrackHeight = c(0.01, 0.01),
-  #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-
-
-
 # }
-
-
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#
+#
+#
