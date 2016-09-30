@@ -107,51 +107,68 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
 }
 
 
-df <- data_cons
-select_time <- 5
-plot_biomass_flow <- function(df, select_time) {
-  one_time <- dplyr::filter(df, time == select_time) %>%
-    dplyr::ungroup() %>%
-    dplyr::select_(.dots = c("prey", "pred", "atoutput"))
+# df <- data_cons
+# select_time <- 5
+# plot_biomass_flow <- function(df, select_time) {
+#   one_time <- dplyr::filter(df, time == select_time) %>%
+#     dplyr::ungroup() %>%
+#     dplyr::select_(.dots = c("prey", "pred", "atoutput"))
+#
+#   # remove prey only groups.
+#   grps <- unique(one_time$pred)
+#   plot_df <- one_time %>%
+#     dplyr::filter(is.element(prey, grps)) %>%
+#     dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
+#     dplyr::arrange_(quote(desc(perc)))
+#
+#   main_links <- plot_df[1:min(which(cumsum(plot_df$perc) > 0.95)), ]
+#   clean_df <- plot_df
+#   clean_df$pred[!is.element(clean_df$pred, unique(c(main_links$pred, main_links$prey)))] <- "Rest"
+#   clean_df$prey[!is.element(clean_df$prey, main_links$prey)] <- "Rest"
+#
+#   clean_df <- agg_data(clean_df, col = "perc", groups = c("pred", "prey"), fun = sum)
+#
+#   # Select main links!
+#
+#   ggplot2::ggplot(one_time, ggplot2::aes(x = pred, y = atoutput, fill = prey)) +
+#     ggplot2::geom_bar(stat = "identity") +
+#     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+#
+#
+#   # remove pred only groups.
+#   grps <- unique(one_time$prey)
+#   plot_df <- one_time %>%
+#     dplyr::filter(is.element(pred, grps))
+#
+#   # Does not work
+#   circlize::chordDiagram(plot_df)
+#   circlize::chordDiagram(clean_df)
+#
+#   # Does work!
+#   test <- tidyr::spread_(one_time, key_col = "prey", value_col = "atoutput", fill = 0)
+#   test <- dplyr::filter(test, is.element(pred, c("Cod", "Crangon", "Dab")))
+#   test <- dplyr::select(test, pred, Cod, Crangon, Dab)
+#   dd <- data.frame(pred = rep(test$pred, 3), prey = rep(test$pred, each = 3), value = unlist(test[1:3, 2:4]))
+#
+#   circlize::chordDiagram(dd)
+#
+#   dd2 <- rbind(dd, data.frame(pred = "Cod", prey = "xxx", value = 2000))
+#
+#   circlize::chordDiagram(dd2)
+#
+#   dd3 <- rbind(dd, data.frame(pred = "xxx", prey = "Cod", value = 2000))
+#
+#   circlize::chordDiagram(dd3)
+#
+#   dd4 <- dd
+#   dd4$value <- dd4$value/100000000000000
+#
+#   circlize::chordDiagram(dd4)
+#
+#   dd5 <- dplyr::filter(dd, value != 0)
+#   circlize::chordDiagram(dd5)
 
-  # remove prey only groups.
-  grps <- unique(one_time$pred)
-  plot_df <- one_time %>%
-    dplyr::filter(is.element(prey, grps)) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
-    dplyr::arrange_(quote(desc(perc)))
 
-  main_links <- plot_df[1:min(which(cumsum(plot_df$perc) > 0.95)), ]
-  clean_df <- plot_df
-  clean_df$pred[!is.element(clean_df$pred, c(main_links$pred, main_links$prey))] <- "Rest"
-  clean_df$prey[!is.element(clean_df$pred, c(main_links$pred, main_links$prey))] <- "Rest"
-
-  clean_df <- agg_data(clean_df, groups = c("pred", "prey"), fun = sum)
-
-  # Select main links!
-
-  ggplot2::ggplot(one_time, ggplot2::aes(x = pred, y = atoutput, fill = prey)) +
-    ggplot2::geom_bar(stat = "identity") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
-
-
-  # remove pred only groups.
-  grps <- unique(one_time$prey)
-  plot_df <- one_time %>%
-    dplyr::filter(is.element(pred, grps))
-
-  # Does not work
-  circlize::chordDiagram(plot_df)
-  circlize::chordDiagram(clean_df)
-
-  # Does work!
-  test <- tidyr::spread_(one_time, key_col = "prey", value_col = "atoutput", fill = 0)
-  test <- dplyr::filter(test, is.element(pred, c("Cod", "Crangon", "Dab")))
-  test <- dplyr::select(test, pred, Cod, Crangon, Dab)
-  dd <- data.frame(pred = rep(test$pred, 3), prey = rep(test$pred, each = 3), value = unlist(test[1:3, 2:4]))
-
-  # circlize::chordDiagram(dd)
-  #
   #   dplyr::filter(is.element(pred, grps) & is.element(prey, grps))
   #   dplyr::filter_(~is.element(prey, grps))
   #
@@ -176,7 +193,7 @@ plot_biomass_flow <- function(df, select_time) {
 
 
 
-}
+# }
 
 
 
