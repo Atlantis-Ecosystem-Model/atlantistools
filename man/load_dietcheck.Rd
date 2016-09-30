@@ -41,7 +41,7 @@ diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "S
 head(diet, n = 10)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv")
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroupsDem_NoCep.csv")
 head(diet, n = 10)
 }
 \seealso{
