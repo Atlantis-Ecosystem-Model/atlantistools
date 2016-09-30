@@ -32,11 +32,11 @@ diet within the model. Please use \code{plot_diet} instead.
 }
 \examples{
 # Plot SpecMort.txt per ageclass.
-plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl")
+plots <- plot_diet_bec_dev(preprocess_setas$diet_specmort, wrap_col = "agecl")
 gridExtra::grid.arrange(plots[[1]])
 
 # Only plot specific species
-plots <- plot_diet(preprocess_setas$diet_specmort, species = "CEP", wrap_col = "agecl")
+plots <- plot_diet_bec_dev(preprocess_setas$diet_specmort, species = "CEP", wrap_col = "agecl")
 gridExtra::grid.arrange(plots[[1]])
 
 # Plot SpecMort.txt per stanza First we need to transform the ageclasses to stanzas.
@@ -46,7 +46,7 @@ diet_stanza <- combine_ages(dir = d,
                             data = preprocess_setas$diet_specmort,
                             col = "pred",
                             prm_biol = "VMPA_setas_biol_fishing_New.prm")
-plots <- plot_diet(diet_stanza, wrap_col = "stanza")
+plots <- plot_diet_bec_dev(diet_stanza, wrap_col = "stanza")
 gridExtra::grid.arrange(plots[[1]])
 }
 }
