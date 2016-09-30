@@ -103,10 +103,11 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
     dplyr::filter_(~!is.na(atoutput.y)) %>%
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput"))
 
+  # This is intended as workaround for the moment! Will clean this mess later.
   if (plot_diet) {
     data_cons <- agg_perc(data_cons, groups = c("time", "prey", "agecl"))
-    df$atoutput.x <- NULL
-    df$atoutput.y <- NULL
+    data_cons$atoutput.x <- NULL
+    data_cons$atoutput.y <- NULL
   } else {
     data_cons <- agg_data(data_cons, groups = c("time", "pred", "prey"), fun = sum)
   }
