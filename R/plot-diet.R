@@ -26,21 +26,21 @@
 #' @family plot functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' df_pred <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE, fgs = "SETasGroupsDem_NoCep.csv")
-#' df_orey <- biomass_flow(dir = d,
-#'                         nc_prod = "outputSETASPROD.nc",
-#'                         nc_gen <- "outputSETAS.nc",
-#'                         dietcheck = "outputSETASDietCheck.txt",
-#'                         prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-#'                         prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-#'                         bps = load_bps(dir = d, init = "INIT_VMPA_Jan2015.nc", fgs = "SETasGroupsDem_NoCep.csv"),
-#'                         fgs = "SETasGroupsDem_NoCep.csv",
-#'                         bboxes = get_boundary(load_box(dir = d, bgm = "VMPA_setas.bgm")),
-#'                         plot_diet = TRUE)
-#'
-#' plots <- plot_diet(preddata = df_pred, preydata = df_prey, wrap_col = "agecl")
-#' gridExtra::grid.arrange(plots[[1]])
+# d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+# df_pred <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE, fgs = "SETasGroupsDem_NoCep.csv")
+# df_orey <- biomass_flow(dir = d,
+#                         nc_prod = "outputSETASPROD.nc",
+#                         nc_gen <- "outputSETAS.nc",
+#                         dietcheck = "outputSETASDietCheck.txt",
+#                         prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#                         prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#                         bps = load_bps(dir = d, init = "INIT_VMPA_Jan2015.nc", fgs = "SETasGroupsDem_NoCep.csv"),
+#                         fgs = "SETasGroupsDem_NoCep.csv",
+#                         bboxes = get_boundary(load_box(dir = d, bgm = "VMPA_setas.bgm")),
+#                         plot_diet = TRUE)
+#
+# plots <- plot_diet(preddata = df_pred, preydata = df_prey, wrap_col = "agecl")
+# gridExtra::grid.arrange(plots[[1]])
 
 # dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
 # nc_prod <- "outputNorthSeaPROD.nc"
@@ -53,9 +53,12 @@
 # bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 # preddata <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, report = FALSE, version_flag = 2)
 # preydata <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = TRUE)
-# species <- "Cod"
 # wrap_col <- "agecl"
 # combine_thresh <- 7
+# plots <- plot_diet(preddata, preydata, wrap_col = "agecl")
+# gridExtra::grid.arrange(plots[[1]])
+# gridExtra::grid.arrange(plots[[2]])
+# gridExtra::grid.arrange(plots[[3]])
 
 plot_diet <- function(preddata, preydata, species = NULL, wrap_col, combine_thresh = 7) {
   check_df_names(data = preddata, expect = c("time", "atoutput", "prey", "pred", "agecl"))
