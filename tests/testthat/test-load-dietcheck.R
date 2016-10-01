@@ -4,7 +4,8 @@ library("dplyr", warn.conflicts = FALSE)
 
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
-diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv", report = FALSE)
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_New.prm", report = FALSE)
 
 # test1 <- diet %>%
 #   group_by(time, pred, habitat) %>%
@@ -18,14 +19,15 @@ test_that("test output numbers", {
   # expect_equal(diet$atoutput[diet$pred == "Cephalopod" & diet$time == 240 & diet$habitat == "WC" & diet$prey == "Small planktivorous fish"], 0.001663077)
   # expect_equal(diet$atoutput[diet$pred == "Mesozooplankton" & diet$time == 480 & diet$habitat == "WC" & diet$prey == "Labile detritus"], 9.23446e-13)
 
-  expect_equal(diet$atoutput[diet$pred == "CEP" & diet$time == 240 & diet$habitat == "WC" & diet$prey == "FPS"], 0.001663077)
-  expect_equal(diet$atoutput[diet$pred == "ZM" & diet$time == 480 & diet$habitat == "WC" & diet$prey == "DL"], 9.23446e-13)
+  expect_equal(diet$atoutput[diet$pred == "CEP" & diet$time == 240/365 & diet$habitat == "WC" & diet$prey == "FPS"], 0.001663077)
+  expect_equal(diet$atoutput[diet$pred == "ZM" & diet$time == 480/365 & diet$habitat == "WC" & diet$prey == "DL"], 9.23446e-13)
 
 })
 
 
 diet <- load_dietcheck(system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
-                       dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroupsDem_NoCep.csv", report = FALSE, version_flag = 2)
+                       dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroupsDem_NoCep.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", report = FALSE, version_flag = 2)
 
 test_that("test output numbers trunk", {
   # expect_true(all(abs(test1$check - 1) < 0.001))
@@ -35,6 +37,6 @@ test_that("test output numbers trunk", {
   # expect_equal(diet$atoutput[diet$pred == "Shallow piscivorous fish" & diet$time == 570 & diet$agecl == 3 & diet$prey == "Shallow piscivorous fish"], 0.1192798)
   # expect_equal(diet$atoutput[diet$pred == "Small planktivorous fish" & diet$time == 720 & diet$agecl == 6 & diet$prey == "Refractory detritus"], 0.001334405)
 
-  expect_equal(diet$atoutput[diet$pred == "FVS" & diet$time == 570 & diet$agecl == 3 & diet$prey == "FVS"], 0.1192798)
-  expect_equal(diet$atoutput[diet$pred == "FPS" & diet$time == 720 & diet$agecl == 6 & diet$prey == "DR"], 0.001334405)
+  expect_equal(diet$atoutput[diet$pred == "FVS" & diet$time == 570/365 & diet$agecl == 3 & diet$prey == "FVS"], 0.1192798)
+  expect_equal(diet$atoutput[diet$pred == "FPS" & diet$time == 720/365 & diet$agecl == 6 & diet$prey == "DR"], 0.001334405)
 })
