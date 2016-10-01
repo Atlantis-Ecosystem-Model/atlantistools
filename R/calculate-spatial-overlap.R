@@ -1,8 +1,12 @@
 #' Calculate 3d overlap of predator groups with their prey over time.
 #'
+#' @param biomass_spatial Biomass timeseries of each group and ageclass per polygon
+#' and layer. This dataframe should be generated with \code{\link{calculate_biomass_spatial}}.
+#' @param dietmatrix Availability matrix given in the biological parameter file.
+#' This dataframe should be generated with \code{\link{load_dietmatrix}}.
 #' @inheritParams preprocess
-#' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
-#' predators are selected.
+#' @return Schoener's percent similarity index ranging from 1 (perfect overlap) to
+#' 0 (no overlap at all).
 #'
 #' @export
 #'
@@ -18,7 +22,7 @@
 #' }
 
 
-sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
+calculate_spatial_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
                        pred = NULL, save_to_disc = FALSE) {
 
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
