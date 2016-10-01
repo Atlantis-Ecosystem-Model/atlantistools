@@ -5,10 +5,11 @@
 #' @param dietmatrix Availability matrix given in the biological parameter file.
 #' This dataframe should be generated with \code{\link{load_dietmatrix}}. Please
 #' use \code{convert_names = TRUE} in \code{load_dietmatrix}.
-#' @param agemat First mature age class for age structured groups.
+#' @param agemat First mature age class for age structured groups. This dataframe should
+#' be generated with \code\link{prm_to_df} using "age_mat" as parameter.
 #' @inheritParams preprocess
-#' @return Schoener's percent similarity index ranging from 1 (perfect overlap) to
-#' 0 (no overlap at all).
+#' @return Schoener's similarity index ranging from 1 (perfect overlap) to
+#' 0 (zero overlap).
 #'
 #' @export
 #'
@@ -23,39 +24,19 @@
 #'
 #' biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
 #' dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
+#' agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
+#'                     parameter = "age_mat")
 #'
 #' sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix)
 
 
-calculate_spatial_overlap <- function(biomass_spatial, dietmatrix) {
+calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   # Check input dataframes!
   check_df_names(biomass_spatial, expect = c("species", "agecl", "polygon", "layer", "time", "atoutput"))
   check_df_names(dietmatrix, expect = c("pred", "pred_stanza", "prey_stanza","code", "prey", "avail", "prey_id"))
-  check_df_names(agemat, expect = c(""))
+  check_df_names(agemat, expect = c("species", "age_mat"))
 
-  # 1st step: Load in data!
-  # - n per box and layer for each invert group
-  # - nums, resn, structn for each vert group per box, layer and ageclass
-  # - availability matrix
-  # - Volume per layer and box, layerthickness
-  # - convrsion factor mgN to bio t
-  vars <- list("StructN", "ResN", "Nums", "N")
-  grps <- list(groups_age, groups_age, groups_age, groups_rest)
-
-  data_bio <- Map(load_nc, select_variable = vars, select_groups = grps,
-                  MoreArgs = list(dir, nc = nc_gen, bps = bps, fgs = fgs, bboxes = bboxes))
-  names(data_bio) <- tolower(vars)
-
-  data_dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs, convert_names = TRUE) %>%
-    dplyr::filter_(~avail != 0)
-
-  vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"), bboxes = bboxes, aggregate_layers = F)
-
-  bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
-
-  age_mat <-  prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = "age_mat")
-
-  # 2nd step: Calculate relative biomass per box and layer per group and stanza!
+  # Step1: Calculate relative biomass per box and layer per group and stanza!
   # - Age based groups!
   names(data_bio$structn)[names(data_bio$structn) == "atoutput"] <- "sn"
   names(data_bio$resn)[names(data_bio$resn) == "atoutput"] <- "rn"

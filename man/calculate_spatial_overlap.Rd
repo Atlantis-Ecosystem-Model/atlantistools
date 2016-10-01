@@ -4,7 +4,7 @@
 \alias{calculate_spatial_overlap}
 \title{Calculate 3d overlap of predator groups with their prey over time using Schoener Index.}
 \usage{
-calculate_spatial_overlap(biomass_spatial, dietmatrix)
+calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
 }
 \arguments{
 \item{biomass_spatial}{Biomass timeseries of each group and ageclass per polygon
@@ -14,11 +14,12 @@ and layer. This dataframe should be generated with \code{\link{calculate_biomass
 This dataframe should be generated with \code{\link{load_dietmatrix}}. Please
 use \code{convert_names = TRUE} in \code{load_dietmatrix}.}
 
-\item{agemat}{First mature age class for age structured groups.}
+\item{agemat}{First mature age class for age structured groups. This dataframe should
+be generated with \code\link{prm_to_df} using "age_mat" as parameter.}
 }
 \value{
-Schoener's percent similarity index ranging from 1 (perfect overlap) to
-0 (no overlap at all).
+Schoener's similarity index ranging from 1 (perfect overlap) to
+0 (zero overlap).
 }
 \description{
 Calculate 3d overlap of predator groups with their prey over time using Schoener Index.
@@ -34,6 +35,8 @@ bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
 
 biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
 dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
+agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
+                    parameter = "age_mat")
 
 sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix)
 }
