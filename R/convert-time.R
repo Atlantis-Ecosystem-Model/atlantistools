@@ -24,7 +24,7 @@
 # stock state date is given in days, nc-data is given in timesteps!
 
 convert_time <- function(dir = getwd(), prm_run, col) {
-  if (!is.numeric(col)) stop("Col is nont numeric. No time transformation applied.")
+  if (!is.numeric(col)) stop("Col is not numeric. No time transformation applied.")
 
   # Check if time is composed of a complete sequence of integers!
   # In this case there is no stockstate data! Remove zero!
@@ -33,11 +33,12 @@ convert_time <- function(dir = getwd(), prm_run, col) {
   # This tests if the timestps are a sequence of integers with at max 4 missing numbers between
   # sucessuve values. E.g. 1 6 7 8 12 is ok, 1 60 120 180 is not! This will break in case of very
   # short output timesteps!
-  if (all(diff(ts) < 5)) {
+  if (all(diff(ts) %in% 1:4)) {
     toutinc <- extract_prm(dir = dir, prm_biol = prm_run, variables = "toutinc")
 
     # Convert timesteps to time in years
     data <- col * toutinc / 365
+    return(data)
   } else {
     # Check if data is stock-state data!
     tsumout <- extract_prm(dir = dir, prm_biol = prm_run, variables = "tsumout")
@@ -50,9 +51,9 @@ convert_time <- function(dir = getwd(), prm_run, col) {
 
       # Convert time in days to time in years
       data <- col / 365
+      return(data)
     } else {
-      stop("Provided dataframe has column 'time' but values are corrput. PLease contact package development Team.")
+      stop("Values are corrput. PLease contact package development Team.")
     }
   }
-  return(data)
 }
