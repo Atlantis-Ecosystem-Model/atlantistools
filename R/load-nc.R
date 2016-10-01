@@ -327,5 +327,8 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
       dplyr::ungroup()
   }
 
+  # convert names to longnames
+  result$species <- convert_factor(data_fgs = fgs, col = result$species)
+
   return(result)
 }
