@@ -91,12 +91,13 @@ calculate_consumed_biomass <- function(dir = getwd(), nc_prod, nc_gen, dietcheck
 
   # atoutput.x = eat, atoutput.y = diet
   # Setp4: Calculate consumed biomass of prey species.
-  data_cons <- consumed_bio %>%
+  consumed_biomass <- consumed_bio %>%
     dplyr::filter_(~!is.na(atoutput.x)) %>%
     dplyr::filter_(~!is.na(atoutput.y)) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput"))
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput")) %>%
+    dplyr::select_(.dots = names(.)[!names(.) %in% c("atoutput.x", "vol", "atoutput.y")])
 
-  return(data_cons)
+  return(consumed_biomass)
 }
 
 
