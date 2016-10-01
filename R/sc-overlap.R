@@ -7,13 +7,16 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
 #' nc_gen <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' fgs <- "functionalGroups.csv"
+#' pred <- NULL
 #' bps <- load_bps(dir = dir, fgs = fgs, init = "init_NorthSea.nc")
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-#' pred <- NULL
+#' }
+
 
 sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
                        pred = NULL, save_to_disc = FALSE) {
