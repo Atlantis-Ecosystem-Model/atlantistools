@@ -4,7 +4,8 @@
 \alias{calculate_biomass_spatial}
 \title{Calculate spatiallly explicit biomass (in [t]) for each group and ageclass per timestep.}
 \usage{
-calculate_biomass_spatial(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes)
+calculate_biomass_spatial(dir = getwd(), nc_gen, prm_biol, prm_run, bps, fgs,
+  bboxes)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -19,6 +20,11 @@ case.}
 
 \item{prm_biol}{Character string giving the filename of the biological
 parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string and set dir to 'NULL'.}
 
@@ -40,17 +46,12 @@ Calculate spatiallly explicit biomass (in [t]) for each group and ageclass per t
 \dontrun{
 dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 nc_gen <- "outputSETAS.nc"
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm",
-   prm_run = "VMPA_setas_run_fishing_F_New.prm",
-   bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
-   fgs = "SETasGroups.csv",
-   select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Diatom", "Zoo"),
-   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")),
-   check_acronyms = TRUE,
-   modelstart = "1991-01-01",
-   out = "preprocess.Rda",
-   save_to_disc = FALSE,
-   version_flag = 1)
-   }
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+prm_run = "VMPA_setas_run_fishing_F_Trunk.prm"
+bps = load_bps(dir, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
+fgs = "SETasGroupsDem_NoCep.csv"
+bboxes = get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
+df <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
+}
 }
 
