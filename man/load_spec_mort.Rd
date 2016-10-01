@@ -4,7 +4,8 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort, version_flag = 1)
+load_spec_mort(dir = getwd(), specmort, convert_names = FALSE,
+  version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -16,6 +17,9 @@ folder) you should use 'NULL' as dir.}
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
+
+\item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+or not (default = \code{FALSE}).}
 
 \item{version_flag}{The version of atlantis that created the output files.
 1 for bec_dev, 2 for trunk.}

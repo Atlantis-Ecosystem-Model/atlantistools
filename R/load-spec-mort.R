@@ -8,6 +8,8 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
+#' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+#' or not (default = \code{FALSE}).
 #' @param version_flag The version of atlantis that created the output files.
 #' 1 for bec_dev, 2 for trunk.
 #' @return Dataframe with information about ssb in tonnes and recruits in
@@ -28,7 +30,7 @@
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_spec_mort <- function(dir = getwd(), specmort, version_flag = 1) {
+load_spec_mort <- function(dir = getwd(), specmort, convert_names = FALSE, version_flag = 1) {
   if (version_flag == 1) {
     mort <- load_txt(dir = dir, file = specmort)
     mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "stock", "pred", "mort"), convert = TRUE)
@@ -62,6 +64,11 @@ load_spec_mort <- function(dir = getwd(), specmort, version_flag = 1) {
 
   # Remove zeros
   mort <- mort[mort$atoutput != 0, ]
+
+  # Convert species codes to longnames!
+  if (convert_names) {
+    mort <- dplyr::mutate_at(mort, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = load_fgs(dir = dir, fgs = fgs))
+  }
 
   return(mort)
 }

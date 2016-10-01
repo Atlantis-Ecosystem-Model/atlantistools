@@ -4,8 +4,8 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, fgs, report = TRUE,
-  version_flag = 1)
+load_dietcheck(dir = getwd(), dietcheck, fgs, convert_names = FALSE,
+  report = FALSE, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -22,6 +22,9 @@ case.}
 file. In case you are using multiple folders for your model files and
 outputfiles pass the complete folder/filename string as fgs.
 In addition set dir to 'NULL' in this case.}
+
+\item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+or not (default = \code{FALSE}).}
 
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
