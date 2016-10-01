@@ -4,8 +4,7 @@
 \alias{convert_time}
 \title{Convert timestep to actual time!}
 \usage{
-convert_time(dir = getwd(), prm_run, data, as_date = FALSE,
-  modelstart = NULL)
+convert_time(dir = getwd(), prm_run, col)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -17,36 +16,21 @@ parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string and set dir to 'NULL'.}
 
-\item{data}{Dataframe having a column with information about the model timestep.}
-
-\item{as_date}{Convert the time into a date format (yyyy-mm-dd) \code{TRUE} or
-not \code{FALSE}. Default is \code{FALSE}.}
-
-\item{modelstart}{Character string giving the start of the model run
-in the format \code{'yyyy-mm-dd'}. Only needed in case \code{as_date} is set to \code{TRUE}.}
+\item{col}{Numeric vector. Usually a column in a dataframe with information about time.
+Either given as timesteps or days.}
 }
 \value{
-Dataframe whose column time is converted from timesteps to
-actual time.
+Numeric vector with the time in years.
 }
 \description{
 Convert timestep to actual time!
 }
 \examples{
-# Convert to time given in date format.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-test <- convert_time(dir = d,
-   prm_run = "VMPA_setas_run_fishing_F_New.prm",
-   data = ref_nums,
-   as_date = TRUE,
-   modelstart = "1991-01-01")
-head(test)
-
 # Convert time to years.
-test <- convert_time(dir = d,
-   prm_run = "VMPA_setas_run_fishing_F_New.prm",
-   data = ref_nums)
-head(test)
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+prm_run <- "VMPA_setas_run_fishing_F_New.prm"
+unique(convert_time(dir = d, prm_run = prm_run, col = ref_nums$time))
+unique(convert_time(dir = d, prm_run = prm_run, col = ref_eat$time))
 }
 \seealso{
 Other convert functions: \code{\link{convert_bgm}},
