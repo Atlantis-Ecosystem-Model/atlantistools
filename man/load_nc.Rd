@@ -65,18 +65,19 @@ converts them to a \code{data.frame}.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-test <- load_nc(dir = d, nc = "outputSETAS.nc",
-  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
-  fgs = "SETasGroups.csv",
+nc <- "outputSETAS.nc"
+bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
+fgs <- "SETasGroups.csv"
+bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+prm_run <- "VMPA_setas_run_fishing_F_New.prm"
+
+test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-  select_variable = "ResN",
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
-test <- load_nc(dir = d, nc = "outputSETAS.nc",
-  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
-  fgs = "SETasGroups.csv",
+  select_variable = "ResN")
+
+test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-  select_variable = "Nums",
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+  select_variable = "Nums")
 }
 \author{
 Alexander Keth
