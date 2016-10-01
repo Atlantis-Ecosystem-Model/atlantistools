@@ -198,7 +198,7 @@ plot_struct(result$biomass_age)
 # Diet Plots
 
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
-plots <- plot_diet(result$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
+plots <- plot_diet_bec_dev(result$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
 for (i in seq_along(plots)) {
   cat(paste0("## Diet plot ", i, ": ", names(plots)[i]), sep = "\n")
   gridExtra::grid.arrange(plots[[i]])

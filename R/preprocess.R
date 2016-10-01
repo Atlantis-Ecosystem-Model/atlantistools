@@ -216,7 +216,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # Load in diet-data!
   message("Read in DietCheck.txt!")
-  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, report = report, version_flag = version_flag) #bjs pass the report flag so dietcheck doesnt always report no matter on the setting; add version_flag)
+  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, report = report, version_flag = version_flag) #bjs pass the report flag so dietcheck doesnt always report no matter on the setting; add version_flag)
 
   # load in recruitment data!
   message("Read in SSB/REC data!")
