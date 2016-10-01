@@ -4,7 +4,7 @@
 \alias{load_nc}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc(dir = getwd(), nc, bps, fgs, select_groups, select_variable,
+load_nc(dir = getwd(), nc, bps, fgs, select_groups, select_variable, prm_run,
   bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE,
   report = TRUE)
 }
@@ -38,6 +38,11 @@ Only one variable of the options available (i.e., \code{c(
 "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 }) can be loaded at a time.}
 
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
+
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
 
 \item{check_acronyms}{Logical testing if functional-groups in
@@ -60,18 +65,19 @@ converts them to a \code{data.frame}.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-test <- load_nc(dir = d, nc = "outputSETAS.nc",
-  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
-  fgs = "SETasGroups.csv",
+nc <- "outputSETAS.nc"
+bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
+fgs <- "SETasGroups.csv"
+bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+prm_run <- "VMPA_setas_run_fishing_F_New.prm"
+
+test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-  select_variable = "ResN",
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
-test <- load_nc(dir = d, nc = "outputSETAS.nc",
-  bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
-  fgs = "SETasGroups.csv",
+  select_variable = "ResN")
+
+test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-  select_variable = "Nums",
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+  select_variable = "Nums")
 }
 \author{
 Alexander Keth

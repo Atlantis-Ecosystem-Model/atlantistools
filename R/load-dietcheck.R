@@ -11,7 +11,13 @@
 #' @param fgs Character string giving the filename of 'functionalGroups.csv'
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
+#' @param prm_run Character string giving the filename of the run
+#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
 #' In addition set dir to 'NULL' in this case.
+#' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+#' or not (default = \code{FALSE}).
 #' @param report Logical indicating if incomplete DietCheck information shall
 #' be printed \code{TRUE} or not \code{FALSE}.
 #' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
@@ -23,15 +29,19 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv")
+#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+#'                        fgs = "SETasGroups.csv",
+#'                        prm_run = "VMPA_setas_run_fishing_F_New.prm")
 #' head(diet, n = 10)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroupsDem_NoCep.csv")
+#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+#'                        fgs = "SETasGroupsDem_NoCep.csv",
+#'                        prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
 #' head(diet, n = 10)
 
 #BJS 7/6/16 change to be compatible with trunk version; added version_flag
-load_dietcheck <- function(dir = getwd(), dietcheck, fgs, report = TRUE, version_flag = 1) {
+load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE, version_flag = 1) {
     dietcheck <- convert_path(dir = dir, file = dietcheck)
   if (!file.exists(dietcheck)) {
     stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
@@ -98,8 +108,16 @@ load_dietcheck <- function(dir = getwd(), dietcheck, fgs, report = TRUE, version
 
   # Remove entries without spefific diet information
   diet_long <- diet_long[diet_long$atoutput != 0, ]
-  diet_long <- dplyr::mutate_at(diet_long, .cols = c("pred", "prey"), .funs = convert_factor,
-                                data_fgs = load_fgs(dir = dir, fgs = fgs))
+
+  # Convert species codes to longnames!
+  if (convert_names) {
+    diet_long <- dplyr::mutate_at(diet_long, .cols = c("pred", "prey"), .funs = convert_factor,
+                                  data_fgs = load_fgs(dir = dir, fgs = fgs))
+  }
+
+  # Convert timestep to time in years!
+  diet_long$time <- convert_time(dir = dir, prm_run = prm_run, col = diet_long$time)
+
 
   return(diet_long)
 }

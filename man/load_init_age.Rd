@@ -55,33 +55,23 @@ This function loads weight at age data (in mgN) from the initial conditions file
 }
 \examples{
 dir <- system.file("extdata", "gns", package = "atlantistools")
-load_init_age(dir = dir,
-              init = "init_simple_NorthSea.nc",
-              fgs = "functionalGroups.csv",
+init <- "init_simple_NorthSea.nc"
+fgs <- "functionalGroups.csv"
+bboxes <- get_boundary(load_box(dir, bgm = "NorthSea.bgm"))
+bps = load_bps(dir = dir, fgs = "functionalGroups.csv",
+                                init = "init_simple_NorthSea.nc")
+
+load_init_age(dir = dir, init = init, fgs = fgs, bboxes = bboxes,
               select_variable = "ResN",
-              select_groups = "cod",
-              bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")))
+              select_groups = "cod")
 
-load_init_age(dir = dir,
-              init = "init_simple_NorthSea.nc",
-              fgs = "functionalGroups.csv",
-              select_variable = "ResN",
-              bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")))
+load_init_age(dir = dir, init = init, fgs = fgs, bboxes = bboxes,
+              select_variable = "ResN")
 
-load_init_nonage(dir = dir,
-                 init = "init_simple_NorthSea.nc",
-                 fgs = "functionalGroups.csv",
-                 select_groups = "crangon",
-                 bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")),
-                 bps = load_bps(dir = dir, fgs = "functionalGroups.csv",
-                                init = "init_simple_NorthSea.nc"))
+load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps,
+                 select_groups = "crangon")
 
-load_init_nonage(dir = dir,
-                 init = "init_simple_NorthSea.nc",
-                 fgs = "functionalGroups.csv",
-                 bboxes = get_boundary(load_box(dir, bgm = "NorthSea.bgm")),
-                 bps = load_bps(dir = dir, fgs = "functionalGroups.csv",
-                                init = "init_simple_NorthSea.nc"))
+load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps)
 }
 \author{
 Alexander Keth

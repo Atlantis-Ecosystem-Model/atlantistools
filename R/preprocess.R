@@ -133,39 +133,46 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   # NOTE: Data for new plots has to be added here if not already available!
   message("01 layerd data\nstructn")
   at_structn_l <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                          select_variable = "StructN", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "StructN", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("resn")
   at_resn_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                          select_variable = "ResN", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "ResN", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("nums")
   at_nums_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                          select_variable = "Nums", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "Nums", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("02 non-layerd data\nn for invert groups")
   at_n_pools   <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_other_groups,
-                          select_variable = "N", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "N", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("eat")
   at_eat     <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                        select_variable = "Eat", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                        select_variable = "Eat", prm_run = prm_run, bboxes = bboxes,
+                        check_acronyms = check_acronyms, report = report)
 
   message("growth")
   at_growth  <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                        select_variable = "Growth", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                        select_variable = "Growth", prm_run = prm_run, bboxes = bboxes,
+                        check_acronyms = check_acronyms, report = report)
 
   message("grazing")
   at_grazing <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_other_groups,
-                        select_variable = "Grazing", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                        select_variable = "Grazing", prm_run = prm_run, bboxes = bboxes,
+                        check_acronyms = check_acronyms, report = report)
 
   message("03 physics data\nfluxes")
   flux       <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("eflux", "vflux"),
-                                bboxes = bboxes, aggregate_layers = FALSE)
+                                prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
 
   message("physical variables")
   physics    <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = physic_var,
-                                bboxes = bboxes, aggregate_layers = TRUE)
+                                prm_run = prm_run, bboxes = bboxes, aggregate_layers = TRUE)
 
 
   if (report) message("Start data transformations!")
@@ -187,6 +194,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   vol <- load_nc_physics(dir = dir,
                          nc = nc_gen,
                          select_physics = c("volume", "dz"),
+                         prm_run = prm_run,
                          bboxes = bboxes,
                          aggregate_layers = F)
 
@@ -216,7 +224,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # Load in diet-data!
   message("Read in DietCheck.txt!")
-  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, report = report, version_flag = version_flag) #bjs pass the report flag so dietcheck doesnt always report no matter on the setting; add version_flag)
+  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, prm_run = prm_run, report = report, version_flag = version_flag) #bjs pass the report flag so dietcheck doesnt always report no matter on the setting; add version_flag)
 
   # load in recruitment data!
   message("Read in SSB/REC data!")
@@ -224,7 +232,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # load in specific mortality data!
   message("Read in SpecPredMort data!")
-  spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort, version_flag = version_flag) #bjs add version_flag
+  spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort, prm_run = prm_run, version_flag = version_flag) #bjs add version_flag
 
   message("Read in SpecMort data!")
   spec_mort <- load_txt(dir = dir, file = specmort)
@@ -250,40 +258,6 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
     "structn_age"    = structn_age    #15
   )
 
-  # Convert timestep to actual time.
-  result <- lapply(result, convert_time, dir = dir, prm_run = prm_run, as_date = as_date, modelstart = modelstart)
-
-  # According to the Atlantis wiki DietCheck.txt gives an indication of how much a group is eating
-  # If the prey is an inverebrate value units are mgN/m^3 per second
-  # --> Multiply value with volume of model domain!
-  # If the prey is a vertebrate value units are nums per second
-  # --> Multiply with individual weight!
-  # Currently it is not possible to merge the dataframes vol with diet because there are different
-  # timesteps used (Diet is based on tsumout while vol is based on toutinc) which may differ for
-  # most simulations. I checked our model and tested if the volume does change significantly over
-  # time... Which it does not. Therefore we use the mean volume over the whole simulation as proxy!
-  # This is not 100% correct! In addition individual weight changes drastically over time and merging
-  # with diet data is necessary (but impossbiel due to different time steps) here! This will only
-  # work if toutinc and tsumout are equal!
-  # vol_mult <- mean(agg_sum(vol, col = "volume", groups = "time")$atoutput)
-  # vol_epi <- mean(agg_sum(subset(vol, layer == max(vol$layer)), col = "volume", groups = "time")$atoutput)
-  #
-  # result$diet$time <- result$diet$time / min(result$diet$time)
-
-  # Convert Species names to Longnames!
-  for (i in seq_along(result)) {
-    # Do not convert acronym names in dietdataframes! This will increase readybility of diet plots ALOT!
-    # Otherwise lots of space is lost due to long species names.
-    # if (grepl(pattern = "diet", x = names(result)[i])) {
-    #   result[[i]]$pred <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$pred)
-    #   result[[i]]$prey <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$prey)
-    # }
-    # exlude physics dataframes!
-    if (is.element("species", names(result[[i]])) && !grepl(pattern = "diet", x = names(result)[i])) {
-      result[[i]]$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result[[i]]$species)
-    }
-  }
-
   # Ungroup dataframes!
   result <- lapply(result, dplyr::ungroup)
 
@@ -297,14 +271,5 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   message("Finished preprocessing of data HURRAY!!!")
   return(result)
 }
-
-
-
-# wawa <- list()
-# for (i in seq_along(result)) {
-#   wawa[[i]] <- convert_time(dir = dir, prm_run = prm_run, data = result[[i]], modelstart = modelstart)
-#   print(i)
-# }
-
 
 
