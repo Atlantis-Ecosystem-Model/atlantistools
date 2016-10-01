@@ -133,39 +133,46 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   # NOTE: Data for new plots has to be added here if not already available!
   message("01 layerd data\nstructn")
   at_structn_l <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                          select_variable = "StructN", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "StructN", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("resn")
   at_resn_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                          select_variable = "ResN", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "ResN", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("nums")
   at_nums_l    <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                          select_variable = "Nums", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "Nums", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("02 non-layerd data\nn for invert groups")
   at_n_pools   <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, select_groups = select_other_groups,
-                          select_variable = "N", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                          select_variable = "N", prm_run = prm_run, bboxes = bboxes,
+                          check_acronyms = check_acronyms, report = report)
 
   message("eat")
   at_eat     <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                        select_variable = "Eat", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                        select_variable = "Eat", prm_run = prm_run, bboxes = bboxes,
+                        check_acronyms = check_acronyms, report = report)
 
   message("growth")
   at_growth  <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_age_groups,
-                        select_variable = "Growth", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                        select_variable = "Growth", prm_run = prm_run, bboxes = bboxes,
+                        check_acronyms = check_acronyms, report = report)
 
   message("grazing")
   at_grazing <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, select_groups = select_other_groups,
-                        select_variable = "Grazing", bboxes = bboxes, check_acronyms = check_acronyms, report = report)
+                        select_variable = "Grazing", prm_run = prm_run, bboxes = bboxes,
+                        check_acronyms = check_acronyms, report = report)
 
   message("03 physics data\nfluxes")
   flux       <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("eflux", "vflux"),
-                                bboxes = bboxes, aggregate_layers = FALSE)
+                                prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
 
   message("physical variables")
   physics    <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = physic_var,
-                                bboxes = bboxes, aggregate_layers = TRUE)
+                                prm_run = prm_run, bboxes = bboxes, aggregate_layers = TRUE)
 
 
   if (report) message("Start data transformations!")
@@ -187,6 +194,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
   vol <- load_nc_physics(dir = dir,
                          nc = nc_gen,
                          select_physics = c("volume", "dz"),
+                         prm_run = prm_run,
                          bboxes = bboxes,
                          aggregate_layers = F)
 
@@ -216,7 +224,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # Load in diet-data!
   message("Read in DietCheck.txt!")
-  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, report = report, version_flag = version_flag) #bjs pass the report flag so dietcheck doesnt always report no matter on the setting; add version_flag)
+  diet <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, prm_run = prm_run, report = report, version_flag = version_flag) #bjs pass the report flag so dietcheck doesnt always report no matter on the setting; add version_flag)
 
   # load in recruitment data!
   message("Read in SSB/REC data!")
@@ -224,7 +232,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # load in specific mortality data!
   message("Read in SpecPredMort data!")
-  spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort, version_flag = version_flag) #bjs add version_flag
+  spec_pred_mort <- load_spec_mort(dir = dir, specmort = specpredmort, prm_run = prm_run, version_flag = version_flag) #bjs add version_flag
 
   message("Read in SpecMort data!")
   spec_mort <- load_txt(dir = dir, file = specmort)
