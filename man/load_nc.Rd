@@ -4,7 +4,7 @@
 \alias{load_nc}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc(dir = getwd(), nc, bps, fgs, select_groups, select_variable,
+load_nc(dir = getwd(), nc, bps, fgs, select_groups, select_variable, prm_run,
   bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE,
   report = TRUE)
 }
@@ -37,6 +37,11 @@ Names have to match the ones used in the ncdf file. Check column "Name" in
 Only one variable of the options available (i.e., \code{c(
 "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 }) can be loaded at a time.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
 

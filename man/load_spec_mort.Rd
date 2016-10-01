@@ -4,7 +4,7 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort, convert_names = FALSE,
+load_spec_mort(dir = getwd(), specmort, prm_run, convert_names = FALSE,
   version_flag = 1)
 }
 \arguments{
@@ -17,6 +17,12 @@ folder) you should use 'NULL' as dir.}
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.
+In addition set dir to 'NULL' in this case.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
@@ -34,12 +40,14 @@ Load mortality information from outputSpecificPredMort.txt
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 df <- load_spec_mort(dir = d,
-                     specmort = "outputSETASSpecificPredMort.txt")
+                     specmort = "outputSETASSpecificPredMort.txt",
+                     prm_run = "VMPA_setas_run_fishing_F_New.prm")
 head(df)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 df <- load_spec_mort(dir = d,
                      specmort = "outputSETASSpecificPredMort.txt",
+                     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
                      version_flag = 2)
 head(df)
 }

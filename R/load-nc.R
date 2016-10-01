@@ -25,6 +25,10 @@
 #' Only one variable of the options available (i.e., \code{c(
 #' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 #' }) can be loaded at a time.
+#' @param prm_run Character string giving the filename of the run
+#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
@@ -57,7 +61,7 @@
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
-                    select_variable, bboxes = c(0), check_acronyms = TRUE,
+                    select_variable, prm_run, bboxes = c(0), check_acronyms = TRUE,
                     warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
@@ -329,6 +333,9 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
 
   # convert names to longnames
   result$species <- convert_factor(data_fgs = fgs, col = result$species)
+
+  # Convert timestep to time in years!
+  result$time <- convert_time(dir = dir, prm_run = prm_run, col = result$time)
 
   return(result)
 }

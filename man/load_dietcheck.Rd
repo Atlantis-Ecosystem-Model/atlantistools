@@ -4,8 +4,8 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, fgs, convert_names = FALSE,
-  report = FALSE, version_flag = 1)
+load_dietcheck(dir = getwd(), dietcheck, fgs, prm_run,
+  convert_names = FALSE, report = FALSE, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -20,7 +20,12 @@ case.}
 
 \item{fgs}{Character string giving the filename of 'functionalGroups.csv'
 file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
+outputfiles pass the complete folder/filename string as fgs.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.
 In addition set dir to 'NULL' in this case.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
@@ -40,11 +45,15 @@ Read in the atlantis dietcheck.txt file and perform some basic data transformati
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv")
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+                       fgs = "SETasGroups.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_New.prm")
 head(diet, n = 10)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroupsDem_NoCep.csv")
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+                       fgs = "SETasGroupsDem_NoCep.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
 head(diet, n = 10)
 }
 \seealso{
