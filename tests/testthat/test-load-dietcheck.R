@@ -15,11 +15,11 @@ test_that("test output numbers", {
   expect_equal(dim(diet), c(390, 5))
   expect_is(diet$pred, "character")
   expect_is(diet$prey, "character")
-  expect_equal(diet$atoutput[diet$pred == "Cephalopod" & diet$time == 240 & diet$habitat == "WC" & diet$prey == "Small planktivorous fish"], 0.001663077)
-  expect_equal(diet$atoutput[diet$pred == "Mesozooplankton" & diet$time == 480 & diet$habitat == "WC" & diet$prey == "Labile detritus"], 9.23446e-13)
+  # expect_equal(diet$atoutput[diet$pred == "Cephalopod" & diet$time == 240 & diet$habitat == "WC" & diet$prey == "Small planktivorous fish"], 0.001663077)
+  # expect_equal(diet$atoutput[diet$pred == "Mesozooplankton" & diet$time == 480 & diet$habitat == "WC" & diet$prey == "Labile detritus"], 9.23446e-13)
 
-  # expect_equal(diet$atoutput[diet$pred == "CEP" & diet$time == 240 & diet$habitat == "WC" & diet$prey == "FPS"], 0.001663077)
-  # expect_equal(diet$atoutput[diet$pred == "ZM" & diet$time == 480 & diet$habitat == "WC" & diet$prey == "DL"], 9.23446e-13)
+  expect_equal(diet$atoutput[diet$pred == "CEP" & diet$time == 240 & diet$habitat == "WC" & diet$prey == "FPS"], 0.001663077)
+  expect_equal(diet$atoutput[diet$pred == "ZM" & diet$time == 480 & diet$habitat == "WC" & diet$prey == "DL"], 9.23446e-13)
 
 })
 
@@ -32,9 +32,9 @@ test_that("test output numbers trunk", {
   expect_equal(dim(diet), c(3722, 5))
   expect_is(diet$pred, "character")
   expect_is(diet$prey, "character")
-  expect_equal(diet$atoutput[diet$pred == "Shallow piscivorous fish" & diet$time == 570 & diet$agecl == 3 & diet$prey == "Shallow piscivorous fish"], 0.1192798)
-  expect_equal(diet$atoutput[diet$pred == "Small planktivorous fish" & diet$time == 720 & diet$agecl == 6 & diet$prey == "Refractory detritus"], 0.001334405)
+  # expect_equal(diet$atoutput[diet$pred == "Shallow piscivorous fish" & diet$time == 570 & diet$agecl == 3 & diet$prey == "Shallow piscivorous fish"], 0.1192798)
+  # expect_equal(diet$atoutput[diet$pred == "Small planktivorous fish" & diet$time == 720 & diet$agecl == 6 & diet$prey == "Refractory detritus"], 0.001334405)
 
-  # expect_equal(diet$atoutput[diet$pred == "FVS" & diet$time == 570 & diet$agecl == 3 & diet$prey == "FVS"], 0.1192798)
-  # expect_equal(diet$atoutput[diet$pred == "FPS" & diet$time == 720 & diet$agecl == 6 & diet$prey == "DR"], 0.001334405)
+  expect_equal(diet$atoutput[diet$pred == "FVS" & diet$time == 570 & diet$agecl == 3 & diet$prey == "FVS"], 0.1192798)
+  expect_equal(diet$atoutput[diet$pred == "FPS" & diet$time == 720 & diet$agecl == 6 & diet$prey == "DR"], 0.001334405)
 })
