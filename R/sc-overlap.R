@@ -1,4 +1,4 @@
-#' Calculate 3d overlap of predators groups with their prey over time.
+#' Calculate 3d overlap of predator groups with their prey over time.
 #'
 #' @inheritParams preprocess
 #' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
@@ -90,49 +90,6 @@ sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
     dplyr::left_join(biomass)
   data_bio$perc_bio[is.na(data_bio$perc_bio)] <- 0
 
-  # 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
-  # - pred: %biomass per predator ageclass per time, box, layer
-  # - avail: availability matrix
-  # - prey: overall preybiomass
-  # pred <- "Cod"
-  # pred_stanza <- 1
-  # avail <- dm
-  schoener <- function(pred, pred_stanza, biomass, avail) {
-    if (!(length(pred) == 1 & length(pred_stanza) == 1)) {
-      stop("Only one predator/agecl combination allowed in dataframe 'pred'.")
-    }
-
-    df_pred <- biomass[biomass$pred_stanza == pred_stanza & biomass$species == pred, ]
-
-    df_avail <- avail[avail$pred == pred & avail$pred_stanza == pred_stanza, ]
-
-    # Combine predator data with prey data!
-    # WARNING: This may lead to a very huge dataframe... all (even non existing)
-    # pred/prey combinations are combined!
-    # The 2nd join has to be an inner_join to make sure only available prey groups are
-    # used to calculate the overlap index!
-    si <- dplyr::left_join(df_avail, df_pred, by = c("pred" = "species", "pred_stanza")) %>%
-      dplyr::inner_join(biomass, by = c("prey" = "species", "prey_stanza" = "pred_stanza", "time", "polygon", "layer"))
-
-    si$si <- with(si, abs(perc_bio.x - perc_bio.y))
-
-    # Schoner index per pred/predstanza/prey/preystanza combination!
-    si_spec <- si %>%
-      agg_data(col = "si", groups = c("time", "pred", "pred_stanza", "prey", "prey_stanza", "avail"), out = "si", fun = sum) %>%
-      dplyr::mutate_(.dots = stats::setNames(list(~1 - si * 0.5), "si"))
-
-    # 4th step: Aggregate schoner index based on availabilities
-    # Combine to pred/predstanza index! Weight with present availabilities!
-    si_overall <- si_spec %>%
-      agg_perc(col = "avail", groups = c("time", "pred", "pred_stanza"), out = "avail") %>%
-      dplyr::mutate_(.dots = stats::setNames(list(~si * avail), "si")) %>%
-      agg_data(col = "si", groups = c("time", "pred", "pred_stanza"), out = "si", fun = sum)
-
-    return(list(si_spec, si_overall))
-    # ggplot2::ggplot(si_spec, ggplot2::aes(x = time, y = si, group = time)) +
-    #   ggplot2::geom_violin() +
-    #   ggplot2::geom_point(data = si_overall, colour = "red")
-  }
 
   # Apply calculations to all predators!
   preds <- rep(convert_factor(data_fgs = fgs_data, col = acr_age), each = 2)
@@ -141,6 +98,49 @@ sc_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
 }
 
 
+# 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
+# - pred: %biomass per predator ageclass per time, box, layer
+# - avail: availability matrix
+# - prey: overall preybiomass
+# pred <- "Cod"
+# pred_stanza <- 1
+# avail <- dm
+schoener <- function(pred, pred_stanza, biomass, avail) {
+  if (!(length(pred) == 1 & length(pred_stanza) == 1)) {
+    stop("Only one predator/agecl combination allowed in dataframe 'pred'.")
+  }
+
+  df_pred <- biomass[biomass$pred_stanza == pred_stanza & biomass$species == pred, ]
+
+  df_avail <- avail[avail$pred == pred & avail$pred_stanza == pred_stanza, ]
+
+  # Combine predator data with prey data!
+  # WARNING: This may lead to a very huge dataframe... all (even non existing)
+  # pred/prey combinations are combined!
+  # The 2nd join has to be an inner_join to make sure only available prey groups are
+  # used to calculate the overlap index!
+  si <- dplyr::left_join(df_avail, df_pred, by = c("pred" = "species", "pred_stanza")) %>%
+    dplyr::inner_join(biomass, by = c("prey" = "species", "prey_stanza" = "pred_stanza", "time", "polygon", "layer"))
+
+  si$si <- with(si, abs(perc_bio.x - perc_bio.y))
+
+  # Schoner index per pred/predstanza/prey/preystanza combination!
+  si_spec <- si %>%
+    agg_data(col = "si", groups = c("time", "pred", "pred_stanza", "prey", "prey_stanza", "avail"), out = "si", fun = sum) %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~1 - si * 0.5), "si"))
+
+  # 4th step: Aggregate schoner index based on availabilities
+  # Combine to pred/predstanza index! Weight with present availabilities!
+  si_overall <- si_spec %>%
+    agg_perc(col = "avail", groups = c("time", "pred", "pred_stanza"), out = "avail") %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~si * avail), "si")) %>%
+    agg_data(col = "si", groups = c("time", "pred", "pred_stanza"), out = "si", fun = sum)
+
+  return(list(si_spec, si_overall))
+  # ggplot2::ggplot(si_spec, ggplot2::aes(x = time, y = si, group = time)) +
+  #   ggplot2::geom_violin() +
+  #   ggplot2::geom_point(data = si_overall, colour = "red")
+}
 
 
 # ggplot2::ggplot(sis[[18]][[1]], ggplot2::aes(x = time, y = si, group = time)) +
