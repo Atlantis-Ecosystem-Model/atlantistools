@@ -1,25 +1,22 @@
-#' Calculate the consumed biomass from predator x to prey Y.
+#' Calculate the consumed biomass in [t] of prey j by predator i.
 #'
 #' Consumption data is extracted from output[...]PROD.nc. Age based groups
 #' are stored as "Eat_" non age based groups as "Grazing_". Units are mg N m^-3 d^-1.
 #' Factors are species, time, box and agecl (if present). We will refer to species as
-#' pred from heron to indicate the predator perspective.
+#' pred from here on to indicate the predator perspective.
 #' Diet constribution data is extracted from DietCheck.txt. Currently this only works
-#' with models based on the trunk code. Units are % diet contribution (Will check if
-#' it sums to 1 per predator/agecl combination). Factors are pred, time, agecl, prey.
-#' The biomass flows are calculated as follows:
+#' for models based on the trunk code. Units are % diet contribution. Factors are pred, time, agecl, prey.
+#' The consumed biomass is calculated as follows:
 #' - Calculate consumed biomass as Eat (or Grazing) * boxvolume per time, pred, agecl, box.
 #' - Convert to biomass in [t].
-#' - Sum consumed biomass over the model domain per pred, time, agecl.
 #' - Combine with diet contributions and calculate consumed biomass of prey species.
-#' - Sum up consumed biomass per pred, time, prey.
 #' @inheritParams preprocess
-#' @param plot_diet Logical indicating if you want to apply the \code{plot_diet} function or not.
-#' Default is \code{FALSE}.
-#' @return Dataframe
+#' @return Dataframe with columns 'pred', 'agecl', 'polygon', 'time', 'prey'.
+#' Consumed biomass in [t] is stored in column 'atoutput'.
 
 #' @export
 #' @examples
+#' \dontrun{
 #' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
 #' nc_prod <- "outputNorthSeaPROD.nc"
 #' nc_gen <- "outputNorthSea.nc"
@@ -27,13 +24,13 @@
 #' prm_biol <- "NorthSea_biol_fishing.prm"
 #' prm_run <- "NorthSea_run_fishing_F.prm"
 #' fgs <- "functionalGroups.csv"
-#
-# bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-# bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-#
-# data_cons <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
+#' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#'
+#' df <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
+#' }
 
-biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = FALSE) {
+calculate_consumed_biomass <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes) {
   # Setup group variables
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
@@ -46,18 +43,14 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
   grps <- list(groups_age, groups_rest)
 
   data_eat <- Map(load_nc, select_variable = vars, select_groups = grps,
-                  MoreArgs = list(dir, nc = nc_prod, bps = bps, fgs = fgs, bboxes = bboxes))
+                  MoreArgs = list(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
   data_eat <- do.call(rbind, data_eat)
-  data_eat$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = data_eat$species)
-  data_eat <- convert_time(dir = dir, prm_run = prm_run, data = data_eat)
 
-  vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume", bboxes = bboxes, aggregate_layers = F)
-  vol <- convert_time(dir = dir, prm_run = prm_run, data = vol)
+  vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume", prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
 
-  data_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, report = F, version_flag = 2)
-  data_dm <- convert_time(dir = dir, prm_run = prm_run, data = data_dm)
+  data_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
 
   # Check DietCheck.txt
   check <- agg_data(data_dm, groups = c("time", "pred", "agecl"), fun = sum)
@@ -76,11 +69,9 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
   consumed_bio <- dplyr::left_join(data_eat, boxvol, by = c("polygon", "time")) %>%
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput * vol), "atoutput")) %>%
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput * bio_conv), "atoutput")) %>%
-  # Setp2: Aggregate spatially
-    agg_data(groups = c("species", "time", "agecl"), fun = sum) %>%
-  # Step3: Combine with diet contribution. We need a full join to make sure no data is lost!
+  # Step2: Combine with diet contribution. We need a full join to make sure no data is lost!
     dplyr::full_join(data_dm, by = c("species" = "pred", "time", "agecl")) %>%
-  # Restrict timesteps to netcdf data!
+  # Restrict timesteps to netcdf data! Last timestep is weird in Dietcheck.txt.
     dplyr::filter_(~time %in% ts_eat) %>%
     dplyr::rename_(.dots = c("pred" = "species"))
 
@@ -90,11 +81,11 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
 
   # Remove NAs!
   if (nrow(det_eat) > 0) {
-    message(paste0(100 * round(nrow(det_eat)/nrow(consumed_bio), digits = 2),
+    message(paste0(100 * round(nrow(det_eat)/nrow(consumed_bio), digits = 4),
                    "% data is lost due to missing diet data despite available eat data."))
   }
   if (nrow(det_dm) > 0) {
-    message(paste0(100 * round(nrow(det_dm)/nrow(consumed_bio), digits = 2),
+    message(paste0(100 * round(nrow(det_dm)/nrow(consumed_bio), digits = 4),
                    "% data is lost due to missing eat data despite available diet data."))
   }
 
@@ -104,16 +95,6 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
     dplyr::filter_(~!is.na(atoutput.x)) %>%
     dplyr::filter_(~!is.na(atoutput.y)) %>%
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput"))
-
-  # This is intended as workaround for the moment! Will clean this mess later.
-  if (plot_diet) {
-    data_cons <- agg_perc(data_cons, groups = c("time", "prey", "agecl"))
-    data_cons$atoutput.x <- NULL
-    data_cons$atoutput.y <- NULL
-  } else {
-    # Setp5: Sum up consumed biomass over ages per time, pred and prey!
-    data_cons <- agg_data(data_cons, groups = c("time", "pred", "prey"), fun = sum)
-  }
 
   return(data_cons)
 }
