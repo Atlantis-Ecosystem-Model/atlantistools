@@ -15,11 +15,6 @@
 #' prm_to_df_ages(dir, prm_biol, fgs, group, parameter = c("mum", "C"))
 #' prm_to_df(dir, prm_biol, fgs, group, parameter = c("age_mat", "KWRR"))
 
-dir <- "c:/backup_z/Atlantis_models/baserun/"
-prm_biol <- "NorthSea_biol_fishing.prm"
-group <- c("COD", "WHG")
-parameter <- c("mum", "C")
-
 prm_to_df <- function(dir = getwd(), prm_biol, fgs, group, parameter) {
   # Extract data!
   prms <- lapply(parameter, set_single_prm, group = group)
