@@ -28,10 +28,10 @@
 #' prm_run <- "NorthSea_run_fishing_F.prm"
 #' fgs <- "functionalGroups.csv"
 #
-bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-
-data_cons <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
+# bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+# bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#
+# data_cons <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
 
 biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = FALSE) {
   # Setup group variables
@@ -119,78 +119,78 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
 }
 
 
-df = data_cons
-select_time = 5
-show = 0.95
-
-plot_biomass_flow <- function(df, select_time, show) {
-  # Restrict to selected timestep!
-  one_time <- dplyr::filter(df, time == select_time) %>%
-    dplyr::ungroup() %>%
-    dplyr::select_(.dots = c("prey", "pred", "atoutput"))
-
-  # Select main feedig interactions based on cumulative treshold.
-  main_links <- one_time %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
-    dplyr::arrange_(quote(desc(perc)))
-  main_links <- main_links[1:min(which(cumsum(main_links$perc) > show)), ]
-
-  # Only select species contributing to main interactions.
-  grps <- union(main_links$prey, main_links$pred)
-  one_time$pred[!is.element(one_time$pred, grps)] <- "Rest"
-  one_time$prey[!is.element(one_time$prey, grps)] <- "Rest"
-
-  clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
-
-  # cols <- unique(clean_df$pred)
-  # cols <- data.frame(pred = cols, col = rep(get_colpal(), 3)[1:length(cols)], stringsAsFactors = FALSE)
-  #
-  # plot_df <- dplyr::left_join(clean_df, cols)
-  # plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
-
-  ring <- agg_data(clean_df, groups = "prey", fun = sum) %>%
-    dplyr::arrange_(~desc(atoutput))
-
-  circlize::circos.clear()
-  circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
-                       cell.padding = c(0,0), points.overflow.warning = FALSE)
-  par(mar = rep(0, 4))
-
-  circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
-                         direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-                         annotationTrack = "grid",
-                         link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-
-  # circlize::chordDiagram(x = clean_df,  transparency = 0.1, directional = 1,
-  #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-  #                        annotationTrack = "grid",
-  #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-
-  circlize::circos.trackPlotRegion(
-    track.index = 1,
-    bg.border = NA,
-    panel.fun = function(x, y) {
-      xlim = circlize::get.cell.meta.data("xlim")
-      sector.index = circlize::get.cell.meta.data("sector.index")
-      # reg1 = df9$reg1[df9$pob == sector.index]
-      # reg2 = df9$reg2[df9$pob == sector.index]
-      # kit = df9$kit[df9$pob == sector.index]
-
-      circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
-                    facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
-
-    }
-  )
-
-  circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
-                        facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
-
-
-
-}
-
-
-plot_biomass_flow(df = data_cons, select_time = 3, show = 0.95)
+# df = data_cons
+# select_time = 5
+# show = 0.95
+#
+# plot_biomass_flow <- function(df, select_time, show) {
+#   # Restrict to selected timestep!
+#   one_time <- dplyr::filter(df, time == select_time) %>%
+#     dplyr::ungroup() %>%
+#     dplyr::select_(.dots = c("prey", "pred", "atoutput"))
+#
+#   # Select main feedig interactions based on cumulative treshold.
+#   main_links <- one_time %>%
+#     dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
+#     dplyr::arrange_(quote(desc(perc)))
+#   main_links <- main_links[1:min(which(cumsum(main_links$perc) > show)), ]
+#
+#   # Only select species contributing to main interactions.
+#   grps <- union(main_links$prey, main_links$pred)
+#   one_time$pred[!is.element(one_time$pred, grps)] <- "Rest"
+#   one_time$prey[!is.element(one_time$prey, grps)] <- "Rest"
+#
+#   clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
+#
+#   # cols <- unique(clean_df$pred)
+#   # cols <- data.frame(pred = cols, col = rep(get_colpal(), 3)[1:length(cols)], stringsAsFactors = FALSE)
+#   #
+#   # plot_df <- dplyr::left_join(clean_df, cols)
+#   # plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
+#
+#   ring <- agg_data(clean_df, groups = "prey", fun = sum) %>%
+#     dplyr::arrange_(~desc(atoutput))
+#
+#   circlize::circos.clear()
+#   circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
+#                        cell.padding = c(0,0), points.overflow.warning = FALSE)
+#   par(mar = rep(0, 4))
+#
+#   circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
+#                          direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+#                          annotationTrack = "grid",
+#                          link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
+#
+#   # circlize::chordDiagram(x = clean_df,  transparency = 0.1, directional = 1,
+#   #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+#   #                        annotationTrack = "grid",
+#   #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
+#
+#   circlize::circos.trackPlotRegion(
+#     track.index = 1,
+#     bg.border = NA,
+#     panel.fun = function(x, y) {
+#       xlim = circlize::get.cell.meta.data("xlim")
+#       sector.index = circlize::get.cell.meta.data("sector.index")
+#       # reg1 = df9$reg1[df9$pob == sector.index]
+#       # reg2 = df9$reg2[df9$pob == sector.index]
+#       # kit = df9$kit[df9$pob == sector.index]
+#
+#       circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
+#                     facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
+#
+#     }
+#   )
+#
+#   circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
+#                         facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
+#
+#
+#
+# }
+#
+#
+# plot_biomass_flow(df = data_cons, select_time = 3, show = 0.95)
 
 
 
