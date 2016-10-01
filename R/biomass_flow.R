@@ -28,10 +28,10 @@
 #' prm_run <- "NorthSea_run_fishing_F.prm"
 #' fgs <- "functionalGroups.csv"
 #
-# bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-# bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-#
-# data_cons <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
+bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+
+data_cons <- biomass_flow(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
 
 biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes, plot_diet = FALSE) {
   # Setup group variables
@@ -119,98 +119,78 @@ biomass_flow <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, pr
 }
 
 
-# df <- data_cons
-# select_time <- 5
-# plot_biomass_flow <- function(df, select_time) {
-#   one_time <- dplyr::filter(df, time == select_time) %>%
-#     dplyr::ungroup() %>%
-#     dplyr::select_(.dots = c("prey", "pred", "atoutput"))
-#
-#   # remove prey only groups.
-#   grps <- unique(one_time$pred)
-#   plot_df <- one_time %>%
-#     # dplyr::filter(is.element(prey, grps)) %>%
-#     dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
-#     dplyr::arrange_(quote(desc(perc)))
-#
-#   main_links <- plot_df[1:min(which(cumsum(plot_df$perc) > 0.99)), ]
-#   clean_df <- plot_df
-#   clean_df$pred[!is.element(clean_df$pred, unique(c(main_links$pred, main_links$prey)))] <- "Rest"
-#   clean_df$prey[!is.element(clean_df$prey, main_links$prey)] <- "Rest"
-#
-#   clean_df <- agg_data(clean_df, col = "perc", groups = c("pred", "prey"), fun = sum)
-#
-#   # Select main links!
-#
-#   ggplot2::ggplot(one_time, ggplot2::aes(x = pred, y = atoutput, fill = prey)) +
-#     ggplot2::geom_bar(stat = "identity") +
-#     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
-#
-#
-#   # remove pred only groups.
-#   # grps <- unique(one_time$prey)
-#   # plot_df <- one_time %>%
-#   #   dplyr::filter(is.element(pred, grps))
-#
-#   # Does not work
-#   # circlize::chordDiagram(plot_df)
-#   circlize::chordDiagram(clean_df)
-#
-#   # Does work!
-#   # test <- tidyr::spread_(one_time, key_col = "prey", value_col = "atoutput", fill = 0)
-#   # test <- dplyr::filter(test, is.element(pred, c("Cod", "Crangon", "Dab")))
-#   # test <- dplyr::select(test, pred, Cod, Crangon, Dab)
-#   # dd <- data.frame(pred = rep(test$pred, 3), prey = rep(test$pred, each = 3), value = unlist(test[1:3, 2:4]))
-#   #
-#   # circlize::chordDiagram(dd)
-#   #
-#   # dd2 <- rbind(dd, data.frame(pred = "Cod", prey = "xxx", value = 2000))
-#   #
-#   # circlize::chordDiagram(dd2)
-#   #
-#   # dd3 <- rbind(dd, data.frame(pred = "xxx", prey = "Cod", value = 2000))
-#   #
-#   # circlize::chordDiagram(dd3)
-#   #
-#   # dd4 <- dd
-#   # dd4$value <- dd4$value/100000000000000
-#   #
-#   # circlize::chordDiagram(dd4)
-#   #
-#   # dd5 <- dplyr::filter(dd, value != 0)
-#   # circlize::chordDiagram(dd5)
-#   #
-#   #
-#   #   dplyr::filter(is.element(pred, grps) & is.element(prey, grps))
-#   #   dplyr::filter_(~is.element(prey, grps))
-#   #
-#   # plot_df <- one_time %>%
-#   #   dplyr::filter(is.element(prey, grps))
-#
-#   preds <- unique(clean_df$pred)
-#   cols <- data.frame(pred = preds, col = rep(get_colpal(), 3)[1:length(preds)], stringsAsFactors = FALSE)
-#
-#   plot_df <- dplyr::left_join(clean_df, cols)
-#   plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
-#
-#   circlize::circos.clear()
-#   circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
-#                        cell.padding = c(0,0), points.overflow.warning = FALSE)
-#   par(mar = rep(0, 4))
-#
-#   circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
-#                          direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-#                          annotationTrack = "grid", annotationTrackHeight = c(0.01, 0.01),
-#                          link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-#
-#   circlize::chordDiagram(x = plot_df)
-#
-# }
-#
-#
-#
-#
-#
-#
-#
-#
+df = data_cons
+select_time = 5
+show = 0.95
+
+plot_biomass_flow <- function(df, select_time, show) {
+  # Restrict to selected timestep!
+  one_time <- dplyr::filter(df, time == select_time) %>%
+    dplyr::ungroup() %>%
+    dplyr::select_(.dots = c("prey", "pred", "atoutput"))
+
+  # Select main feedig interactions based on cumulative treshold.
+  main_links <- one_time %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
+    dplyr::arrange_(quote(desc(perc)))
+  main_links <- main_links[1:min(which(cumsum(main_links$perc) > show)), ]
+
+  # Only select species contributing to main interactions.
+  grps <- union(main_links$prey, main_links$pred)
+  one_time$pred[!is.element(one_time$pred, grps)] <- "Rest"
+  one_time$prey[!is.element(one_time$prey, grps)] <- "Rest"
+
+  clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
+
+  # cols <- unique(clean_df$pred)
+  # cols <- data.frame(pred = cols, col = rep(get_colpal(), 3)[1:length(cols)], stringsAsFactors = FALSE)
+  #
+  # plot_df <- dplyr::left_join(clean_df, cols)
+  # plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
+
+  ring <- agg_data(clean_df, groups = "prey", fun = sum) %>%
+    dplyr::arrange_(~desc(atoutput))
+
+  circlize::circos.clear()
+  circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
+                       cell.padding = c(0,0), points.overflow.warning = FALSE)
+  par(mar = rep(0, 4))
+
+  circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
+                         direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+                         annotationTrack = "grid",
+                         link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
+
+  # circlize::chordDiagram(x = clean_df,  transparency = 0.1, directional = 1,
+  #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+  #                        annotationTrack = "grid",
+  #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
+
+  circlize::circos.trackPlotRegion(
+    track.index = 1,
+    bg.border = NA,
+    panel.fun = function(x, y) {
+      xlim = circlize::get.cell.meta.data("xlim")
+      sector.index = circlize::get.cell.meta.data("sector.index")
+      # reg1 = df9$reg1[df9$pob == sector.index]
+      # reg2 = df9$reg2[df9$pob == sector.index]
+      # kit = df9$kit[df9$pob == sector.index]
+
+      circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
+                    facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
+
+    }
+  )
+
+  circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
+                        facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
+
+
+
+}
+
+
+plot_biomass_flow(df = data_cons, select_time = 3, show = 0.95)
+
+
+
