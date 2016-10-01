@@ -39,8 +39,17 @@ In addition set dir to 'NULL' in this case.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
 }
+\value{
+Dataframe with columns 'species', 'agecl', 'polygon', 'layer', 'time'.
+Biomass in [t] is stored in column 'atoutput'.
+}
 \description{
-Calculate spatiallly explicit biomass (in [t]) for each group and ageclass per timestep.
+Calculate spatially explicit biomass time series for each group and ageclass within
+our model. Data is read in from 'output[...].nc'. Biomass for age based groups is calculated
+as (StructN [mgN] + ResN [mgN]) * Numbers [individuals]. Biomass for non age based groups is
+calculated as N [mgN] * volume [m^3] (sediment-dz [m] / volume [m^3] for epibenthic groups).
+mgN is converted to t based on the stettings in the biol.prm file. Simulation time steps
+are converted to time in years based on output timesteps given in run.prm.
 }
 \examples{
 \dontrun{

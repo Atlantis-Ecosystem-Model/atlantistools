@@ -1,6 +1,15 @@
 #' Calculate spatiallly explicit biomass (in [t]) for each group and ageclass per timestep.
 #'
+#' Calculate spatially explicit biomass time series for each group and ageclass within
+#' our model. Data is read in from 'output[...].nc'. Biomass for age based groups is calculated
+#' as (StructN [mgN] + ResN [mgN]) * Numbers [individuals]. Biomass for non age based groups is
+#' calculated as N [mgN] * volume [m^3] (sediment-dz [m] / volume [m^3] for epibenthic groups).
+#' mgN is converted to t based on the stettings in the biol.prm file. Simulation time steps
+#' are converted to time in years based on output timesteps given in run.prm.
+#'
 #' @inheritParams preprocess
+#' @return Dataframe with columns 'species', 'agecl', 'polygon', 'layer', 'time'.
+#' Biomass in [t] is stored in column 'atoutput'.
 #' @export
 #'
 #' @examples
@@ -54,7 +63,7 @@ calculate_biomass_spatial <- function(dir = getwd(), nc_gen, prm_biol, prm_run, 
   biomass_pools <- dplyr::left_join(data_bio$n, vol, by = c("polygon", "layer", "time"))
   biomass_pools$atoutput <- with(biomass_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
   biomass_pools <- dplyr::select_(biomass_pools, .dots = c("species", "time", "polygon", "layer", "atoutput"))
-  biomass_pools$agecl <- 1
+  biomass_pools$agecl <- NA
 
   # Combine both dataframes!
   biomass <- dplyr::bind_rows(biomass_age, biomass_pools)
