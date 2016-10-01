@@ -13,7 +13,7 @@ combine_ages(data, grp_col, agemat, value_col = "atoutput")
 E.g. 'species', 'pred', 'prey' etc.}
 
 \item{agemat}{First mature age class for age structured groups. This dataframe should
-be generated with \code\link{prm_to_df} using "age_mat" as parameter.}
+be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.}
 
 \item{value_col}{Character string giving the name of the column to sum.
 Default is \code{"atoutput"}.}
@@ -25,7 +25,6 @@ Dataframe with ageclasses combined to stanzas.
 Combine ageclasses to juvenile and adult stanza according to age at maturity.
 }
 \examples{
-
 dir <- system.file("extdata", "gns", package = "atlantistools")
 nc_gen <- "outputNorthSea.nc"
 prm_biol <- "NorthSea_biol_fishing.prm"

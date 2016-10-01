@@ -15,7 +15,7 @@ This dataframe should be generated with \code{\link{load_dietmatrix}}. Please
 use \code{convert_names = TRUE} in \code{load_dietmatrix}.}
 
 \item{agemat}{First mature age class for age structured groups. This dataframe should
-be generated with \code\link{prm_to_df} using "age_mat" as parameter.}
+be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.}
 }
 \value{
 Schoener's similarity index ranging from 1 (perfect overlap) to

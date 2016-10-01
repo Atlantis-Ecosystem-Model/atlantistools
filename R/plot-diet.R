@@ -11,7 +11,7 @@
 #' should be generated with \code{\link{load_dietcheck}} or read in from a preprocessd
 #' *.rda generated with \code{\link{preprocess}}.
 #' @param preydata Proportion of consumed biomass of a preygroup by different predator/ageclass
-#' combinations. This dataframe should be generated with \code{\link{biomass_flow}} with
+#' combinations. This dataframe should be generated with \code{\link{calculate_consumed_biomass}} with
 #' \code{plot_diet} set to \code{TRUE}.
 #' @param species Character string giving the acronyms of the species you aim to plot. Default is
 #' \code{NULL} resulting in all available species being ploted.

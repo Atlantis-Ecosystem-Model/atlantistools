@@ -4,14 +4,13 @@
 #' @param grp_col Character string giving the name of the group column in \code{data}.
 #' E.g. 'species', 'pred', 'prey' etc.
 #' @param agemat First mature age class for age structured groups. This dataframe should
-#' be generated with \code\link{prm_to_df} using "age_mat" as parameter.
+#' be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.
 #' @param value_col Character string giving the name of the column to sum.
 #' Default is \code{"atoutput"}.
 #' @return Dataframe with ageclasses combined to stanzas.
 #' @export
 #'
 #' @examples
-#'
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
 #' nc_gen <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
@@ -34,7 +33,7 @@ combine_ages <- function(data, grp_col, agemat, value_col = "atoutput") {
 
   # Combine data with agemat!
   agegrps <- unique(data[!is.na(data$agecl) & data$agecl > 2, grp_col])
-  if (any(!agegrps %in% agemat$species)) stop("Agegroups in data not present agemat")
+  if (any(!agegrps %in% agemat$species)) stop("Agegroups in data not present in agemat.")
   names(agemat)[names(agemat) == "species"] <- grp_col # in case grp_col is not 'species'
 
   data_stanza <- dplyr::left_join(data, agemat)
