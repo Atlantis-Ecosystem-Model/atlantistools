@@ -52,15 +52,14 @@ mgN is converted to t based on the stettings in the biol.prm file. Simulation ti
 are converted to time in years based on output timesteps given in run.prm.
 }
 \examples{
-\dontrun{
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-nc_gen <- "outputSETAS.nc"
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-prm_run = "VMPA_setas_run_fishing_F_Trunk.prm"
-bps = load_bps(dir, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
-fgs = "SETasGroupsDem_NoCep.csv"
-bboxes = get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
+dir <- system.file("extdata", "gns", package = "atlantistools")
+nc_gen <- "outputNorthSea.nc"
+prm_biol <- "NorthSea_biol_fishing.prm"
+prm_run = "NorthSea_run_fishing_F.prm"
+bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
+fgs = "functionalGroups.csv"
+bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+
 df <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
-}
 }
 

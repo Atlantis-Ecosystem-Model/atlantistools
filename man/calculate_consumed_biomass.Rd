@@ -68,18 +68,16 @@ The consumed biomass is calculated as follows:
 - Combine with diet contributions and calculate consumed biomass of prey species.
 }
 \examples{
-\dontrun{
-dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
+dir <- system.file("extdata", "gns", package = "atlantistools")
 nc_prod <- "outputNorthSeaPROD.nc"
 nc_gen <- "outputNorthSea.nc"
 dietcheck <- "outputNorthSeaDietCheck.txt"
 prm_biol <- "NorthSea_biol_fishing.prm"
 prm_run <- "NorthSea_run_fishing_F.prm"
 fgs <- "functionalGroups.csv"
-bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+bps <- load_bps(dir = dir, init = "init_simple_NorthSea.nc", fgs = fgs)
 bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 
 df <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
-}
 }
 

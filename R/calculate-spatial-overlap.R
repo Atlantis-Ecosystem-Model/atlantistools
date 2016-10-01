@@ -1,9 +1,11 @@
-#' Calculate 3d overlap of predator groups with their prey over time.
+#' Calculate 3d overlap of predator groups with their prey over time using Schoener Index.
 #'
 #' @param biomass_spatial Biomass timeseries of each group and ageclass per polygon
 #' and layer. This dataframe should be generated with \code{\link{calculate_biomass_spatial}}.
 #' @param dietmatrix Availability matrix given in the biological parameter file.
-#' This dataframe should be generated with \code{\link{load_dietmatrix}}.
+#' This dataframe should be generated with \code{\link{load_dietmatrix}}. Please
+#' use \code{convert_names = TRUE} in \code{load_dietmatrix}.
+#' @param agemat First mature age class for age structured groups.
 #' @inheritParams preprocess
 #' @return Schoener's percent similarity index ranging from 1 (perfect overlap) to
 #' 0 (no overlap at all).
@@ -11,33 +13,25 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
+#' dir <- system.file("extdata", "gns", package = "atlantistools")
 #' nc_gen <- "outputNorthSea.nc"
 #' prm_biol <- "NorthSea_biol_fishing.prm"
-#' fgs <- "functionalGroups.csv"
-#' pred <- NULL
-#' bps <- load_bps(dir = dir, fgs = fgs, init = "init_NorthSea.nc")
-#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-#' }
+#' prm_run = "NorthSea_run_fishing_F.prm"
+#' bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
+#' fgs = "functionalGroups.csv"
+#' bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+#'
+#' biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
+#' dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
+#'
+#' sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix)
 
 
-calculate_spatial_overlap <- function(dir = getwd(), nc_gen, prm_biol, bps, fgs, bboxes, out,
-                       pred = NULL, save_to_disc = FALSE) {
-
-  fgs_data <- load_fgs(dir = dir, fgs = fgs)
-
-  if (is.null(pred)) {
-    acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
-  } else {
-    acr_age <- fgs_data$Code[is.element(fgs_data$LongName, pred)]
-    if (length(acr_age) == 0) stop("Please provide pred as LongName.")
-    if (length(acr_age) != length(pred)) stop("Not all predators present in functionalGroups file")
-  }
-
-  groups <- get_groups(dir = dir, fgs = fgs)
-  groups_age <- get_age_groups(dir = dir, fgs = fgs)
-  groups_rest <- groups[!is.element(groups, groups_age)]
+calculate_spatial_overlap <- function(biomass_spatial, dietmatrix) {
+  # Check input dataframes!
+  check_df_names(biomass_spatial, expect = c("species", "agecl", "polygon", "layer", "time", "atoutput"))
+  check_df_names(dietmatrix, expect = c("pred", "pred_stanza", "prey_stanza","code", "prey", "avail", "prey_id"))
+  check_df_names(agemat, expect = c(""))
 
   # 1st step: Load in data!
   # - n per box and layer for each invert group
