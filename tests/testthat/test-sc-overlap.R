@@ -1,58 +1,33 @@
 context("Calculation of Schoner index")
 
+dummy <- data.frame(pred_stanza = 1, polygon = rep(1:2, 2), layer = rep(1:2, each = 2),
+                    time = 1, stringsAsFactors = FALSE)
+dummy1 <- dummy
+dummy1$species <- "cod"
+dummy2 <- dummy
+dummy2$species <- "herring"
+
+df_avail <- data.frame(pred = "cod", pred_stanza = 1, prey_stanza = 1, prey = "herring", avail = 1, stringsAsFactors = FALSE)
+
+# Perfect negative overlap!
+dummy1$perc_bio <- c(rep(0.5, 2), rep(0, 2))
+dummy2$perc_bio <- c(rep(0, 2),   rep(0.5, 2))
+df_bio1 <- rbind(dummy1, dummy2)
+
+# Perfect positive overlap!
+dummy1$perc_bio <- c(rep(0.5, 2), rep(0, 2))
+dummy2$perc_bio <- c(rep(0.5, 2), rep(0, 2))
+df_bio2 <- rbind(dummy1, dummy2)
+
+# 1/2 positive overlap!
+dummy1$perc_bio <- c(c(0.75, 0.25), rep(0, 2))
+dummy2$perc_bio <- c(c(0.25, 0.75), rep(0, 2))
+df_bio3 <- rbind(dummy1, dummy2)
 
 
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-
-bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
-
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
-
-non_ss <- load_nc(dir = d, nc = "outputSETAS.nc",
-                  bps = bps,
-                  fgs = "SETasGroups.csv",
-                  select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-                  select_variable = "Nums",
-                  bboxes = bboxes,
-                  check_acronyms = TRUE,
-                  report = FALSE)
-
-# test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
-#   select_physics = c("salt", "NO3", "volume"),
-#   aggregate_layers = FALSE,
-#   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
-
-ss <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroups.csv", report = FALSE)
-
-rando <- ss
-rando$time <- rando$time * runif(n = nrow(ss), min = 0, max = 1)
-
-wrong_input <- non_ss
-wrong_input$time <- NULL
-
-ms <- "1991-01-01"
-
-# test <- convert_time(dir = d,
-#                      prm_run = "VMPA_setas_run_fishing_F_New.prm",
-#                      data = test,
-#                      modelstart = ms)
-
-test_that("test convert_time", {
-  # expect_equal(min(test$time), as.Date.numeric(0, origin = ms))
-  expect_warning(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = wrong_input, as_date = TRUE, modelstart = ms),
-                 "No column 'time' present in dataframe. No time conversion applied!")
-
-  expect_error(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = rando, as_date = TRUE, modelstart = ms),
-               "Provided dataframe has column 'time' but values are corrput. PLease contact package development Team.")
-
-  expect_is(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = non_ss, as_date = TRUE, modelstart = ms)$time, "Date")
-
-  expect_equal(unique(sort(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = non_ss, as_date = TRUE, modelstart = ms)$time)),
-               as.Date.numeric(0:3 * 365, origin = ms))
-
-  expect_true(all(unique(convert_time(dir = d, prm_run = "VMPA_setas_run_fishing_F_New.prm", data = ss)$time) < 3))
-
+test_that("test schoener calculations", {
+  expect_equal(schoener(pred = "cod", pred_stanza = 1, biomass = df_bio1, avail = df_avail)[[1]]$si, 0)
+  expect_equal(schoener(pred = "cod", pred_stanza = 1, biomass = df_bio2, avail = df_avail)[[1]]$si, 1)
+  expect_equal(schoener(pred = "cod", pred_stanza = 1, biomass = df_bio3, avail = df_avail)[[1]]$si, 0.5)
 })
-
-
 
