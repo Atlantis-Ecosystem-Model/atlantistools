@@ -1,0 +1,32 @@
+#' Visualise the spatial distribution per species and stanza combination.
+#'
+#' @param bio_spatial Biomass per group and stanza in tonnes for each timestep,
+#' layer and polygon. This dataframe should be generated with
+#' \code{\link{calculate_biomass_spatial}}. The columns of the dataframe have to
+#' be 'species', 'species_stanza', 'polygon', 'layer', 'time' and 'atoutput'.
+#' Column 'atoutput' is the biomass in tonnes. Please use \code{\link{combine_ages}}
+#' to transform an agebased dataframe to a stanza based dataframe.
+#' @param bgm_as_df *.bgm file converted to a dataframe. Please use \code{\link{convert_bgm}}
+#' to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat',
+#' 'inside_long' and 'polygon'.
+#' @return ggplot2 plot
+#' @export
+#'
+#' @examples
+#' dir <- system.file("extdata", "gns", package = "atlantistools")
+#' nc_gen <- "outputNorthSea.nc"
+#' prm_biol <- "NorthSea_biol_fishing.prm"
+#' prm_run = "NorthSea_run_fishing_F.prm"
+#' bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
+#' fgs = "functionalGroups.csv"
+#' bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+#'
+#' df_agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
+#'                     parameter = "age_mat")
+#' df_sp <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
+#' df_sp <- combine_ages(df_sp, grp_col = "species", agemat = df_agemat)
+#' df_bgm <- convert_bgm(dir, bgm = "NorthSea.bgm")
+
+plot_spatial <- function(bio_spatial, bgm_as_df){
+
+}
