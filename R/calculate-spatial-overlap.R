@@ -8,8 +8,10 @@
 #' @param agemat First mature age class for age structured groups. This dataframe should
 #' be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.
 #' @inheritParams preprocess
-#' @return Schoener's similarity index ranging from 1 (perfect overlap) to
-#' 0 (zero overlap).
+#' @return List of Schoener's similarity indices ranging from 1 (perfect overlap) to
+#' 0 (zero overlap). Dataframe in first listentry gives pred, pred agecl, prey, preyageclass
+#' specific index. Dataframe in second listentry gives index per pred, pred agecl. Si is calculated
+#' as weighted mean with the availabilities as weights.
 #'
 #' @export
 #'

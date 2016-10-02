@@ -18,8 +18,10 @@ make sure to use \code{convert_names = TRUE} in \code{load_dietmatrix}.}
 be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.}
 }
 \value{
-Schoener's similarity index ranging from 1 (perfect overlap) to
-0 (zero overlap).
+List of Schoener's similarity indices ranging from 1 (perfect overlap) to
+0 (zero overlap). Dataframe in first listentry gives pred, pred agecl, prey, preyageclass
+specific index. Dataframe in second listentry gives index per pred, pred agecl. Si is calculated
+as weighted mean with the availabilities as weights.
 }
 \description{
 Calculate 3d overlap of predator groups with their prey over time using Schoener Index.
@@ -38,6 +40,6 @@ dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
 agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
                     parameter = "age_mat")
 
-sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix)
+sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
 }
 
