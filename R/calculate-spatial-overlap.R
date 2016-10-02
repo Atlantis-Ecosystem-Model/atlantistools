@@ -80,8 +80,9 @@ schoener <- function(pred, pred_stanza, biomass, avail) {
   df_pred <- biomass[biomass$species_stanza == pred_stanza & biomass$species == pred, ]
   df_avail <- avail[avail$pred == pred & avail$pred_stanza == pred_stanza, ]
   # Remove predator/predstanza since overlap is 1 by default!
-  biomass_clean <- dplyr::anti_join(biomass, df_pred)
-  # Remove sediment layer! We need to read in
+  biomass_clean <- dplyr::anti_join(biomass, df_pred) %>%
+  # Remove sediment layer! Need to read in the sediment penetration depth (KDEP) to include sedimant layer.
+    dplyr::filter_(lazyeval::interp(~ col != max(col), col = as.name("layer")))
 
   # Combine predator data with prey data!
   # WARNING: This may lead to a very huge dataframe... all (even non existing)
