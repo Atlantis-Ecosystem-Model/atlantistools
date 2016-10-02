@@ -4,7 +4,7 @@
 #' and layer. This dataframe should be generated with \code{\link{calculate_biomass_spatial}}.
 #' @param dietmatrix Availability matrix given in the biological parameter file.
 #' This dataframe should be generated with \code{\link{load_dietmatrix}}. Please
-#' use \code{convert_names = TRUE} in \code{load_dietmatrix}.
+#' make sure to use \code{convert_names = TRUE} in \code{load_dietmatrix}.
 #' @param agemat First mature age class for age structured groups. This dataframe should
 #' be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.
 #' @inheritParams preprocess
@@ -108,9 +108,9 @@ schoener <- function(pred, pred_stanza, biomass, avail) {
   return(list(si_spec, si_overall))
 }
 
-ggplot2::ggplot(si_spec, ggplot2::aes(x = time, y = si, group = time)) +
-  ggplot2::geom_violin() +
-  ggplot2::geom_point(data = si_overall, colour = "red")
+# ggplot2::ggplot(si_spec, ggplot2::aes(x = time, y = si, group = time)) +
+#   ggplot2::geom_violin() +
+#   ggplot2::geom_point(data = si_overall, colour = "red")
 
 # ggplot2::ggplot(sis[[18]][[1]], ggplot2::aes(x = time, y = si, group = time)) +
 #   ggplot2::geom_violin() +
