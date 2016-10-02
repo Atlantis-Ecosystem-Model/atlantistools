@@ -27,8 +27,7 @@
 #' agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
 #'                     parameter = "age_mat")
 #'
-#' sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix)
-
+#' sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
 
 calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   # Check input dataframes!
@@ -36,53 +35,60 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   check_df_names(dietmatrix, expect = c("pred", "pred_stanza", "prey_stanza","code", "prey", "avail", "prey_id"))
   check_df_names(agemat, expect = c("species", "age_mat"))
 
-  # Step1: Calculate relative biomass per box and layer per group and stanza!
+  # Step1: Calculate relative biomass per box and layer per group and agecl!
   # - Age based groups!
-  bio_stanza <- combine_ages(biomass_spatial, grp_col = "species", agemat = agemat)
-  bio_stanza$species_stanza[is.na(bio_stanza$species_stanza)] <- 1 # Not sure if this is correct!
-  biomass <- agg_perc(bio_stanza, groups = c("time", "species", "species_stanza"), out = "perc_bio")
+  # bio_stanza <- combine_ages(biomass_spatial, grp_col = "species", agemat = agemat)
+  perc_biomass <- agg_perc(biomass_spatial, groups = c("time", "species", "agecl"), out = "perc_bio")
+  # Add stanza information
+  bio_stanza <- dplyr::left_join(perc_biomass, agemat, by = c("species"))
+  bio_stanza$species_stanza <- ifelse(bio_stanza$agecl < bio_stanza$age_mat, 1, 2)
+  bio_stanza$species_stanza[is.na(bio_stanza$species_stanza)] <- 2 # Not sure if this is correct!
+
+  biomass <- bio_stanza
 
   # Fill data gaps to make sure that both combinations are present later:
   # - pred/stanza present in box/layer combination & prey/stanza absent
   # - prey/stanza present in box/layer combination $ pred/stanza absent
   ac_box_layer <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("polygon", "layer")))
-  ac_pred_stan <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("species", "species_stanza")))
+  ac_pred_agecl <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("species", "agecl", "species_stanza")))
   ac_time <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("time")))
 
-  data_bio <- merge(ac_box_layer, ac_pred_stan) %>%
+  data_bio <- merge(ac_box_layer, ac_pred_agecl) %>%
     merge(ac_time) %>%
-    dplyr::left_join(biomass, by = c("time", "species", "species_stanza", "polygon", "layer"))
+    dplyr::left_join(biomass, by = c("time", "species", "agecl", "polygon", "layer", "species_stanza"))
   data_bio$perc_bio[is.na(data_bio$perc_bio)] <- 0
+
+  # Remove sediment layer! Need to read in the sediment penetration depth (KDEP) to include sedimant layer.
+  data_bio <- dplyr::filter_(data_bio, lazyeval::interp(~ col != max(col), col = as.name("layer")))
 
   # Apply Schoener calculations to all predators!
   ps <- data_bio %>%
-    dplyr::select_(.dots = c("species", "species_stanza")) %>%
+    dplyr::select_(.dots = c("species", "agecl")) %>%
     unique()
-  sis <- Map(schoener, pred = ps$species, pred_stanza = ps$species_stanza,
+  sis <- Map(schoener, predgrp = ps$species, ageclass = ps$agecl,
              MoreArgs = list(biomass = data_bio, avail = dietmatrix))
 }
-
 
 # 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
 # - pred: %biomass per predator ageclass per time, box, layer
 # - avail: availability matrix
 # - prey: overall preybiomass
-# pred <- ps$species[1]
-# pred_stanza <- ps$species_stanza[1]
+# id <- 21
+# predgrp <- ps$species[id]
+# ageclass <- ps$agecl[id]
 # biomass <- data_bio
 # avail <- dietmatrix
-schoener <- function(pred, pred_stanza, biomass, avail) {
-  if (!(length(pred) == 1 & length(pred_stanza) == 1)) {
+schoener <- function(predgrp, ageclass, biomass, avail) {
+  if (!(length(predgrp) == 1 & length(ageclass) == 1)) {
     stop("Only one predator/agecl combination allowed in dataframe 'pred'.")
   }
 
-  # Select specific predator/predator stanza combination! (columns still called species at this point)
-  df_pred <- biomass[biomass$species_stanza == pred_stanza & biomass$species == pred, ]
-  df_avail <- avail[avail$pred == pred & avail$pred_stanza == pred_stanza, ]
+  # Select specific predator/ageclass combination! (columns still called species at this point)
+  df_pred <- dplyr::filter_(biomass, ~species == predgrp & agecl == ageclass)
+  pstanza <- unique(df_pred$species_stanza)
+  df_avail <- dplyr::filter_(avail, ~pred == predgrp & pred_stanza == pstanza & avail != 0)
   # Remove predator/predstanza since overlap is 1 by default!
-  biomass_clean <- dplyr::anti_join(biomass, df_pred) %>%
-  # Remove sediment layer! Need to read in the sediment penetration depth (KDEP) to include sedimant layer.
-    dplyr::filter_(lazyeval::interp(~ col != max(col), col = as.name("layer")))
+  biomass_clean <- dplyr::filter_(biomass, ~!(species == predgrp & agecl == ageclass))
 
   # Combine predator data with prey data!
   # WARNING: This may lead to a very huge dataframe... all (even non existing)
@@ -90,33 +96,43 @@ schoener <- function(pred, pred_stanza, biomass, avail) {
   # The 2nd join has to be an inner_join to make sure only available prey groups are
   # used to calculate the overlap index!
   si <- dplyr::left_join(df_avail, df_pred, by = c("pred" = "species", "pred_stanza" = "species_stanza")) %>%
-    dplyr::inner_join(biomass, by = c("prey" = "species", "prey_stanza" = "species_stanza", "time", "polygon", "layer"))
+    dplyr::inner_join(biomass_clean, by = c("prey" = "species", "prey_stanza" = "species_stanza", "time", "polygon", "layer"))
 
   si$si <- with(si, abs(perc_bio.x - perc_bio.y))
 
-  # Schoner index per pred/predstanza/prey/preystanza combination!
+  # Schoner index per pred/agecl/prey/preystanza combination!
   si_spec <- si %>%
-    agg_data(col = "si", groups = c("time", "pred", "pred_stanza", "prey", "prey_stanza", "avail"), out = "si", fun = sum) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~1 - si * 0.5), "si"))
+    agg_data(col = "si", groups = c("time", "pred", "agecl.x", "prey", "agecl.y", "pred_stanza", "prey_stanza", "avail"), out = "si", fun = sum) %>%
+    dplyr::mutate_(.dots = stats::setNames(list(~1 - si * 0.5), "si")) %>%
+    dplyr::rename_(.dots = c("agecl_pred" = "agecl.x", "agecl_prey" = "agecl.y"))
 
   # 4th step: Aggregate schoner index based on availabilities
   # Combine to pred/predstanza index! Weight with present availabilities!
   si_overall <- si_spec %>%
-    agg_perc(col = "avail", groups = c("time", "pred", "pred_stanza"), out = "avail") %>%
+    agg_perc(col = "avail", groups = c("time"), out = "avail") %>%
     dplyr::mutate_(.dots = stats::setNames(list(~si * avail), "si")) %>%
-    agg_data(col = "si", groups = c("time", "pred", "pred_stanza"), out = "si", fun = sum)
+    agg_data(col = "si", groups = c("time", "pred", "agecl_pred"), out = "si", fun = sum)
 
   return(list(si_spec, si_overall))
 }
 
-# ggplot2::ggplot(si_spec, ggplot2::aes(x = time, y = si, group = time)) +
-#   ggplot2::geom_violin() +
-#   ggplot2::geom_point(data = si_overall, colour = "red")
+# df_list <- sp_overlap
+plot_overlap <- function(df_list) {
+  # combine lists to dataframe!
+  combine_list <- function(list, index) {
+    my_list <- lapply(list, function(x) x[[index]])
+    dplyr::bind_rows(my_list)
+  }
 
-# ggplot2::ggplot(sis[[18]][[1]], ggplot2::aes(x = time, y = si, group = time)) +
-#   ggplot2::geom_violin() +
-#   ggplot2::geom_point(data = sis[[18]][[2]], colour = "red")
+  si_spec <- combine_list(df_list, 1)
+  si_overall <- combine_list(df_list, 2)
 
+  plot <- ggplot2::ggplot(si_spec, ggplot2::aes(x = time, y = si, group = time)) +
+    ggplot2::geom_violin() +
+    ggplot2::geom_point(data = si_overall, colour = "red") +
+    ggplot2::facet_grid(agecl_pred ~ pred)
 
+  return(plot)
+}
 
 
