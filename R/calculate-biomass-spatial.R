@@ -62,7 +62,7 @@ calculate_biomass_spatial <- function(dir = getwd(), nc_gen, prm_biol, prm_run, 
   biomass_pools <- dplyr::left_join(data_bio$n, vol, by = c("polygon", "layer", "time"))
   biomass_pools$atoutput <- with(biomass_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
   biomass_pools <- dplyr::select_(biomass_pools, .dots = c("species", "time", "polygon", "layer", "atoutput"))
-  biomass_pools$agecl <- NA
+  biomass_pools$agecl <- 1
 
   # Combine both dataframes!
   biomass_spatial <- dplyr::bind_rows(biomass_age, biomass_pools)
