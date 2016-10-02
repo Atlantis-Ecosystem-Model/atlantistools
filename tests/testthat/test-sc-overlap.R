@@ -1,7 +1,7 @@
 context("Calculation of Schoner index")
 
-dummy <- data.frame(pred_stanza = 1, polygon = rep(1:2, 2), layer = rep(1:2, each = 2),
-                    time = 1, stringsAsFactors = FALSE)
+dummy <- data.frame(agecl = 1, polygon = rep(1:2, 2), layer = rep(1:2, each = 2),
+                    time = 1, stringsAsFactors = FALSE, species_stanza = 1)
 dummy1 <- dummy
 dummy1$species <- "cod"
 dummy2 <- dummy
@@ -26,8 +26,8 @@ df_bio3 <- rbind(dummy1, dummy2)
 
 
 test_that("test schoener calculations", {
-  expect_equal(schoener(pred = "cod", pred_stanza = 1, biomass = df_bio1, avail = df_avail)[[1]]$si, 0)
-  expect_equal(schoener(pred = "cod", pred_stanza = 1, biomass = df_bio2, avail = df_avail)[[1]]$si, 1)
-  expect_equal(schoener(pred = "cod", pred_stanza = 1, biomass = df_bio3, avail = df_avail)[[1]]$si, 0.5)
+  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio1, avail = df_avail)[[1]]$si, 0)
+  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio2, avail = df_avail)[[1]]$si, 1)
+  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio3, avail = df_avail)[[1]]$si, 0.5)
 })
 
