@@ -30,6 +30,9 @@
 #' df_sp <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
 #' bio_spatial <- combine_ages(df_sp, grp_col = "species", agemat = df_agemat)
 #' bgm_as_df <- convert_bgm(dir, bgm = "NorthSea.bgm")
+#'
+#' grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
+#' gridExtra::grid.arrange(grobs[[3]])
 
 plot_spatial <- function(bio_spatial, bgm_as_df, timesteps = 2){
   # Check input dataframe!
@@ -55,23 +58,50 @@ plot_spatial <- function(bio_spatial, bgm_as_df, timesteps = 2){
       ggplot2::geom_polygon(colour = "black") +
       ggplot2::facet_grid(layer ~ time) +
       ggplot2::scale_fill_gradient(low = "red", high = "green") +
+      ggplot2::coord_equal() +
       theme_atlantis()
+
     return(plot)
   }
 
-  plot_ts_species <- function()
+  plot_ts_species <- function(data) {
+    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
+      ggplot2::geom_line() +
+      ggplot2::facet_wrap(~polygon, scales = "free_y", ncol = 2, labeller = ggplot2::label_wrap_gen(width = 15)) +
+      ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = abbreviate) +
+      theme_atlantis()
+
+    return(plot)
+  }
 
   # Create panels
   # 1. Overview of the polygon layout
-  box_layout <- plot_boxes(data = bgm_as_df)
-  box_layout <- box_layout + ggplot2::theme(legend.position = "none")
+  bl <- plot_boxes(data = bgm_as_df)
+  bl <- bl + ggplot2::theme_void()
+  bl <- bl + ggplot2::theme(legend.position = "none")
 
   # 2. Spatial distribution per predator and stanza per time, layer, polygon
   dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
     split_dfs(cols = c("species", "species_stanza"))
+  plots_spatial <- lapply(dfs_spatial, plot_spatial_species)
 
   # 3. Biomasstimeseries per box
+  dfs_ts <- split_dfs(ts_bio, cols = c("species", "species_stanza"))
+  plots_ts <- lapply(dfs_ts, plot_ts_species)
 
+  # Combine plots!
+  grobs <- vector(mode = "list", length = nrow(pred_stanza))
+  for (i in seq_along(grobs)) {
+    header <- grid::textGrob(paste("Species:", pred_stanza[i, 1], "with stanza:", pred_stanza[i, 2]),
+                             gp = grid::gpar(fontsize = 18))
+
+    grobs[[i]] <- gridExtra::arrangeGrob(
+      grobs = c(list(header), list(plots_spatial[[i]]), list(bl), list(plots_ts[[i]])),
+      layout_matrix = matrix(c(rep(1, 4), c(rep(2, 3), 3), rep(c(rep(2, 3), 4), 2)), ncol = 4, byrow = TRUE),
+      heights = grid::unit(c(0.04, rep(0.32, 3)), units = "npc"))
+  }
+
+  return(grobs)
 }
 
 # Utility functions
@@ -86,6 +116,8 @@ select_time <- function(df, timesteps = 2) {
       select_time <- c(select_time, time_sorted[pos])
     }
     dplyr::filter_(df, ~time %in% select_time)
+  } else {
+    df
   }
 }
 
@@ -99,6 +131,7 @@ split_dfs <- function(df, cols) {
     df_join <- dplyr::slice(df_cat, i)
     dfs[[i]] <- dplyr::inner_join(df, df_join, by = cols)
   }
+  names(dfs) <- apply(df_cat, MARGIN = 1, paste, collapse = " ")
   return(dfs)
 }
 
