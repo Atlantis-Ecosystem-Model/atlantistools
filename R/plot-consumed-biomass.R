@@ -24,7 +24,8 @@
 #' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
 #' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 #'
-#' bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
+#' bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol,
+#'                                            prm_run, bps, fgs, bboxes)
 #'
 #' select_time <- NULL
 #' show <- 0.95
@@ -56,7 +57,29 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   one_time$pred[!is.element(one_time$pred, grps)] <- "Rest"
   one_time$prey[!is.element(one_time$prey, grps)] <- "Rest"
 
+  # Setup final dataframes for plotting!
   clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
+
+
+  # See: https://github.com/gjabel/migest/blob/master/demo/cfplot_reg2.R
+  # for Details!
+  circlize::circos.clear()
+  circlize::circos.par(start.degree = 90, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
+  par(mar = rep(0, 4))
+
+  circlize::chordDiagram(x = clean_df, transparency = 0.25,
+                          directional = 1,
+                         direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+                         annotationTrack = "grid", annotationTrackHeight = c(0.05, 0.1),
+                         link.arr.type = "big.arrow", link.sort = TRUE, link.largest.ontop = TRUE)
+
+  # line1: read in the data (clean_df) and set colours of the outer sectors (set_cols).
+  # line2: set order of outer sectors and indicates that chords should be directional.
+  # line3: direction of the chords will be illustrated by both arrows and a difference in height. The
+  #        height difference is negative to make the chord shorter at the end (with the arrow head).
+  # line4: annotations outside the sectors are not plotted, but provides a track measures.
+  # line5: use big arrows, sort the chords left to right in each sector and plot the smallest chords first.
+
 
   # cols <- unique(clean_df$pred)
   # cols <- data.frame(pred = cols, col = rep(get_colpal(), 3)[1:length(cols)], stringsAsFactors = FALSE)
