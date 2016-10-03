@@ -206,9 +206,8 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   # Combine with biomass from age-groups
   biomass <- biomass_age %>%
-    dplyr::group_by_("species", "time") %>%
-    dplyr::summarise_(atoutput = ~sum(atoutput)) %>%
-    rbind(biomass_pools)
+    agg_data(groups = c("species", "time"), fun = sum) %>%
+    dplyr::bind_rows(biomass_pools)
 
   # Aggregate Numbers! This is done seperately since numbers need to be summed!
   nums     <- agg_data(data = at_nums_l, col = "atnums", groups = c("species", "time"), fun = sum)
