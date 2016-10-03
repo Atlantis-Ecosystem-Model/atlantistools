@@ -28,7 +28,7 @@
 #'                                            prm_run, bps, fgs, bboxes)
 #'
 #' select_time <- NULL
-#' show <- 0.95
+#' show <- 0.99
 #' }
 
 plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95) {
@@ -59,7 +59,16 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
 
   # Setup final dataframes for plotting!
   clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
-
+  # Will break if any predator only group is not grouped to Rest!
+  set_cols <- agg_data(clean_df, groups = "prey", fun = sum, out = "order") %>%
+    dplyr::rename_(.dots = c("group" = "prey")) %>%
+    dplyr::arrange_(~desc(order))
+  set_cols$order <- 1:nrow(set_cols)
+  set_cols$col <- rep(get_colpal(), 3)[1:nrow(set_cols)]
+  grp_sp <- stringr::str_split(set_cols$group, pattern = " ", n = 2)
+  set_cols$reg1 <- sapply(grp_sp, function(x) x[1])
+  set_cols$reg2 <- sapply(grp_sp, function(x) x[2])
+  set_cols$reg2[is.na(set_cols$reg2)] <- ""
 
   # See: https://github.com/gjabel/migest/blob/master/demo/cfplot_reg2.R
   # for Details!
@@ -67,65 +76,55 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   circlize::circos.par(start.degree = 90, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
   graphics::par(mar = rep(0, 4))
 
-  circlize::chordDiagram(x = clean_df, transparency = 0.25,
-                          directional = 1,
+  circlize::chordDiagram(x = clean_df, grid.col = set_cols$col, transparency = 0.25,
+                         order = set_cols$group, directional = 1,
                          direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
                          annotationTrack = "grid", annotationTrackHeight = c(0.05, 0.1),
                          link.arr.type = "big.arrow", link.sort = TRUE, link.largest.ontop = TRUE)
 
-  # line1: read in the data (clean_df) and set colours of the outer sectors (set_cols).
-  # line2: set order of outer sectors and indicates that chords should be directional.
-  # line3: direction of the chords will be illustrated by both arrows and a difference in height. The
+  # line 1: read in the data (clean_df) and set colours of the outer sectors (set_cols).
+  # line 2: set order of outer sectors and indicates that chords should be directional.
+  # line 3: direction of the chords will be illustrated by both arrows and a difference in height. The
   #        height difference is negative to make the chord shorter at the end (with the arrow head).
-  # line4: annotations outside the sectors are not plotted, but provides a track measures.
-  # line5: use big arrows, sort the chords left to right in each sector and plot the smallest chords first.
+  # line 4: annotations outside the sectors are not plotted, but provides a track measures.
+  # line 5: use big arrows, sort the chords left to right in each sector and plot the smallest chords first.
 
+  sectors <- sapply(circlize::get.all.sector.index(), circlize::get.cell.meta.data, name = "xlim")[2, ]
+  sum_sec <- sum(sectors)
 
-  # cols <- unique(clean_df$pred)
-  # cols <- data.frame(pred = cols, col = rep(get_colpal(), 3)[1:length(cols)], stringsAsFactors = FALSE)
-  #
-  # plot_df <- dplyr::left_join(clean_df, cols)
-  # plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
+  # Add axis and text.
+  circlize::circos.trackPlotRegion(
+    track.index = 1,
+    bg.border = NA,
+    panel.fun = function(x, y) {
+      xlim = circlize::get.cell.meta.data("xlim")
+      sector.index = circlize::get.cell.meta.data("sector.index")
+      reg1 = set_cols$reg1[set_cols$group == sector.index]
+      reg2 = set_cols$reg2[set_cols$group == sector.index]
 
-  # ring <- agg_data(clean_df, groups = "prey", fun = sum) %>%
-  #   dplyr::arrange_(~desc(atoutput))
-  #
-  # circlize::circos.clear()
-  # circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
-  #                      cell.padding = c(0,0), points.overflow.warning = FALSE)
-  # par(mar = rep(0, 4))
-  #
-  # circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
-  #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-  #                        annotationTrack = "grid",
-  #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-  #
-  # # circlize::chordDiagram(x = clean_df,  transparency = 0.1, directional = 1,
-  # #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-  # #                        annotationTrack = "grid",
-  # #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-  #
-  # circlize::circos.trackPlotRegion(
-  #   track.index = 1,
-  #   bg.border = NA,
-  #   panel.fun = function(x, y) {
-  #     xlim = circlize::get.cell.meta.data("xlim")
-  #     sector.index = circlize::get.cell.meta.data("sector.index")
-  #     # reg1 = df9$reg1[df9$pob == sector.index]
-  #     # reg2 = df9$reg2[df9$pob == sector.index]
-  #     # kit = df9$kit[df9$pob == sector.index]
-  #
-  #     circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
-  #                   facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
-  #
-  #   }
-  # )
-  #
-  # circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
-  #                       facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
+      test <- nchar(reg2)
+      circlize::circos.text(x = mean(xlim), y = ifelse(test == 0, yes = 6, no = 6.8),
+                           labels = reg1, facing = "bending")
+      circlize::circos.text(x = mean(xlim), y = 5.2,
+                            labels = reg2, facing = "bending")
+      # test <- xlim[2]
+      circlize::circos.axis(h = "top",
+                            major.at = as.numeric(scales::scientific(seq(from = 0, to = xlim[2], length.out = ceiling(xlim[2] / sum(sectors) / 0.05)), digits = 2)),
+                            # minor.ticks = 1,
+                            labels.cex = 0.8,
+                            major.tick.percentage = 0.5,
+                            labels.niceFacing = FALSE)
+    }
+  )
 
-
-
+  # line 1:   only use 1st track.
+  # line 2:   do not plot borders around the tracks.
+  # line 3:   Add a track.
+  # line 4+5: collect individual track meta data from plot object.
+  # line 6+7: collect matching name information from plot data frame (cet_cols).
+  # line 8:   (1st circos.text) add text from (reg1) either at y = 6 (if there is a second part of the name in reg2) or 5.2.
+  # line 9:   (2nd circos.text) add text (reg2).
+  # line 10:  add axis with major and minor ticks, without flipping the axis labels in the bottom half.
 }
 
 
