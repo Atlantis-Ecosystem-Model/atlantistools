@@ -48,28 +48,43 @@ plot_spatial <- function(bio_spatial, bgm_as_df, timesteps = 2){
   # Plot spatial distribution per species, species_stanza, timesteps and layer!
   # Use layer (y-direction) and timestep (x-direction) to facet_grid
   plot_spatial_species <- function(data) {
-    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~factor(polygon), group = ~factor(polygon), label = ~polygon)) +
+    # add time to polygon layout
+    bgrd <- merge(bgm_as_df, unique(dplyr::select_(data, .dots = c("time", "layer"))))
+    data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
+    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~atoutput, group = ~factor(polygon))) +
       ggplot2::geom_polygon(colour = "black") +
-      ggplot2::geom_text(data = inside) +
-      theme_atlantis() +
-      ggplot2::guides(fill = ggplot2::guide_legend(ncol = 3)) +
-      ggplot2::theme(legend.position = "right")
+      ggplot2::facet_grid(layer ~ time) +
+      ggplot2::scale_fill_gradient(low = "red", high = "green") +
+      theme_atlantis()
+    return(plot)
   }
 
+  plot_ts_species <- function()
 
+  # Create panels
+  # 1. Overview of the polygon layout
+  box_layout <- plot_boxes(data = bgm_as_df)
+  box_layout <- box_layout + ggplot2::theme(legend.position = "none")
 
-  dfs <- split_dfs(perc_bio, cols = c("species", "species_stanza"))
+  # 2. Spatial distribution per predator and stanza per time, layer, polygon
+  dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
+    split_dfs(cols = c("species", "species_stanza"))
+
+  # 3. Biomasstimeseries per box
 
 }
 
 # Utility functions
 # Select timesteps
 select_time <- function(df, timesteps = 2) {
-  select_time <- c(min(df$time), max(df$time))
-  if (timesteps > 2) {
-    time_sorted <- sort(unique(df$time))
-    pos <- 1:(timesteps - 2) * (ceiling(length(time_sorted) / timesteps)) + 1
-    select_time <- c(select_time, time_sorted[pos])
+  time_sorted <- sort(unique(df$time))
+  if (timesteps < length(time_sorted)) {
+    select_time <- c(min(df$time), max(df$time))
+    if (timesteps > 2) {
+      pos <- (1:(timesteps - 1) * (trunc(length(time_sorted) / (timesteps - 1)))) + 1
+      pos <- pos[-length(pos)]
+      select_time <- c(select_time, time_sorted[pos])
+    }
     dplyr::filter_(df, ~time %in% select_time)
   }
 }
