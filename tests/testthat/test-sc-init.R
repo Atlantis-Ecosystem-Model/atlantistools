@@ -9,7 +9,6 @@ mult_mum <- c(2:3)
 mult_c <- c(2:3)
 no_avail <- FALSE
 save_to_disc <- FALSE
-
 data1 <- sc_init(dir, init, prm_biol, fgs, bboxes, save_to_disc = FALSE)
 
 plot_sc_init(df = data1, mult_mum, mult_c)
