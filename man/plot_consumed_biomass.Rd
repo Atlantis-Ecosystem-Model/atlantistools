@@ -4,9 +4,43 @@
 \alias{plot_consumed_biomass}
 \title{Circle diagramm to visualise the consumed biomass for the whole system.}
 \usage{
-plot_consumed_biomass(df, select_time, show)
+plot_consumed_biomass(bio_consumed, select_time = NULL, show = 0.95)
+}
+\arguments{
+\item{bio_consumed}{Consumed biomass of prey groups by predatorgroup and agecl in tonnes
+for each timestep and polygon. Dataframe with columns 'pred', 'agecl', 'polygon', 'time', 'prey'.
+Consumed biomass in [t] is stored in column 'atoutput'. Should be generated with
+\code{link{calculate_consumed_biomass}}.}
+
+\item{select_time}{Numeric value to control the simulation time in years to visualise.
+By default the start of the simulation is shown.}
+
+\item{show}{Numeric value between 0 - 1 to control the amount of links shown. Default value is 0.95.
+Thus, the most important 95% of the total biomass flows are shown. The remaining interactions
+are grouped together as 'Rest'.}
+}
+\value{
+plot
 }
 \description{
 Circle diagramm to visualise the consumed biomass for the whole system.
+}
+\examples{
+\dontrun{
+dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
+nc_prod <- "outputNorthSeaPROD.nc"
+nc_gen <- "outputNorthSea.nc"
+dietcheck <- "outputNorthSeaDietCheck.txt"
+prm_biol <- "NorthSea_biol_fishing.prm"
+prm_run <- "NorthSea_run_fishing_F.prm"
+fgs <- "functionalGroups.csv"
+bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+
+bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
+
+select_time <- NULL
+show <- 0.95
+}
 }
 
