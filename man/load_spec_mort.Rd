@@ -4,7 +4,7 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort, prm_run, convert_names = FALSE,
+load_spec_mort(dir = getwd(), specmort, prm_run, fgs, convert_names = FALSE,
   version_flag = 1)
 }
 \arguments{
@@ -24,6 +24,11 @@ multiple folders for your model files and outputfiles pass the complete
 folder/filename string and set dir to 'NULL'.
 In addition set dir to 'NULL' in this case.}
 
+\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
+file. In case you are using multiple folders for your model files and
+outputfiles pass the complete folder/filename string as fgs.
+In addition set dir to 'NULL' in this case.}
+
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
 
@@ -41,13 +46,15 @@ Load mortality information from outputSpecificPredMort.txt
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 df <- load_spec_mort(dir = d,
                      specmort = "outputSETASSpecificPredMort.txt",
-                     prm_run = "VMPA_setas_run_fishing_F_New.prm")
+                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
+                     fgs = "SETasGroups.csv")
 head(df)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 df <- load_spec_mort(dir = d,
                      specmort = "outputSETASSpecificPredMort.txt",
                      prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+                     fgs = "SETasGroupsDem_NoCep.csv",
                      version_flag = 2)
 head(df)
 }
