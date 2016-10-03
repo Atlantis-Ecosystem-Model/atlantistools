@@ -35,6 +35,9 @@
 #'
 #' grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[3]])
+#'
+#' grobs <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Crangon", timesteps = 3)
+#' gridExtra::grid.arrange(grobs[[1]])
 
 plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2){
   # Check input dataframe!
@@ -69,7 +72,7 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~atoutput, group = ~factor(polygon))) +
       ggplot2::geom_polygon(colour = "black") +
       ggplot2::facet_grid(layer ~ time) +
-      ggplot2::scale_fill_gradient(low = "red", high = "green") +
+      ggplot2::scale_fill_gradient("biomass distribution", low = "red", high = "green") +
       ggplot2::coord_equal() +
       theme_atlantis()
 
@@ -77,11 +80,16 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
   }
 
   plot_ts_species <- function(data) {
-    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
+    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~atoutput)) +
       ggplot2::geom_line() +
       ggplot2::facet_wrap(~polygon, scales = "free_y", ncol = 2, labeller = ggplot2::label_wrap_gen(width = 15)) +
-      ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x))) +
-      theme_atlantis()
+      ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = function(x) scales::scientific(x, digits = 2)) +
+      ggplot2::scale_colour_gradientn("biomass [t]", colours = rainbow(n = 7)) +
+      ggplot2::labs(x = "time [years]", y = "biomasstrend per polygon") +
+      theme_atlantis() +
+      ggplot2::theme(axis.text.y = ggplot2::element_blank(),
+                     axis.line.y = ggplot2::element_blank(),
+                     axis.ticks.y = ggplot2::element_blank())
 
     return(plot)
   }
