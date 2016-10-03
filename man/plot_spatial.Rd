@@ -47,8 +47,10 @@ df_sp <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bbo
 bio_spatial <- combine_ages(df_sp, grp_col = "species", agemat = df_agemat)
 bgm_as_df <- convert_bgm(dir, bgm = "NorthSea.bgm")
 
+\dontrun{
 grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
 gridExtra::grid.arrange(grobs[[3]])
+}
 
 grobs <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Crangon", timesteps = 3)
 gridExtra::grid.arrange(grobs[[1]])
