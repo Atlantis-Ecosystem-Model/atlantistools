@@ -78,6 +78,7 @@ fgs <- "functionalGroups.csv"
 bps <- load_bps(dir = dir, init = "init_simple_NorthSea.nc", fgs = fgs)
 bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
 
-df <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
+df <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck,
+                                 prm_biol, prm_run, bps, fgs, bboxes)
 }
 

@@ -26,7 +26,8 @@
 #'
 #' biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
 #' dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
-#' agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
+#' agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
+#'                     group = get_age_acronyms(dir = dir, fgs = fgs),
 #'                     parameter = "age_mat")
 #'
 #' sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
@@ -129,7 +130,7 @@ plot_overlap <- function(df_list) {
   si_spec <- combine_list(df_list, 1)
   si_overall <- combine_list(df_list, 2)
 
-  plot <- ggplot2::ggplot(si_spec, ggplot2::aes(x = time, y = si, group = time)) +
+  plot <- ggplot2::ggplot(si_spec, ggplot2::aes_(x = ~time, y = ~si, group = ~time)) +
     ggplot2::geom_violin() +
     ggplot2::geom_point(data = si_overall, colour = "red") +
     ggplot2::facet_grid(agecl_pred ~ pred)

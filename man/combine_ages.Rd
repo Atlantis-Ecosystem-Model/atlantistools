@@ -34,7 +34,8 @@ fgs = "functionalGroups.csv"
 bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
 
 data <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)#'
-agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
+agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
+                    group = get_age_acronyms(dir = dir, fgs = fgs),
                     parameter = "age_mat")
 
 combine_ages(data, grp_col = "species", agemat = agemat)

@@ -37,7 +37,8 @@ bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
 
 biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
 dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
-agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
+agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
+                    group = get_age_acronyms(dir = dir, fgs = fgs),
                     parameter = "age_mat")
 
 sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
