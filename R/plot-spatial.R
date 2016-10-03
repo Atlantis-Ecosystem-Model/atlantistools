@@ -86,10 +86,10 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~atoutput)) +
       ggplot2::geom_line() +
       ggplot2::facet_wrap(~polygon, scales = "free_y", ncol = 2, labeller = ggplot2::label_wrap_gen(width = 15)) +
-      ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = function(x) scales::scientific(x, digits = 2)) +
-      ggplot2::scale_colour_gradientn("biomass [t]", colours = rainbow(n = 7)) +
+      # ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = function(x) scales::scientific(x, digits = 2)) +
+      ggplot2::scale_colour_gradientn("biomass [t]", colours = rainbow(n = 7), labels = function(x) scales::scientific(x, digits = 2)) +
       ggplot2::labs(x = "time [years]", y = "biomasstrend per polygon") +
-      ggplot2::guides(colour = ggplot2::guide_colorbar(barwidth = 20)) +
+      ggplot2::guides(colour = ggplot2::guide_colorbar(barwidth = 10)) +
       theme_atlantis() +
       ggplot2::theme(axis.text.y = ggplot2::element_blank(),
                      axis.line.y = ggplot2::element_blank(),
