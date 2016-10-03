@@ -89,8 +89,9 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # line 4: annotations outside the sectors are not plotted, but provides a track measures.
   # line 5: use big arrows, sort the chords left to right in each sector and plot the smallest chords first.
 
+  # Create space between x-axis ticks. In total 24 ticks for the whole circle --> every 15°
   sectors <- sapply(circlize::get.all.sector.index(), circlize::get.cell.meta.data, name = "xlim")[2, ]
-  sum_sec <- sum(sectors)
+  tick_step <- sum(sectors) / 24
 
   # Add axis and text.
   circlize::circos.trackPlotRegion(
@@ -107,10 +108,9 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
                            labels = reg1, facing = "bending")
       circlize::circos.text(x = mean(xlim), y = 5.2,
                             labels = reg2, facing = "bending")
-      # test <- xlim[2]
+
       circlize::circos.axis(h = "top",
-                            major.at = as.numeric(scales::scientific(seq(from = 0, to = xlim[2], length.out = ceiling(xlim[2] / sum(sectors) / 0.05)), digits = 2)),
-                            # minor.ticks = 1,
+                            major.at = as.numeric(scales::scientific(seq(from = 0, to = xlim[2], by = tick_step), digits = 2)),
                             labels.cex = 0.8,
                             major.tick.percentage = 0.5,
                             labels.niceFacing = FALSE)
