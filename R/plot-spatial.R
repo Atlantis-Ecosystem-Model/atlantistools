@@ -93,7 +93,8 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
       theme_atlantis() +
       ggplot2::theme(axis.text.y = ggplot2::element_blank(),
                      axis.line.y = ggplot2::element_blank(),
-                     axis.ticks.y = ggplot2::element_blank())
+                     axis.ticks.y = ggplot2::element_blank(),
+                     panel.margin = grid::unit(0, "lines"))
 
     return(plot)
   }
