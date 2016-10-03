@@ -23,7 +23,7 @@ to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat'
 
 \item{timesteps}{Integer giving the number of timesteps to visualise. The minimum
 value is 2 (default). By default the start and end of the simulation is shown. In case
-timesteps > 2 equally spaces timesteps - 2 are added.}
+timesteps > 2 equally spaced timesteps - 2 are added.}
 }
 \value{
 grob of 3 ggplot2 plots.
