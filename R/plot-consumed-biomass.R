@@ -65,7 +65,7 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # for Details!
   circlize::circos.clear()
   circlize::circos.par(start.degree = 90, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
-  par(mar = rep(0, 4))
+  graphics::par(mar = rep(0, 4))
 
   circlize::chordDiagram(x = clean_df, transparency = 0.25,
                           directional = 1,
@@ -87,42 +87,42 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # plot_df <- dplyr::left_join(clean_df, cols)
   # plot_df <- as.data.frame(plot_df, stringsAsFactors = FALSE)
 
-  ring <- agg_data(clean_df, groups = "prey", fun = sum) %>%
-    dplyr::arrange_(~desc(atoutput))
-
-  circlize::circos.clear()
-  circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
-                       cell.padding = c(0,0), points.overflow.warning = FALSE)
-  par(mar = rep(0, 4))
-
-  circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
-                         direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-                         annotationTrack = "grid",
-                         link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-
-  # circlize::chordDiagram(x = clean_df,  transparency = 0.1, directional = 1,
+  # ring <- agg_data(clean_df, groups = "prey", fun = sum) %>%
+  #   dplyr::arrange_(~desc(atoutput))
+  #
+  # circlize::circos.clear()
+  # circlize::circos.par(start.degree = 90, gap.degree = 3, track.margin = c(-0.12, 0.12),
+  #                      cell.padding = c(0,0), points.overflow.warning = FALSE)
+  # par(mar = rep(0, 4))
+  #
+  # circlize::chordDiagram(x = plot_df, col = plot_df$col, transparency = 0.1, directional = 1,
   #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
   #                        annotationTrack = "grid",
   #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
-
-  circlize::circos.trackPlotRegion(
-    track.index = 1,
-    bg.border = NA,
-    panel.fun = function(x, y) {
-      xlim = circlize::get.cell.meta.data("xlim")
-      sector.index = circlize::get.cell.meta.data("sector.index")
-      # reg1 = df9$reg1[df9$pob == sector.index]
-      # reg2 = df9$reg2[df9$pob == sector.index]
-      # kit = df9$kit[df9$pob == sector.index]
-
-      circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
-                    facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
-
-    }
-  )
-
-  circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
-                        facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
+  #
+  # # circlize::chordDiagram(x = clean_df,  transparency = 0.1, directional = 1,
+  # #                        direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
+  # #                        annotationTrack = "grid",
+  # #                        link.arr.type = "big.arrow",link.sort = TRUE, link.largest.ontop = TRUE)
+  #
+  # circlize::circos.trackPlotRegion(
+  #   track.index = 1,
+  #   bg.border = NA,
+  #   panel.fun = function(x, y) {
+  #     xlim = circlize::get.cell.meta.data("xlim")
+  #     sector.index = circlize::get.cell.meta.data("sector.index")
+  #     # reg1 = df9$reg1[df9$pob == sector.index]
+  #     # reg2 = df9$reg2[df9$pob == sector.index]
+  #     # kit = df9$kit[df9$pob == sector.index]
+  #
+  #     circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
+  #                   facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
+  #
+  #   }
+  # )
+  #
+  # circlize::circos.text(x = mean(xlim), y = 1, labels = ring$prey, col = "white",
+  #                       facing = "clockwise", pos = 4, cex = 0.7, offset = 0)
 
 
 
