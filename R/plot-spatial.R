@@ -101,6 +101,7 @@ plot_spatial <- function(bio_spatial, bgm_as_df, timesteps = 2){
       heights = grid::unit(c(0.04, rep(0.32, 3)), units = "npc"))
   }
 
+  names(grobs) <- apply(pred_stanza, MARGIN = 1, paste, collapse = " ")
   return(grobs)
 }
 
