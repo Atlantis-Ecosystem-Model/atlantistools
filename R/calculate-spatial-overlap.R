@@ -115,7 +115,7 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
     dplyr::mutate_(.dots = stats::setNames(list(~si * avail), "si")) %>%
     agg_data(col = "si", groups = c("time", "pred", "agecl_pred"), out = "si", fun = sum)
 
-  return(list(si_spec, si_overall))
+  return(list(dplyr::ungroup(si_spec), dplyr::ungroup(si_overall)))
 }
 
 # df_list <- sp_overlap

@@ -18,7 +18,7 @@
 agg_data <- function(data, col = "atoutput", groups, out = "atoutput", fun){
   result <- group_data(data, groups = groups) %>%
     dplyr::summarise_(.dots = stats::setNames(list(lazyeval::interp(~fun(var), var = as.name(col))), out))
-  return(result)
+  return(dplyr::ungroup(result))
 }
 
 #' @export
@@ -26,7 +26,7 @@ agg_data <- function(data, col = "atoutput", groups, out = "atoutput", fun){
 agg_perc <- function(data, col = "atoutput", groups, out = "atoutput"){
   result <- group_data(data, groups = groups) %>%
     dplyr::mutate_(.dots = stats::setNames(list(lazyeval::interp(~var/sum(var), var = as.name(col))), out))
-  return(result)
+  return(dplyr::ungroup(result))
 }
 
 #' @export

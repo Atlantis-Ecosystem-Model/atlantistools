@@ -95,7 +95,7 @@ calculate_consumed_biomass <- function(dir = getwd(), nc_prod, nc_gen, dietcheck
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput")) %>%
     dplyr::select_(.dots = names(.)[!names(.) %in% c("atoutput.x", "vol", "atoutput.y")])
 
-  return(consumed_biomass)
+  return(dplyr::ungroup(consumed_biomass))
 }
 
 

@@ -67,6 +67,6 @@ calculate_biomass_spatial <- function(dir = getwd(), nc_gen, prm_biol, prm_run, 
   # Combine both dataframes!
   biomass_spatial <- dplyr::bind_rows(biomass_age, biomass_pools)
 
-  return(biomass_spatial)
+  return(dplyr::ungroup(biomass_spatial))
 }
 
