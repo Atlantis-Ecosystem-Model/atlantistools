@@ -73,6 +73,7 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
       ggplot2::geom_polygon(colour = "black") +
       ggplot2::facet_grid(layer ~ time) +
       ggplot2::scale_fill_gradient("biomass distribution", low = "red", high = "green") +
+      ggplot2::guides(fill = ggplot2::guide_colorbar(barwidth = 20)) +
       ggplot2::coord_equal() +
       theme_atlantis()
 
@@ -86,6 +87,7 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
       ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = function(x) scales::scientific(x, digits = 2)) +
       ggplot2::scale_colour_gradientn("biomass [t]", colours = rainbow(n = 7)) +
       ggplot2::labs(x = "time [years]", y = "biomasstrend per polygon") +
+      ggplot2::guides(colour = ggplot2::guide_colorbar(barwidth = 20)) +
       theme_atlantis() +
       ggplot2::theme(axis.text.y = ggplot2::element_blank(),
                      axis.line.y = ggplot2::element_blank(),
