@@ -9,6 +9,8 @@
 #' @param bgm_as_df *.bgm file converted to a dataframe. Please use \code{\link{convert_bgm}}
 #' to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat',
 #' 'inside_long' and 'polygon'.
+#' @param select_species Character vector listing the species to plot. If no species are selected
+#' \code{NULL} (default) all available species are plotted.
 #' @param timesteps Integer giving the number of timesteps to visualise. The minimum
 #' value is 2 (default). By default the start and end of the simulation is shown. In case
 #' timesteps > 2 equally spaces timesteps - 2 are added.
@@ -34,17 +36,27 @@
 #' grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[3]])
 
-plot_spatial <- function(bio_spatial, bgm_as_df, timesteps = 2){
+plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2){
   # Check input dataframe!
   check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
   check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
+
+  # Filter by species if select_species not NULL!
+  # Warning: Will change input parameter which makes it harder to debug...
+  if (!is.null(select_species)) {
+    if (all(select_species %in% unique(bio_spatial$species))) {
+      bio_spatial <- dplyr::filter_(bio_spatial, ~species %in% select_species)
+    } else {
+      stop("Not all selected_species are present in bio_spatial.")
+    }
+  }
 
   # Get available species and stanzas!
   pred_stanza <- unique(dplyr::select_(bio_spatial, .dots = c("species", "species_stanza")))
 
   # Step1: Calculate different summary tables
   # - perc biomass per box and layer
-  perc_bio <- agg_perc(bio_spatial, groups = c("time", "layer", "species", "species_stanza"))
+  perc_bio <- agg_perc(bio_spatial, groups = c("time", "species", "species_stanza"))
   # - biomass timeseries per box
   ts_bio <- agg_data(bio_spatial, groups = c("time", "species", "species_stanza", "polygon"), fun = sum)
 
@@ -68,7 +80,7 @@ plot_spatial <- function(bio_spatial, bgm_as_df, timesteps = 2){
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput)) +
       ggplot2::geom_line() +
       ggplot2::facet_wrap(~polygon, scales = "free_y", ncol = 2, labeller = ggplot2::label_wrap_gen(width = 15)) +
-      ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = abbreviate) +
+      ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x))) +
       theme_atlantis()
 
     return(plot)

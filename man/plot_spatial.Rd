@@ -4,7 +4,7 @@
 \alias{plot_spatial}
 \title{Visualise the spatial distribution per species and stanza combination.}
 \usage{
-plot_spatial(bio_spatial, bgm_as_df)
+plot_spatial(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2)
 }
 \arguments{
 \item{bio_spatial}{Biomass per group and stanza in tonnes for each timestep,
@@ -17,6 +17,13 @@ to transform an agebased dataframe to a stanza based dataframe.}
 \item{bgm_as_df}{*.bgm file converted to a dataframe. Please use \code{\link{convert_bgm}}
 to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat',
 'inside_long' and 'polygon'.}
+
+\item{select_species}{Character vector listing the species to plot. If no species are selected
+\code{NULL} (default) all available species are plotted.}
+
+\item{timesteps}{Integer giving the number of timesteps to visualise. The minimum
+value is 2 (default). By default the start and end of the simulation is shown. In case
+timesteps > 2 equally spaces timesteps - 2 are added.}
 }
 \value{
 ggplot2 plot
@@ -35,8 +42,12 @@ bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
 
 df_agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir = dir, fgs = fgs),
                     parameter = "age_mat")
+
 df_sp <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
-df_sp <- combine_ages(df_sp, grp_col = "species", agemat = df_agemat)
-df_bgm <- convert_bgm(dir, bgm = "NorthSea.bgm")
+bio_spatial <- combine_ages(df_sp, grp_col = "species", agemat = df_agemat)
+bgm_as_df <- convert_bgm(dir, bgm = "NorthSea.bgm")
+
+grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
+gridExtra::grid.arrange(grobs[[3]])
 }
 
