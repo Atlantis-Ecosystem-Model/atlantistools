@@ -14,7 +14,7 @@
 #' @param timesteps Integer giving the number of timesteps to visualise. The minimum
 #' value is 2 (default). By default the start and end of the simulation is shown. In case
 #' timesteps > 2 equally spaces timesteps - 2 are added.
-#' @return ggplot2 plot
+#' @return grob of 3 ggplot2 plots.
 #' @export
 #'
 #' @examples

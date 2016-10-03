@@ -26,7 +26,7 @@ value is 2 (default). By default the start and end of the simulation is shown. I
 timesteps > 2 equally spaces timesteps - 2 are added.}
 }
 \value{
-ggplot2 plot
+grob of 3 ggplot2 plots.
 }
 \description{
 Visualise the spatial distribution per species and stanza combination.
@@ -49,5 +49,8 @@ bgm_as_df <- convert_bgm(dir, bgm = "NorthSea.bgm")
 
 grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
 gridExtra::grid.arrange(grobs[[3]])
+
+grobs <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Crangon", timesteps = 3)
+gridExtra::grid.arrange(grobs[[1]])
 }
 
