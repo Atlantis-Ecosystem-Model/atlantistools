@@ -2,17 +2,14 @@
 #'
 #' Visualise diet proportions form predator and prey perspective. The upper panel
 #' plot shows the predator perspective while the lower panel plot shows the prey perspective
-#' for a given group. Please note that this function only works properly with models
+#' for a given group. Please note that this function only works with models
 #' based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to get an indication
 #' of the feeding interactions.
 #'
-#' @param preddata Diet proportion of prey species in the stomach of a specific
-#' predator/ageclass combination per time. This dataframe
-#' should be generated with \code{\link{load_dietcheck}} or read in from a preprocessd
-#' *.rda generated with \code{\link{preprocess}}.
-#' @param preydata Proportion of consumed biomass of a preygroup by different predator/ageclass
-#' combinations. This dataframe should be generated with \code{\link{calculate_consumed_biomass}} with
-#' \code{plot_diet} set to \code{TRUE}.
+#' @param bio_consumed Consumed biomass of prey groups by predatorgroup and agecl in tonnes
+#' for each timestep and polygon. Dataframe with columns 'pred', 'agecl', 'polygon', 'time', 'prey'.
+#' Consumed biomass in [t] is stored in column 'atoutput'. Should be generated with
+#' \code{link{calculate_consumed_biomass}}.
 #' @param species Character string giving the acronyms of the species you aim to plot. Default is
 #' \code{NULL} resulting in all available species being ploted.
 #' @param wrap_col Character specifying the column of the dataframe to be used as multipanel plot.
@@ -26,21 +23,36 @@
 #' @family plot functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-# df_pred <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt", report = FALSE, fgs = "SETasGroupsDem_NoCep.csv")
-# df_prey <- biomass_flow(dir = d,
-#                         nc_prod = "outputSETASPROD.nc",
-#                         nc_gen <- "outputSETAS.nc",
-#                         dietcheck = "outputSETASDietCheck.txt",
-#                         prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-#                         prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-#                         bps = load_bps(dir = d, init = "INIT_VMPA_Jan2015.nc", fgs = "SETasGroupsDem_NoCep.csv"),
-#                         fgs = "SETasGroupsDem_NoCep.csv",
-#                         bboxes = get_boundary(load_box(dir = d, bgm = "VMPA_setas.bgm")),
-#                         plot_diet = TRUE)
-#
-# plots <- plot_diet(preddata = df_pred, preydata = df_prey, wrap_col = "agecl")
-# gridExtra::grid.arrange(plots[[1]])
+#' #' \dontrun{
+#' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
+#' nc_prod <- "outputNorthSeaPROD.nc"
+#' nc_gen <- "outputNorthSea.nc"
+#' dietcheck <- "outputNorthSeaDietCheck.txt"
+#' prm_biol <- "NorthSea_biol_fishing.prm"
+#' prm_run <- "NorthSea_run_fishing_F.prm"
+#' fgs <- "functionalGroups.csv"
+#' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#'
+#' bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol,
+#'                                            prm_run, bps, fgs, bboxes)
+#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#'
+#' nc_prod <- "outputSETASPROD.nc"
+#' nc_gen <- "outputSETAS.nc"
+#' dietcheck <- "outputSETASDietCheck.txt"
+#' prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+#' prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+#' bps <- load_bps(dir = dir, init = "INIT_VMPA_Jan2015.nc", fgs = "SETasGroupsDem_NoCep.csv")
+#' fgs <- "SETasGroupsDem_NoCep.csv"
+#' bboxes <- get_boundary(load_box(dir = dir, bgm = "VMPA_setas.bgm")
+#'
+#' bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol,
+#'                                            prm_run, bps, fgs, bboxes)
+#'
+#' plots <- plot_diet(bio_consumed, wrap_col = "agecl")
+#' gridExtra::grid.arrange(plots[[1]])
+#'}
 
 # dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
 # nc_prod <- "outputNorthSeaPROD.nc"
@@ -60,9 +72,14 @@
 # gridExtra::grid.arrange(plots[[2]])
 # gridExtra::grid.arrange(plots[[3]])
 
-plot_diet <- function(preddata, preydata, species = NULL, wrap_col, combine_thresh = 7) {
-  check_df_names(data = preddata, expect = c("time", "atoutput", "prey", "pred", "agecl"))
-  check_df_names(data = preydata, expect = c("time", "atoutput", "prey", "pred", "agecl"))
+plot_diet <- function(bio_consumed, species = NULL, wrap_col, combine_thresh = 7) {
+  # Check input dataframe structure.
+  check_df_names(data = bio_consumed, expect = c("pred", "agecl", "polygon", "time", "prey", "atoutput"))
+
+  # Calculate % diet dirstribution from pred and prey perspective.
+  agg_bio <- agg_data(bio_consumed, groups = c("time", "pred", "agecl", "prey"), fun = sum)
+  preddata <- agg_perc(agg_bio, groups = c("time", "pred", "agecl"))
+  preydata <- agg_perc(agg_bio, groups = c("time", "prey", "agecl"))
 
   # Combine groups for both dataframes!
   pred_comb <- combine_groups(preddata, group_col = "prey", groups = c("time", "pred", "agecl"), combine_thresh = combine_thresh)
