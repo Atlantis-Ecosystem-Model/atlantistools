@@ -87,3 +87,18 @@ bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
 grob <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Cephalopod", timesteps = 3)
 
 
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+
+nc_prod <- "outputSETASPROD.nc"
+nc_gen <- "outputSETAS.nc"
+dietcheck <- "outputSETASDietCheck.txt"
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+bps <- load_bps(dir = dir, init = "INIT_VMPA_Jan2015.nc", fgs = "SETasGroupsDem_NoCep.csv")
+fgs <- "SETasGroupsDem_NoCep.csv"
+bboxes <- get_boundary(load_box(dir = dir, bgm = "VMPA_setas.bgm")
+
+bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol,
+                                           prm_run, bps, fgs, bboxes)
+
+plots <- plot_diet(bio_consumed, wrap_col = "agecl")
