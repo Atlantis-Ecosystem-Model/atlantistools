@@ -44,10 +44,6 @@ pset <- suppressMessages(preprocess(dir = d, nc_gen = "outputSETAS.nc", nc_prod 
                                     fgs = "SETasGroups.csv", bboxes = get_boundary(load_box(dir = d, bgm = "VMPA_setas.bgm")),
                                     save_to_disc = FALSE, check_acronyms = FALSE, report = FALSE))
 
-test_that("test output numbers", {
-  expect_equal(length(preprocess_setas), 16)
-})
-
 
 # context("sc_init applied to dummy dataframes")
 
