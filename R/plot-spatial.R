@@ -36,7 +36,7 @@
 #'
 #' \dontrun{
 #' grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
-#' gridExtra::grid.arrange(grobs[[3]])
+#' gridExtra::grid.arrange(grobs[[1]])
 #' }
 #'
 #' grobs <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Crangon", timesteps = 3)
@@ -46,6 +46,10 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
   # Check input dataframe!
   check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
   check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
+
+  # Create dataframe with all polygon + layer combinations.
+  full_grid <- expand.grid(polygon = unique(bgm_as_df$polygon), layer = min(bio_spatial$layer):max(bio_spatial$layer))
+  full_grid <- dplyr::left_join(full_grid, bgm_as_df)
 
   # Filter by species if select_species not NULL!
   # Warning: Will change input parameter which makes it harder to debug...
@@ -68,9 +72,9 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
 
   # Plot spatial distribution per species, species_stanza, timesteps and layer!
   # Use layer (y-direction) and timestep (x-direction) to facet_grid
-  plot_spatial_species <- function(data) {
+  plot_spatial_species <- function(data, full_grid) {
     # add time to polygon layout
-    bgrd <- merge(bgm_as_df, unique(dplyr::select_(data, .dots = c("time", "layer"))))
+    bgrd <- merge(full_grid, unique(dplyr::select_(data, .dots = c("time"))))
     data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~atoutput, group = ~factor(polygon))) +
       ggplot2::geom_polygon(colour = "black") +
@@ -110,7 +114,7 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
   # 2. Spatial distribution per predator and stanza per time, layer, polygon
   dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
     split_dfs(cols = c("species", "species_stanza"))
-  plots_spatial <- lapply(dfs_spatial, plot_spatial_species)
+  plots_spatial <- lapply(dfs_spatial, plot_spatial_species, full_grid = full_grid)
 
   # 3. Biomasstimeseries per box
   dfs_ts <- split_dfs(ts_bio, cols = c("species", "species_stanza"))
