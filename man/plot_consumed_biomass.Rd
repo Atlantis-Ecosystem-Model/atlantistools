@@ -41,7 +41,7 @@ bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_
                                            prm_run, bps, fgs, bboxes)
 
 select_time <- NULL
-show <- 0.95
+show <- 0.99
 }
 }
 
