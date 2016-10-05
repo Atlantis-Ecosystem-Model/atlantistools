@@ -15,42 +15,43 @@ Simulation time steps are converted to time in years based on the output timeste
 `calculate` or `load` function to guarantee the same structure in all dataframes.
 
 * `calculate_consumed_biomass` Calculate the consumed biomass in tonnes of every preygroup
-group by a predator/predatorageclass combination for each timestep and polygon. Consumption data is extracted from output[...]PROD.nc. Age based groups are stored as "Eat_" non age based groups as "Grazing_". Units are mg N m^-3 d^-1.
+by a predator/predatorageclass combination for each timestep and polygon. Consumption data is extracted from output[...]PROD.nc. Age based groups are stored as "Eat_" non age based groups as "Grazing_". Units are consumed mass in mg N m^-3 d^-1.
 The consumed biomass is scaled by the boxvolume and transformed to tonnes.
-Diet constribution data is extracted from DietCheck.txt. Currently this only works
-for models based on the trunk code. Units are % diet contribution. To calculate the consumed biomass by preytype
+Diet contribution data is extracted from DietCheck.txt. Currently this only works
+for models based on the trunk code. Units are % diet contribution. To calculate the consumed biomass for each preytype
 the total consumed biomass (per predator/ageclass/time/polygon) is multiplied with the dietcontribution
 of that prey to the predator.
 
-* `calculate_spatial_overlap` The spatial overlap between predator and prey groups is calculated as
+* `calculate_spatial_overlap` The spatial overlap between predator and prey groups is calculated based on the concept of
 Schoener's similarity index ranging from 1 (perfect overlap) to 0 (zero overlap). 
 The function returns 2 dataframes. Firstly the Schoener index per predator/ageclass/prey combination.
 Secondly the index is calculated as a weighted mean per predator/predatorageclass with the prey availabilities 
-as weights. The second version can be used to test the overlap of the predator with the most important
+as weights. The second version can be used to test the overlap of the predator with an emphasis on the most important
 prey groups. In the current version all potential polygons and layers (islands/boundary boxes and non-existent 
-layers are excluded) are used to calculate the spatial overlap. 
-Even if a predator is never present in a specific polygon and layer. This may result in very low overlap
+layers are excluded) are used to calculate the spatial overlap even if a predator is never present in a specific polygon and layer. This may result in very low overlap
 indices in case your species have a narrow spatial distribution.
 
 * `check_growth` helps to track changes in group- and age specific individual weight over time.
 You can either track the maximum relative change in individual weight over the whole simulation
 period or the relative change within each year in case you have multiple outputs per year. 
-This will allow you to easily track unrealistically high changes throughout the simulation.
+This will allow you to easily track unrealistically high changes in individual weight throughout the simulation.
 
-* `plot_diet` updated the way ``plot_diet` works. The new version of `plot_diet` only works with trunk models. Please use `plot_diet_bec_dev` for 'bec_dev' models. `plot_diet()` now displays the realised diet contribution (both per predator and
-prey perspective) based an the amount of consumed biomas. Please note, `plot_diet_bec_dev` does not work with DietCheck.txt anymore. Please use SpecPredMort.txt instead. It should be noted that the resulting plot only gives an indication of the 
+* `plot_diet` I updated the way `plot_diet` works. The new version of `plot_diet` only works with trunk models. Please use `plot_diet_bec_dev` for models based on the bec_dev code version. `plot_diet()` now displays the realised diet contribution (both per predator and
+prey perspective) based an the amount of consumed biomas. 
+
+* Please note, `plot_diet_bec_dev` does not work with DietCheck.txt anymore. Please use SpecPredMort.txt instead. It should be noted that the resulting plot only gives an indication of the 
 realisd diets with bec_dev models.
 
 * `sc_init` sanity check for your initial conditions file. Given the prey densities, C and MUM values 
 in your initial conditions file the required growth per group and ageclass (which is the growth needed to 
 grow from ageclass i to ageclass i+1) is compared with the realised growth given your initial conditions file.
 
-* `plot_sc_init` This function is tightly linked to `sc_init`. Based on the calculations in `sc_init` you cann pass
-multiplication factors for your initial MUM and C and visualise the effect on the relative growth 
+* `plot_sc_init` This function is tightly linked to `sc_init`. Based on the calculations in `sc_init` you can pass
+multiplication factors for your initial MUM and C values to visualise the effect on the relative growth 
 (realised growth/required growth). This visualisation can be used to give you an indication of the MUM/C/Avail
-parameterspace prior to your simulation. Please keep in mind that growth in this scenario is highly simplified and
+parameterspace prior to your simulation. Please keep in mind that growth is highly simplified and
 may not represent the actual growth in your soimulation due to the absence of major ecological processes
-(e.g. rugosity, reproductioncosts, refuge, ...). Nonetheless, this is a great starting point.
+(e.g. rugosity, reproductioncosts, refuge, ...).
 
 * `plot_consumed_biomass` In addition to `diet_plot` you can use this function to visualise 
 the group specific biomass flow for the whole system at any timestep of your simulation with
@@ -58,6 +59,7 @@ a circle-flow-diagram (These things just look awesome). Please note, this functi
 in early development.
 
 * `plot_spatial_overlap` Visualise the Schoener index calculated with `calculate_spatial_overlap`.
+Please note, this function is still in early development.
 
 * `combine_ages` Transform an ageclass based dataset to a stanza based dataset using the age_mat
 parameters in your biol.prm file.
@@ -65,15 +67,16 @@ parameters in your biol.prm file.
 * `prm_to_df` Extract parameters from your biological parameter file (e.g. MUM, C, KWRR, KWSR, age_mat ...)
 and convert the output to a tidy dataframe. Please note, there are two versions of this function available.
 Like the `extract_prm` functions one function is used to convert non ageclass specific parameters (these
-are parameters which have 1 value per parameter) `prm_to_df` and ageclass specific ones (these parameters
-are ususally stored row following the flag in the prm file and multiple values are stored per parameter. E.g. MUM,
+are parameters which have 1 value per parameter. Value and parameter flag are stored in the same line the prm file) 
+`prm_to_df` and ageclass specific ones (these parameters
+are ususally stored in the row following the flag in the prm file and multiple values are stored per parameter. E.g. MUM,
 C, VERTday) `prm_to_df_ages`. This can be very helpful to either add additional information to any kind of
 tidy dataframe in atlantistools. For example adding age at maturity to an ageclass based dataframe.
-In addition this might be helpful to extract parameter values from a dataframe and distribute them to collegues
-in a unified format (E.g. to compare parameters among different models).
+In addition this might be helpful to extract parameter values from any model and distribute them among collegues
+in a unified format (E.g. to compare parameters).
 
 * `load_init` Read in information from your initial conditions file (e.g. StructN, ResN, Nums, N). Based on the
-different format of the variables currently there are 3 functions available:
+different format of the variables there are 3 functions available currently:
 1. `load_init_age` to read in age-specific data like ResN, StructN, Nums.
 2. `load_init_nonage` to read in N.
 3. `load_init_physics` to read in physical parameters like Salt, Volume, Temp, NH3 and so on.
