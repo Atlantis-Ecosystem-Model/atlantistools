@@ -5,15 +5,37 @@ output: html_document
 
 # atlantistools 0.3.2.9000
 ## New features
-* `check_growth()` helps to track changes in group- and age specific individual weight over time.
+* `calculate_biomass_spatial` Calculate the total biomass in tonnes for every group and ageclass combination
+per time, polygon and layer. Data is read in from 'output[...].nc' using the `load_nc` function. 
+Biomass for age based groups is calculated as (StructN [mgN] + ResN [mgN]) * Numbers [individuals]. 
+Biomass for non age based groups is calculated as N [mgN] * volume [m^3] (sediment-dz [m] / volume [m^3] for epibenthic groups).
+mgN is converted to tonnes based on the stettings in the biol.prm file. Simulation time steps
+are converted to time in years based on output timesteps given in run.prm. Group names are unified to
+the column 'LongName' in the functionalGroups.csv. All these transformations are applied in every
+`calculate` or `load` function to guarantee the same structure in all dataframes.
+* `calculate_consumed_biomass` Calculate the consumed biomass in tonnes of every preygroup
+group by a predator/predatorageclass combination for each timestep and polygon. Consumption data is extracted from output[...]PROD.nc. Age based groups are stored as "Eat_" non age based groups as "Grazing_". Units are mg N m^-3 d^-1.
+The consumed biomass is scaled by the boxvolume and transformed to tonnes.
+Diet constribution data is extracted from DietCheck.txt. Currently this only works
+for models based on the trunk code. Units are % diet contribution. To calculate the consumed biomass by preytype
+the total consumed biomass (per predator/ageclass/time/polygon) is multiplied with the dietcontribution
+of that prey to the predator.
+* `calculate_spatial_overlap` The spatial overlap between predator and prey groups is calculated as
+Schoener's similarity index ranging from 1 (perfect overlap) to 0 (zero overlap). 
+The function returns 2 dataframes. Firstly the Schoener index per predator/ageclass/prey combination.
+Secondly
+Dataframe in first listentry gives pred, pred agecl, prey, preyageclass
+#' specific index. Dataframe in second listentry gives index per pred, pred agecl. Si is calculated
+#' as weighted mean with the availabilities as weights.
+
+
+
+* `check_growth` helps to track changes in group- and age specific individual weight over time.
 You can either track the maximum relative change in individual weight over the whole simulation
-period or the relative change within each year (in case you have mukltiple outputs per year. Other
-wise the result will be 0 by default). This will allow you to easily track if individual weight is 
-consistent with provided input weights throughout the simulation.
-* `plot_diet()` new version of `plot_diet` only works with trunk models. Please use `plot_diet_bec_dev`
-for bec_dev models. `plot_diet()` now displays the realised diet contribution (both per predator and
-prey perspective). Please note, `plot_diet_bec_dev` does not work with DietCheck.txt anymore. Please
-use SpecPredMort.txt instead. It should be noted that the resulting plot only gives an indication of the 
+period or the relative change within each year in case you have multiple outputs per year. 
+This will allow you to easily track unrealistically high changes throughout the simulation.
+* `plot_diet` updated the way ``plot_diet` works. The new version of `plot_diet` only works with trunk models. Please use `plot_diet_bec_dev` for 'bec_dev' models. `plot_diet()` now displays the realised diet contribution (both per predator and
+prey perspective) based an the amount of consumed biomas. Please note, `plot_diet_bec_dev` does not work with DietCheck.txt anymore. Please use SpecPredMort.txt instead. It should be noted that the resulting plot only gives an indication of the 
 realisd diets with bec_dev models.
 * `biomass_flow` calculate the consumed biomass in [t] per timestep of prey species j by predator i with 
 ageclass k. These values are used in `plot_diet()` to visualise the actual realised diet within the model.
