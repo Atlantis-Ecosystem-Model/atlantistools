@@ -23,7 +23,7 @@
 #' @family plot functions
 #'
 #' @examples
-#' #' \dontrun{
+#' \dontrun{
 #' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
 #' nc_prod <- "outputNorthSeaPROD.nc"
 #' nc_gen <- "outputNorthSea.nc"
