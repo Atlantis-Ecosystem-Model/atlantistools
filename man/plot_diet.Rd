@@ -24,7 +24,7 @@ Currently only "agecl" is supported.}
 colors are used in the plots.}
 }
 \value{
-List of ggplot2 objects.
+List of grobs composed of ggplot2 objects.
 }
 \description{
 Visualise diet proportions form predator and prey perspective. The upper panel
@@ -34,8 +34,8 @@ based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to g
 of the feeding interactions.
 }
 \examples{
-#' \dontrun{
 dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
+\dontrun{
 nc_prod <- "outputNorthSeaPROD.nc"
 nc_gen <- "outputNorthSea.nc"
 dietcheck <- "outputNorthSeaDietCheck.txt"

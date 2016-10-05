@@ -18,13 +18,13 @@
 #' 20 different prey items. If you only want to show the 3 most important prey items set
 #' \code{combine_thresh} to 3. As rule of thumb values < 10 are useful otherwise to many
 #' colors are used in the plots.
-#' @return List of ggplot2 objects.
+#' @return List of grobs composed of ggplot2 objects.
 #' @export
 #' @family plot functions
 #'
 #' @examples
-#' \dontrun{
 #' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
+#' \dontrun{
 #' nc_prod <- "outputNorthSeaPROD.nc"
 #' nc_gen <- "outputNorthSea.nc"
 #' dietcheck <- "outputNorthSeaDietCheck.txt"
