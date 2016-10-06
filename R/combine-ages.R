@@ -41,7 +41,7 @@ combine_ages <- function(data, grp_col, agemat, value_col = "atoutput") {
 
   # NAs remain NAs!
   data_stanza$stanza <- ifelse(data_stanza$agecl < data_stanza$age_mat, 1, 2)
-  data_stanza$stanza[is.na(data_stanza$stanza)] <- 2 # Not sure if this is correct!
+  data_stanza$stanza[is.na(data_stanza$stanza)] <- 1 # Not sure if this is correct!
 
   result <- data_stanza %>%
     agg_data(col = value_col, groups = names(.)[!names(.) %in% c(value_col, "agecl")], out = value_col, fun = sum)
