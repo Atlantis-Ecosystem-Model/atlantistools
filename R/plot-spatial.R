@@ -47,6 +47,9 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
   check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
   check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
 
+  # Flip layers in bio_spatial!
+  bio_spatial <- flip_layers(bio_spatial)
+
   # Create dataframe with all polygon + layer combinations.
   full_grid <- expand.grid(polygon = unique(bgm_as_df$polygon), layer = min(bio_spatial$layer):max(bio_spatial$layer))
   full_grid <- dplyr::left_join(full_grid, bgm_as_df)
