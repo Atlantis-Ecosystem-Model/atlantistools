@@ -15,8 +15,7 @@ plots <- plot_diet_bec_dev(preprocess_setas$diet_specmort, wrap_col = "agecl")
 plot <- plot_species(preprocess_setas, species = "Shallow piscivorous fish")
 
 
-# context("calculate consumed biomass")
-
+# calculate consumed biomass  ---------------------------------------------------------------------
 dir <- system.file("extdata", "gns", package = "atlantistools")
 nc_prod <- "outputNorthSeaPROD.nc"
 nc_gen <- "outputNorthSea.nc"
@@ -31,8 +30,7 @@ df <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck,
                                  prm_biol, prm_run, bps, fgs, bboxes)
 
 
-# context("preprocess test data structure and format")
-
+# preprocess test data structure and format  ------------------------------------------------------
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 
 pset <- suppressMessages(preprocess(dir = d, nc_gen = "outputSETAS.nc", nc_prod = "outputSETASPROD.nc",
@@ -45,8 +43,7 @@ pset <- suppressMessages(preprocess(dir = d, nc_gen = "outputSETAS.nc", nc_prod 
                                     save_to_disc = FALSE, check_acronyms = FALSE, report = FALSE))
 
 
-# context("sc_init applied to dummy dataframes")
-
+# sc_init applied to dummy dataframes  ------------------------------------------------------------
 dir <- system.file("extdata", "gns", package = "atlantistools")
 fgs <- "functionalGroups.csv"
 init <- "init_simple_NorthSea.nc"
@@ -65,9 +62,7 @@ data2 <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "Cod", save_to_disc = 
 p <- plot_sc_init(df = data2, mult_mum, mult_c)
 
 
-# context("plot_spatial")
-
-
+# plot_spatial  -----------------------------------------------------------------------------------
 dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 nc_gen <- "outputSETAS.nc"
 prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
@@ -87,6 +82,7 @@ bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
 grob <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Cephalopod", timesteps = 3)
 
 
+# plot_diet  --------------------------------------------------------------------------------------
 dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
 nc_prod <- "outputSETASPROD.nc"
@@ -101,3 +97,22 @@ bboxes <- get_boundary(load_box(dir = dir, bgm = "VMPA_setas.bgm"))
 bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes)
 
 plots <- plot_diet(bio_consumed, wrap_col = "agecl")
+
+# plot_calibrate  ---------------------------------------------------------------------------------
+plot_calibrate(preprocess_setas$structn_age)
+
+# plot_struct -------------------------------------------------------------------------------------
+plot_struct(preprocess_setas$biomass_age)
+
+# plot_bench --------------------------------------------------------------------------------------
+data_comp <- preprocess_setas$biomass
+data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2)
+data_comp$atoutput <- NULL
+data_comp$model <- "test_model"
+plot_bench(data = preprocess_setas$biomass, ex_data = data_comp)
+
+# plot_rec ----------------------------------------------------------------------------------------
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
+plot_rec(preprocess_setas$ssb_rec, ex_data)
+
