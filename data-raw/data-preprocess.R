@@ -81,10 +81,16 @@ ref_resn <- load_nc(dir = d,
 
 devtools::use_data(ref_resn, overwrite = TRUE)
 
-ref_vol <- load_nc_physics(dir = d, nc = "outputSETAS.nc", select_physics = c("volume", "dz"),
+ref_vol_dz <- load_nc_physics(dir = d, nc = "outputSETAS.nc", select_physics = c("volume", "dz"),
+                           prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", bboxes = boundary_boxes, aggregate_layers = F)
+
+devtools::use_data(ref_vol_dz, overwrite = TRUE)
+
+ref_vol <- load_nc_physics(dir = d, nc = "outputSETAS.nc", select_physics = "volume",
                            prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", bboxes = boundary_boxes, aggregate_layers = F)
 
 devtools::use_data(ref_vol, overwrite = TRUE)
+
 
 preprocess_setas <- preprocess(dir = d,
    nc_gen = "outputSETAS.nc",
