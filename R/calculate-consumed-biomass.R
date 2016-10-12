@@ -10,54 +10,66 @@
 #' - Calculate consumed biomass as Eat (or Grazing) * boxvolume per time, pred, agecl, box.
 #' - Convert to biomass in [t].
 #' - Combine with diet contributions and calculate consumed biomass of prey species.
-#' @inheritParams preprocess
+#' @param eat Dataframe with information about consumption for age-based groups.
+#' Should be generated with \code{\link{load_nc}}.
+#' @param grazing Dataframe with information about consumption for non-age-based groups.
+#' Should be generated with \code{\link{load_nc}}.
+#' @param dm Dataframe with information about diet contributions per predator.
+#' Should be generated with \code{\link{load_dietcheck}} using \code{convert_names = TRUE}.
+#' @param vol Dataframe with information about volume per polygon and layer.
+#' Should be generated with \code{\link{load_nc_physics}}.
+#' @param bio_conv Numeric value to transform weight in mg N to tonnes.
+#' Should be generated with \code{\link{get_conv_mgnbiot}}.
 #' @return Dataframe with columns 'pred', 'agecl', 'polygon', 'time', 'prey'.
 #' Consumed biomass in [t] is stored in column 'atoutput'.
 
 #' @export
 #' @examples
-#' dir <- system.file("extdata", "gns", package = "atlantistools")
-#' nc_prod <- "outputNorthSeaPROD.nc"
-#' nc_gen <- "outputNorthSea.nc"
-#' dietcheck <- "outputNorthSeaDietCheck.txt"
-#' prm_biol <- "NorthSea_biol_fishing.prm"
-#' prm_run <- "NorthSea_run_fishing_F.prm"
-#' fgs <- "functionalGroups.csv"
-#' bps <- load_bps(dir = dir, init = "init_simple_NorthSea.nc", fgs = fgs)
-#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+#' # 1. Using preprocessed datasets.
+#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
 #'
-#' df <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck,
-#'                                  prm_biol, prm_run, bps, fgs, bboxes)
+#' bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
+#'
+#' df <- calculate_consumed_biomass(eat = ref_eat, grazing = ref_grazing, dm = ref_dm,
+#'                                  vol = ref_vol, bio_conv = bio_conv)
+#'
+#' # 2. Read in dataframes from existing Atlantis simulation.
+#' bboxes <- get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
+#' nc_gen <- "outputSETAS.nc"
+#' nc_prod <- "outputSETASPROD.nc"
+#' prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+#' fgs <- "SETasGroupsDem_NoCep.csv"
+#' bps <- load_bps(dir, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
+#'
+#' groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
+#' groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
+#'
+#' df_eat <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs,
+#'                select_groups = groups_age, select_variable = "Eat",
+#'                prm_run = prm_run, bboxes = bboxes)
+#' df_grz <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs,
+#'                select_groups = groups_rest, select_variable = "Grazing",
+#'                prm_run = prm_run, bboxes = bboxes)
+#' df_dm <- load_dietcheck(dir = dir, dietcheck = "outputSETASDietCheck.txt",
+#'                         fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
+#' vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume",
+#'                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+#'
+#' df <- calculate_consumed_biomass(eat = df_eat, grazing = df_grz, dm = df_dm,
+#'                                  vol = vol, bio_conv = bio_conv)
 
-calculate_consumed_biomass <- function(dir = getwd(), nc_prod, nc_gen, dietcheck, prm_biol, prm_run, bps, fgs, bboxes) {
-  # Setup group variables
-  fgs_data <- load_fgs(dir = dir, fgs = fgs)
-
-  groups <- get_groups(dir = dir, fgs = fgs)
-  groups_age <- get_age_groups(dir = dir, fgs = fgs)
-  groups_rest <- groups[!is.element(groups, groups_age)]
-
-  # Extract data
-  vars <- list("Eat", "Grazing")
-  grps <- list(groups_age, groups_rest)
-
-  data_eat <- Map(load_nc, select_variable = vars, select_groups = grps,
-                  MoreArgs = list(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
-  data_eat <- do.call(rbind, data_eat)
-
-  vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume", prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
-
-  bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
-
-  data_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck, fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
+calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
+  # Combine grazing and eat dataframes!
+  data_eat <- dplyr::bind_rows(eat, grazing)
 
   # Check DietCheck.txt
-  check <- agg_data(data_dm, groups = c("time", "pred", "agecl"), fun = sum)
+  check <- agg_data(dm, groups = c("time", "pred", "agecl"), fun = sum)
   if (!all(abs(check$atoutput -1) < 0.001)) stop("DietCheck.txt does not sum to 1 for all predators.")
 
   # Check timesteps!
   ts_eat <- sort(unique(data_eat$time))
-  ts_dm <- sort(unique(data_dm$time))
+  ts_dm <- sort(unique(dm$time))
   matching <- sum(ts_eat %in% ts_dm) / length(ts_eat)
   message(paste0(100 * round(matching, digits = 2), "% matching timesteps between PROD.nc and DietCheck.txt"))
 
@@ -69,7 +81,7 @@ calculate_consumed_biomass <- function(dir = getwd(), nc_prod, nc_gen, dietcheck
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput * vol), "atoutput")) %>%
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput * bio_conv), "atoutput")) %>%
   # Step2: Combine with diet contribution. We need a full join to make sure no data is lost!
-    dplyr::full_join(data_dm, by = c("species" = "pred", "time", "agecl")) %>%
+    dplyr::full_join(dm, by = c("species" = "pred", "time", "agecl")) %>%
   # Restrict timesteps to netcdf data! Last timestep is weird in Dietcheck.txt.
     dplyr::filter_(~time %in% ts_eat) %>%
     dplyr::rename_(.dots = c("pred" = "species"))

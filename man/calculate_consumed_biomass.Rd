@@ -4,52 +4,23 @@
 \alias{calculate_consumed_biomass}
 \title{Calculate the consumed biomass in [t] of prey j by predator i.}
 \usage{
-calculate_consumed_biomass(dir = getwd(), nc_prod, nc_gen, dietcheck,
-  prm_biol, prm_run, bps, fgs, bboxes)
+calculate_consumed_biomass(eat, grazing, dm, vol, bio_conv)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{eat}{Dataframe with information about consumption for age-based groups.
+Should be generated with \code{\link{load_nc}}.}
 
-\item{nc_prod}{Character string giving the filename of the productivity netcdf
-file. Usually "output[...]PROD.nc". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc_prod. In addition set dir to 'NULL' in this
-case.}
+\item{grazing}{Dataframe with information about consumption for non-age-based groups.
+Should be generated with \code{\link{load_nc}}.}
 
-\item{nc_gen}{Character string giving the filename of the general netcdf
-file Usually "output[...].nc". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc_gen. In addition set dir to 'NULL' in this
-case.}
+\item{dm}{Dataframe with information about diet contributions per predator.
+Should be generated with \code{\link{load_dietcheck}} using \code{convert_names = TRUE}.}
 
-\item{dietcheck}{Character string of the DietCheck.txt file. Usually
-'output[...]DietCheck.txt'. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as dietcheck. In addition set dir to 'NULL' in this
-case.}
+\item{vol}{Dataframe with information about volume per polygon and layer.
+Should be generated with \code{\link{load_nc_physics}}.}
 
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{bps}{Vector of character strings giving the complete list of epibenthic
-functional groups (Only present in the sediment layer). The names have to match
-the column 'Name' in the 'functionalGroups.csv' file.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
-
-\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+\item{bio_conv}{Numeric value to transform weight in mg N to tonnes.
+Should be generated with \code{\link{get_conv_mgnbiot}}.}
 }
 \value{
 Dataframe with columns 'pred', 'agecl', 'polygon', 'time', 'prey'.
@@ -68,17 +39,38 @@ The consumed biomass is calculated as follows:
 - Combine with diet contributions and calculate consumed biomass of prey species.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-nc_prod <- "outputNorthSeaPROD.nc"
-nc_gen <- "outputNorthSea.nc"
-dietcheck <- "outputNorthSeaDietCheck.txt"
-prm_biol <- "NorthSea_biol_fishing.prm"
-prm_run <- "NorthSea_run_fishing_F.prm"
-fgs <- "functionalGroups.csv"
-bps <- load_bps(dir = dir, init = "init_simple_NorthSea.nc", fgs = fgs)
-bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+# 1. Using preprocessed datasets.
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
 
-df <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck,
-                                 prm_biol, prm_run, bps, fgs, bboxes)
+bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
+
+df <- calculate_consumed_biomass(eat = ref_eat, grazing = ref_grazing, dm = ref_dm,
+                                 vol = ref_vol, bio_conv = bio_conv)
+
+# 2. Read in dataframes from existing Atlantis simulation.
+bboxes <- get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
+nc_gen <- "outputSETAS.nc"
+nc_prod <- "outputSETASPROD.nc"
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
+bps <- load_bps(dir, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
+
+groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
+groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
+
+df_eat <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs,
+               select_groups = groups_age, select_variable = "Eat",
+               prm_run = prm_run, bboxes = bboxes)
+df_grz <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs,
+               select_groups = groups_rest, select_variable = "Grazing",
+               prm_run = prm_run, bboxes = bboxes)
+df_dm <- load_dietcheck(dir = dir, dietcheck = "outputSETASDietCheck.txt",
+                        fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
+vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume",
+                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+
+df <- calculate_consumed_biomass(eat = df_eat, grazing = df_grz, dm = df_dm,
+                                 vol = vol, bio_conv = bio_conv)
 }
 
