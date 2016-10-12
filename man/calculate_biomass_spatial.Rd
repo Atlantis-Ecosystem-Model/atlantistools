@@ -4,40 +4,31 @@
 \alias{calculate_biomass_spatial}
 \title{Calculate spatiallly explicit biomass (in [t]) for each group and ageclass per timestep.}
 \usage{
-calculate_biomass_spatial(dir = getwd(), nc_gen, prm_biol, prm_run, bps, fgs,
-  bboxes)
+calculate_biomass_spatial(nums, sn, rn, n, vol, bio_conv, bps)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{nums}{Dataframe with information about numbers for age-based groups.
+Should be generated with \code{\link{load_nc}}.}
 
-\item{nc_gen}{Character string giving the filename of the general netcdf
-file Usually "output[...].nc". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc_gen. In addition set dir to 'NULL' in this
-case.}
+\item{sn}{Dataframe with information about structural nitrogen for age-based groups.
+Should be generated with \code{\link{load_nc}}.}
 
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{rn}{Dataframe with information about reserve nitrogen for age-based groups.
+Should be generated with \code{\link{load_nc}}.}
 
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{n}{Dataframe with information about nitrogen for non-ge-based groups.
+Should be generated with \code{\link{load_nc}}.}
+
+\item{vol}{Dataframe with information about volume and layer height per polygon.
+Should be generated with \code{\link{load_nc_physics}}.}
+
+\item{bio_conv}{Numeric value to transform weight in mg N to tonnes.
+Should be generated with \code{\link{get_conv_mgnbiot}}.}
 
 \item{bps}{Vector of character strings giving the complete list of epibenthic
 functional groups (Only present in the sediment layer). The names have to match
-the column 'Name' in the 'functionalGroups.csv' file.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
-
-\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+the column 'Name' in the 'functionalGroups.csv' file.
+Should be generated with \code{\link{load_bps}}.}
 }
 \value{
 Dataframe with columns 'species', 'agecl', 'polygon', 'layer', 'time'.
@@ -52,14 +43,50 @@ mgN is converted to t based on the stettings in the biol.prm file. Simulation ti
 are converted to time in years based on output timesteps given in run.prm.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-nc_gen <- "outputNorthSea.nc"
-prm_biol <- "NorthSea_biol_fishing.prm"
-prm_run = "NorthSea_run_fishing_F.prm"
-bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
-fgs = "functionalGroups.csv"
-bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+# 1. Using preprocessed datasets.
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+bboxes <- get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
+nc_gen <- "outputSETAS.nc"
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
+bps <- load_bps(dir, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
 
-df <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
+bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
+vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
+                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+
+df <- calculate_biomass_spatial(nums = ref_nums, sn = ref_structn, rn = ref_resn, n = ref_n,
+                                vol = vol, bio_conv = bio_conv, bps = bps)
+
+# 2. Read in dataframes from existing Atlantis simulation.
+groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
+groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
+
+nums <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
+                select_groups = groups_age, select_variable = "Nums",
+                prm_run = prm_run, bboxes = bboxes)
+sn <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
+              select_groups = groups_age, select_variable = "StructN",
+              prm_run = prm_run, bboxes = bboxes)
+rn <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
+              select_groups = groups_age, select_variable = "ResN",
+              prm_run = prm_run, bboxes = bboxes)
+n <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
+             select_groups = groups_rest, select_variable = "N",
+             prm_run = prm_run, bboxes = bboxes)
+
+df <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol = vol,
+                                bio_conv = bio_conv, bps = bps)
+
+# 3. Read in dataframes from existing Atlantis simulation with Map().
+vars <- list("Nums", "StructN", "ResN", "N")
+grps <- list(groups_age, groups_age, groups_age, groups_rest)
+dfs <- Map(load_nc, select_variable = vars, select_groups = grps,
+           MoreArgs = list(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
+                           prm_run = prm_run, bboxes = bboxes))
+
+df <- calculate_biomass_spatial(nums = dfs[[1]], sn = dfs[[2]], rn = dfs[[3]], n = dfs[[4]],
+                                vol = vol, bio_conv = bio_conv, bps = bps)
 }
 
