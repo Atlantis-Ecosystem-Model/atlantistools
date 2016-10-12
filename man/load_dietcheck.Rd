@@ -4,7 +4,8 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, report = TRUE, version_flag = 1)
+load_dietcheck(dir = getwd(), dietcheck, fgs, prm_run,
+  convert_names = FALSE, report = FALSE, version_flag = 1)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -16,6 +17,19 @@ folder) you should use 'NULL' as dir.}
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
+
+\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
+file. In case you are using multiple folders for your model files and
+outputfiles pass the complete folder/filename string as fgs.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.
+In addition set dir to 'NULL' in this case.}
+
+\item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+or not (default = \code{FALSE}).}
 
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
@@ -31,16 +45,21 @@ Read in the atlantis dietcheck.txt file and perform some basic data transformati
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-diet <- load_dietcheck(dir = d,
-    dietcheck = "outputSETASDietCheck.txt")
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+                       fgs = "SETasGroups.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_New.prm")
 head(diet, n = 10)
-diet <- load_dietcheck(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
-    dietcheck = "outputSETASDietCheck.txt")
+
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+                       fgs = "SETasGroupsDem_NoCep.csv",
+                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
 head(diet, n = 10)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
   \code{\link{load_bps}}, \code{\link{load_fgs}},
+  \code{\link{load_init_age}}, \code{\link{load_init}},
   \code{\link{load_nc_physics}}, \code{\link{load_nc}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}

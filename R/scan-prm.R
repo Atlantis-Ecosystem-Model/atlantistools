@@ -42,13 +42,3 @@ scan_prm <- function(chars, variable){
   }
 }
 
-#' @export
-#' @rdname scan_prm
-# Extract value for a specific parameter from a Vector of character strings.
-extract_prm <- function(chars, variable){
-  pos <- scan_prm(chars = chars, variable = variable)
-  result <- chars[pos]
-  result <- str_split_twice(char = result)
-  return(result)
-}
-

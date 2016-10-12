@@ -27,6 +27,7 @@ head(fgs)
 \seealso{
 Other load functions: \code{\link{load_box}},
   \code{\link{load_bps}}, \code{\link{load_dietcheck}},
+  \code{\link{load_init_age}}, \code{\link{load_init}},
   \code{\link{load_nc_physics}}, \code{\link{load_nc}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}

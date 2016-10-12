@@ -33,7 +33,7 @@ convert_bgm <- function(dir = getwd(), bgm) {
     names(result[[i]]) <- c("lat", "long")
     result[[i]]$inside_lat <- box$boxes[[i]]$inside[1]
     result[[i]]$inside_long <- box$boxes[[i]]$inside[2]
-    result[[i]]$box <- i - 1
+    result[[i]]$polygon <- i - 1
   }
   result <- do.call(rbind, result)
 

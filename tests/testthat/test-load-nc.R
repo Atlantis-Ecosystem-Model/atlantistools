@@ -17,6 +17,7 @@ data <- load_nc(dir = d,
                 fgs = "SETasGroups.csv",
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
                 select_variable = "Nums",
+                prm_run = "VMPA_setas_run_fishing_F_New.prm",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
                 report = FALSE)
@@ -42,6 +43,7 @@ data <- load_nc(dir = d,
                 fgs = "SETasGroups.csv",
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
                 select_variable = "N",
+                prm_run = "VMPA_setas_run_fishing_F_New.prm",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
                 report = FALSE)
@@ -67,6 +69,7 @@ data <- load_nc(dir = d,
                 fgs = "SETasGroups.csv",
                 select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det"),
                 select_variable = "Grazing",
+                prm_run = "VMPA_setas_run_fishing_F_New.prm",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
                 report = FALSE)
@@ -92,6 +95,7 @@ data <- load_nc(dir = d,
                 fgs = "SETasGroups.csv",
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
                 select_variable = "Eat",
+                prm_run = "VMPA_setas_run_fishing_F_New.prm",
                 bboxes = bboxes,
                 check_acronyms = TRUE,
                 report = FALSE)
@@ -109,6 +113,12 @@ test_that("test output nitrogen", {
   expect_true(sd(test$check[!is.na(test$check)]) < 0.0000001)
 })
 
+d <- system.file("extdata", "gns", package = "atlantistools")
+bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
+bboxes <- get_boundary(load_box(dir = d, bgm = "NorthSea.bgm"))
+data <- load_nc(dir = d, nc = "init_simple_NorthSea.nc", bps = bps, fgs = "functionalGroups.csv",
+                select_groups = c("cod", "herring"), select_variable = "Nums",
+                prm_run = "NorthSea_run_fishing_F.prm", bboxes = bboxes)
 
 
 

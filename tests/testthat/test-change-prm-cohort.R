@@ -40,6 +40,14 @@ test_that("test change_prm_cohort", {
 })
 
 
+prm <- change_prm_cohort(dir = system.file("extdata", "gns", package = "atlantistools"),
+                         prm_biol = "NorthSea_biol_fishing.prm", select_acronyms = "COD", roc = c(100, 200),
+                         parameter = "mL", relative = F, save_to_disc = F)
+
+
+test_that("test external mortalities in trunc models", {
+  expect_equal(str_split_twice(prm[6919], min_only = FALSE), c(100, 200))
+})
 
 
 

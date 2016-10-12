@@ -199,21 +199,15 @@ plot_struct(data = setas$nums_age)
 Please note the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
-Data about feeding interactions can be visualised with `DietCheck.txt` and `SpecificPredMort.txt` with
-`atlantistools`. Currently the differences in units (per ageclass groups and invert groups) in the `DietCheck.txt` 
-are not attributed in `atlantistools`. Therefore I highly reccommend to use the `SpecificPredMort.txt` file
-to analyse feeding interactions. Nonetheless, examples for both plotting approaches will be presented here.
-
-```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
-# Create a plot for each predator in your model using DietCheck.txt.
-feeding_plots <- plot_diet(data = setas$diet_dietcheck, wrap_col = "habitat", combine_thresh = 15)
-grid.arrange(feeding_plots[[1]])
-```
+Data about feeding interactions can be visualised with `plot_diet_bec_dev`. The data originates from `SpecPredMort.txt`
+which gives an indication about feeding interactions. Please note that these values do not represent realised diets within
+the model. If you want to visualise realised diets you need oto switch to the trunk version of ATLANTIS and use
+`plot_diet` instead.
 
 ```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
 # Create a plot for each predator in your model using SpecMort.txt.
 # create a subplot for each ageclass.
-feeding_plots <- plot_diet(data = setas$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
+feeding_plots <- plot_diet_bec_dev(data = setas$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
 grid.arrange(feeding_plots[[1]])
 ```
 
@@ -291,9 +285,8 @@ thoroughly so you would normally set `save_to_disc` to `TRUE` to overwrite your 
 parameter file with the newly generated one Please make sure to backup your original files beforehand.
 
 ```{r}
-prm_old <- readLines(con = file.path(d, "VMPA_setas_biol_fishing_New.prm"))
-extract_prm(chars = prm_old, variable = "KWRR_FPS")
-extract_prm(chars = new_prm, variable = "KWRR_FPS")
+extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWRR_FPS")
+extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWSR_FPS")
 ```
 
 You can also pass a vector of groups to change the parameter for multiple functional groups with a single call to `change_prm`.

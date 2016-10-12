@@ -4,61 +4,73 @@
 \alias{plot_diet}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_diet(data, species = NULL, wrap_col, combine_thresh = 15)
+plot_diet(bio_consumed, species = NULL, wrap_col, combine_thresh = 7)
 }
 \arguments{
-\item{data}{Dataframe with information about diets. The dataframe
-should be generated with \code{\link{load_dietcheck}}.}
+\item{bio_consumed}{Consumed biomass of prey groups by predatorgroup and agecl in tonnes
+for each timestep and polygon. Dataframe with columns 'pred', 'agecl', 'polygon', 'time', 'prey'.
+Consumed biomass in [t] is stored in column 'atoutput'. Should be generated with
+\code{link{calculate_consumed_biomass}}.}
 
 \item{species}{Character string giving the acronyms of the species you aim to plot. Default is
 \code{NULL} resulting in all available species being ploted.}
 
 \item{wrap_col}{Character specifying the column of the dataframe to be used as multipanel plot.
-In case you aim to plot DietCheck.txt data use "habitat".
-In case you aim to plot SpecMort.txt data use either "agecl" or "stanza".}
+Currently only "agecl" is supported.}
 
-\item{combine_thresh}{Integer indicating minimum amount to the stomach contribution.
-Each prey item with a lower contribution as this treshold is assigned to the
-grpup "Rest". This is necessary for species with a wide variety of food items
-in their diet. Otherwise the screen will be cluttered with colors in the
-dietplots. Default is 0.03.}
+\item{combine_thresh}{Number of different categories to plot. Lets say predator X has eaten
+20 different prey items. If you only want to show the 3 most important prey items set
+\code{combine_thresh} to 3. As rule of thumb values < 10 are useful otherwise to many
+colors are used in the plots.}
 }
 \value{
-List of ggplot2 objects.
+List of grobs composed of ggplot2 objects.
 }
 \description{
-Plot contribution of diet contents for each functional group.
+Visualise diet proportions form predator and prey perspective. The upper panel
+plot shows the predator perspective while the lower panel plot shows the prey perspective
+for a given group. Please note that this function only works with models
+based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to get an indication
+of the feeding interactions.
 }
 \examples{
-# Plot DietCheck.txt
-plots <- plot_diet(preprocess_setas$diet_dietcheck, wrap_col = "habitat")
-gridExtra::grid.arrange(plots[[1]])
-
-# Plot SpecMort.txt per stanza First we need to transform the ageclasses to stanzas.
+dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
 \dontrun{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-diet_stanza <- combine_ages(dir = d,
-                            data = preprocess_setas$diet_specmort,
-                            col = "pred",
-                            prm_biol = "VMPA_setas_biol_fishing_New.prm")
-plots <- plot_diet(diet_stanza, wrap_col = "stanza")
+nc_prod <- "outputNorthSeaPROD.nc"
+nc_gen <- "outputNorthSea.nc"
+dietcheck <- "outputNorthSeaDietCheck.txt"
+prm_biol <- "NorthSea_biol_fishing.prm"
+prm_run <- "NorthSea_run_fishing_F.prm"
+fgs <- "functionalGroups.csv"
+bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
+bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
+
+bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol,
+                                           prm_run, bps, fgs, bboxes)
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+
+nc_prod <- "outputSETASPROD.nc"
+nc_gen <- "outputSETAS.nc"
+dietcheck <- "outputSETASDietCheck.txt"
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+bps <- load_bps(dir = dir, init = "INIT_VMPA_Jan2015.nc", fgs = "SETasGroupsDem_NoCep.csv")
+fgs <- "SETasGroupsDem_NoCep.csv"
+bboxes <- get_boundary(load_box(dir = dir, bgm = "VMPA_setas.bgm"))
+
+bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol,
+                                           prm_run, bps, fgs, bboxes)
+
+plots <- plot_diet(bio_consumed, wrap_col = "agecl")
 gridExtra::grid.arrange(plots[[1]])
 }
-
-# Plot SpecMort.txt per ageclass.
-plots <- plot_diet(preprocess_setas$diet_specmort, wrap_col = "agecl")
-gridExtra::grid.arrange(plots[[1]])
-
-# Only plot specific species
-plots <- plot_diet(preprocess_setas$diet_specmort, species = "CEP", wrap_col = "agecl")
-gridExtra::grid.arrange(plots[[1]])
 }
 \seealso{
 Other plot functions: \code{\link{plot_bench}},
   \code{\link{plot_boxes}}, \code{\link{plot_calibrate}},
-  \code{\link{plot_flux}}, \code{\link{plot_physics}},
-  \code{\link{plot_rec}}, \code{\link{plot_species}},
-  \code{\link{plot_struct}}, \code{\link{plot_ts}},
-  \code{\link{plot_ws}}
+  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_flux}},
+  \code{\link{plot_physics}}, \code{\link{plot_rec}},
+  \code{\link{plot_species}}, \code{\link{plot_struct}},
+  \code{\link{plot_ts}}, \code{\link{plot_ws}}
 }
 

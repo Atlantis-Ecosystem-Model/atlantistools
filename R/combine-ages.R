@@ -1,52 +1,52 @@
-#' #' Combine ageclasses to juvenile and adult stanza according to age at maturity.
-#' #'
-#' #' @param dir Character string giving the path of the Atlantis model folder.
-#' #' If data is stored in multiple folders (e.g. main model folder and output
-#' #' folder) you should use 'NULL' as dir.
-#' #' @param data Dataframe whose ageclasses shall be combined.
-#' #' @param col Character string giving the name of the group column in \code{data}.
-#' #' @param prm_biol Character string giving the filename of the biological
-#' #' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' #' multiple folders for your model files and outputfiles pass the complete
-#' #' folder/filename string and set dir to 'NULL'.
-#' #' @return dataframe with ageclasses combined to stanzas.
-#' #' @export
-#' #'
-#' #' @examples
-#' #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' #' combine_ages(dir = d,
-#' #'              data = preprocess_setas$diet_specmort,
-#' #'              col = "pred",
-#' #'              prm_biol = "VMPA_setas_biol_fishing_New.prm")
+#' Combine ageclasses to juvenile and adult stanza according to age at maturity.
 #'
-#' combine_ages <- function(dir = getwd(), data, col, prm_biol) {
-#'   # Combine ageclasses to stanzas based on maturity!
-#'   # Get agebased predators. We could extract the data from the functional
-#'   # groups file. However, doing so would add an additional parameter to the function call...
-#'   # Stanzas are introcued during the file loading procedure to reduce the final file size on the HDD.
-#'   preds <- data %>%
-#'     dplyr::group_by_(col) %>%
-#'     dplyr::summarise_(count = ~length(unique(agecl))) %>%
-#'     dplyr::filter(count == 10)
-#'   preds <- preds[[1]]
+#' @param data Dataframe with ageclass specific information.
+#' @param grp_col Character string giving the name of the group column in \code{data}.
+#' E.g. 'species', 'pred', 'prey' etc.
+#' @param agemat First mature age class for age structured groups. This dataframe should
+#' be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.
+#' @param value_col Character string giving the name of the column to sum.
+#' Default is \code{"atoutput"}.
+#' @return Dataframe with ageclasses combined to stanzas.
+#' @export
 #'
-#'   age_mat <- convert_path(dir = dir, file = prm_biol)
-#'   age_mat <- readLines(con = age_mat)
+#' @examples
+#' dir <- system.file("extdata", "gns", package = "atlantistools")
+#' nc_gen <- "outputNorthSea.nc"
+#' prm_biol <- "NorthSea_biol_fishing.prm"
+#' prm_run = "NorthSea_run_fishing_F.prm"
+#' bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
+#' fgs = "functionalGroups.csv"
+#' bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
 #'
-#'   age_mat <- data.frame(pred = preds,
-#'                         age_mat = vapply(paste0(preds, "_age_mat"), extract_prm, chars = age_mat, FUN.VALUE = numeric(1)),
-#'                         stringsAsFactors = FALSE)
+#' data <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)#'
+#' agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
+#'                     group = get_age_acronyms(dir = dir, fgs = fgs),
+#'                     parameter = "age_mat")
 #'
-#'   # Finally set stanzas!
-#'   data_stanza <- dplyr::left_join(data, age_mat)
-#'   data_stanza$stanza <- ifelse(data_stanza$agecl < data_stanza$age_mat, "juvenile", "adult")
-#'   data_stanza$stanza[is.na(data_stanza$age_mat)] <- "none"
-#'
-#'   # Remove column "age_mat"
-#'   data_stanza$age_mat <- NULL
-#'
-#'   # Calculate mean over ages
-#'   data_stanza <- agg_data(data_stanza, groups = names(data_stanza)[!is.element(names(data_stanza), c("atoutput", "agecl"))], fun = mean)
-#'
-#'   return(data_stanza)
-#' }
+#' combine_ages(data, grp_col = "species", agemat = agemat)
+
+combine_ages <- function(data, grp_col, agemat, value_col = "atoutput") {
+  # Check input dataframe structure.
+  cols <- c(grp_col, value_col, "agecl")
+  missing <- cols[!cols %in% names(data)]
+  if (length(missing) > 0) stop(paste0("Columnname '", missing, "' missing in data."))
+
+  # Combine data with agemat!
+  agegrps <- unique(data[!is.na(data$agecl) & data$agecl > 2, grp_col])
+  if (any(!agegrps %in% agemat$species)) stop("Agegroups in data not present in agemat.")
+  names(agemat)[names(agemat) == "species"] <- grp_col # in case grp_col is not 'species'
+
+  data_stanza <- dplyr::left_join(data, agemat)
+
+  # NAs remain NAs!
+  data_stanza$stanza <- ifelse(data_stanza$agecl < data_stanza$age_mat, 1, 2)
+  data_stanza$stanza[is.na(data_stanza$stanza)] <- 1 # Not sure if this is correct!
+
+  result <- data_stanza %>%
+    agg_data(col = value_col, groups = names(.)[!names(.) %in% c(value_col, "agecl")], out = value_col, fun = sum)
+  names(result)[names(result) == "stanza"] <- paste(grp_col, "stanza", sep = "_")
+  result$age_mat <- NULL
+
+  return(result)
+}

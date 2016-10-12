@@ -25,6 +25,10 @@
 #' Only one variable of the options available (i.e., \code{c(
 #' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 #' }) can be loaded at a time.
+#' @param prm_run Character string giving the filename of the run
+#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
@@ -43,21 +47,23 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' test <- load_nc(dir = d, nc = "outputSETAS.nc",
-#'   bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
-#'   fgs = "SETasGroups.csv",
+#' nc <- "outputSETAS.nc"
+#' bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
+#' fgs <- "SETasGroups.csv"
+#' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+#' prm_run <- "VMPA_setas_run_fishing_F_New.prm"
+#'
+#' test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-#'   select_variable = "ResN",
-#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
-#' test <- load_nc(dir = d, nc = "outputSETAS.nc",
-#'   bps = load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc"),
-#'   fgs = "SETasGroups.csv",
+#'   select_variable = "ResN")
+#'
+#' test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
-#'   select_variable = "Nums",
-#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+#'   select_variable = "Nums")
 
 load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
-                    select_variable, bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE) {
+                    select_variable, prm_run, bboxes = c(0), check_acronyms = TRUE,
+                    warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
   # at the end. However, this requires alot more storage and the code wouldn't be highly
@@ -157,7 +163,21 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   final_species <- select_groups[sapply(lapply(select_groups, grepl, x = search_clean), any)]
   final_agecl <- fgs$NumCohorts[sapply(final_species, function(x) which(x == fgs$Name))]
 
-  num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")[,1]
+  # This may allow init files to be loaded as well! Unfortunately "num_layers" is missing in
+  # the init file. Therefore we also load in the general fiel to extract the layers!
+  # nc = init-file, init = nc-file (very confusing....)
+  # if (length(init) >= 1 & is.character(init)) {
+  #   init <- convert_path(dir = dir, file = init)
+  #   at_out <- RNetCDF::open.nc(con = init)
+  # }
+  num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")
+  if (length(dim(num_layers)) == 2) {
+    if (all(apply(num_layers, MARGIN = 1, FUN = function(x) length(unique)) == 1)) {
+      num_layers <- num_layers[, 1]
+    } else {
+      stop("Different numbers of layers per Box. This nc-structure is not supported.")
+    }
+  }
   # add sediment layer!
   num_layers <- num_layers + ifelse(num_layers == 0, 0, 1)
 
@@ -308,8 +328,15 @@ load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
   if (select_variable == "N" & any(final_agecl == 2)) {
     result <- result %>%
       dplyr::group_by_("polygon", "layer", "species", "time") %>%
-      dplyr::summarise_(atoutput = ~sum(atoutput))
+      dplyr::summarise_(atoutput = ~sum(atoutput)) %>%
+      dplyr::ungroup()
   }
+
+  # convert names to longnames
+  result$species <- convert_factor(data_fgs = fgs, col = result$species)
+
+  # Convert timestep to time in years!
+  result$time <- convert_time(dir = dir, prm_run = prm_run, col = result$time)
 
   return(result)
 }

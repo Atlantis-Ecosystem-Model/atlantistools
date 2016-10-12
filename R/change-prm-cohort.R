@@ -25,7 +25,6 @@
 #' be passed directly.
 #' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
 #' (\code{TRUE}) or not (\code{FALSE}).
-#' @param variables Character vector of the variables to extract from the file.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
@@ -77,7 +76,11 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
       # Function to update a specific parameter composed of a parameter string
       # a group acronym and a seperator (by default "_") found in a prm file.
       update_prm_species <- function(prm_biol, acronym, roc, parameter, relative) {
-        flag <- paste(parameter, acronym, sep = "_")
+        if (parameter %in% c("mL", "mQ")) {
+          flag <- paste(acronym, parameter, sep = "_") # only works with trunc code!
+        } else {
+          flag <- paste(parameter, acronym, sep = "_")
+        }
         pos <- scan_prm(chars = prm_biol, variable = flag)
         # Values are stored in the next row in the *.prm file.
         pos <- pos + 1
@@ -96,14 +99,14 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
           new_value <- roc
         }
 
-        # Update value. Some pesky expectations have to be added here.
         prm_biol[pos] <- paste(new_value, collapse = "\t")
         return(prm_biol)
       }
 
       for (i in seq_along(select_acronyms)) {
         if (!(all(roc[[i]] == 1) & relative)) {
-          prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[[i]], parameter = parameter, relative = relative)
+          prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i],
+                                             roc = roc[[i]], parameter = parameter, relative = relative)
         }
       }
 
@@ -116,32 +119,4 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
   }
 }
 
-#' @export
-#' @rdname change_prm_cohort
-# Extract value for a specific cohort parameter from a Vector of character strings.
-extract_prm_cohort <- function(dir = getwd(), prm_biol, variables) {
-  # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
-
-  slice <- function(prm, variable) {
-    pos <- scan_prm(chars = prm, variable = variable)
-    pos <- pos + 1
-    while (substr(prm[pos], 1, 1) == "#") pos <- pos + 1
-
-    # Keep all numeric values
-    value <- str_split_twice(char = prm[pos], min_only = FALSE)
-    return(value)
-  }
-
-  values <- lapply(variables, slice, prm = prm_biol_new)
-  # rbind to matrix in case all groups have the same number of cohorts!
-  if (length(unique(sapply(values, length))) == 1) {
-    values <- do.call(rbind, values)
-    rownames(values) <- variables
-  } else {
-    names(values) <- variables
-  }
-  return(values)
-}
 

@@ -8,6 +8,17 @@
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
+#' @param prm_run Character string giving the filename of the run
+#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
+#' In addition set dir to 'NULL' in this case.
+#' @param fgs Character string giving the filename of 'functionalGroups.csv'
+#' file. In case you are using multiple folders for your model files and
+#' outputfiles pass the complete folder/filename string as fgs.
+#' In addition set dir to 'NULL' in this case.
+#' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+#' or not (default = \code{FALSE}).
 #' @param version_flag The version of atlantis that created the output files.
 #' 1 for bec_dev, 2 for trunk.
 #' @return Dataframe with information about ssb in tonnes and recruits in
@@ -18,14 +29,21 @@
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' df <- load_spec_mort(dir = d,
-#'    specmort = "outputSETASSpecificPredMort.txt")
+#'                      specmort = "outputSETASSpecificPredMort.txt",
+#'                      prm_run = "VMPA_setas_run_fishing_F_New.prm",
+#'                      fgs = "SETasGroups.csv")
 #' head(df)
-#' df <- load_spec_mort(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
-#'                      specmort = "outputSETASSpecificPredMort.txt", version_flag = 2)
+#'
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' df <- load_spec_mort(dir = d,
+#'                      specmort = "outputSETASSpecificPredMort.txt",
+#'                      prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#'                      fgs = "SETasGroupsDem_NoCep.csv",
+#'                      version_flag = 2)
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_spec_mort <- function(dir = getwd(), specmort, version_flag = 1) {
+load_spec_mort <- function(dir = getwd(), specmort, prm_run, fgs, convert_names = FALSE, version_flag = 1) {
   if (version_flag == 1) {
     mort <- load_txt(dir = dir, file = specmort)
     mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "stock", "pred", "mort"), convert = TRUE)
@@ -59,6 +77,14 @@ load_spec_mort <- function(dir = getwd(), specmort, version_flag = 1) {
 
   # Remove zeros
   mort <- mort[mort$atoutput != 0, ]
+
+  # Convert species codes to longnames!
+  if (convert_names) {
+    mort <- dplyr::mutate_at(mort, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = load_fgs(dir = dir, fgs = fgs))
+  }
+
+  # Convert time
+  mort$time <- convert_time(dir = dir, prm_run = prm_run, col = mort$time)
 
   return(mort)
 }

@@ -32,7 +32,17 @@ convert_factor <- function(data_fgs, col) {
       col <- set_factor(col_fgs = data_fgs$Name, col = col, data_fgs = data_fgs)
       return(col)
     } else {
-      stop("Not all entries in column Code (or Name) match the entries in parameter col!")
+      # Add pesky sediment groups!
+      ids <- (nrow(data_fgs) - 2):nrow(data_fgs)
+      data_fgs <- rbind(data_fgs, data_fgs[ids, ])
+      data_fgs[ids + 3, "Code"] <- paste0(data_fgs[ids + 3, "Code"], "sed")
+      data_fgs[ids + 3, "LongName"] <- paste0(data_fgs[ids + 3, "LongName"], "_sed")
+      if (all(is.element(avail, data_fgs$Code))) {
+        col <- set_factor(col_fgs = data_fgs$Code, col = col, data_fgs = data_fgs)
+        return(col)
+      } else {
+        stop("Not all entries in column Code (or Name) match the entries in parameter col!")
+      }
     }
   }
 }

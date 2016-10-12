@@ -43,10 +43,10 @@ load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
   result <- dplyr::inner_join(x = yoy, y = ssb, by = c("time", "code"))
 
   # Extract info about recruit weights from the biological parameterfile!
-  string_prm_biol <- readLines(con = convert_path(dir = dir, file = prm_biol))
+  # string_prm_biol <- readLines(con = convert_path(dir = dir, file = prm_biol))
   acr <- unique(result$code)
-  kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_prm, chars = string_prm_biol)
-  kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_prm, chars = string_prm_biol)
+  kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_prm, dir = dir, prm_biol = prm_biol)
+  kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_prm, dir = dir, prm_biol = prm_biol)
   rec_weights <- data.frame(code = acr, rec_weights = unlist(kwrr) + unlist(kwsr), stringsAsFactors = F)
 
   # Combine with recruitment data and convert units!

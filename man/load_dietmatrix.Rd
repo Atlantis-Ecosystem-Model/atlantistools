@@ -2,9 +2,13 @@
 % Please edit documentation in R/load-dietmatrix.R
 \name{load_dietmatrix}
 \alias{load_dietmatrix}
+\alias{write_diet}
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
-load_dietmatrix(dir = getwd(), prm_biol, fgs)
+load_dietmatrix(dir = getwd(), prm_biol, fgs, transform = TRUE,
+  convert_names = FALSE)
+
+write_diet(dir = getwd(), dietmatrix, prm_biol)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -20,6 +24,18 @@ folder/filename string and set dir to 'NULL'.}
 file. In case you are using multiple folders for your model files and
 outputfiles pass the complete folder/filename string as fgs.
 In addition set dir to 'NULL' in this case.}
+
+\item{transform}{Boolean indicating if the returned dataframe is displayed in
+"long" (\code{transform = TRUE, default}) or "wide" (\code{transform = FALSE})
+format. You should use the "wide" format in case you aim to change your
+diet matrix entries.}
+
+\item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+or not (default = \code{FALSE}).}
+
+\item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
+with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
+'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
 }
 \value{
 dataframe of the availability matrix in long format with columns
@@ -31,6 +47,9 @@ of any ATLANTIS simulation.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-head(load_dietmatrix(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", fgs = "SETasGroups.csv"), n = 10)
+dm <- load_dietmatrix(dir = d,
+                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                      fgs = "SETasGroups.csv")
+head(dm, n = 10)
 }
 

@@ -4,8 +4,8 @@
 \alias{load_nc_physics}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc_physics(dir = getwd(), nc, select_physics, aggregate_layers, bboxes,
-  warn_zeros = FALSE)
+load_nc_physics(dir = getwd(), nc, select_physics, prm_run, aggregate_layers,
+  bboxes, warn_zeros = FALSE)
 }
 \arguments{
 \item{dir}{Character string giving the path of the Atlantis model folder.
@@ -21,6 +21,12 @@ case.}
 
 \item{select_physics}{Character vector of physical variables which shall be read in.
 Names have to match the ones used in the ncdf file.}
+
+\item{prm_run}{Character string giving the filename of the run
+parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+multiple folders for your model files and outputfiles pass the complete
+folder/filename string and set dir to 'NULL'.
+In addition set dir to 'NULL' in this case.}
 
 \item{aggregate_layers}{Logical indicating if values for layers should be
 aggregated (\code{TRUE}) or not (\code{FALSE}).}
@@ -44,6 +50,7 @@ This functions converts the ATLANTIS output to a dataframe which can be processe
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
   select_physics = c("salt", "NO3", "volume"),
+  prm_run = "VMPA_setas_run_fishing_F_New.prm",
   aggregate_layers = FALSE,
   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 str(test)
@@ -51,7 +58,8 @@ str(test)
 \seealso{
 Other load functions: \code{\link{load_box}},
   \code{\link{load_bps}}, \code{\link{load_dietcheck}},
-  \code{\link{load_fgs}}, \code{\link{load_nc}},
+  \code{\link{load_fgs}}, \code{\link{load_init_age}},
+  \code{\link{load_init}}, \code{\link{load_nc}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }

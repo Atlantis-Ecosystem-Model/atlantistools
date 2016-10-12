@@ -26,8 +26,8 @@ preprocess_txt <- function(df_txt, sep_col = "code", into) {
   df_txt <- tidyr::separate_(df_txt, col = sep_col, into = into, convert = TRUE)
   # df_txt$agecl <- df_txt$agecl + 1
 
-  # check uniqueness of columns.
-  cun <- sapply(df_txt, unique)
+  # check uniqueness of columns. Do not use sapply at this point!
+  cun <- lapply(df_txt, unique)
 
   # Get column with ageclassses and add 1! Wow this is so hacky and ugly... O_o
   id_agecl <- cun[sapply(cun, is.numeric)]
@@ -45,8 +45,10 @@ preprocess_txt <- function(df_txt, sep_col = "code", into) {
   df_txt <- df_txt[, id_data]
 
   # Only zeros in first timestep? Remove values!
-  if (all(df_txt$time[df_txt$time == 0] == 0)) {
-    df_txt <- df_txt[df_txt$time != 0, ]
+  if ("time" %in% names(df_txt)) {
+    if (all(df_txt$atoutput[df_txt$time == 0] == 0)) {
+      df_txt <- df_txt[df_txt$time != 0, ]
+    }
   }
 
   # Remove zeros

@@ -4,12 +4,17 @@
 \alias{plot_struct}
 \title{Function to plot relative contribution of biomass and numbers per cohort.}
 \usage{
-plot_struct(data, ncol = 7)
+plot_struct(data, ncol = 7, combine_thresh = NULL)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
 
 \item{ncol}{Number of columns in multipanel plot.}
+
+\item{combine_thresh}{Integer indicating numbers of species to display in the
+final plot. The species are ranked according to their overall distribution to
+the stacked bar. Species with a low contribution are lumped together to the
+group 'Rest'.}
 }
 \value{
 ggplot2 object
@@ -19,13 +24,14 @@ Function to plot relative contribution of biomass and numbers per cohort.
 }
 \examples{
 plot_struct(preprocess_setas$biomass_age)
+plot_struct(preprocess_setas$biomass, combine_thresh = 3)
 }
 \seealso{
 Other plot functions: \code{\link{plot_bench}},
   \code{\link{plot_boxes}}, \code{\link{plot_calibrate}},
-  \code{\link{plot_diet}}, \code{\link{plot_flux}},
-  \code{\link{plot_physics}}, \code{\link{plot_rec}},
-  \code{\link{plot_species}}, \code{\link{plot_ts}},
-  \code{\link{plot_ws}}
+  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_diet}},
+  \code{\link{plot_flux}}, \code{\link{plot_physics}},
+  \code{\link{plot_rec}}, \code{\link{plot_species}},
+  \code{\link{plot_ts}}, \code{\link{plot_ws}}
 }
 

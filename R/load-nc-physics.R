@@ -13,6 +13,11 @@
 #' case.
 #' @param select_physics Character vector of physical variables which shall be read in.
 #' Names have to match the ones used in the ncdf file.
+#' @param prm_run Character string giving the filename of the run
+#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
+#' In addition set dir to 'NULL' in this case.
 #' @param aggregate_layers Logical indicating if values for layers should be
 #' aggregated (\code{TRUE}) or not (\code{FALSE}).
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
@@ -30,6 +35,7 @@
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
 #'   select_physics = c("salt", "NO3", "volume"),
+#'   prm_run = "VMPA_setas_run_fishing_F_New.prm",
 #'   aggregate_layers = FALSE,
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 #' str(test)
@@ -38,6 +44,7 @@
 load_nc_physics <- function(dir = getwd(),
                             nc,
                             select_physics,
+                            prm_run,
                             aggregate_layers,
                             bboxes,
                             warn_zeros = FALSE){
@@ -154,6 +161,8 @@ load_nc_physics <- function(dir = getwd(),
       dplyr::group_by_("variable", "polygon", "time") %>%
       dplyr::summarise_(atoutput = ~mean(atoutput))
   }
+
+  result$time <- convert_time(dir = dir, prm_run = prm_run, col = result$time)
 
   return(result)
 }
