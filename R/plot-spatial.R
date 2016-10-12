@@ -87,6 +87,8 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
       ggplot2::coord_equal() +
       theme_atlantis()
 
+    plot <- ggplot_custom(plot)
+
     return(plot)
   }
 
@@ -104,6 +106,8 @@ plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timestep
                      axis.line.y = ggplot2::element_blank(),
                      axis.ticks.y = ggplot2::element_blank(),
                      panel.margin = grid::unit(0, "lines"))
+
+    plot <- ggplot_custom(plot)
 
     return(plot)
   }

@@ -251,6 +251,8 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     ggplot2::labs(x = "mult.factor MUM", y = "mult. factor C") +
     theme_atlantis(scale_font = 0.8)
 
+  plot <- ggplot_custom(plot)
+
   return(plot)
 }
 
