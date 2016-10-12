@@ -96,6 +96,9 @@ ref_dm <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
                          prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
                          version_flag = 2, convert_names = TRUE)
 
+devtools::use_data(ref_dm, overwrite = TRUE)
+
+
 preprocess_setas <- preprocess(dir = d,
    nc_gen = "outputSETAS.nc",
    nc_prod = "outputSETASPROD.nc",
