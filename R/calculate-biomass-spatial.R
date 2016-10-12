@@ -15,7 +15,7 @@
 #' Should be generated with \code{\link{load_nc}}.
 #' @param n Dataframe with information about nitrogen for non-ge-based groups.
 #' Should be generated with \code{\link{load_nc}}.
-#' @param vol Dataframe with information about volume and layer height per polygon.
+#' @param vol_dz Dataframe with information about volume and layer height per polygon.
 #' Should be generated with \code{\link{load_nc_physics}}.
 #' @param bio_conv Numeric value to transform weight in mg N to tonnes.
 #' Should be generated with \code{\link{get_conv_mgnbiot}}.
@@ -37,7 +37,7 @@
 #' bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
 #'
 #' df <- calculate_biomass_spatial(nums = ref_nums, sn = ref_structn, rn = ref_resn, n = ref_n,
-#'                                 vol = ref_vol, bio_conv = bio_conv, bps = bps)
+#'                                 vol_dz = ref_vol_dz, bio_conv = bio_conv, bps = bps)
 #'
 #' # 2. Read in dataframes from existing Atlantis simulation.
 #' bboxes <- get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
@@ -62,7 +62,7 @@
 #' vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
 #'                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 #'
-#' df <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol = vol,
+#' df <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol_dz = vol,
 #'                                 bio_conv = bio_conv, bps = bps)
 #'
 #' # 3. Read in dataframes from existing Atlantis simulation with Map().
@@ -73,9 +73,9 @@
 #'                            prm_run = prm_run, bboxes = bboxes))
 #'
 #' df <- calculate_biomass_spatial(nums = dfs[[1]], sn = dfs[[2]], rn = dfs[[3]], n = dfs[[4]],
-#'                                 vol = vol, bio_conv = bio_conv, bps = bps)
+#'                                 vol_dz = vol, bio_conv = bio_conv, bps = bps)
 
-calculate_biomass_spatial <- function(nums, sn, rn, n, vol, bio_conv, bps) {
+calculate_biomass_spatial <- function(nums, sn, rn, n, vol_dz, bio_conv, bps) {
   vol <- tidyr::spread_(vol, key_col = c("variable"), value_col = "atoutput")
 
   # Calculate biomass per time, box and layer per group and ageclass!
