@@ -91,6 +91,10 @@ ref_vol <- load_nc_physics(dir = d, nc = "outputSETAS.nc", select_physics = "vol
 
 devtools::use_data(ref_vol, overwrite = TRUE)
 
+ref_dm <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+                         fgs = "SETasGroupsDem_NoCep.csv",
+                         prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+                         version_flag = 2, convert_names = TRUE)
 
 preprocess_setas <- preprocess(dir = d,
    nc_gen = "outputSETAS.nc",
