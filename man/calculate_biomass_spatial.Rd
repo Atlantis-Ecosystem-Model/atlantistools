@@ -46,20 +46,19 @@ are converted to time in years based on output timesteps given in run.prm.
 # 1. Using preprocessed datasets.
 dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-bboxes <- get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
-nc_gen <- "outputSETAS.nc"
-prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
 fgs <- "SETasGroupsDem_NoCep.csv"
 bps <- load_bps(dir, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
 
 bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
-vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
-                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
 df <- calculate_biomass_spatial(nums = ref_nums, sn = ref_structn, rn = ref_resn, n = ref_n,
-                                vol = vol, bio_conv = bio_conv, bps = bps)
+                                vol = ref_vol, bio_conv = bio_conv, bps = bps)
 
 # 2. Read in dataframes from existing Atlantis simulation.
+bboxes <- get_boundary(boxinfo = load_box(dir, bgm = "VMPA_setas.bgm"))
+nc_gen <- "outputSETAS.nc"
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+
 groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
 groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
 
@@ -75,6 +74,8 @@ rn <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
 n <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
              select_groups = groups_rest, select_variable = "N",
              prm_run = prm_run, bboxes = bboxes)
+vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
+                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
 df <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol = vol,
                                 bio_conv = bio_conv, bps = bps)
