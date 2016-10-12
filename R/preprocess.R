@@ -194,6 +194,7 @@ preprocess <- function(dir = getwd(), nc_gen, nc_prod, dietcheck, yoy, ssb, spec
 
   at_n_pools <- dplyr::left_join(at_n_pools, vol)
   at_n_pools$biomass_ind <- with(at_n_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
+  at_n_pools$bio <- with(at_n_pools, atoutput * volume * bio_conv)
   biomass_pools <- agg_data(data = at_n_pools, groups = c("species", "time"), fun = sum)
 
   # Combine with biomass from age-groups
