@@ -65,7 +65,7 @@ calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
 
   # Check DietCheck.txt
   check <- agg_data(dm, groups = c("time", "pred", "agecl"), fun = sum)
-  if (!all(abs(check$atoutput -1) < 0.001)) stop("DietCheck.txt does not sum to 1 for all predators.")
+  if (!all(abs(check$atoutput - 1) < 0.001)) stop("DietCheck.txt does not sum to 1 for all predators.")
 
   # Check timesteps!
   ts_eat <- sort(unique(data_eat$time))
