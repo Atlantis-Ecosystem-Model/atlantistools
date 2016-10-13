@@ -107,7 +107,7 @@ plot_diet <- function(bio_consumed, species = NULL, wrap_col, combine_thresh = 7
       plot <- ggplot_custom(plot)
     }
 
-  return(plot)
+    return(plot)
   }
 
   # Select all available species if none have been selected! This is a bit hacky but it works...
