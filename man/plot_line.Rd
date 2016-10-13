@@ -30,6 +30,7 @@ Function to plot time series of atlantis ncdf output.
 plot_line(preprocess_setas$biomass)
 plot_line(preprocess_setas$biomass, col = "species")
 plot_line(preprocess_setas$biomass_age, col = "agecl")
+plot_line(preprocess_setas$biomass_age, wrap = "agecl", col = "species")
 }
 \seealso{
 Other plot functions: \code{\link{plot_bench}},

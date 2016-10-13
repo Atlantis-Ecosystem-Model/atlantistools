@@ -14,6 +14,7 @@
 #' plot_line(preprocess_setas$biomass)
 #' plot_line(preprocess_setas$biomass, col = "species")
 #' plot_line(preprocess_setas$biomass_age, col = "agecl")
+#' plot_line(preprocess_setas$biomass_age, wrap = "agecl", col = "species")
 
 
 plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7) {
