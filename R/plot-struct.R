@@ -42,3 +42,11 @@ plot_struct <- function(data, ncol = 7, combine_thresh = NULL) {
 
   return(plot)
 }
+
+# plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~species)) +
+#   ggplot2::geom_bar(stat = "identity") +
+#   ggplot2::scale_fill_manual(values = get_colpal()) +
+#   ggplot2::labs(y = "Biomass [t]") +
+#   theme_atlantis() +
+#   ggplot2::theme(legend.position = "right")
+

@@ -21,11 +21,9 @@ bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 plot_boxes(bgm_data)
 }
 \seealso{
-Other plot functions: \code{\link{plot_bench}},
-  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_diet}},
-  \code{\link{plot_flux}}, \code{\link{plot_line}},
-  \code{\link{plot_physics}}, \code{\link{plot_rec}},
-  \code{\link{plot_species}}, \code{\link{plot_struct}},
-  \code{\link{plot_ws}}
+Other plot functions: \code{\link{plot_diet_bec_dev}},
+  \code{\link{plot_diet}}, \code{\link{plot_line}},
+  \code{\link{plot_rec}}, \code{\link{plot_species}},
+  \code{\link{plot_struct}}
 }
 

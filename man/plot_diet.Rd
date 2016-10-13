@@ -66,11 +66,9 @@ gridExtra::grid.arrange(plots[[1]])
 }
 }
 \seealso{
-Other plot functions: \code{\link{plot_bench}},
-  \code{\link{plot_boxes}},
-  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_flux}},
-  \code{\link{plot_line}}, \code{\link{plot_physics}},
+Other plot functions: \code{\link{plot_boxes}},
+  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_line}},
   \code{\link{plot_rec}}, \code{\link{plot_species}},
-  \code{\link{plot_struct}}, \code{\link{plot_ws}}
+  \code{\link{plot_struct}}
 }
 
