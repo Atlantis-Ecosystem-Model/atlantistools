@@ -20,6 +20,6 @@ Calculate relative timeseries using the initial value as benchmark.
 }
 \examples{
 df <- convert_relative_initial(preprocess_setas$structn_age)
-head(df)
+head(df, n = 15)
 }
 

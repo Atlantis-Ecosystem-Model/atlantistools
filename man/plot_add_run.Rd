@@ -29,6 +29,7 @@ plot <- plot_add_run(plot)
 plot
 }
 \seealso{
-Other low-level-plot functions: \code{\link{plot_add_range}}
+Other low-level-plot functions: \code{\link{plot_add_box}},
+  \code{\link{plot_add_range}}
 }
 
