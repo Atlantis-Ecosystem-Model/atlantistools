@@ -25,8 +25,15 @@ ggplot_custom <- function(plot) {
 }
 
 
-plot_add_box <- function(plot) {
+plot_add_box <- function(plot, range = c(0.5, 0.2)) {
+  plot <- plot + ggplot2::annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1 - range[1], ymax = 1 + range[1], alpha = 0.1)
+  plot <- plot + ggplot2::annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1 - range[2], ymax = 1 + range[2], alpha = 0.3)
+  plot <- plot + ggplot2::geom_hline(yintercept = 1, linetype = "dotted")
 
+  # Rearrange layers. Set newly added layers as first layers!
+  nl <- length(plot$layers)
+  plot$layers <- plot$layers[c((nl - 2):nl, 1:(nl - 3))]
 
+  return(plot)
 }
 
