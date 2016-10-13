@@ -31,6 +31,38 @@ plot_line(preprocess_setas$biomass)
 plot_line(preprocess_setas$biomass, col = "species")
 plot_line(preprocess_setas$biomass_age, col = "agecl")
 plot_line(preprocess_setas$biomass_age, wrap = "agecl", col = "species")
+
+# The function can also be used to compare model outoput with observed data.
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+ex_data <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
+names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
+
+data <- preprocess_setas$biomass
+data$model <- "atlantis"
+comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
+
+# Show atlantis as first factor!
+comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
+
+# Create plot
+plot_line(comp, col = "model")
+
+# Use \\code{\\link{convert_relative_initial}} and \\code{\\link{plot_add_box}} with \\code{\\link{plot_line}}.
+# Use \\code{\\link{convert_relative_initial}} to generate a relative time series first.
+df <- convert_relative_initial(preprocess_setas$structn_age)
+
+# Create the base plot with \\code{\\link{plot_line}}.
+plot <- plot_line(df, col = "agecl")
+
+# Add lower and upper range.
+plot_add_box(plot)
+
+# Create spatial timeseries plots in conjuction with \\code{\\link{custom_grid}}.
+plot <- plot_line(preprocess_setas$physics, wrap = NULL)
+custom_grid(plot, grid_x = "polygon", grid_y = "variable")
+
+plot <- plot_line(preprocess_setas$flux, wrap = NULL, col = "variable")
+custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 }
 \seealso{
 Other plot functions: \code{\link{plot_bar}},
