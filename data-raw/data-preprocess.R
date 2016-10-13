@@ -98,6 +98,13 @@ ref_dm <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
 
 devtools::use_data(ref_dm, overwrite = TRUE)
 
+ref_growth  <- load_nc(dir = d, nc = "outputSETASPROD.nc", bps = epibenthic_groups, fgs = "SETasGroupsDem_NoCep.csv",
+                       select_groups = groups_age, select_variable = "Growth", prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+                       bboxes = boundary_boxes,
+                      check_acronyms = TRUE)
+
+devtools::use_data(ref_growth, overwrite = TRUE)
+
 
 preprocess_setas <- preprocess(dir = d,
    nc_gen = "outputSETAS.nc",
