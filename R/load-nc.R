@@ -11,13 +11,13 @@
 #' multiple folder for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
-#' @param bps Vector of character strings giving the complete list of epibenthic
-#' functional groups (Only present in the sediment layer). The names have to match
-#' the column 'Name' in the 'functionalGroups.csv' file.
 #' @param fgs Character string giving the filename of 'functionalGroups.csv'
 #' file. In case you are using multiple folders for your model files and
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
+#' @param bps Vector of character strings giving the complete list of epibenthic
+#' functional groups (Only present in the sediment layer). The names have to match
+#' the column 'Name' in the 'functionalGroups.csv' file.
 #' @param select_groups Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the ncdf file. Check column "Name" in
 #' "functionalGroups.csv" for clarification.
@@ -61,7 +61,7 @@
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
 #'   select_variable = "Nums")
 
-load_nc <- function(dir = getwd(), nc, bps, fgs, select_groups,
+load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
                     select_variable, prm_run, bboxes = c(0), check_acronyms = TRUE,
                     warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
