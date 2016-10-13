@@ -14,7 +14,7 @@
 #' plot_bar(preprocess_setas$biomass_age)
 #' plot_bar(preprocess_setas$biomass, combine_thresh = 3)
 
-plot_bar <- function(data, ncol = 7, combine_thresh = NULL) {
+plot_struct <- function(data, ncol = 7, combine_thresh = NULL) {
   check_df_names(data = data, expect = c("time", "atoutput", "species"), optional = "agecl")
 
   if ("agecl" %in% names(data)) {
