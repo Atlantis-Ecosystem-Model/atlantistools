@@ -14,10 +14,10 @@
 #' df <- combine_groups(preprocess_setas$biomass, group_col = "species", combine_thresh = 3)
 #' plot_bar(df)
 #'
-#' # This function can also be used to plot age-specific data
+#' # This function can also be used to plot age-specific data.
 #' plot_bar(preprocess_setas$nums_age, fill = "agecl", wrap = "species")
 #'
-#' # Please use \code{\link{agg_perc}} to visualise the cohort structure over time.
+#' # Please use \code{\link{agg_perc}} to visualise the relative cohort structure over time.
 #' df <- agg_perc(preprocess_setas$nums_age, groups = c("time", "species"))
 #' plot_bar(df, fill = "agecl", wrap = "species")
 
@@ -46,4 +46,3 @@ plot_bar <- function(data, x = "time", y = "atoutput", fill = "species", wrap = 
 
   return(plot)
 }
-
