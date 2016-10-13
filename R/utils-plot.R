@@ -1,16 +1,24 @@
-# Customised nse version of facet_wrap used within atlantistools
-custom_wrap <- function(plot, col, ncol = 7) {
-  plot <- plot + ggplot2::facet_wrap(stats::as.formula(paste("~", paste(col, collapse = "+"))),
-                                     scales = "free_y", ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15))
-  return(plot)
-}
+#' Utility functions used for various plotting routines within atlantistools.
+#'
+#' @param plot ggplot2 plot.
+#' @param grid_x character vector used in facet_grid in horizontal direction.
+#' @param grid_y character vector used in facet_grid in vertical direction.
+#' @return ggplot2 plot.
+#' @export
 
 # Customised nse version of facet_grid used within atlantistools
 custom_grid <- function(plot, grid_x, grid_y) {
   px <- paste(grid_x, collapse = "+")
   py <- paste(grid_y, collapse = "+")
-  plot <- plot + ggplot2::facet_wrap(stats::as.formula(paste(px, "~", py)),
+  plot <- plot + ggplot2::facet_grid(stats::as.formula(paste(py, "~", px)),
                                      scales = "free", labeller = ggplot2::label_wrap_gen(width = 15))
+  return(plot)
+}
+
+# Customised nse version of facet_wrap used within atlantistools
+custom_wrap <- function(plot, col, ncol = 7) {
+  plot <- plot + ggplot2::facet_wrap(stats::as.formula(paste("~", paste(col, collapse = "+"))),
+                                     scales = "free_y", ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15))
   return(plot)
 }
 
@@ -29,16 +37,5 @@ ggplot_custom <- function(plot) {
   return(plot)
 }
 
-# Function to add data range to calibration plot!
-plot_add_box <- function(plot, range = c(0.5, 0.2)) {
-  plot <- plot + ggplot2::annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1 - range[1], ymax = 1 + range[1], alpha = 0.1)
-  plot <- plot + ggplot2::annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1 - range[2], ymax = 1 + range[2], alpha = 0.3)
-  plot <- plot + ggplot2::geom_hline(yintercept = 1, linetype = "dotted")
 
-  # Rearrange layers. Set newly added layers as first layers!
-  nl <- length(plot$layers)
-  plot$layers <- plot$layers[c((nl - 2):nl, 1:(nl - 3))]
-
-  return(plot)
-}
 
