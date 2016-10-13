@@ -1,9 +1,6 @@
-custom_wrap <- function(plot, col) {
-  if (length(col) != 1) stop("Please supply only one wraping column.")
-  plot <- plot + ggplot2::facet_wrap(lazyeval::interp(~var, var = as.name(col)),
-                                     scales = "free_y",
-                                     ncol = 7,
-                                     labeller = ggplot2::label_wrap_gen(width = 15))
+custom_wrap <- function(plot, col, ncol = 7) {
+  plot <- plot + ggplot2::facet_wrap(as.formula(paste("~", paste(col, collapse = "+"))),
+                                     scales = "free_y", ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15))
   return(plot)
 }
 
@@ -18,3 +15,4 @@ ggplot_custom <- function(plot) {
   plot <- plot + ggplot2::scale_y_continuous(labels = abbreviate)
   return(plot)
 }
+
