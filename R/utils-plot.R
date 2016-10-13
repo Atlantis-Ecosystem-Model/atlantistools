@@ -25,7 +25,7 @@ custom_map <- function(data, x, y) {
 # Changes applied to every ggplot object within atlantistools.
 ggplot_custom <- function(plot) {
   plot <- plot + ggplot2::coord_cartesian(expand = FALSE)
-  plot <- plot + ggplot2::scale_y_continuous(labels = scales::scientific(x, digits = 2))
+  plot <- plot + ggplot2::scale_y_continuous(labels = scales::scientific_format(digits = 2))
   return(plot)
 }
 
