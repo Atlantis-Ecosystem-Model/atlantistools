@@ -1,52 +1,49 @@
 #' Function to plot relative contribution of biomass and numbers per cohort.
 #'
-#' @param data Dataframe to be plotted.
-#' @param ncol Number of columns in multipanel plot.
+#' @inheritParams plot_line
+#' @param fill Column to use as filling colour. Default is 'species'.
 #' @return ggplot2 object
-#' @param combine_thresh Integer indicating numbers of species to display in the
-#' final plot. The species are ranked according to their overall distribution to
-#' the stacked bar. Species with a low contribution are lumped together to the
-#' group 'Rest'.
 #' @export
 #' @family plot functions
 #'
 #' @examples
-#' plot_bar(preprocess_setas$biomass_age)
-#' plot_bar(preprocess_setas$biomass, combine_thresh = 3)
+#' plot_bar(preprocess_setas$biomass)
+#'
+#' # Most models have a large number of groups. Please make sure to combine groups with a low
+#' # contribution prior to plotting with \code{\link{combine_groups}}.
+#' df <- combine_groups(preprocess_setas$biomass, group_col = "species", combine_thresh = 3)
+#' plot_bar(df)
+#'
+#' # This function can also be used to plot age-specific data
+#' plot_bar(preprocess_setas$nums_age, fill = "agecl", wrap = "species")
+#'
+#' # Please use \code{\link{agg_perc}} to visualise the cohort structure over time.
+#' df <- agg_perc(preprocess_setas$nums_age, groups = c("time", "species"))
+#' plot_bar(df, fill = "agecl", wrap = "species")
 
-plot_struct <- function(data, ncol = 7, combine_thresh = NULL) {
-  check_df_names(data = data, expect = c("time", "atoutput", "species"), optional = "agecl")
-
-  if ("agecl" %in% names(data)) {
-    data <- agg_perc(data = data, groups = c("species", "time"))
-  } else {
-    data <- agg_perc(data = data, groups = c("time"))
-    data <- combine_groups(data = data, group_col = "species", groups = "time", combine_thresh = combine_thresh)
-  }
-
-  plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~factor(agecl))) +
+plot_bar <- function(data, x = "time", y = "atoutput", fill = "species", wrap = NULL, ncol = NULL) {
+  plot <- custom_map(data = data, x = x, y = y) +
     ggplot2::geom_bar(stat = "identity") +
-    ggplot2::labs(y = "Distribution [%]") +
     theme_atlantis()
 
-  if ("agecl" %in% names(data)) {
-    plot <- plot + ggplot2::facet_wrap( ~species, ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15))
-    plot <- plot + ggplot2::aes_(fill = ~factor(agecl))
+  # Add colour. check if integer or not
+  if (is.numeric(data[, fill][[1]]) && all(data[, fill] %% 1 == 0)) {
+    plot <- plot + ggplot2::aes_(fill = lazyeval::interp(~factor(var), var = as.name(fill)))
     plot <- plot + ggplot2::guides(fill = ggplot2::guide_legend(nrow = 1))
-  } else {
-    plot <- plot + ggplot2::aes_(fill = ~species)
+  } else {# used in whole system and diet plots!
+    plot <- plot + ggplot2::aes_(fill = lazyeval::interp(~var, var = as.name(fill)))
+    plot <- plot + ggplot2::scale_fill_manual(values = get_colpal())
     plot <- plot + ggplot2::theme(legend.position = "right")
+  }
+
+  # Wrap in case wrap is not NULL!
+  if (!is.null(wrap)) {
+    if (is.null(ncol)) ncol <- 7  # set default if NULL
+    plot <- custom_wrap(plot, col = wrap, ncol = ncol)
   }
 
   plot <- ggplot_custom(plot)
 
   return(plot)
 }
-
-# plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = ~time, y = ~atoutput, fill = ~species)) +
-#   ggplot2::geom_bar(stat = "identity") +
-#   ggplot2::scale_fill_manual(values = get_colpal()) +
-#   ggplot2::labs(y = "Biomass [t]") +
-#   theme_atlantis() +
-#   ggplot2::theme(legend.position = "right")
 
