@@ -6,3 +6,4 @@ BML,4,1,Megazoobenthos,Megazoobenthos,1,1,1,1,1,1,1,1,1,1,1,MOB_EP_OTHER,1,0,0,1
 PL,5,1,Diatom,Diatom,1,1,1,1,1,1,0,0,0,0,0,LG_PHY,0,0,1,1,0,0,0,0
 DL,6,1,Lab_Det,Labile detritus,1,1,1,1,1,1,0,0,0,0,0,LAB_DET,0,0,0,1,0,0,0,0
 DR,7,1,Ref_Det,Refractory detritus,1,1,1,1,1,1,0,0,0,0,0,REF_DET,0,0,0,1,0,0,0,0
+DC,8,1,Carrion,Carrion3,1,1,1,1,1,1,0,0,0,0,0,CARRION,0,0,0,1,0,0,0,0
