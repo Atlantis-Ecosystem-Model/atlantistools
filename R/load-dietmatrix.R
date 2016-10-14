@@ -36,8 +36,8 @@
 
 load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, convert_names = FALSE) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
-  acr <- fgs_data$Code[fgs_data$isPredator == 1]
-  agecl <- fgs_data$NumCohorts[fgs_data$isPredator == 1]
+  acr <- fgs_data$Code[fgs_data[, names(fgs_data)[names(fgs_data) %in% c("isPredator", "IsPredator")]] == 1]
+  agecl <- fgs_data$NumCohorts[fgs_data[, names(fgs_data)[names(fgs_data) %in% c("isPredator", "IsPredator")]] == 1]
   pstring <- "pPREY"
 
   coh10 <- acr[agecl > 2]
