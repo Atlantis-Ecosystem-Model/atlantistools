@@ -86,6 +86,8 @@ X_CHLN   7   Ratio of chla to N 7
 X_SiN   3   Redfield ratio of Si:N 3                    
 X_FeN   30000   Redfield ratio of Fe:N 30000                    
 
+#AFDW to wet weight           
+k_wetdry  20   Ratio of Wet weight to AFDW 20      
 
 
 ## Biological parameters                        
