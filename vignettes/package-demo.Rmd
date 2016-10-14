@@ -2,7 +2,10 @@
 title: "package-demo"
 author: "Alexander Keth"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    fig_width: 7
+    fig_height: 5
 vignette: >
   %\VignetteIndexEntry{package-demo}
   %\VignetteEngine{knitr::rmarkdown}
@@ -14,142 +17,230 @@ library("atlantistools")
 library("ggplot2")
 library("gridExtra")
 
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 ```
 
 
-## Preprocess your atlantis outoput
-The first step with `atlantistools` is generally the preprocessing of the output of your atlantis simulation. 
-During this process an extensive set of dataframes is created from the general-
-and production netcdf files (e.g. individual weight, biomass, numbers at age ...). These dataframes
-can be directly passed to various plotting routines.
+## Read in output from netcdf files with `load_nc` and `load_nc_physics`
+The first step with `atlantistools` is the extraction of data from the atlantis simulation.
+Data is transformed following the 'tidy-dataframe' framework from Hadley Wickham.
+Output from various variables (individual weight, physics, consumption...) is standardised to a uniform format.
+To further simplify subsequnt analysis the following transformations are applied:
+- Simulation time is standardised to time in years.
+- Group names are converted according to the colum 'LongName' in the functional groups file. 
+- Data from boundary boxes and islands is removed.
+- Data from non existent layers is removed.
+- Values are stored in the column 'atoutput'.
 
-```{r, eval = FALSE}
-setas <-   preprocess(dir = d,
-                      nc_gen = "outputSETAS.nc",
-                      nc_prod = "outputSETASPROD.nc",
-                      dietcheck = "outputSETASDietCheck.txt",
-                      yoy = "outputSETASYOY.txt",
-                      ssb = "outputSETASSSB.txt",
-                      specmort = "outputSETASSpecificMort.txt",
-                      specpredmort = "outputSETASSpecificPredMort.txt",
-                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                      prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                      bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
-                                     init = "init_vmpa_setas_25032013.nc"),
-                      fgs = "SETasGroups.csv",
-                      select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
-                                        "Cephalopod", "Diatom", "Zoo"),
-                      bboxes = get_boundary(boxinfo = load_box(dir = d, 
-                                                               bgm = "VMPA_setas.bgm")),
-                      check_acronyms = TRUE,
-                      out = "preprocess.Rda",
-                      report = FALSE,
-                      save_to_disc = FALSE)
+# Extract numbers per species, timestep, polygon, layer and ageclass
+```{r}
+nums <- load_nc(dir = d, nc = "outputSETAS.nc", 
+                fgs = "SETasGroupsDem_NoCep.csv", 
+                bps = c("Filter_Shallow", "Filter_Other", "Filter_Deep", "Benthic_grazer", 
+                        "Macrobenth_Deep", "Megazoobenthos", "Macrobenth_Shallow", "Macroalgae"), 
+                select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
+                select_variable = "Nums", 
+                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                bboxes = c(0, 6, 7, 8, 9, 10))
 ```
 
-```{r, echo = FALSE}
-setas <- suppressMessages(
-  preprocess(dir = d,
-             nc_gen = "outputSETAS.nc",
-             nc_prod = "outputSETASPROD.nc",
-             dietcheck = "outputSETASDietCheck.txt",
-             yoy = "outputSETASYOY.txt",
-             ssb = "outputSETASSSB.txt",
-             specmort = "outputSETASSpecificMort.txt",
-             specpredmort = "outputSETASSpecificPredMort.txt",
-             prm_biol = "VMPA_setas_biol_fishing_New.prm",
-             prm_run = "VMPA_setas_run_fishing_F_New.prm",
-             bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
-                            init = "init_vmpa_setas_25032013.nc"),
-             fgs = "SETasGroups.csv",
-             select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
-                               "Cephalopod", "Diatom", "Zoo"),
-             bboxes = get_boundary(boxinfo = load_box(dir = d, 
-                                                      bgm = "VMPA_setas.bgm")),
-             check_acronyms = TRUE,
-             out = "preprocess.Rda",
-             report = FALSE,
-             save_to_disc = FALSE))
+# Extract structural nitrogen per species, timestep, polygon, layer and ageclass
+```{r}
+structn <- load_nc(dir = d, nc = "outputSETAS.nc", 
+                   fgs = "SETasGroupsDem_NoCep.csv", 
+                   bps = c("Filter_Shallow", "Filter_Other", "Filter_Deep", "Benthic_grazer", 
+                           "Macrobenth_Deep", "Megazoobenthos", "Macrobenth_Shallow", "Macroalgae"), 
+                   select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
+                   select_variable = "StructN", 
+                   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                   bboxes = c(0, 6, 7, 8, 9, 10))
 ```
 
-You can also directly pass the boundary boxes or epibenthic groups as vectors if you do not intend to use the build in
-functions `load_bps` or `get_boundary`. However, I highly recommend to use these build in functions
-as they ensure the correct output independant of model formulation.
+# Use build in functions to extract epibenthic groups and boundary boxes
+```{r}
+boundary_boxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+epibenthic_groups <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
 
-```{r, eval = FALSE}
-setas <- preprocess(dir = d,
-                    nc_gen = "outputSETAS.nc",
-                    nc_prod = "outputSETASPROD.nc",
-                    dietcheck = "outputSETASDietCheck.txt",
-                    yoy = "outputSETASYOY.txt",
-                    ssb = "outputSETASSSB.txt",
-                    specmort = "outputSETASSpecificMort.txt",
-                    specpredmort = "outputSETASSpecificPredMort.txt",
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                    bps = c("Filter_Shallow", 
-                            "Filter_Other", 
-                            "Filter_Deep", 
-                            "Benthic_grazer", 
-                            "Macrobenth_Deep", 
-                            "Megazoobenthos", 
-                            "Macrobenth_Shallow", 
-                            "Macroalgae"),
-                    fgs = "SETasGroups.csv",
-                    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
-                                      "Cephalopod", "Diatom", "Zoo"),
-                    bboxes = c(0, 6, 7, 8, 9, 10),
-                    check_acronyms = TRUE,
-                    out = "preprocess.Rda",
-                    report = FALSE,
-                    save_to_disc = FALSE)
+resn <- load_nc(dir = d, nc = "outputSETAS.nc", 
+                fgs = "SETasGroupsDem_NoCep.csv", 
+                bps = epibenthic_groups, 
+                select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
+                select_variable = "ResN", 
+                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                bboxes = boundary_boxes)
 ```
 
-The data can be stored on your machine if `save_to_disc` is set
-to `TRUE`. The data is stored as `*.rda` format as a list of dataframes which all share the same format.
-This is done to save storage space and to make sure that the data structure is not altered when it is imported into R.
-If you want to work with external software in further steps (E.g. Excel) you should convert the dataframes to `*.txt` or `*.csv` file.
-In addition you should always set `report` to `TRUE` to activate the progression bars during
-data import and transformation since this process may take some time for complex models (many boxes/groups)
-or long simulations.
+# Extract consumption from non-age-based groups species, timestep and polygon
+```{r}
+grazing <- load_nc(dir = d, nc = "outputSETASPROD.nc", 
+                   fgs = "SETasGroupsDem_NoCep.csv", 
+                   bps = epibenthic_groups, 
+                   select_groups = c("Megazoobenthos", "Cephalopod"), 
+                   select_variable = "Grazing", 
+                   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                   bboxes = boundary_boxes)
+```
 
-Most functions in `atlantistools` expect a directory to search for specific model files. There are 2 ways to pass the directory:
+# Extract Volume per polygon, layer and timestep.
+```{r}
+physics <- load_nc_physics(dir = d, nc = "outputSETAS.nc", select_physics = "volume", 
+                           prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+                           bboxes = boundary_boxes, aggregate_layers = FALSE)
+```
+
+
+
+
+Most `load` functions in `atlantistools` need a directory to search for specific model files. There are 2 ways to pass the directory:
 
 All your model files are stored in one directory. The files can now be accesed via their name. The directory can be set/passed in two ways:
 
-Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory.
+Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory to any function call.
 Pass the directory of your Atlantis folder as Object (this is the approach which is used here) to the argument `dir`.
   
 In case you are using different folders for generic model files and output files the directory can be set as described above. However you need to
 implement the output subfolder into the name of your outputfiles:
 
 ```{r, eval = FALSE}
-
-setas <- preprocess(dir = d,
-                    nc_gen = "output/outputSETAS.nc",
-                    nc_prod = "output/outputSETASPROD.nc",
-                    dietcheck = "output/outputSETASDietCheck.txt",
-                    yoy = "output/outputSETASYOY.txt",
-                    ssb = "output/outputSETASSSB.txt",
-                    specmort = "outputSETASSpecificMort.txt",
-                    specpredmort = "outputSETASSpecificPredMort.txt",
-                    prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                    prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                    bps = load_bps(dir = d, fgs = "SETasGroups.csv", 
-                                   init = "init_vmpa_setas_25032013.nc"),
-                    fgs = "SETasGroups.csv",
-                    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish", 
-                                      "Cephalopod", "Diatom", "Zoo"),
-                    bboxes = get_boundary(boxinfo = load_box(dir = d, 
-                                                             bgm = "VMPA_setas.bgm")),
-                    check_acronyms = TRUE,
-                    out = "preprocess.Rda",
-                    report = FALSE,
-                    save_to_disc = FALSE)
+structn <- load_nc(dir = d, nc = "output\outputSETAS.nc", 
+                   fgs = "SETasGroupsDem_NoCep.csv", 
+                   bps = c("Filter_Shallow", "Filter_Other", "Filter_Deep", "Benthic_grazer", 
+                           "Macrobenth_Deep", "Megazoobenthos", "Macrobenth_Shallow", "Macroalgae"), 
+                   select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
+                   select_variable = "StructN", 
+                   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                   bboxes = c(0, 6, 7, 8, 9, 10))
 ```
 
-## Create a map of your model for Bec!
+## Atlantistools offers a set of functions to calculate model diagnostics.
+
+Use `calculate_biomass_spatial` to calculate the biomass in tonnes over time for each group and ageclass
+per polygon and layer.
+
+
+```{r}
+bboxes <- get_boundary(boxinfo = load_box(d, bgm = "VMPA_setas.bgm"))
+nc_gen <- "outputSETAS.nc"
+nc_prod <- "outputSETASPROD.nc"
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
+bps <- load_bps(d, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
+bio_conv <- get_conv_mgnbiot(dir = d, prm_biol = prm_biol)
+
+groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
+groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det")
+
+nums <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+                select_groups = groups_age, select_variable = "Nums",
+                prm_run = prm_run, bboxes = bboxes)
+sn <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+              select_groups = groups_age, select_variable = "StructN",
+              prm_run = prm_run, bboxes = bboxes)
+rn <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+              select_groups = groups_age, select_variable = "ResN",
+              prm_run = prm_run, bboxes = bboxes)
+n <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+             select_groups = groups_rest, select_variable = "N",
+             prm_run = prm_run, bboxes = bboxes)
+vol <- load_nc_physics(dir = d, nc = nc_gen, select_physics = c("volume", "dz"),
+                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+
+df <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol_dz = vol,
+                                bio_conv = bio_conv, bps = bps)
+```
+
+Use `calculate_consumed_biomass` to calculate the consumed biomass of each prey species in tonnes by each predator and ageclass
+per timestep and polygon.
+
+```{r}
+bboxes <- get_boundary(boxinfo = load_box(d, bgm = "VMPA_setas.bgm"))
+nc_gen <- "outputSETAS.nc"
+nc_prod <- "outputSETASPROD.nc"
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
+bps <- load_bps(d, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
+bio_conv <- get_conv_mgnbiot(dir = d, prm_biol = prm_biol)
+
+groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
+groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det")
+
+df_eat <- load_nc(dir = d, nc = nc_prod, bps = bps, fgs = fgs,
+               select_groups = groups_age, select_variable = "Eat",
+               prm_run = prm_run, bboxes = bboxes)
+df_grz <- load_nc(dir = d, nc = nc_prod, bps = bps, fgs = fgs,
+               select_groups = groups_rest, select_variable = "Grazing",
+               prm_run = prm_run, bboxes = bboxes)
+df_dm <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+                        fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
+vol <- load_nc_physics(dir = d, nc = nc_gen, select_physics = "volume",
+                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+
+df_cons <- calculate_consumed_biomass(eat = df_eat, grazing = df_grz, dm = df_dm,
+                                      vol = vol, bio_conv = bio_conv)
+```
+
+## atlantistools offers a wide variety of plotting functions to visualise Atlantis simulations
+
+The two major plotting functions are `plot_line` to visualise time-series and `plot_bar`.
+Each plot in `atlantistools` either returns a ggplot2 object or a table-grob composed of
+individual ggplot2 objects. Therefore, you are able to customise the plots to your personal
+liking afterwards.
+
+# `plot_line` can be used in various ways
+
+```{r}
+plot_line(preprocess_setas$biomass, ncol = 3)
+plot_line(preprocess_setas$biomass, col = "species", ncol = 3)
+plot_line(preprocess_setas$biomass_age, col = "agecl")
+plot_line(preprocess_setas$biomass_age, wrap = "agecl", col = "species", ncol = 3)
+```
+
+Compare model outoput with observed data. 
+
+```{r}
+ex_data <- read.csv(file.path(system.file("extdata", "setas-model-new-becdev", package = "atlantistools"), 
+                              "setas-bench.csv"), stringsAsFactors = FALSE)
+names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
+
+data <- preprocess_setas$biomass
+data$model <- "atlantis"
+comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
+
+# Show atlantis as first factor!
+comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
+
+# Create plot
+plot_line(comp, col = "model", ncol = 3)
+```
+
+```{r}
+# Use convert_relative_initial and {plot_add_box with plot_line.
+# Firstly, use convert_relative_initial to generate a relative time series first.
+df <- convert_relative_initial(preprocess_setas$structn_age)
+
+# Create the base plot with plot_line.
+plot <- plot_line(df, col = "agecl")
+
+# Add lower and upper range.
+plot_add_box(plot)
+
+# You can set the upper and lower range of the box as you like!
+plot_add_box(plot, range = c(0.8, 0.4))
+```
+
+```{r}
+# Create spatial timeseries plots in conjuction with custom_grid.
+plot <- plot_line(preprocess_setas$physics, wrap = NULL)
+custom_grid(plot, grid_x = "polygon", grid_y = "variable")
+
+plot <- plot_line(preprocess_setas$flux, wrap = NULL, col = "variable")
+custom_grid(plot, grid_x = "polygon", grid_y = "layer")
+```
+
+
+# Create a map of your model for Bec!
 
 Always add a spatial representation of your model if you have issues with model tuning. This makes the life of Bec and Beth much easier.
 
@@ -158,69 +249,35 @@ bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 plot_boxes(bgm_data)
 ```
 
-## Plot physics and fluxes
+```{r}
+# Use agg_perc together with plot_bar to visualise the relative cohort structure over time.
+df <- agg_perc(preprocess_setas$nums_age, groups = c("time", "species"))
+plot_bar(df, fill = "agecl", wrap = "species")
 
-```{r, fig.width = 7, fig.height = 10}
-plot_physics(setas$physics)
+df <- agg_perc(preprocess_setas$biomass_age, groups = c("time", "species"))
+plot_bar(df, fill = "agecl", wrap = "species")
 ```
 
-```{r, fig.width = 7, fig.height = 5}
-plot_flux(setas$flux)
-```
-
-
-## Plot biomass timeseries (or any other time series!)
-
-```{r, fig.width = 10, fig.height = 3}
-plot_ts(setas$biomass)
-```
-
-## Create reference plot for individual weight and biomass
-
-```{r, fig.width = 7, fig.height = 5}
-plot_calibrate(data = setas$structn_age)
-```
-
-The function can also be used with non-age structured data.
-
-```{r, fig.width = 10, fig.height = 3}
-plot_calibrate(data = setas$biomass)
-```
-
-## Visualise cohort distributions for numbers and biomass over time
-
-```{r, fig.width = 7, fig.height = 5}
-plot_struct(data = setas$biomass_age)
-plot_struct(data = setas$nums_age)
-```
-
-## Plot feeding interactions
+# Plot feeding interactions
 
 Please note the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
-Data about feeding interactions can be visualised with `plot_diet_bec_dev`. The data originates from `SpecPredMort.txt`
-which gives an indication about feeding interactions. Please note that these values do not represent realised diets within
-the model. If you want to visualise realised diets you need oto switch to the trunk version of ATLANTIS and use
-`plot_diet` instead.
+Data about feeding interactions can be visualised with `plot_diet` (Please use `plot_diet_bec_dev` for bec-dev models.
+However, in contrast to trunk models the plots will only give an indication about feeding interacions. They do not show the
+actual consumed biomass). The data originates from `DietCheck.txt`.
 
-```{r, fig.show = 'hold', fig.width = 7, fig.height = 5}
-# Create a plot for each predator in your model using SpecMort.txt.
-# create a subplot for each ageclass.
-feeding_plots <- plot_diet_bec_dev(data = setas$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
-grid.arrange(feeding_plots[[1]])
+The plots are stored as a list of table-grob. You can plot them on the graphics device with `gridExtra::grid.arrange`.
+
+```{r}
+feeding_plots <- plot_diet(df_cons, wrap_col = "agecl")
+gridExtra::grid.arrange(feeding_plots[[1]])
+gridExtra::grid.arrange(feeding_plots[[7]])
+
+# Apply names() to the list of table-grobs to extract the predator name
+names(feeding_plots)
 ```
 
-```{r, fig.show = 'hold', fig.width = 7, fig.height = 5, eval=FALSE}
-# Create a plot for each predator in your model using SpecMort.txt.
-# create a subplot for each stanza (juvenile/adult/none).
-# plot_data <- combine_ages(dir = d,
-                          # data = setas$diet_specmort, 
-                          # col = "pred", 
-                          # prm_biol = "VMPA_setas_biol_fishing_New.prm")
-# feeding_plots <- plot_diet(data = plot_data, wrap_col = "stanza", combine_thresh = 15)
-# grid.arrange(feeding_plots[[1]])
-```
 
 ```{r, eval = FALSE}
 # Save all plots to disc in multiple pdfs!
@@ -236,33 +293,6 @@ marrangeGrob(feeding_plots, nrow = 1, ncol = 1)
 dev.off()
 ```
 
-## Compare recruitment with recruitment data
-
-Please note that recruitment in Atlantis differs from recruitment in most models due to changes of recruitment
-ages (which is generally age 0-3 in stock assessment models). Thanks @ Isaac for pointing that out.
-
-As the Setas model comes without recruitment data some noise is applied to the output files to demonstrate the plots.
-
-```{r, fig.width = 7, fig.height = 5}
-ex_data <- setas$ssb_rec
-ex_data$species <- as.character(ex_data$species)
-ex_data$rec <- ex_data$rec * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
-ex_data$ssb <- ex_data$ssb * runif(n = nrow(ex_data), min = 0.8, max = 1.2)
-ex_data$model <- "test_model"
-plot_rec(data = setas$ssb_rec, ex_data)
-```
-
-<!-- ## Compare your model run with other models/data! -->
-
-<!-- Again, noise is added due to a lack of external data. -->
-
-<!-- ```{r, fig.width = 10, fig.height = 4} -->
-<!-- data_comp <- setas$biomass -->
-<!-- data_comp$biomass <- data_comp$atoutput * runif(n = nrow(data_comp), min = 0.8, max = 1.2) -->
-<!-- data_comp$atoutput <- NULL -->
-<!-- data_comp$model <- "test_model" -->
-<!-- plot_bench(data = setas$biomass, ex_data = data_comp) -->
-<!-- ``` -->
 
 ## Change parameter values!
 
@@ -273,7 +303,7 @@ we increase the existing value by a factor of 2.
 
 ```{r}
 new_prm <-  change_prm(dir = d, 
-                       prm_biol = "VMPA_setas_biol_fishing_New.prm", 
+                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", 
                        select_acronyms = "FPS", 
                        roc = 2, 
                        parameter = "KWRR", 
@@ -285,15 +315,15 @@ thoroughly so you would normally set `save_to_disc` to `TRUE` to overwrite your 
 parameter file with the newly generated one Please make sure to backup your original files beforehand.
 
 ```{r}
-extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWRR_FPS")
-extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm", variable = "KWSR_FPS")
+extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", variable = "KWRR_FPS")
+extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", variable = "KWSR_FPS")
 ```
 
 You can also pass a vector of groups to change the parameter for multiple functional groups with a single call to `change_prm`.
 
 ```{r}
 new_prm <-  change_prm(dir = d, 
-                       prm_biol = "VMPA_setas_biol_fishing_New.prm", 
+                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", 
                        select_acronyms = c("FPL", "FPO", "FPS", "FVD", "FVV", "FVS", "FVB", "FVT", "FVO"), 
                        roc = runif(n = 9, min = 2, max = 5), 
                        parameter = "KWRR", 
@@ -309,7 +339,7 @@ works with parameters whose values are stored in the next row following the flag
 
 ```{r}
 new_prm <-  change_prm_cohort(dir = d, 
-                              prm_biol = "VMPA_setas_biol_fishing_New.prm", 
+                              prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", 
                               select_acronyms = c("FPL", "FPO"), 
                               roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10), 
                               parameter = "C", 
