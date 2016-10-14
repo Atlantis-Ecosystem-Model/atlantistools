@@ -34,12 +34,12 @@ dt         	12 hour     # 12 hour time step
 tstop       1095 day     # Stop time after the given period 15000 5000
 
 toutstart  	0 day       # Output start time
-toutinc    	365 day     # Write output with this periodicity
-toutfinc   	365 day     # Write fisheries output with this periodicity
+toutinc    	73 day     # Write output with this periodicity
+toutfinc   	73 day     # Write fisheries output with this periodicity
 tburnday   0 day
 external_box 0
 
-tsumout    	30  	day      # Write stock state summary with this periodicity
+tsumout    	73  	day      # Write stock state summary with this periodicity
 flagannual_Mest 0      # Whether to write out estimates of mortality per predator annually (1) or not (0)
 fishout    	1          # Switch to turn fisheries output on = 1, off = 0
 flagreusefile 	2        # Switch to show want to append output file no = 0, yes = 1, replace = 2
