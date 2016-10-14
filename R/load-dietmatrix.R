@@ -23,18 +23,19 @@
 #' @param dietmatrix Dataframe in 'long' format containing information about availabilities
 #' with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
 #' 'avail'. The dataframe should be generated with \code{load_dietmatrix()}.
+#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
 #' @return dataframe of the availability matrix in long format with columns
 #' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.
 #' @export
 
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' dm <- load_dietmatrix(dir = d,
-#'                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
-#'                       fgs = "SETasGroups.csv")
+#'                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#'                       fgs = "SETasGroupsDem_NoCep.csv")
 #' head(dm, n = 10)
 
-load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, convert_names = FALSE) {
+load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, convert_names = FALSE, version_flag = 2) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
   acr <- fgs_data$Code[fgs_data[, names(fgs_data)[names(fgs_data) %in% c("isPredator", "IsPredator")]] == 1]
   agecl <- fgs_data$NumCohorts[fgs_data[, names(fgs_data)[names(fgs_data) %in% c("isPredator", "IsPredator")]] == 1]
@@ -43,6 +44,8 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
   coh10 <- acr[agecl > 2]
   coh2 <- acr[agecl == 2]
   coh1 <- acr[agecl == 1]
+
+  if (version_flag == 2) coh10 <- c(coh10, coh2); coh2 <- NULL
 
   if (length(c(coh10, coh2, coh1)) != length(acr)) stop("Incomplete functional groups file.")
 
