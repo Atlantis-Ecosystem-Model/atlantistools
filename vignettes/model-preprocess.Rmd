@@ -1,0 +1,20 @@
+---
+title: "model-preprocess"
+author: "Alexander Keth"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{model-preprocess}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r}
+library("atlantistools")
+library("ggplot2")
+library("gridExtra")
+
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+```
+
+
