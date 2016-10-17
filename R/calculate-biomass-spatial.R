@@ -76,7 +76,7 @@
 #'                                 vol_dz = vol, bio_conv = bio_conv, bps = bps)
 
 calculate_biomass_spatial <- function(nums, sn, rn, n, vol_dz, bio_conv, bps) {
-  vol <- tidyr::spread_(vol, key_col = c("variable"), value_col = "atoutput")
+  vol <- tidyr::spread_(vol_dz, key_col = c("variable"), value_col = "atoutput")
 
   # Calculate biomass per time, box and layer per group and ageclass!
   # - Age based groups!
