@@ -9,12 +9,162 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+## Motivation
+This Vignette is used to load in and preprocess autput from an Atlantis simulation. Given
+the complexity of the model output and the time it takes to process it the vignette has three main
+porposes
+1. Standardise various output formats (netcdf, txt) and structures to a unified format. 
+2. Aggregate the complex Atlantis output in meaningul ways. E.g. horizontally and vertically.
+3. Save the preprocessed output as a list of dataframes to save computation time and make it easier to share model output.
+
+Please feelfree to modify the vignette to your likings by adding your personal calculation procedures. I will try
+to update this vignette as frequently as possible to make sure most functionality within
+atlantistools is present.
+
 ```{r}
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
+library("dplyr")
 
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+# You should be able to build the vignette either by clicking on "Knit-PDF" or with
+# rmarkdown::render("model-calibration.Rmd")
 ```
+
+## User Input
+This section is used to define simulation specific variables. Please change this accordingly.
+
+```{r}
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+
+nc_gen <- "outputSETAS.nc"
+nc_prod <- "outputSETASPROD.nc"
+dietcheck <- "outputSETASDietCheck.txt"
+yoy <- "outputSETASYOY.txt"
+ssb <- "outputSETASSSB.txt"
+version_flag <- 2
+
+prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
+bgm <- "VMPA_setas.bgm"
+init <- "INIT_VMPA_Jan2015.nc"
+```
+
+## Define additional variables using build in atlantistools functions.
+```{r}
+bboxes <- get_boundary(boxinfo = load_box(dir, bgm))
+bps <- load_bps(dir, fgs, init)
+bio_conv <- get_conv_mgnbiot(dir, prm_biol)
+
+# By default data from all groups within the simulation is extracted!
+groups <- get_groups(dir, fgs)
+groups_age <- get_age_groups(dir, fgs)
+groups_rest <- groups[!groups %in% groups_age]
+```
+
+## Read in data from Atlantis simulation.
+```{r}
+# Read in raw untransformed data from nc_gen
+vars <- list("Nums", "StructN", "ResN", "N")
+grps <- list(groups_age, groups_age, groups_age, groups_rest)
+dfs_gen <- Map(load_nc, select_variable = vars, select_groups = grps,
+               MoreArgs = list(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
+
+# Read in raw untransformed data from nc_prod
+vars <- list("Eat", "Grazing", "Growth")
+grps <- list(groups_age, groups_rest, groups_age)
+dfs_prod <- Map(load_nc, select_variable = vars, select_groups = grps,
+                MoreArgs = list(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
+
+# Read in physics
+flux <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("eflux", "vflux"),
+                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
+
+sink <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("hdsource", "hdsink"),
+                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
+
+physics <- load_nc_physics(dir = dir, nc = nc_gen, 
+                           select_physics = c("salt", "NO3", "NH3", "Temp", "Chl_a", "Denitrifiction"),
+                           prm_run = prm_run, bboxes = bboxes, aggregate_layers = TRUE)
+
+vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume",
+                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+
+vol_dz <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
+                          prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+
+# Read in Dietcheck
+df_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck,
+                        fgs = fgs, prm_run = prm_run, version_flag = version_flag, convert_names = TRUE)
+
+# Read in SSB/R
+ssb_rec <- load_rec(dir = dir, yoy = yoy, ssb = ssb, prm_biol = prm_biol)
+
+# Read in misc  
+df_agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir, fgs), parameter = "age_mat")
+dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
+```
+
+## Apply preprocess calculations
+```{r}
+# Calculate biomass spatially
+bio_sp <- calculate_biomass_spatial(nums = dfs_gen[[1]], sn = dfs_gen[[2]], rn = dfs_gen[[3]], n = dfs_gen[[4]],
+                                    vol_dz = vol_dz, bio_conv = bio_conv, bps = bps)
+
+# Aggregate biomass
+biomass <- bio_sp %>%
+  agg_data(groups = c("species", "time"), fun = sum)
+
+biomass_age <- bio_sp %>%
+  filter(agecl > 2) %>%
+  agg_data(groups = c("species", "agecl", "time"), fun = sum)
+
+# Aggregate Numbers! This is done seperately since numbers need to be summed!
+nums     <- agg_data(data = dfs_gen[[1]], groups = c("species", "time"), fun = sum)
+nums_age <- agg_data(data = dfs_gen[[1]], groups = c("species", "agecl", "time"), fun = sum)
+nums_box <- agg_data(data = dfs_gen[[1]], groups = c("species", "polygon", "time"), fun = sum)
+
+# Aggregate the rest of the dataframes by mean!
+structn_age <- agg_data(data = dfs_gen[[2]],  groups = c("species", "time", "agecl"), fun = mean)
+resn_age    <- agg_data(data = dfs_gen[[3]],  groups = c("species", "time", "agecl"), fun = mean)
+eat_age     <- agg_data(data = dfs_prod[[1]], groups = c("species", "time", "agecl"), fun = mean)
+grazing     <- agg_data(data = dfs_prod[[2]], groups = c("species", "time"), fun = mean)
+growth_age  <- agg_data(data = dfs_prod[[3]], groups = c("species", "time", "agecl"), fun = mean)
+
+# Calculate consumed biomass
+bio_cons <- calculate_consumed_biomass(eat = dfs_prod[[1]], grazing = dfs_prod[[2]], dm = df_dm,
+                                       vol = vol, bio_conv = bio_conv) %>%
+  agg_data(groups = c("pred", "agecl", "time", "prey"), fun = sum)
+
+# Calculate spatial overlap
+sp_overlap <- calculate_spatial_overlap(biomass_spatial = bio_sp, dietmatrix = dietmatrix, agemat = df_agemat)
+```
+
+
+## Combine objects to a list of preprocessed dataframes.
+```{r}
+  result <- list(
+    "biomass"          = biomass,       #1
+    "biomass_age"      = biomass_age,
+    "biomass_consumed" = bio_cons,
+    "diet"             = df_dm,
+    "eat_age"          = eat_age,       #5
+    "flux"             = flux,
+    "grazing"          = grazing,
+    "growth_age"       = growth_age,
+    "nums"             = nums,
+    "nums_age"         = nums_age,      #10
+    "nums_box"         = nums_box,
+    "physics"          = physics,
+    "resn_age"         = resn_age,
+    "sink"             = sink,
+    "spatial_overlap"  = sp_overlap,    #15
+    "ssb_rec"          = ssb_rec,
+    "structn_age"      = structn_age    
+  )
+```
+
+
 
 
