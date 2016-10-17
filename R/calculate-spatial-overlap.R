@@ -16,21 +16,17 @@
 #' @export
 #'
 #' @examples
-#' dir <- system.file("extdata", "gns", package = "atlantistools")
-#' nc_gen <- "outputNorthSea.nc"
-#' prm_biol <- "NorthSea_biol_fishing.prm"
-#' prm_run = "NorthSea_run_fishing_F.prm"
-#' bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
-#' fgs = "functionalGroups.csv"
-#' bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+#' # Using built in datasets.
+#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+#' fgs <- "SETasGroupsDem_NoCep.csv"
 #'
-#' biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
 #' dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
 #' agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
 #'                     group = get_age_acronyms(dir = dir, fgs = fgs),
 #'                     parameter = "age_mat")
 #'
-#' sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
+#' sp_overlap <- calculate_spatial_overlap(biomass_spatial = ref_bio_sp, dietmatrix = dietmatrix, agemat)
 
 calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   # Check input dataframes!
@@ -62,12 +58,14 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   data_bio$perc_bio[is.na(data_bio$perc_bio)] <- 0
 
   # Remove sediment layer! Need to read in the sediment penetration depth (KDEP) to include sedimant layer.
-  data_bio <- dplyr::filter_(data_bio, lazyeval::interp(~ col != max(col), col = as.name("layer")))
+  data_bio <- dplyr::filter_(data_bio, lazyeval::interp(~col != max(col), col = as.name("layer")))
 
   # Apply Schoener calculations to all predators!
   ps <- data_bio %>%
     dplyr::select_(.dots = c("species", "agecl")) %>%
-    unique()
+    unique() %>%
+    dplyr::filter_(~species %in% unique(dietmatrix$pred))
+
   sis <- Map(schoener, predgrp = ps$species, ageclass = ps$agecl,
              MoreArgs = list(biomass = data_bio, avail = dietmatrix))
 }

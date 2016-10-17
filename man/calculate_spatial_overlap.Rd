@@ -27,20 +27,16 @@ as weighted mean with the availabilities as weights.
 Calculate 3d overlap of predator groups with their prey over time using Schoener Index.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-nc_gen <- "outputNorthSea.nc"
-prm_biol <- "NorthSea_biol_fishing.prm"
-prm_run = "NorthSea_run_fishing_F.prm"
-bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
-fgs = "functionalGroups.csv"
-bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+# Using built in datasets.
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
 
-biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
 dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
 agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
                     group = get_age_acronyms(dir = dir, fgs = fgs),
                     parameter = "age_mat")
 
-sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
+sp_overlap <- calculate_spatial_overlap(biomass_spatial = ref_bio_sp, dietmatrix = dietmatrix, agemat)
 }
 
