@@ -1,12 +1,12 @@
 context("change_prm test parameter update.")
 
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-prm_old <- "VMPA_setas_biol_fishing_New.prm"
+prm_old <- "VMPA_setas_biol_fishing_Trunk.prm"
 prm_old_read <- readLines(file.path(d, prm_old))
 
 prm_new <- change_prm(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
                       select_acronyms = c("FPS", "FVS"),
                       roc = c(2,3),
                       parameter = "KWRR",
@@ -24,8 +24,7 @@ test_that("test change_prm", {
     scan_prm(chars = prm_old_read, variable = paste("KWRR", "FVS", sep = "_"))))
 })
 
-supported_parameters <-   c("KWSR", "KWRR", "jack_a", "jack_b", "KUP", "KLP", "Recruit_Period",
-                            "BHbeta", "BHalpha", "jmL", "jmQ", "FSP", "KSPA", "E", "EPlant")
+supported_parameters <-   c("KWSR", "KWRR", "FSP", "KSPA", "E", "EPlant")
 
 # Different ordering
 # "Recruit_Time", "spawn_period", "Time_Spawn"
@@ -42,9 +41,6 @@ test_that("test scan_prm & extract_prm", {
   expect_error(scan_prm(chars = c("KWRR_FVS 15", "KWRR_FVS 25"), variable = "KWRR_FVS"), "Variable KWRR_FVS found multiple times.")
 
   expect_equal(extract_prm(dir = d, prm_biol = prm_old, variable = "KWRR_FVS"), 7000)
-
-  expect_equal(extract_prm(dir = d, prm_biol = prm_old, variable = "mL_FPS"), 2e-8)
-  expect_equal(extract_prm(dir = d, prm_biol = prm_old, variable = "jmL_FPS"), 1e-8)
 
   expect_equal(length(pos), length(supported_parameters))
 

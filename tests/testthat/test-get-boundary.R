@@ -1,7 +1,6 @@
 context("get_boundary check for boundary boxes")
 
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-file <- "SETasGroups.csv"
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
 boxinfo <- load_box(dir = d, bgm = "VMPA_setas.bgm")
 
