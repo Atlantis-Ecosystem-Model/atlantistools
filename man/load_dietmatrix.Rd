@@ -6,7 +6,7 @@
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
 load_dietmatrix(dir = getwd(), prm_biol, fgs, transform = TRUE,
-  convert_names = FALSE)
+  convert_names = FALSE, version_flag = 2)
 
 write_diet(dir = getwd(), dietmatrix, prm_biol)
 }
@@ -33,6 +33,8 @@ diet matrix entries.}
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
 
+\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
+
 \item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
 with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
 'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
@@ -46,10 +48,10 @@ Extracts the diet matrix as long dataframe from the biological paremeter file
 of any ATLANTIS simulation.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 dm <- load_dietmatrix(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                      fgs = "SETasGroups.csv")
+                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+                      fgs = "SETasGroupsDem_NoCep.csv")
 head(dm, n = 10)
 }
 
