@@ -1553,3 +1553,39 @@ KWRR_WHB        65224179.9  Reserve weight of baleen whale young              mg
 KWRR_WHS         21328.0   Reserve weight of small toothed whale young       mg N            1986327.0
 KWRR_WHT        1986327.0  Reserve weight of toothed whale young             mg N            1986327.0
 
+# Age class of maturity                      
+FPL_age_mat  2  First mature age class of large planktivores 1                 
+FPS_age_mat  3  First mature age class of small planktivores 1                 
+FPO_age_mat  2  First mature age class of other planktivores 1                 
+FVD_age_mat  2  First mature age class of deep piscivores 2                 
+FVV_age_mat  2  First mature age class of vulnerable piscivores 2                 
+FVS_age_mat  2  First mature age class of shallow piscivores 2                 
+FVT_age_mat  4  First mature age class of tropical piscivores 2                 
+FVO_age_mat  2  First mature age class of other tuna 4                 
+FVB_age_mat  2  First mature age class of other piscivores 1                 
+FMM_age_mat  2  First mature age class of migratory mesopelagics 1                 
+FMN_age_mat  2  First mature age class of non-migratory mesopelagics 2                 
+FBP_age_mat  2  First mature age class of benthopelagics 1                  
+FDD_age_mat  2  First mature age class of deep demersals 2                 
+FDS_age_mat  3  First mature age class of shallow demersals 2                 
+FDB_age_mat  2  First mature age class of other shallow demersal 2                
+FDC_age_mat  2  First mature age class of other deep demersal 3                
+FDO_age_mat  2  First mature age class of longlived demersal 4                 
+FDE_age_mat  2  First mature age class of herbivorous demersals 2                 
+FDF_age_mat  3  First mature age class of flat deep demersals 2                
+FDM_age_mat  2  First mature age class of miscellaneous demersals 2                 
+FDP_age_mat  2  First mature age class of protected demersals 2                 
+SHD_age_mat  3  First mature age class of demersal sharks 2                 
+SHB_age_mat  4  First mature age class of other sharks 2                 
+SHC_age_mat  4  First mature age class of dogfish 2                  
+SHR_age_mat  4  First mature age class of reef sharks 2                 
+SHP_age_mat  5  First mature age class of pelagic sharks 2                 
+SSK_age_mat  2  First mature age class of skates and rays 2                
+SB_age_mat  2 First mature age class of seabirds 2                  
+SP_age_mat  3 First mature age class of penguins 1                  
+REP_age_mat  2  First mature age class of reptiles 2                  
+WDG_age_mat  3  First mature age class of dugongs 3                  
+PIN_age_mat  3  First mature age class of pinnipeds 3                  
+WHB_age_mat  2  First mature age class of baleen whales 3                 
+WHS_age_mat  2  First mature age class of small toothed whales 2                
+WHT_age_mat  2  First mature age class of toothed whales 2                 
