@@ -1,0 +1,14 @@
+#' Physical variables.
+#'
+#' @format
+#' \describe{
+#' \item{variable}{Name of the physical variable: "salt", "NO3", "NH3", "Temp", "Chl_a" and "Denitrifiction".}
+#' \item{polygon}{Boxid starting from 0 to numboxes - 1.}
+#' \item{layer}{Layerid starting from 0 to numlayers - 1.}
+#' \item{time}{Simulation time in years. Modeltimestep was converted to actual
+#' time based on the settings in the 'run.prm' file.}
+#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' units are salt = PSU; NO3, NH3 = mg N m-3; Temp = degrees Celcius; Chl_a, Denitrifiction = ?}
+#' }
+#' @source See \code{data-raw/data-preprocess.R} for further information.
+"ref_physics"
