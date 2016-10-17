@@ -74,7 +74,7 @@
 
 plot_diet <- function(bio_consumed, species = NULL, wrap_col, combine_thresh = 7) {
   # Check input dataframe structure.
-  check_df_names(data = bio_consumed, expect = c("pred", "agecl", "polygon", "time", "prey", "atoutput"))
+  check_df_names(data = bio_consumed, expect = c("pred", "agecl", "time", "prey", "atoutput"), optional = "polygon")
 
   # Calculate % diet dirstribution from pred and prey perspective.
   agg_bio <- agg_data(bio_consumed, groups = c("time", "pred", "agecl", "prey"), fun = sum)
