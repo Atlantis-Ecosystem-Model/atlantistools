@@ -1,8 +1,12 @@
 #' Extract parameters from the biological parameter file and transform them to a dataframe.
 #'
+#' @param prm_biol Character string giving the filename of the biological
+#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
+#' multiple folders for your model files and outputfiles pass the complete
+#' folder/filename string and set dir to 'NULL'.
 #' @param group Character vector giving the functional Groups to extract.
 #' @param parameter Character vector giving the parameters to extract.
-#' @inheritParams preprocess
+#' @inheritParams load_nc
 #' @return Dataframe with columns 'species' and as many columns as parameters.
 #' @export
 #'
