@@ -45,7 +45,7 @@
 #' prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
 #'
 #' groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
-#' groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
+#' groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det")
 #'
 #' nums <- load_nc(dir = dir, nc = nc_gen, bps = bps, fgs = fgs,
 #'                 select_groups = groups_age, select_variable = "Nums",
