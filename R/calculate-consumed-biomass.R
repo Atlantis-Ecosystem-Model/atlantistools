@@ -25,7 +25,7 @@
 
 #' @export
 #' @examples
-#' # 1. Using preprocessed datasets.
+#' # 1. Using built-in datasets.
 #' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
 #'
