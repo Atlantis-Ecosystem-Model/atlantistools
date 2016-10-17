@@ -17,6 +17,7 @@ epibenthic_groups <- load_bps(dir = d, fgs = fgs, init = init)
 groups <- c("Planktiv_S_Fish", "Pisciv_S_Fish", "Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det")
 groups_age <- groups[1:2]
 groups_rest <- groups[3:length(groups)]
+bio_conv <- get_conv_mgnbiot(dir = d, prm_biol = prm_biol)
 
 # Create reference dataframes ---------------------------------------------------------------------
 vars <- list("Nums",     "StructN",  "ResN",     "Growth",   "Eat",      "Grazing",   "N")
@@ -48,9 +49,16 @@ ref_dm <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
                          prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
                          version_flag = 2, convert_names = TRUE)
 
+ref_bio_sp <- calculate_biomass_spatial(nums = ref_nums, sn = ref_structn, rn = ref_resn, n = ref_n,
+                                        vol_dz = ref_vol_dz, bio_conv = bio_conv, bps = epibenthic_groups)
+
+ref_bio_cons <- calculate_consumed_biomass(eat = ref_eat, grazing = ref_grazing, dm = ref_dm,
+                                           vol = ref_vol, bio_conv = bio_conv)
+
 # Save to HDD and cleanup -------------------------------------------------------------------------
 devtools::use_data(ref_eat, ref_grazing, ref_n, ref_nums, ref_structn, ref_resn,
-                   ref_vol_dz, ref_vol, ref_dm, ref_growth, ref_physics, overwrite = TRUE)
+                   ref_vol_dz, ref_vol, ref_dm, ref_growth, ref_physics, ref_bio_sp,
+                   ref_bio_cons, overwrite = TRUE)
 
 rm(list = ls())
 
