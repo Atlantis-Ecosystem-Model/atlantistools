@@ -3,10 +3,10 @@ context("load_init check structure and values in output dataframe")
 d <- system.file("extdata", "gns", package = "atlantistools")
 
 dd <- load_init(dir = d, init = "init_simple_NorthSea.nc", vars = c("cod1_Nums", "cod1_ResN"))
-df <- load_init(dir = system.file("extdata", "setas-model-new-becdev", package = "atlantistools"),
-                init = "init_vmpa_setas_25032013.nc", vars = "Pisciv_D_Fish1_ResN")
-dg <- load_init(dir = system.file("extdata", "setas-model-new-becdev", package = "atlantistools"),
-                init = "init_vmpa_setas_25032013.nc", vars = "Macroalgae_N")
+df <- load_init(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
+                init = "INIT_VMPA_Jan2015.nc", vars = "Planktiv_S_Fish1_ResN")
+dg <- load_init(dir = system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
+                init = "INIT_VMPA_Jan2015.nc", vars = "Megazoobenthos_N")
 
 test_that("test output numbers", {
   expect_equal(dim(dd[[1]]), c(208, 3))
