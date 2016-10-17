@@ -49,7 +49,7 @@ load_nc_physics <- function(dir = getwd(),
                             bboxes,
                             warn_zeros = FALSE){
   if (is.null(select_physics)) stop("No physical variables selected.")
-  supported_variables <- c("salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a",
+  supported_variables <- c("salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a", "hdsource", "hdsink",
                            "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz", "nominal_dz")
 
   wrong_input <- select_physics[which(!is.element(select_physics, supported_variables))]
