@@ -7,7 +7,7 @@
 #' 'output[...]YOY.txt'. In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
+#' case. Biomass in tonnes per spawning event summed over the total model domain.
 #' @param ssb Character string of the SSB.txt file. Usually
 #' 'output[...]SSB.txt'. In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
@@ -23,11 +23,11 @@
 #' @family load functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' load_rec(dir = d,
 #'    yoy = "outputSETASYOY.txt",
 #'    ssb = "outputSETASSSB.txt",
-#'    prm_biol = "VMPA_setas_biol_fishing_New.prm")
+#'    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
 
 load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
   # Read in files
