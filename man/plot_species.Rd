@@ -8,7 +8,7 @@ plot_species(data_pre, species)
 }
 \arguments{
 \item{data_pre}{List of preprocessed Atlantis simulation. The list of dataframes
-should be created with \code{preprocess()}.}
+should be created with \code{model-preprocess.Rmd}.}
 
 \item{species}{Character srtring giving the name of the species to plot. Only age
 based species are supported.}
@@ -27,7 +27,7 @@ used during model calibration. Currently 6 plots are created by default:
 - Numbers over time per age
 }
 \examples{
-plot <- plot_species(preprocess_setas, species = "Shallow piscivorous fish")
+plot <- plot_species(preprocess, species = "Shallow piscivorous fish")
 # Use grid.arrange to draw the plot on the current device
 gridExtra::grid.arrange(plot)
 }

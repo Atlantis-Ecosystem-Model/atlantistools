@@ -10,7 +10,7 @@
 #' - Numbers over time per age
 #'
 #' @param data_pre List of preprocessed Atlantis simulation. The list of dataframes
-#' should be created with \code{preprocess()}.
+#' should be created with \code{model-preprocess.Rmd}.
 #' @param species Character srtring giving the name of the species to plot. Only age
 #' based species are supported.
 #' @return ggplot2 object of class grob
@@ -18,7 +18,7 @@
 #' @family plot functions
 #'
 #' @examples
-#' plot <- plot_species(preprocess_setas, species = "Shallow piscivorous fish")
+#' plot <- plot_species(preprocess, species = "Shallow piscivorous fish")
 #' # Use grid.arrange to draw the plot on the current device
 #' gridExtra::grid.arrange(plot)
 
@@ -52,7 +52,9 @@ plot_species <- function(data_pre, species) {
   dfs <- c(dfs, list(condition))
 
   # Create plots
-  plots <- lapply(dfs, plot_ts)
+  plot1 <- plot_line(dfs[[1]])
+  plot2 <- lapply(dfs[2:length(dfs)], plot_line, col = "agecl")
+  plots <- c(list(plot1), plot2)
 
   # Update y axis labels!
   labels <- c("Biomass[t]", "Biomass [t]",
