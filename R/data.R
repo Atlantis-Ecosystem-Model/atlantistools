@@ -182,3 +182,17 @@
 #' Volume in m^3}
 #' }
 "ref_vol"
+
+#' agemat.
+#'
+#' @format
+#' \describe{
+#' \item{species}{Name of the functional groups given as character string.
+#' The names match with the column 'LongName' in the functionalGroups.csv file.}
+#' \item{age_mat}{First mature age class.}
+#' }
+"ref_agemat"
+
+
+
+

@@ -57,10 +57,13 @@ ref_bio_cons <- calculate_consumed_biomass(eat = ref_eat, grazing = ref_grazing,
 
 ref_dietmatrix <- load_dietmatrix(dir = d, prm_biol, fgs, convert_names = TRUE)
 
+ref_agemat <- prm_to_df(dir = d, prm_biol = prm_biol, fgs = fgs,
+                        group = get_age_acronyms(dir = d, fgs = fgs), parameter = "age_mat")
+
 # Save to HDD and cleanup -------------------------------------------------------------------------
 devtools::use_data(ref_eat, ref_grazing, ref_n, ref_nums, ref_structn, ref_resn,
                    ref_vol_dz, ref_vol, ref_dm, ref_growth, ref_physics, ref_bio_sp,
-                   ref_bio_cons, ref_dietmatrix, overwrite = TRUE)
+                   ref_bio_cons, ref_dietmatrix, ref_agemat, overwrite = TRUE)
 
 rm(list = ls())
 
