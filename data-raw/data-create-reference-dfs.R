@@ -55,6 +55,8 @@ ref_bio_sp <- calculate_biomass_spatial(nums = ref_nums, sn = ref_structn, rn = 
 ref_bio_cons <- calculate_consumed_biomass(eat = ref_eat, grazing = ref_grazing, dm = ref_dm,
                                            vol = ref_vol, bio_conv = bio_conv)
 
+ref_dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
+
 # Save to HDD and cleanup -------------------------------------------------------------------------
 devtools::use_data(ref_eat, ref_grazing, ref_n, ref_nums, ref_structn, ref_resn,
                    ref_vol_dz, ref_vol, ref_dm, ref_growth, ref_physics, ref_bio_sp,
