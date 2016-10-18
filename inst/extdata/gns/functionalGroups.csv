@@ -1,8 +1,0 @@
-Code,Index,IsTurnedOn,Name,LongName,NumCohorts,NumGeneTypes,NumStages,NumSpawns,NumAgeClassSize,NumStocks,VerticallyMigrates,HorizontallyMigrates,isFished,IsImpacted,isTAC,GroupType,isPredator,IsCover,isSiliconDep,isAssessed,IsCatchGrazer,OverWinters,isCultured,isHabDepend
-COD,0,1,cod,Cod,14,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
-HER,1,1,herring,Herring,10,1,2,1,1,1,1,1,1,1,1,FISH,1,0,0,1,0,0,0,1
-CSH,2,1,crangon,Crangon,1,1,1,1,1,1,0,1,1,1,1,PWN,1,0,0,1,0,0,0,1
-MEP,3,1,epifaunal_macrobenthos,Epifaunal macrobenthos,1,1,1,1,1,1,0,0,1,1,1,MOB_EP_OTHER,1,0,0,1,0,0,0,1
-DL,4,1,labile_detritus,Labile detritus,1,1,1,1,1,1,0,0,0,0,0,LAB_DET,0,0,0,1,0,0,0,1
-DR,5,1,refractory_detritus,Refractory detritus,1,1,1,1,1,1,0,0,0,0,0,REF_DET,0,0,0,1,0,0,0,1
-DC,6,1,carrion,Discards,1,1,1,1,1,1,0,0,0,0,0,CARRION,0,0,0,1,0,0,0,1
