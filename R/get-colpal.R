@@ -11,9 +11,8 @@
 
 
 get_colpal <- function(){
-  r <- c(166, 31, 178, 51, 251, 227, 253, 255, 202, 106, 255, 177, 51, 128, 204, 71, 148, 224, 91, 168, 244)
-  g <- c(206, 120, 223, 160, 154, 26, 191, 127, 178, 61, 255, 89, 51, 128, 204, 71, 148, 224, 91, 168, 244)
-  b <- c(227, 180, 138, 44, 153, 28, 111, 0, 214, 154, 153, 40, 51, 128, 204, 71, 148, 224, 91, 168, 244)
-  col_pal <- grDevices::rgb(cbind(r, g, b), maxColorValue = 255)
+  greys <- c(51, 128, 204, 71, 148, 224, 91, 168, 244)
+  greys <- grDevices::rgb(cbind(greys, greys, greys), maxColorValue = 255)
+  col_pal <- c(RColorBrewer::brewer.pal(n = 12, name = "Paired"), greys)
   return(col_pal)
 }

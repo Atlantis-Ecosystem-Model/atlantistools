@@ -25,6 +25,7 @@ Imports:
   proj4,
   gridExtra,
   scales,
-  circlize
+  circlize,
+  RColorBrewer
 VignetteBuilder: knitr
 
