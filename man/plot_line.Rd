@@ -27,10 +27,10 @@ ggplot2 object
 Function to plot time series of atlantis ncdf output.
 }
 \examples{
-plot_line(preprocess_setas$biomass)
-plot_line(preprocess_setas$biomass, col = "species")
-plot_line(preprocess_setas$biomass_age, col = "agecl")
-plot_line(preprocess_setas$biomass_age, wrap = "agecl", col = "species")
+plot_line(preprocess$biomass)
+plot_line(preprocess$biomass, col = "species")
+plot_line(preprocess$biomass_age, col = "agecl")
+plot_line(preprocess$biomass_age, wrap = "agecl", col = "species")
 
 # The function can also be used to compare model outoput with observed data.
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
