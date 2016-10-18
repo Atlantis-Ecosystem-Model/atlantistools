@@ -21,7 +21,7 @@
 #' ex_data <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
 #' names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
 #'
-#' data <- preprocess_setas$biomass
+#' data <- preprocess$biomass
 #' data$model <- "atlantis"
 #' comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
 #'
@@ -33,7 +33,7 @@
 #'
 #' # Use \code{\link{convert_relative_initial}} and \code{\link{plot_add_box}} with \code{\link{plot_line}}.
 #' # Use \code{\link{convert_relative_initial}} to generate a relative time series first.
-#' df <- convert_relative_initial(preprocess_setas$structn_age)
+#' df <- convert_relative_initial(preprocess$structn_age)
 #'
 #' # Create the base plot with \code{\link{plot_line}}.
 #' plot <- plot_line(df, col = "agecl")
@@ -42,10 +42,10 @@
 #' plot_add_box(plot)
 #'
 #' # Create spatial timeseries plots in conjuction with \code{\link{custom_grid}}.
-#' plot <- plot_line(preprocess_setas$physics, wrap = NULL)
+#' plot <- plot_line(preprocess$physics, wrap = NULL)
 #' custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 #'
-#' plot <- plot_line(preprocess_setas$flux, wrap = NULL, col = "variable")
+#' plot <- plot_line(preprocess$flux, wrap = NULL, col = "variable")
 #' custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 
 plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7) {
