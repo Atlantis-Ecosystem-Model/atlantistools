@@ -50,7 +50,7 @@ load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
   rec_weights <- data.frame(code = acr, rec_weights = unlist(kwrr) + unlist(kwsr), stringsAsFactors = F)
 
   # Combine with recruitment data and convert units!
-  result <- dplyr::inner_join(x = result, y = rec_weights)
+  result <- dplyr::inner_join(x = result, y = rec_weights, by = "code")
   bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
   result$atoutput.x <- ((result$atoutput.x / bio_conv) / result$rec_weights) / 1000
 
