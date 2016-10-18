@@ -9,8 +9,8 @@
 #' @family combine functions
 #'
 #' @examples
-#' combine_groups(preprocess_setas$diet_dietcheck,
-#'    group_col = "prey")
+#' df <- combine_groups(ref_dm, group_col = "prey")
+#' df <- combine_groups(ref_dm, group_col = "prey", combine_thresh = 2)
 
 combine_groups <- function(data,
                            group_col,

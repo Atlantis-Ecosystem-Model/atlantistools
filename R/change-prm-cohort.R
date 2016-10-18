@@ -29,9 +29,10 @@
 #' @export
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#'
 #' new_prm <- change_prm_cohort(dir = d,
-#'                              prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'                              prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
 #'                              select_acronyms = c("FPS", "FVS"),
 #'                              roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
 #'                              parameter = "C",
@@ -39,7 +40,7 @@
 #'
 #' # Also works for lists as argument
 #' new_prm <- change_prm_cohort(dir = d,
-#'                              prm_biol = "VMPA_setas_biol_fishing_New.prm",
+#'                              prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
 #'                              select_acronyms = c("FPS", "FVS"),
 #'                              roc = list(rep(3, times = 10), rep(2, times = 10)),
 #'                              parameter = "C",

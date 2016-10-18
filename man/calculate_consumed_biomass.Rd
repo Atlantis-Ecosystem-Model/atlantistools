@@ -57,7 +57,7 @@ fgs <- "SETasGroupsDem_NoCep.csv"
 bps <- load_bps(dir, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
 
 groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
-groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Zoo", "Lab_Det", "Ref_Det")
+groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det")
 
 df_eat <- load_nc(dir = dir, nc = nc_prod, bps = bps, fgs = fgs,
                select_groups = groups_age, select_variable = "Eat",

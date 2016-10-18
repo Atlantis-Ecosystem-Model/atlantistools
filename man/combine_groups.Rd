@@ -23,8 +23,8 @@ dataframe with groupgs combined to "Rest" if contribution is low.
 Combine values from different groups if specific groups only have a low contribution to the overall value.
 }
 \examples{
-combine_groups(preprocess_setas$diet_dietcheck,
-   group_col = "prey")
+df <- combine_groups(ref_dm, group_col = "prey")
+df <- combine_groups(ref_dm, group_col = "prey", combine_thresh = 2)
 }
 \seealso{
 Other combine functions: \code{\link{combine_runs}}

@@ -25,13 +25,6 @@ Numeric vector with the time in years.
 \description{
 Convert timestep to actual time!
 }
-\examples{
-# Convert time to years.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-prm_run <- "VMPA_setas_run_fishing_F_New.prm"
-unique(convert_time(dir = d, prm_run = prm_run, col = ref_nums$time))
-unique(convert_time(dir = d, prm_run = prm_run, col = ref_eat$time))
-}
 \seealso{
 Other convert functions: \code{\link{convert_bgm}},
   \code{\link{convert_factor}}, \code{\link{convert_path}}

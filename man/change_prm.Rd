@@ -43,9 +43,9 @@ parameterfile *.prm file with the new parameter values.
 This functionis is used to help automate the calibration routine for ATLANTIS models.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 new_prm <- change_prm(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
                       select_acronyms = c("FPS", "FVS"),
                       roc = c(2,3),
                       parameter = "KWRR",

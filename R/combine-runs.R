@@ -9,7 +9,7 @@
 #' @family combine functions
 #'
 #' @examples
-#' outs <- list(preprocess_setas, preprocess_setas)
+#' outs <- list(preprocess, preprocess)
 #' runs <- c("run1", "run2")
 #' test <- combine_runs(outs, runs)
 #' names(test[[1]])

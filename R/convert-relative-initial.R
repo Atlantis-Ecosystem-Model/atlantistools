@@ -7,8 +7,8 @@
 #' @export
 #'
 #' @examples
-#' df <- convert_relative_initial(preprocess_setas$structn_age)
-#' head(df, n = 15)
+#' df <- convert_relative_initial(ref_structn)
+#' head(df[df$layer == 1, ], n = 15)
 
 convert_relative_initial <- function(data, col = "atoutput") {
   if (!"time" %in% names(data)) stop("Column time is missing in data.")

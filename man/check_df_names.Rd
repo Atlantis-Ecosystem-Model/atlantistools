@@ -19,7 +19,7 @@ is passed.
 }
 \examples{
 \dontrun{
-check_df_names(preprocess_setas$biomass_age, expect = c("time", "species", "atoutput", "ages"))
+check_df_names(preprocess$biomass_age, expect = c("time", "species", "atoutput", "ages"))
 }
 }
 

@@ -25,19 +25,14 @@ Dataframe with ageclasses combined to stanzas.
 Combine ageclasses to juvenile and adult stanza according to age at maturity.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-nc_gen <- "outputNorthSea.nc"
-prm_biol <- "NorthSea_biol_fishing.prm"
-prm_run = "NorthSea_run_fishing_F.prm"
-bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
-fgs = "functionalGroups.csv"
-bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
 
-data <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)#'
 agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
                     group = get_age_acronyms(dir = dir, fgs = fgs),
                     parameter = "age_mat")
 
-combine_ages(data, grp_col = "species", agemat = agemat)
+combine_ages(ref_nums, grp_col = "species", agemat = agemat)
 }
 

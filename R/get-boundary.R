@@ -14,7 +14,7 @@
 #' @family get functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
 #' get_boundary(boxinfo = boxes)
 

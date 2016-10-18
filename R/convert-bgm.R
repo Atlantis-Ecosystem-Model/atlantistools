@@ -6,7 +6,7 @@
 #' @family convert functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' bgm <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 #' head(bgm)
 

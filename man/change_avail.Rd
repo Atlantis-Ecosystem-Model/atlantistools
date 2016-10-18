@@ -46,24 +46,24 @@ parameterfile *.prm file with the new parameter values.
 Change the availability of predator XXX on specific preygroups.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 dm <- load_dietmatrix(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
-                      fgs = "SETasGroups.csv")
+                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+                      fgs = "SETasGroupsDem_NoCep.csv")
 
 dm1 <- change_avail(dietmatrix = dm,
-                    pred = "FPL",
+                    pred = "FPS",
                     pred_stanza = 1,
-                    prey = "FPL",
+                    prey = "CEP",
                     roc = 0.1234,
                     relative = FALSE)
 # Show only rows with availability of 0.1234
 dm1[apply(apply(dm1[, 5:ncol(dm1)], MARGIN = 2, function(x) x == 0.1234), MARGIN = 1, any), ]
 
 dm2 <- change_avail(dietmatrix = dm,
-                    pred = c("FPL", "FPO"),
+                    pred = c("FPS", "FVS"),
                     pred_stanza = c(1, 2),
-                    prey = list(c("FPL", "FPO"), c("FPS", "FVD")),
+                    prey = list(c("FPS", "FVS"), c("FPS", "FVS")),
                     roc = list(c(0.1111, 0.2222), c(0.3333, 0.4444)),
                     relative = FALSE)
 

@@ -11,13 +11,6 @@
 #' Either given as timesteps or days.
 #' @return Numeric vector with the time in years.
 #' @family convert functions
-#'
-#' @examples
-#' # Convert time to years.
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' prm_run <- "VMPA_setas_run_fishing_F_New.prm"
-#' unique(convert_time(dir = d, prm_run = prm_run, col = ref_nums$time))
-#' unique(convert_time(dir = d, prm_run = prm_run, col = ref_eat$time))
 
 #' @export
 
