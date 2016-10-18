@@ -10,5 +10,5 @@
 #' \item{atoutput}{Obersavtion column storing the actual output value.
 #' Volume in m^3}
 #' }
-#' @source See \code{data-raw/data-preprocess.R} for further information.
+#' @source See \code{data-raw/data-create-reference-dfs.R} for further information.
 "ref_vol"

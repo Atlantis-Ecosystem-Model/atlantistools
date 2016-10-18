@@ -11,5 +11,5 @@
 #' \item{atoutput}{Obersavtion column storing the actual output value.
 #' Nitrogen in mg N m-3.}
 #' }
-#' @source See \code{data-raw/data-preprocess.R} for further information.
+#' @source See \code{data-raw/data-create-reference-dfs.R} for further information.
 "ref_n"

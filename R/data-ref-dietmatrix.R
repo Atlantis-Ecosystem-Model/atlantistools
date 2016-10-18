@@ -13,5 +13,5 @@
 #' Availability ranging from 0 to 1.}
 #' \item{prey_id}{Preyid index based on the functional groups file.}
 #' }
-#' @source See \code{data-raw/data-preprocess.R} for further information.
+#' @source See \code{data-raw/data-create-reference-dfs.R} for further information.
 "ref_dietmatrix"
