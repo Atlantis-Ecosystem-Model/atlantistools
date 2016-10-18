@@ -60,7 +60,7 @@
 #'              select_groups = groups_rest, select_variable = "N",
 #'              prm_run = prm_run, bboxes = bboxes)
 #' vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
-#'                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+#'                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
 #'
 #' df <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol_dz = vol,
 #'                                 bio_conv = bio_conv, bps = bps)
