@@ -1,17 +1,17 @@
 context("load-rec test output structure")
 
-library("dplyr", warn.conflicts = FALSE)
-
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
 test <- load_rec(dir = d,
                  yoy = "outputSETASYOY.txt",
                  ssb = "outputSETASSSB.txt",
-                 prm_biol = "VMPA_setas_biol_fishing_New.prm")
+                 prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
+
+ssb_raw <- read.csv(file.path(d, "outputSETASSSB.txt"), sep = " ")
+ssb_raw <- sum(sapply(ssb_raw[, 2:3], function(x) sum(unique(x))))
 
 test_that("test output numbers", {
-  expect_equal(dim(test), c(8, 4))
+  expect_equal(dim(test), c(12, 4))
   expect_equal(names(test), c("species", "time", "ssb", "rec"))
-  expect_true(sum(test$ssb)/17810.83 > 0.999)
-  expect_true(sum(test$rec)/1340230 > 0.999)
+  expect_true(abs(sum(test$ssb)/ssb_raw - 1) < 0.001)
 })
