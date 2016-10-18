@@ -5,21 +5,7 @@
 #' @export
 #'
 #' @examples
-#' dir <- system.file("extdata", "gns", package = "atlantistools")
-#' nc_gen <- "outputNorthSea.nc"
-#' prm_biol <- "NorthSea_biol_fishing.prm"
-#' prm_run = "NorthSea_run_fishing_F.prm"
-#' bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
-#' fgs = "functionalGroups.csv"
-#' bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
-#'
-#' biomass_spatial <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
-#' dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
-#' agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
-#'                     group = get_age_acronyms(dir = dir, fgs = fgs),
-#'                     parameter = "age_mat")
-#'
-#' sp_overlap <- calculate_spatial_overlap(biomass_spatial, dietmatrix, agemat)
+#' sp_overlap <- calculate_spatial_overlap(ref_bio_sp, ref_dietmatrix, ref_agemat)
 #' plot_spatial_overlap(sp_overlap)
 
 plot_spatial_overlap <- function(df_list) {

@@ -32,6 +32,7 @@
 #' @return Dataframe/ Plot.
 #'
 #' @examples
+#' \dontrun{
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
 #' fgs <- "functionalGroups.csv"
 #' init <- "init_simple_NorthSea.nc"
@@ -47,6 +48,7 @@
 #'
 #' data2 <- sc_init(dir, init, prm_biol, fgs, bboxes, pred = "Cod", save_to_disc = FALSE)
 #' plot_sc_init(df = data2, mult_mum, mult_c)
+#' }
 
 #' @export
 

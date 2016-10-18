@@ -35,10 +35,10 @@ Dataframe with columns 'species' and as many columns as parameters.
 Extract parameters from the biological parameter file and transform them to a dataframe.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-prm_biol <- "NorthSea_biol_fishing.prm"
-fgs <- "functionalGroups.csv"
-group <- c("COD", "HER")
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+fgs <- "SETasGroupsDem_NoCep.csv"
+group <- c("FPS", "FVS")
 
 prm_to_df_ages(dir, prm_biol, fgs, group, parameter = c("mum", "C"))
 prm_to_df(dir, prm_biol, fgs, group, parameter = c("age_mat", "KWRR"))

@@ -23,9 +23,11 @@ ggplot2 object
 Plot recruitment.
 }
 \examples{
+\dontrun{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 plot_rec(preprocess_setas$ssb_rec, ex_data)
+}
 }
 \seealso{
 Other plot functions: \code{\link{plot_bar}},

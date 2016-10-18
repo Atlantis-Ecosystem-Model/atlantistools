@@ -32,28 +32,25 @@ grob of 3 ggplot2 plots.
 Visualise the spatial distribution per species and stanza combination.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-nc_gen <- "outputNorthSea.nc"
-prm_biol <- "NorthSea_biol_fishing.prm"
-prm_run = "NorthSea_run_fishing_F.prm"
-bps = load_bps(dir, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
-fgs = "functionalGroups.csv"
-bboxes = get_boundary(boxinfo = load_box(dir, bgm = "NorthSea.bgm"))
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-df_agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
-                       group = get_age_acronyms(dir = dir, fgs = fgs),
-                       parameter = "age_mat")
+bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
 
-df_sp <- calculate_biomass_spatial(dir, nc_gen, prm_biol, prm_run, bps, fgs, bboxes)
-bio_spatial <- combine_ages(df_sp, grp_col = "species", agemat = df_agemat)
-bgm_as_df <- convert_bgm(dir, bgm = "NorthSea.bgm")
+# Spatial distribution in Atlantis is based on adu- and juv stanzas.
+# Therefore, we need to aggregate the age-based biomass to stanzas with \\code{\\link{combine_ages}}.
+bio_spatial <- combine_ages(ref_bio_sp, grp_col = "species", agemat = ref_agemat)
 
-\dontrun{
+# Apply \\code{\\link{plot_spatial}}
 grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
 gridExtra::grid.arrange(grobs[[1]])
-}
+gridExtra::grid.arrange(grobs[[9]])
 
-grobs <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Crangon", timesteps = 3)
+# use names() to select specific plots
+names(grobs)
+
+# Plot specific species
+grobs <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Shallow piscivorous fish", timesteps = 3)
 gridExtra::grid.arrange(grobs[[1]])
+gridExtra::grid.arrange(grobs[[2]])
 }
 
