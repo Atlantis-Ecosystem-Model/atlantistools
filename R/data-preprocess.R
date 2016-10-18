@@ -1,4 +1,4 @@
-#' preprocess-setas
+#' preprocess
 #'
 #' See "data-vignette-model-preprocess.R" and "model-preprocess.Rmd" for further information.
 #'
