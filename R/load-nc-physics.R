@@ -39,7 +39,14 @@
 #'   aggregate_layers = FALSE,
 #'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
 #' str(test)
-#' @export
+#'
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
+#'   select_physics = c("salt", "NO3", "volume"),
+#'   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+#'   aggregate_layers = FALSE,
+#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+#' str(test)
 
 load_nc_physics <- function(dir = getwd(),
                             nc,

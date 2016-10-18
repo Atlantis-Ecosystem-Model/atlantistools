@@ -54,24 +54,23 @@ A dataframes with columns atoutput, polygon, layer (if present), species (if pre
 This function loads weight at age data (in mgN) from the initial conditions file.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-init <- "init_simple_NorthSea.nc"
-fgs <- "functionalGroups.csv"
-bboxes <- get_boundary(load_box(dir, bgm = "NorthSea.bgm"))
-bps = load_bps(dir = dir, fgs = "functionalGroups.csv",
-                                init = "init_simple_NorthSea.nc")
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+init <- "INIT_VMPA_Jan2015.nc"
+fgs <- "SETasGroupsDem_NoCep.csv"
+bboxes <- get_boundary(load_box(dir, bgm = "VMPA_setas.bgm"))
 
+bps <- load_bps(dir = dir, fgs = fgs, init = init)
+
+# There are no values in the initial conditions file. Therefore atoutput is NA.
 load_init_age(dir = dir, init = init, fgs = fgs, bboxes = bboxes,
               select_variable = "ResN",
-              select_groups = "cod")
+              select_groups = "Planktiv_S_Fish")
 
 load_init_age(dir = dir, init = init, fgs = fgs, bboxes = bboxes,
               select_variable = "ResN")
 
 load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps,
-                 select_groups = "crangon")
-
-load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps)
+                 select_groups = "Megazoobenthos")
 }
 \author{
 Alexander Keth

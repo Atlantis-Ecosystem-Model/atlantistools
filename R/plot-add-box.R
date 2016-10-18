@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' # Make sure to use a relative timeseries generated with \code{\link{convert_relative_initial}}.
-#' df <- convert_relative_initial(preprocess_setas$structn_age)
+#' df <- convert_relative_initial(preprocess$structn_age)
 #'
 #' # Create the plot with \code{\link{plot_line}}.
 #' plot <- plot_line(df, col = "agecl")

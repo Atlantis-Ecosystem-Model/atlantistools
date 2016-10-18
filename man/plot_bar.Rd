@@ -27,18 +27,18 @@ ggplot2 object
 Function to plot relative contribution of biomass and numbers per cohort.
 }
 \examples{
-plot_bar(preprocess_setas$biomass)
+plot_bar(preprocess$biomass)
 
 # Most models have a large number of groups. Please make sure to combine groups with a low
 # contribution prior to plotting with \\code{\\link{combine_groups}}.
-df <- combine_groups(preprocess_setas$biomass, group_col = "species", combine_thresh = 3)
+df <- combine_groups(preprocess$biomass, group_col = "species", combine_thresh = 3)
 plot_bar(df)
 
 # This function can also be used to plot age-specific data.
-plot_bar(preprocess_setas$nums_age, fill = "agecl", wrap = "species")
+plot_bar(preprocess$nums_age, fill = "agecl", wrap = "species")
 
 # Please use \\code{\\link{agg_perc}} to visualise the relative cohort structure over time.
-df <- agg_perc(preprocess_setas$nums_age, groups = c("time", "species"))
+df <- agg_perc(preprocess$nums_age, groups = c("time", "species"))
 plot_bar(df, fill = "agecl", wrap = "species")
 }
 \seealso{

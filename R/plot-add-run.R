@@ -12,13 +12,16 @@
 #' @family low-level-plot functions
 #'
 #' @examples
-#' dummy <- preprocess_setas
-#' # Change output of dummy simulation!
-#' dummy$biomass$atoutput <- dummy$biomass$atoutput * 1.5
-#' dfs <- combine_runs(list(preprocess_setas, dummy), runs = c("setas", "dummy"))
-#' plot <- plot_ts(dfs$biomass)
-#' plot <- plot_add_run(plot)
-#' plot
+#' # We need to create dummy data from an additional simulation first.
+#' dummy <- preprocess$biomass
+#' dummy$atoutput <- dummy$atoutput * 1.5
+#'
+#' # Combine the two runs!
+#' dfs <- combine_runs(list(list(preprocess$biomass), list(dummy)), runs = c("setas", "dummy"))
+#'
+#' # Plot timeseries and add color coding according to column 'run'.
+#' plot <- plot_line(dfs[[1]])
+#' plot_add_run(plot)
 
 plot_add_run <- function(plot) {
   # Check input

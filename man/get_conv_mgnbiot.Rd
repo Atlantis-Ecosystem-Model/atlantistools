@@ -25,8 +25,8 @@ Extract conversion factor used to transform data from nitrogen in mg to
 biomass in tonnes.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
 }
 \seealso{
 Other get functions: \code{\link{get_boundary}},

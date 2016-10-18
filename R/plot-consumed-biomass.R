@@ -13,23 +13,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' dir <- "c:/backup_z/Atlantis_models/Runs/dummy_02_ATLANTIS_NS/"
-#' nc_prod <- "outputNorthSeaPROD.nc"
-#' nc_gen <- "outputNorthSea.nc"
-#' dietcheck <- "outputNorthSeaDietCheck.txt"
-#' prm_biol <- "NorthSea_biol_fishing.prm"
-#' prm_run <- "NorthSea_run_fishing_F.prm"
-#' fgs <- "functionalGroups.csv"
-#' bps <- load_bps(dir = dir, init = "init_NorthSea.nc", fgs = fgs)
-#' bboxes <- get_boundary(load_box(dir = dir, bgm = "NorthSea.bgm"))
-#'
-#' bio_consumed <- calculate_consumed_biomass(dir, nc_prod, nc_gen, dietcheck, prm_biol,
-#'                                            prm_run, bps, fgs, bboxes)
-#'
-#' select_time <- NULL
-#' show <- 0.99
-#' }
+#' plot_consumed_biomass(ref_bio_cons)
+#' plot_consumed_biomass(ref_bio_cons, select_time = 1.8)
+#' plot_consumed_biomass(ref_bio_cons, select_time = 1.8, show = 0.99)
 
 plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95) {
   # Restrict to selected timestep!

@@ -23,8 +23,8 @@
 #' @return Character \code{vector} of epibenthic biomass pools.
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
 
 load_bps <- function(dir = getwd(), fgs, init){
   if (strsplit(init, "\\.")[[1]][2] != "nc") {

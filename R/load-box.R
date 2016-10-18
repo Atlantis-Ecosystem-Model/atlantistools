@@ -12,7 +12,7 @@
 #' @return A list of information regarding boxes for an Atlantis scenario.
 #' @export
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
 
 load_box <- function(dir = getwd(), bgm) {

@@ -19,7 +19,7 @@ Read in the \code{.bgm} file that specifies the the box coordinates
 for an Atlantis scenario.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
 }
 \author{

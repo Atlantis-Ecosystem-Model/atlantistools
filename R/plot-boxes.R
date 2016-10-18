@@ -6,7 +6,7 @@
 #' @family plot functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
 #' plot_boxes(bgm_data)
 

@@ -24,10 +24,10 @@ A list of dataframes with columns atoutput, polygon and layer (if present).
 This function loads weight at age data (in mgN) from the initial conditions file.
 }
 \examples{
-dir <- system.file("extdata", "gns", package = "atlantistools")
-load_init(dir = dir, init = "init_simple_NorthSea.nc", vars = "cod1_Nums")
-load_init(dir = dir, init = "init_simple_NorthSea.nc", vars = c("herring2_ResN", "herring3_ResN"))
-load_init(dir = dir, init = "init_simple_NorthSea.nc", vars = "crangon_N")
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Planktiv_S_Fish1_Nums")
+load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = c("Planktiv_S_Fish2_ResN", "Planktiv_S_Fish3_ResN"))
+load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Megazoobenthos_N")
 }
 \author{
 Alexander Keth

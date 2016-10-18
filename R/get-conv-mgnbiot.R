@@ -12,8 +12,8 @@
 #' @family get functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_New.prm")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
 
 #' @export
 
