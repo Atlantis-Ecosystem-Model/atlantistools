@@ -11,14 +11,17 @@
 #' @family plot functions
 #'
 #' @examples
+#' \dontrun{
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 #' plot_rec(preprocess_setas$ssb_rec, ex_data)
+#' }
 
 # d <- file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")
 # ex_data <- read.csv(file.path(d, "ssb_r_ssa_sms.csv"), stringsAsFactors = F)
 # load(file.path(d, "preprocess-north-sea.rda"))
 # data <- result$ssb_rec
+
 
 plot_rec <- function(data, ex_data, ncol = 7) {
   check_df_names(data = data, expect = c("ssb", "rec", "time", "species"))
