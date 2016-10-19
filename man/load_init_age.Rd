@@ -3,6 +3,7 @@
 \name{load_init_age}
 \alias{load_init_age}
 \alias{load_init_nonage}
+\alias{load_init_nonage_age}
 \alias{load_init_physics}
 \alias{load_init_weight}
 \title{This function loads weight at age data (in mgN) from the initial conditions file.}
@@ -12,6 +13,9 @@ load_init_age(dir = getwd(), init, fgs, select_variable,
 
 load_init_nonage(dir = getwd(), init, fgs, select_variable = "N",
   select_groups = NULL, bboxes, bps)
+
+load_init_nonage_age(dir = getwd(), init, fgs, select_variable = "N",
+  select_groups = NULL, bboxes)
 
 load_init_physics(dir = getwd(), init, select_variable, bboxes)
 
@@ -71,6 +75,10 @@ load_init_age(dir = dir, init = init, fgs = fgs, bboxes = bboxes,
 
 load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps,
                  select_groups = "Megazoobenthos")
+
+load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps)
+
+load_init_nonage_age(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
 }
 \author{
 Alexander Keth

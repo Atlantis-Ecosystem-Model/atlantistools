@@ -46,6 +46,10 @@
 #'
 #' load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps,
 #'                  select_groups = "Megazoobenthos")
+#'
+#' load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps)
+#'
+#' load_init_nonage_age(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
 
 load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_groups = NULL, bboxes) {
   # Consrtuct vars to search for!
@@ -54,7 +58,7 @@ load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_grou
   if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a fully age-structured group.")
   if (is.null(select_groups)) select_groups <- age_groups
 
-  num_cohorts <- fgs_data$NumCohorts[is.element(fgs_data$Name, select_groups)]
+  num_cohorts <- fgs_data$NumCohorts
   ages <- lapply(num_cohorts, seq, from = 1, by = 1)
 
   vars <- NULL
@@ -88,6 +92,7 @@ load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_grou
 #' @export
 #' @rdname load_init_age
 load_init_nonage <- function(dir = getwd(), init, fgs, select_variable = "N", select_groups = NULL, bboxes, bps) {
+  # NOTE: Age based inverts are stored in a different way.... Name_Ncohort instead of NameCohort_Var
   # Consrtuct vars to search for!
   if (is.null(select_groups)) select_groups <- get_groups(dir = dir, fgs = fgs)
   select_bps <- select_groups[is.element(select_groups, bps)]
@@ -129,6 +134,49 @@ load_init_nonage <- function(dir = getwd(), init, fgs, select_variable = "N", se
 
   return(result)
 }
+
+#' @export
+#' @rdname load_init_age
+load_init_nonage_age <- function(dir = getwd(), init, fgs, select_variable = "N", select_groups = NULL, bboxes) {
+  # Consrtuct vars to search for!
+  fgs_data <- load_fgs(dir = dir, fgs = fgs)
+  fgs_data <- fgs_data[fgs_data$NumCohorts == 2, ]
+  age_groups <- fgs_data$Name
+
+  if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a fully age-structured group.")
+  if (is.null(select_groups)) select_groups <- age_groups
+
+  num_cohorts <- rep(2, length(select_groups))
+  ages <- lapply(num_cohorts, seq, from = 1, by = 1)
+
+  vars <- NULL
+  for (i in seq_along(select_groups)) {
+    tags <- paste0(select_groups[i], "_", select_variable, ages[[i]])
+    vars <- c(vars, tags)
+  }
+
+  # Extract data
+  df_list <- load_init(dir = dir, init = init, vars = vars)
+  # Add columns!
+  for (i in seq_along(select_groups)) {
+    for (j in 1:length(ages[[i]])) {
+      if (i == 1 & j == 1) k <- 1
+      df_list[[k]]$species <- select_groups[i]
+      df_list[[k]]$agecl <- ages[[i]][j]
+      k <- k + 1
+    }
+  }
+  result <- do.call(rbind, df_list)
+
+  # Cleanup
+  result <- remove_min_pools(df = result)
+  result <- remove_bboxes(df = result, bboxes = bboxes)
+  result <- dplyr::filter_(result, ~!is.na(layer))
+  result$species <- convert_factor(data_fgs = fgs_data, col = result$species)
+
+  return(result)
+}
+
 
 #' @export
 #' @rdname load_init_age
