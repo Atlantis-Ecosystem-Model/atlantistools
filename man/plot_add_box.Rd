@@ -31,7 +31,6 @@ plot_add_box(plot)
 plot_add_box(plot, range = c(0.8, 0.4))
 }
 \seealso{
-Other low-level-plot functions: \code{\link{plot_add_range}},
-  \code{\link{plot_add_run}}
+Other low-level-plot functions: \code{\link{plot_add_range}}
 }
 
