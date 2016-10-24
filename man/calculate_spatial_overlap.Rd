@@ -37,6 +37,8 @@ agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
                     group = get_age_acronyms(dir = dir, fgs = fgs),
                     parameter = "age_mat")
 
-sp_overlap <- calculate_spatial_overlap(biomass_spatial = ref_bio_sp, dietmatrix = dietmatrix, agemat)
+sp_overlap <- calculate_spatial_overlap(biomass_spatial = ref_bio_sp,
+                                        dietmatrix = dietmatrix,
+                                        agemat = agemat)
 }
 

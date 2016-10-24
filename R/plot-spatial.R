@@ -23,7 +23,8 @@
 #' bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
 #'
 #' # Spatial distribution in Atlantis is based on adu- and juv stanzas.
-#' # Therefore, we need to aggregate the age-based biomass to stanzas with \code{\link{combine_ages}}.
+#' # Therefore, we need to aggregate the age-based biomass to
+#' stanzas with \code{\link{combine_ages}}.
 #' bio_spatial <- combine_ages(ref_bio_sp, grp_col = "species", agemat = ref_agemat)
 #'
 #' # Apply \code{\link{plot_spatial}}

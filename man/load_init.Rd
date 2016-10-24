@@ -26,7 +26,8 @@ This function loads weight at age data (in mgN) from the initial conditions file
 \examples{
 dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Planktiv_S_Fish1_Nums")
-load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = c("Planktiv_S_Fish2_ResN", "Planktiv_S_Fish3_ResN"))
+load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = c("Planktiv_S_Fish2_ResN",
+                                                             "Planktiv_S_Fish3_ResN"))
 load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Megazoobenthos_N")
 }
 \author{

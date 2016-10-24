@@ -42,7 +42,8 @@ data$model <- "atlantis"
 comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
 
 # Show atlantis as first factor!
-comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
+lev_ord <- c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"])
+comp$model <- factor(comp$model, levels = lev_ord)
 
 # Create plot
 plot_line(comp, col = "model")
