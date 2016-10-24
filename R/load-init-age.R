@@ -146,6 +146,8 @@ load_init_stanza <- function(dir = getwd(), init, fgs, select_variable = "N", se
   fgs_data <- fgs_data[fgs_data$NumCohorts == 2, ]
   age_groups <- fgs_data$Name
 
+  ages <- 1:2
+
   if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a stanza group.")
   if (is.null(select_groups)) select_groups <- age_groups
 
@@ -159,10 +161,10 @@ load_init_stanza <- function(dir = getwd(), init, fgs, select_variable = "N", se
   df_list <- load_init(dir = dir, init = init, vars = vars)
   # Add columns!
   for (i in seq_along(select_groups)) {
-    for (j in 1:length(ages[[i]])) {
+    for (j in 1:length(ages)) {
       if (i == 1 & j == 1) k <- 1
       df_list[[k]]$species <- select_groups[i]
-      df_list[[k]]$agecl <- ages[[i]][j]
+      df_list[[k]]$agecl <- ages[j]
       k <- k + 1
     }
   }
