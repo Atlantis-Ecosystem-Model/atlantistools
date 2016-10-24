@@ -17,52 +17,49 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r, echo = FALSE}
+\newpage
+
+NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
+due to the fact that the dummy setas file have a running time of 5 years.
+
+In order to use this vignette make sure to render `model-preprocess.Rmd` for each simulation first. Save the resulting
+list of dataframes as shown in `data-raw/data-vignette-model-preprocess.R`. Of course,  you can also use 
+a personalised version of `mode-preprocess.Rmd`. Please make sure to add all resulting dataframes
+to the list of dataframes at the end of the preprocess vignette and change `model-comparison.Rmd` accordingly.
+
+```{r}
 library("atlantistools")
 library("ggplot2")
+library("gridExtra")
 
-# NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
-# due to the fact that the dummy setas file have a running time of 3 years.
-
-# This section is used to read in the data created with preprocess() for each simulation. 
-# You can do this however you like. You can use the following code snippet to read in
-# the preprocessed file (*.rda) from different locations. dirs should be a vector of character
-# strings giving the directories of your simulations. Please change "preprocess.rda" to the
-# filename you choose for the output generated with preprocess(). 
-# Please note that the final data should be a list of your simulations.
-# Each list entry should itself be a list of datarframes created with preprocess(). 
-
-# dirs <- file.path(dirs, "preprocess.rda")
-# store_data <- vector("list", length = length(dirs))
-# for (i in seq_along(dirs)) {
-#   load(file.path(dirs[i])
-#   store_data[[j]] <- result
-# }
-
-# Unfortunately it is nearly impossible to demonstarte this with the package itself because the data is 
-# already loaded as soon as you load the package with "library()". In addition there is only one
-# simulation available therefore I have to create some dummy data to demonstrate the rest of 
-# the vignette. # Please comment out the next section in your personal version of this *.Rmd file.
- 
-dummy_setas <- function(list, mult) {
-  for (i in seq_along(list)) {
-    mult <- rep_len(mult, length.out = nrow(list[[i]]))
-    list[[i]][, ncol(list[[i]])] <- list[[i]][, ncol(list[[i]])] * mult
-  }
-  return(list)
-}
-store_data <- list(preprocess_setas, 
-                   dummy_setas(preprocess_setas, mult = c(1, 1.2)),
-                   dummy_setas(preprocess_setas, mult = c(2, 2.2)))
-
-# Now we have to combine the data from the different simulations with "combine_runs()".
-# Please edit the strings passed to "runs" at this point.
-result <- combine_runs(outs = store_data, runs = c("run1", "run2", "run3"))
-
-# And adjust the ploting sizes (at the top and throughout this document) to your likings.
+gen_labels <- list(x = "Time [years]", y = "Biomass [t]")
 
 # You should be able to build the vignette either by clicking on "Knit-PDF" or with
 # rmarkdown::render("model-comparison.Rmd")
+```
+
+## User Input
+This section is used to read in the simulations. In order to demonstrate the vignette, 
+dummy simulations are generated. Please change this accordingly.
+
+```{r}
+result <- preprocess
+
+dummy_setas <- function(list, mult) {
+  for (i in seq_along(list)) {
+    if (is.data.frame(list[[i]])) {
+          mult <- rep_len(mult, length.out = nrow(list[[i]]))
+          list[[i]][, ncol(list[[i]])] <- list[[i]][, ncol(list[[i]])] * mult
+    }
+  }
+  return(list)
+}
+
+store_data <- list(result, 
+                   dummy_setas(result, mult = c(1, 1.2)),
+                   dummy_setas(result, mult = c(2, 2.2)))
+
+result <- combine_runs(outs = store_data, runs = c("run1", "run2", "run3"))
 ```
 
 \newpage
@@ -70,32 +67,33 @@ result <- combine_runs(outs = store_data, runs = c("run1", "run2", "run3"))
 # Whole system biomass
 ```{r, fig.width = 14, fig.height = 8}
 sum_bio <- agg_data(result$biomass, groups = c("time", "run"), fun = sum)
-ggplot2::ggplot(sum_bio, ggplot2::aes(x = time, y = atoutput, colour = run)) +
-  ggplot2::geom_line() +
-  ggplot2::coord_cartesian(expand = FALSE) +
-  ggplot2::guides(colour = ggplot2::guide_legend(ncol = 1)) +
-  theme_atlantis()
+plot <- plot_line(sum_bio, wrap = NULL, col = "run")
+update_labels(plot, gen_labels)
 ```
 
 \newpage
 
 # Biomass timeseries
 ```{r}
-plot_ts(result$biomass) %>% plot_add_run(.) %>% update_labels(labels = list(y = "Biomass [t]"))
+plot_line(result$biomass, col = "run", ncol = 4) %>% update_labels(gen_labels)
 ```
 
 \newpage
 
 # Relative biomass timeseries
 ```{r}
-plot_calibrate(result$biomass) %>% plot_add_run(.)
+df <- convert_relative_initial(result$biomass)
+plot <- plot_line(df, col = "run", ncol = 4)
+plot <- plot_add_box(plot)
+update_labels(plot, labels = list(x = "Time [year]", y = expression(Biomass/Biomass[initial])))
 ```
 
 \newpage
 
 # Physics
 ```{r, fig.width = 30, fig.height = 12}
-plot_physics(result$physics) %>% plot_add_run(.)
+plot <- plot_line(result$physics, wrap = NULL, col = "run")
+custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 ```
 
 
