@@ -1,0 +1,33 @@
+species,time,biomass,model
+Shallow piscivorous fish,0,441436.824029865,dummy
+Shallow piscivorous fish,1,924316.527460019,dummy
+Shallow piscivorous fish,2,646282.60848353,dummy
+Shallow piscivorous fish,3,113764.002653811,dummy
+Small planktivorous fish,0,1448.97026352967,dummy
+Small planktivorous fish,1,1048.20972973265,dummy
+Small planktivorous fish,2,811.459905262058,dummy
+Small planktivorous fish,3,788.827458845967,dummy
+Cephalopod,0,0.0562497687183321,dummy
+Cephalopod,1,7.93947282240769,dummy
+Cephalopod,2,12.1014936779103,dummy
+Cephalopod,3,14.4347746289514,dummy
+Diatom,0,1682.44126001551,dummy
+Diatom,1,2799.51089383875,dummy
+Diatom,2,3609.26565163099,dummy
+Diatom,3,3607.63852084741,dummy
+Labile detritus,0,2196.53105787486,dummy
+Labile detritus,1,0.538010779418523,dummy
+Labile detritus,2,0.804980050160939,dummy
+Labile detritus,3,0.967614908394151,dummy
+Megazoobenthos,0,3.07771408203989,dummy
+Megazoobenthos,1,3.49238958433454,dummy
+Megazoobenthos,2,3.04780058554685,dummy
+Megazoobenthos,3,2.92048953277756,dummy
+Refractory detritus,0,11590.8918778924,dummy
+Refractory detritus,1,1249.21535705228,dummy
+Refractory detritus,2,309.292265358475,dummy
+Refractory detritus,3,94.6316183665157,dummy
+Mesozooplankton,0,3.82317011681758,dummy
+Mesozooplankton,1,2.79595200554893,dummy
+Mesozooplankton,2,3.79606978357382,dummy
+Mesozooplankton,3,2.98408916485496,dummy
