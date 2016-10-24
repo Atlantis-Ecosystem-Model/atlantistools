@@ -45,7 +45,7 @@ nums <- load_nc(dir = d, nc = "outputSETAS.nc",
                 bboxes = c(0, 6, 7, 8, 9, 10))
 ```
 
-# Extract structural nitrogen per species, timestep, polygon, layer and ageclass
+## Extract structural nitrogen per species, timestep, polygon, layer and ageclass
 ```{r}
 structn <- load_nc(dir = d, nc = "outputSETAS.nc", 
                    fgs = "SETasGroupsDem_NoCep.csv", 
@@ -57,7 +57,7 @@ structn <- load_nc(dir = d, nc = "outputSETAS.nc",
                    bboxes = c(0, 6, 7, 8, 9, 10))
 ```
 
-# Use build in functions to extract epibenthic groups and boundary boxes
+## Use build in functions to extract epibenthic groups and boundary boxes
 ```{r}
 boundary_boxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 epibenthic_groups <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
@@ -71,7 +71,7 @@ resn <- load_nc(dir = d, nc = "outputSETAS.nc",
                 bboxes = boundary_boxes)
 ```
 
-# Extract consumption from non-age-based groups species, timestep and polygon
+## Extract consumption from non-age-based groups species, timestep and polygon
 ```{r}
 grazing <- load_nc(dir = d, nc = "outputSETASPROD.nc", 
                    fgs = "SETasGroupsDem_NoCep.csv", 
@@ -82,7 +82,7 @@ grazing <- load_nc(dir = d, nc = "outputSETASPROD.nc",
                    bboxes = boundary_boxes)
 ```
 
-# Extract Volume per polygon, layer and timestep.
+## Extract Volume per polygon, layer and timestep.
 ```{r}
 physics <- load_nc_physics(dir = d, nc = "outputSETAS.nc", select_physics = "volume", 
                            prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
@@ -189,7 +189,7 @@ Each plot in `atlantistools` either returns a ggplot2 object or a table-grob com
 individual ggplot2 objects. Therefore, you are able to customise the plots to your personal
 liking afterwards.
 
-# `plot_line` can be used in various ways
+## `plot_line` can be used in various ways
 
 ```{r}
 # Aggregate spatial biomass!
@@ -256,7 +256,7 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
 
 
-# Create a map of your model for Bec!
+## Create a map of your model for Bec!
 
 Always add a spatial representation of your model if you have issues with model tuning. This makes the life of Bec and Beth much easier.
 
@@ -277,7 +277,7 @@ df <- agg_perc(biomass_age, groups = c("time", "species"))
 plot_bar(df, fill = "agecl", wrap = "species")
 ```
 
-# Plot feeding interactions
+## Plot feeding interactions
 
 Please note the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
