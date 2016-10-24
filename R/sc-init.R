@@ -14,15 +14,10 @@
 #' outputfiles pass the complete folder/filename string as fgs.
 #' In addition set dir to 'NULL' in this case.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
-#' @param out Character string giving the filename of the *.Rda output
-#' file. In case you are using different folders for your model data
-#' and output files please add the output folder.
 #' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
 #' predators are selected.
 #' @param set_avail Numeric value. All present availabilities can be set to a spefiic value.
 #' Default value is \code{NULL} which results in no changes to the present availability matrix.
-#' @param save_to_disc Logical indicating if the resulting list shall be stored
-#' on the hard-disc (\code{TRUE}) or not (\code{FALSE}).
 #' @param df Dataframe to pass to \code{plot_sc_init()}. df should be generated with
 #' sc_init or read in from *.rda (also generated with sc_init()).
 #' @param mult_mum Numeric vector of multiplication factors applied to the initial
@@ -79,8 +74,7 @@
 
 
 # function start
-sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
-                    pred = NULL, set_avail = NULL, save_to_disc = FALSE) {
+sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL) {
   fgs_data <- load_fgs(dir = dir, fgs = fgs)
 
   if (is.null(pred)) {
@@ -205,12 +199,6 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, out,
   pd <- dplyr::rename_(pd, .dots = c("pred" = "species")) %>%
     dplyr::select_(.dots = c("pred", "agecl", "mum", "c", "growth_req"))
   result <- dplyr::left_join(result, pd, by = c("pred", "agecl"))
-
-  if (save_to_disc) {
-    message("Write final dataframe as *.rda")
-    if (!is.null(dir)) out <- file.path(dir, out)
-    save(result, file = out)
-  }
 
   return(result)
 }

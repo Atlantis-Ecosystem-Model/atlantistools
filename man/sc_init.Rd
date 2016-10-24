@@ -5,8 +5,8 @@
 \alias{sc_init}
 \title{Sanity check initial conditions file}
 \usage{
-sc_init(dir = getwd(), init, prm_biol, fgs, bboxes, out, pred = NULL,
-  set_avail = NULL, save_to_disc = FALSE)
+sc_init(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL,
+  set_avail = NULL)
 
 plot_sc_init(df, mult_mum, mult_c, pred = NULL)
 }
@@ -30,18 +30,11 @@ In addition set dir to 'NULL' in this case.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
 
-\item{out}{Character string giving the filename of the *.Rda output
-file. In case you are using different folders for your model data
-and output files please add the output folder.}
-
 \item{pred}{Vector of predator acronyms to check. If \code{NULL} (default) all age based
 predators are selected.}
 
 \item{set_avail}{Numeric value. All present availabilities can be set to a spefiic value.
 Default value is \code{NULL} which results in no changes to the present availability matrix.}
-
-\item{save_to_disc}{Logical indicating if the resulting list shall be stored
-on the hard-disc (\code{TRUE}) or not (\code{FALSE}).}
 
 \item{df}{Dataframe to pass to \code{plot_sc_init()}. df should be generated with
 sc_init or read in from *.rda (also generated with sc_init()).}
