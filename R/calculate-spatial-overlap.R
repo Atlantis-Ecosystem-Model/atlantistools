@@ -69,13 +69,15 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
 
   sis <- Map(schoener, predgrp = ps$species, ageclass = ps$agecl,
              MoreArgs = list(biomass = data_bio, avail = dietmatrix))
+
+  return(sis)
 }
 
 # 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
 # - pred: %biomass per predator ageclass per time, box, layer
 # - avail: availability matrix
 # - prey: overall preybiomass
-# id <- 21
+# id <- 1
 # predgrp <- ps$species[id]
 # ageclass <- ps$agecl[id]
 # biomass <- data_bio
