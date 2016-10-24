@@ -19,7 +19,9 @@ di <- load_init_nonage(dir = d, init = init, fgs = fgs, bboxes = bboxes, bps = b
                        select_groups = c("Megazoobenthos"))
 
 dj <- load_init_physics(dir = d, init = init, bboxes = bboxes, select_variable = "NO3")
-dj <- load_init_physics(dir = d, init = init, bboxes = bboxes, select_variable = "volume")
+dk <- load_init_physics(dir = d, init = init, bboxes = bboxes, select_variable = "volume")
+
+dl <- load_init_stanza(dir = d, init = init, fgs = fgs, bboxes = bboxes)
 
 data <- de %>%
   dplyr::group_by(species, agecl) %>%
