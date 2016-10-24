@@ -58,7 +58,7 @@ load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_grou
   if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a fully age-structured group.")
   if (is.null(select_groups)) select_groups <- age_groups
 
-  num_cohorts <- fgs_data$NumCohorts
+  num_cohorts <- fgs_data$NumCohorts[is.element(fgs_data$Name, select_groups)]
   ages <- lapply(num_cohorts, seq, from = 1, by = 1)
 
   vars <- NULL
