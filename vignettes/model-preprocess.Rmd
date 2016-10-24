@@ -28,7 +28,7 @@ library("gridExtra")
 library("dplyr")
 
 # You should be able to build the vignette either by clicking on "Knit-PDF" or with
-# rmarkdown::render("model-calibration.Rmd")
+# rmarkdown::render("model-preprocess.Rmd")
 ```
 
 ## User Input
