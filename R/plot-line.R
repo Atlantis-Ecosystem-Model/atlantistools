@@ -32,8 +32,9 @@
 #' # Create plot
 #' plot_line(comp, col = "model")
 #'
-#' # Use \code{\link{convert_relative_initial}} and \code{\link{plot_add_box}} with \code{\link{plot_line}}.
-#' # Use \code{\link{convert_relative_initial}} to generate a relative time series first.
+#' # Use \code{\link{convert_relative_initial}} and \code{\link{plot_add_box}}
+#' # with \code{\link{plot_line}}. Use \code{\link{convert_relative_initial}} to
+#' # generate a relative time series first.
 #' df <- convert_relative_initial(preprocess$structn_age)
 #'
 #' # Create the base plot with \code{\link{plot_line}}.
