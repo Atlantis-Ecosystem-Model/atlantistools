@@ -16,6 +16,7 @@ vignette: >
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
+library("dplyr")
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 ```
@@ -146,8 +147,8 @@ n <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
 vol <- load_nc_physics(dir = d, nc = nc_gen, select_physics = c("volume", "dz"),
                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
-df <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol_dz = vol,
-                                bio_conv = bio_conv, bps = bps)
+df_bio_spatial <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol_dz = vol,
+                                            bio_conv = bio_conv, bps = bps)
 ```
 
 Use `calculate_consumed_biomass` to calculate the consumed biomass of each prey species in tonnes by each predator and ageclass
@@ -191,10 +192,20 @@ liking afterwards.
 # `plot_line` can be used in various ways
 
 ```{r}
-plot_line(preprocess_setas$biomass, ncol = 3)
-plot_line(preprocess_setas$biomass, col = "species", ncol = 3)
-plot_line(preprocess_setas$biomass_age, col = "agecl")
-plot_line(preprocess_setas$biomass_age, wrap = "agecl", col = "species", ncol = 3)
+# Aggregate spatial biomass!
+biomass <- df_bio_spatial %>%
+  agg_data(groups = c("species", "time"), fun = sum)
+
+plot_line(biomass, ncol = 3)
+plot_line(biomass, col = "species", ncol = 3)
+
+# Aggregate spatial biomass for fully age structured groups!
+biomass_age <- df_bio_spatial %>%
+  filter(agecl > 2) %>%
+  agg_data(groups = c("species", "agecl", "time"), fun = sum)
+
+plot_line(biomass_age, col = "agecl")
+plot_line(biomass_age, wrap = "agecl", col = "species", ncol = 3)
 ```
 
 Compare model outoput with observed data. 
@@ -204,7 +215,7 @@ ex_data <- read.csv(file.path(system.file("extdata", "setas-model-new-becdev", p
                               "setas-bench.csv"), stringsAsFactors = FALSE)
 names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
 
-data <- preprocess_setas$biomass
+data <- biomass
 data$model <- "atlantis"
 comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
 
@@ -218,7 +229,9 @@ plot_line(comp, col = "model", ncol = 3)
 ```{r}
 # Use convert_relative_initial and {plot_add_box with plot_line.
 # Firstly, use convert_relative_initial to generate a relative time series first.
-df <- convert_relative_initial(preprocess_setas$structn_age)
+# Aggregate the polygon and layer based data first.
+structn_age <- agg_data(data = structn,  groups = c("species", "time", "agecl"), fun = mean)
+df <- convert_relative_initial(structn_age)
 
 # Create the base plot with plot_line.
 plot <- plot_line(df, col = "agecl")
@@ -231,11 +244,14 @@ plot_add_box(plot, range = c(0.8, 0.4))
 ```
 
 ```{r}
-# Create spatial timeseries plots in conjuction with custom_grid.
-plot <- plot_line(preprocess_setas$physics, wrap = NULL)
+# Create spatial timeseries plots in conjuction with custom_grid to plot physics data.
+plot <- plot_line(ref_physics, wrap = NULL)
 custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
-plot <- plot_line(preprocess_setas$flux, wrap = NULL, col = "variable")
+flux <- load_nc_physics(dir = d, nc = nc_gen, select_physics = c("eflux", "vflux"),
+                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
+
+plot <- plot_line(flux, wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
 
@@ -250,11 +266,14 @@ plot_boxes(bgm_data)
 ```
 
 ```{r}
+# Aggregate numbers.
+nums_age <- agg_data(data = nums, groups = c("species", "agecl", "time"), fun = sum)
+
 # Use agg_perc together with plot_bar to visualise the relative cohort structure over time.
-df <- agg_perc(preprocess_setas$nums_age, groups = c("time", "species"))
+df <- agg_perc(nums_age, groups = c("time", "species"))
 plot_bar(df, fill = "agecl", wrap = "species")
 
-df <- agg_perc(preprocess_setas$biomass_age, groups = c("time", "species"))
+df <- agg_perc(biomass_age, groups = c("time", "species"))
 plot_bar(df, fill = "agecl", wrap = "species")
 ```
 
