@@ -24,7 +24,7 @@
 #'
 #' # Spatial distribution in Atlantis is based on adu- and juv stanzas.
 #' # Therefore, we need to aggregate the age-based biomass to
-#' stanzas with \code{\link{combine_ages}}.
+#' # stanzas with \code{\link{combine_ages}}.
 #' bio_spatial <- combine_ages(ref_bio_sp, grp_col = "species", agemat = ref_agemat)
 #'
 #' # Apply \code{\link{plot_spatial}}
@@ -36,7 +36,8 @@
 #' names(grobs)
 #'
 #' # Plot specific species
-#' grobs <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Shallow piscivorous fish", timesteps = 3)
+#' grobs <- plot_spatial(bio_spatial, bgm_as_df,
+#'                       select_species = "Shallow piscivorous fish", timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[1]])
 #' gridExtra::grid.arrange(grobs[[2]])
 
