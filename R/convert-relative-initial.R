@@ -24,6 +24,9 @@ convert_relative_initial <- function(data, col = "atoutput") {
   # Replace division by 0 with 0!
   result$atoutput[result$atoutput_ref == 0] <- 0
 
+  # Remove NAs. Some groups have missing values at first time step (carrion)
+  result <- result[!is.na(result$atoutput), ]
+
   result$atoutput_ref <- NULL
 
   return(result)
