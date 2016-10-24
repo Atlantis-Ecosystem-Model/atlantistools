@@ -3,6 +3,49 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.3.3.9000
+## Development manifesto
+The internal structure of atlantistools was updadted considerably. Unfortunately, this might break existing code.
+Please check out the updated versions of the vignettes `model-calibration`,  `model-calibration-species` and
+`model-comparison` to get an idea on how to update your existing code.
+
+Following are the main changes to the previous version:
+
+1. Examples and tests are now based on the SETAS-trunk model. The package still works with bec_dev models,
+however the focus of development is shifted towards the trunk code base.
+
+2. `preprocss()` was replaced with `model-preprocess.Rmd`. Modelers can now build their own preprocessing
+routine using the built in `model-preprocess` vignette. This does not impair the functionality of the package in any
+way but further improves the modulate structure of atlantisttols. Modelers can decide for themselves
+which routines they want to include in their personalised preprocessing application. In addition 
+contributing to atlantistools is much easier now due to the removed technical overhead within the old `preprocess` function.
+
+3. Functions within atlantistools follow a specific hierarchy. The lowest level of hierarchy is 
+comprised of the `load_` functions. These functions form the main link between the Atlantis simulation
+and the R environment and ensure data is transformed according to the tidy dataframe framework 
+by Hadley Wickham (Tidy Data - Available at: http://vita.had.co.nz/papers/tidy-data.pdf).
+Based on the `load_` functions various `calculate_` functions can be applied to calculate model specific metrics
+like spatial biomass or consumed biomass. The last layer is formed by the `plot_` functions. These functions can be applied
+to dataframes generated with `load_` functions directly or via the `calculate_` functions. Please feel free to
+contribute to any of those functions to further improve the functionality of atlantistools.
+
+4. The plotting modules within atlantistools were overhauled.
+Instead of dataframe specific plotting routines two main plot functions, naimly `plot_line` and `plot_bar`
+are introduced. Most plots within atlantistools are based on the ggplot2 architecture. Thus, it is very easy
+to modulate the plots to your personal likings. To further specialise the generalised main plotting functions low-level functions 
+like `plot_add_box` and `plot_add_range` can be added to customise the visualisations.
+
+## New features
+* `load_init_stanza` Read in nitrogen values from your initial conditions file for stanza based groups.
+* `plot_line` Visualise data as line chart.
+* `plot_bar` Visualise data as bar chart.
+* `plot_add_box` Add boxes around relative timeseries plots to indicate if data is within an acceptable range.
+* `plot_add_range` Add external data as rug-plot to the left and right y-axis to check if data from 
+an Atlantis simulation is within the range of obeserved data.
+
+## Documentation improvements
+* Added various reference dataframes from the SETAS-trunk model. See `data.R` for more information.
+
 # atlantistools 0.3.2.9000
 ## New features
 * `calculate_biomass_spatial` Calculate the total biomass in tonnes for every group and ageclass combination
