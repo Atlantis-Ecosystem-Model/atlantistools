@@ -1,10 +1,10 @@
 context("load_init_age check different function calls")
 
-d <- system.file("extdata", "gns", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-init <- "init_simple_NorthSea.nc"
-fgs <- "functionalGroups.csv"
-bboxes <- get_boundary(load_box(dir = d, bgm = "NorthSea.bgm"))
+init <- "INIT_VMPA_Jan2015.nc"
+fgs <- "SETasGroupsDem_NoCep.csv"
+bboxes <- get_boundary(load_box(dir = d, bgm = "VMPA_setas.bgm"))
 bps <- load_bps(dir = d, fgs = fgs, init = init)
 
 # Test different calls to the loading functions!
@@ -14,9 +14,9 @@ df <- load_init_age(dir = d, init = init, fgs = fgs, bboxes = bboxes, select_var
 
 dg <- load_init_nonage(dir = d, init = init, fgs = fgs, bboxes = bboxes, bps = bps, select_variable = "N")
 dh <- load_init_nonage(dir = d, init = init, fgs = fgs, bboxes = bboxes, bps = bps, select_variable = "N",
-                       select_groups = c("crangon", "cod"))
+                       select_groups = c("Diatom", "Megazoobenthos"))
 di <- load_init_nonage(dir = d, init = init, fgs = fgs, bboxes = bboxes, bps = bps, select_variable = "N",
-                       select_groups = c("epifaunal_macrobenthos"))
+                       select_groups = c("Megazoobenthos"))
 
 dj <- load_init_physics(dir = d, init = init, bboxes = bboxes, select_variable = "NO3")
 dj <- load_init_physics(dir = d, init = init, bboxes = bboxes, select_variable = "volume")
