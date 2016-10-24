@@ -17,34 +17,42 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r, echo = FALSE}
+\newpage
+
+NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
+due to the fact that the dummy setas file have a running time of 5 years.
+
+In order to use this vignette make sure to render `model-preprocess.Rmd` first. Either save the resulting
+list of dataframes as shown in `data-raw/data-vignette-model-preprocess.R` or render both vignettes
+`model-preprocess.Rmd` and `model-calibration.Rmd` in the same R-instance. Of course,  you can also use 
+a personalised version of `mode-preprocess.Rmd`. Please make sure to add all resulting dataframes
+to the list of dataframes at the end of the preprocess vignette and change `model-calibration.Rmd` accordingly.
+
+```{r}
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
 
-# NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
-# due to the fact that the dummy setas file have a running time of 3 years.
-
-# This section is used to read in the data created with preprocess(). 
-# You can do this however you like. Either make sure the data is already
-# present in your workspace as object "result" or load the data from *.rda with load().
-# Unfortunately it is nearly impossible to demonstarte this with the package itself because the data is 
-# already loaded as soon as you load the package with "library()". Therefore I have to 
-# assign the data by hand otherwise the vignette will fail.
-# Please comment out/edit the next two lines in your personal version of this *.Rmd file and add your
-# personal loading technique.
-result <- preprocess_setas
-model_path <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-
-# In addition please change the names of the following dataframes.
-bench_bio <- "setas-bench.csv"
-bench_rec <- "setas-ssb-rec.csv"
-
-# And adjust the ploting sizes (here, at the top and throughout this document) to your likings.
 fig_height2 <- 11
+gen_labels <- list(x = "Time [years]", y = "Biomass [t]")
 
 # You should be able to build the vignette either by clicking on "Knit-PDF" or with
 # rmarkdown::render("model-calibration.Rmd")
+```
+
+## User Input
+This section is used to read in the SETAS dummy files. Please change this accordingly.
+
+```{r}
+result <- preprocess
+
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+
+# External recruitment data
+ex_rec_ssb <- read.csv(file.path(dir, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
+
+# External biomass data
+ex_bio <- read.csv(file.path(dir, "setas-bench.csv"), stringsAsFactors = FALSE)
 ```
 
 \newpage
@@ -52,39 +60,41 @@ fig_height2 <- 11
 # Whole system plots!
 ## Overall biomass
 ```{r, fig.width = 14, fig.height = 8}
-plot_ws(result$biomass)
+df_bio <- combine_groups(result$biomass, group_col = "species", combine_thresh = 10)
+plot <- plot_bar(df_bio)
+update_labels(plot, labels = gen_labels)
 ```
 
 \newpage
 
 ## Biomass timeseries
 ```{r}
-plot <- plot_ts(result$biomass)
-update_labels(p = plot, labels = list(y = "Biomass [t]"))
+plot <- plot_line(result$biomass)
+update_labels(plot, labels = gen_labels)
 ```
 
 \newpage
 
 ## Biomass@age timeseries
 ```{r}
-plot <- plot_ts(result$biomass_age)
-update_labels(p = plot, labels = list(y = "Biomass [t]"))
+plot <- plot_line(result$biomass_age, col = "agecl")
+update_labels(p = plot, labels = c(gen_labels, list(colour = "Ageclass")))
 ```
 
 \newpage
 
 ## Number timeseries
 ```{r, fig.height = fig_height2}
-plot <- plot_ts(result$nums)
-update_labels(p = plot, labels = list(y = "Numbers"))
+plot <- plot_line(result$nums)
+update_labels(p = plot, labels = list(x = "Time [years]", y = "Numbers"))
 ```
 
 \newpage
 
 ## Number@age timeseries
 ```{r, fig.height = fig_height2}
-plot <- plot_ts(result$nums_age)
-update_labels(p = plot, labels = list(y = "Numbers"))
+plot <- plot_line(result$nums_age, col = "agecl")
+update_labels(p = plot, labels = list(x = "Time [years]", y = "Numbers", colour = "Ageclass"))
 ```
 
 \newpage
@@ -92,39 +102,49 @@ update_labels(p = plot, labels = list(y = "Numbers"))
 ## SSB & Recruitment
 
 ```{r}
-ex <- read.csv(file.path(model_path, bench_rec), stringsAsFactors = FALSE)
-plot_rec(result$ssb_rec, ex_data = ex)
+plot_rec(result$ssb_rec, ex_data = ex_rec_ssb)
 ```
 
 \newpage
 
 ## Biomass benchmark
 ```{r}
-ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE)
-plot_bench(result$biomass, ex_data = ex)
+names(ex_bio)[names(ex_bio) == "biomass"] <- "atoutput"
+
+data <- result$biomass
+data$model <- "atlantis"
+comp <- rbind(ex_bio, data, stringsAsFactors = FALSE)
+
+# Show atlantis as first factor!
+comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
+
+# Create plot
+plot <- plot_line(comp, col = "model")
+update_labels(plot, gen_labels)
 ```
 
 \newpage
 
 ## Biomass benchmark 2
 ```{r}
-ex <- read.csv(file.path(model_path, bench_bio), stringsAsFactors = FALSE)
-plot <- plot_ts(result$biomass) %>% update_labels(labels = list(y = "Biomass [t]"))
-plot_add_range(plot, ex)
+plot <- plot_line(result$biomass) %>% update_labels(labels = gen_labels)
+plot_add_range(plot, ex_bio)
 ```
 
 \newpage
 
 ## Physics
 ```{r, fig.width = 30, fig.height = 12}
-plot_physics(result$physics)
+plot <- plot_line(result$physics, wrap = NULL)
+custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 ```
 
 \newpage
 
 ## Fluxes
 ```{r, fig.width = 30, fig.height = 12}
-plot_flux(result$flux)
+plot <- plot_line(result$flux, wrap = NULL, col = "variable")
+custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
 
 \newpage
@@ -132,42 +152,60 @@ plot_flux(result$flux)
 # Calibration plots
 ## Structural nitrogen
 ```{r, fig.height = fig_height2}
-plot_calibrate(result$structn_age)
+df_rel <- convert_relative_initial(result$structn_age)
+plot <- plot_line(df_rel, col = "agecl")
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(SN/SN[init])))
+plot_add_box(plot)
 ```
 
 \newpage
 
 ## Reserve nitrogen
 ```{r, fig.height = fig_height2}
-plot_calibrate(result$resn_age)
+df_rel <- convert_relative_initial(result$resn_age)
+plot <- plot_line(df_rel, col = "agecl")
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(RN/RN[init])))
+plot_add_box(plot)
 ```
 
 \newpage
 
 ## Biomass per ageclass
 ```{r, fig.height = fig_height2}
-plot_calibrate(result$biomass_age)
+df_rel <- convert_relative_initial(result$biomass_age)
+plot <- plot_line(df_rel, col = "agecl")
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(Biomass/Biomass[init])))
+plot_add_box(plot)
 ```
 
 \newpage
 
 ## Eat per ageclass
 ```{r, fig.height = fig_height2}
-plot_calibrate(result$eat_age)
+df_rel <- convert_relative_initial(result$eat_age)
+plot <- plot_line(df_rel, col = "agecl")
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(Cons./Cons.[init])))
+plot_add_box(plot)
 ```
 
 \newpage
 
 ## Growth per ageclass
 ```{r, fig.height = fig_height2}
-plot_calibrate(result$growth_age)
+df_rel <- convert_relative_initial(result$growth_age)
+plot <- plot_line(df_rel, col = "agecl")
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(Growth/Growth[init])))
+plot_add_box(plot)
 ```
 
 \newpage
 
 ## Numbers
 ```{r, fig.height = fig_height2}
-plot_calibrate(result$nums_age)
+df_rel <- convert_relative_initial(result$nums_age)
+plot <- plot_line(df_rel, col = "agecl")
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(Numbers/Numbers[init])))
+plot_add_box(plot)
 ```
 
 
@@ -175,7 +213,10 @@ plot_calibrate(result$nums_age)
 
 ## Biomass
 ```{r}
-plot_calibrate(result$biomass)
+df_rel <- convert_relative_initial(result$biomass)
+plot <- plot_line(df_rel)
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(Biomass/Biomass[init])))
+plot_add_box(plot)
 ```
 
 \newpage
@@ -183,14 +224,18 @@ plot_calibrate(result$biomass)
 # Distribution plots
 ## Numbers @ age
 ```{r, fig.height = fig_height2}
-plot_struct(result$nums_age)
+df <- agg_perc(result$nums_age, groups = c("time", "species"))
+plot <- plot_bar(df, fill = "agecl", wrap = "species")
+update_labels(plot, labels = list(x = "Time [years]", y = "Numbers [%]"))
 ```
 
 \newpage
 
 ## Biomass @ age
 ```{r, fig.height = fig_height2}
-plot_struct(result$biomass_age)
+df <- agg_perc(result$biomass_age, groups = c("time", "species"))
+plot <- plot_bar(df, fill = "agecl", wrap = "species")
+update_labels(plot, labels = list(x = "Time [years]", y = "Biomass [%]"))
 ```
 
 \newpage
@@ -198,7 +243,7 @@ plot_struct(result$biomass_age)
 # Diet Plots
 
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
-plots <- plot_diet_bec_dev(result$diet_specmort, wrap_col = "agecl", combine_thresh = 15)
+plots <- plot_diet(result$biomass_consumed, wrap_col = "agecl", combine_thresh = 7)
 for (i in seq_along(plots)) {
   cat(paste0("## Diet plot ", i, ": ", names(plots)[i]), sep = "\n")
   gridExtra::grid.arrange(plots[[i]])
