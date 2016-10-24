@@ -72,7 +72,7 @@ df_plot <- preprocess$biomass
 df_plot$model <- "atlantis"
 df_plot <- rbind(df_plot, data_comp)
 
-plot_line(df_plot, col = "model")
+plot <- plot_line(df_plot, col = "model")
 
 # plot_rec ----------------------------------------------------------------------------------------
 # d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
