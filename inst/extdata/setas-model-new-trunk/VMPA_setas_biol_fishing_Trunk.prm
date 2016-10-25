@@ -1589,3 +1589,42 @@ PIN_age_mat  3  First mature age class of pinnipeds 3
 WHB_age_mat  2  First mature age class of baleen whales 3                 
 WHS_age_mat  2  First mature age class of small toothed whales 2                
 WHT_age_mat  2  First mature age class of toothed whales 2                 
+
+## Vertebrate age structure parameters                      
+FPL_AgeClassSize  3  Number of years represented in each age class of large planktivore 1             
+FPS_AgeClassSize  1  Number of years represented in each age class of small planktivore 1             
+FPO_AgeClassSize  1  Number of years represented in each age class of other planktivore 1             
+FVD_AgeClassSize  1  Number of years represented in each age class of deep piscivore 2             
+FVV_AgeClassSize  3  Number of years represented in each age class of vulnerable pisciv. 2             
+FVS_AgeClassSize  1  Number of years represented in each age class of shallow piscivore 2             
+FVT_AgeClassSize  1  Number of years represented in each age class of tropical piscivore 2             
+FVO_AgeClassSize  1  Number of years represented in each age class of other tuna 2             
+FVB_AgeClassSize  1  Number of years represented in each age class of other piscivore 1             
+FMM_AgeClassSize  1  Number of years represented in each age class of migratory mesopel 1             
+FMN_AgeClassSize  1  Number of years represented in each age class of non-mig. mesopelag 1             
+FBP_AgeClassSize  1  Number of years represented in each age class of benthopelagics 1              
+FDD_AgeClassSize  4  Number of years represented in each age class of deep demersals 2             
+FDS_AgeClassSize  3  Number of years represented in each age class of shallow demersals 2             
+FDB_AgeClassSize  1  Number of years represented in each age class of other shallow dem. 2            
+FDC_AgeClassSize  1  Number of years represented in each age class of other deep dem. 2            
+FDO_AgeClassSize  2 Number of years represented in each age class of longlived demersal 10             
+FDE_AgeClassSize  1  Number of years represented in each age class of herbiv demersals 2             
+FDF_AgeClassSize  2  Number of years represented in each age class of flat deep demersal 2            
+FDM_AgeClassSize  1  Number of years represented in each age class of misc demersals 2             
+FDP_AgeClassSize  1  Number of years represented in each age class of protected demersal 2             
+SHD_AgeClassSize  3  Number of years represented in each age class of demersal sharks 9             
+SHB_AgeClassSize  6  Number of years represented in each age class of other sharks 3             
+SHC_AgeClassSize  6  Number of years represented in each age class of dogfish 10              
+SHR_AgeClassSize  6  Number of years represented in each age class of reef sharks 2             
+SHP_AgeClassSize  4  Number of years represented in each age class of pelagic sharks 10             
+SSK_AgeClassSize  3  Number of years represented in each age class of skates and rays 10            
+SB_AgeClassSize  4 Number of years represented in each age class of seabirds 2              
+SP_AgeClassSize  2 Number of years represented in each age class of penguins 1              
+REP_AgeClassSize  2  Number of years represented in each age class of reptiles 2              
+WDG_AgeClassSize  2  Number of years represented in each age class of dugongs 5              
+PIN_AgeClassSize  2  Number of years represented in each age class of pinnipeds 5              
+WHB_AgeClassSize  6  Number of years represented in each age class of baleen whales 10             
+WHS_AgeClassSize  5  Number of years represented in each age class of sm toothed whales 10            
+WHT_AgeClassSize  8  Number of years represented in each age class of toothed whales 10             
+CEP_AgeClassSize  1  Number of years represented in each age class of cephalopods        1
+
