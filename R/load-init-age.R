@@ -50,6 +50,8 @@
 #' load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps)
 #'
 #' load_init_stanza(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
+#'
+#' load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
 
 load_init_age <- function(dir = getwd(), init, fgs, select_variable, select_groups = NULL, bboxes) {
   # Consrtuct vars to search for!
@@ -203,10 +205,12 @@ load_init_physics <- function(dir = getwd(), init, select_variable, bboxes) {
 #' @rdname load_init_age
 load_init_weight <- function(dir = getwd(), init, fgs, bboxes) {
   rn <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "ResN", bboxes = bboxes) %>%
+    dplyr::filter_(~!is.na(atoutput)) %>%
     dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
     dplyr::rename_(.dots = c("rn" = "atoutput")) %>%
     unique()
   sn <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "StructN", bboxes = bboxes) %>%
+    dplyr::filter_(~!is.na(atoutput)) %>%
     dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
     dplyr::rename_(.dots = c("sn" = "atoutput")) %>%
     unique()
