@@ -14,7 +14,8 @@ convert_relative_initial <- function(data, col = "atoutput") {
   if (!"time" %in% names(data)) stop("Column time is missing in data.")
 
   # Divide values by reference value (time = min(time))
-  ref <- dplyr::filter_(data, ~time == min(time))
+  ref <- dplyr::ungroup(data)
+  ref <- dplyr::filter_(ref, ~time == min(time))
   ref$time <- NULL
   names(ref)[names(ref) == col] <- "atoutput_ref"
   result <- data %>%
