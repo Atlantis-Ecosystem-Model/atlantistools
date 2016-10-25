@@ -7,7 +7,7 @@
 #'   \item biomass
 #'   \item biomass_age
 #'   \item biomass_consumed
-#'   \item biomass_spatial
+#'   \item biomass_spatial_stanza
 #'   \item diet
 #'   \item eat_age
 #'   \item flux

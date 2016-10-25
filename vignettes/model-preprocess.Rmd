@@ -112,6 +112,9 @@ dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
 bio_sp <- calculate_biomass_spatial(nums = dfs_gen[[1]], sn = dfs_gen[[2]], rn = dfs_gen[[3]], n = dfs_gen[[4]],
                                     vol_dz = vol_dz, bio_conv = bio_conv, bps = bps)
 
+# Aggregate spatial biomass to based on stanzas
+bio_sp_stanza <- combine_ages(bio_sp, grp_col = "species", agemat = df_agemat)
+
 # Aggregate biomass
 biomass <- bio_sp %>%
   agg_data(groups = c("species", "time"), fun = sum)
@@ -172,25 +175,25 @@ gr_rel_init <- growth_age %>%
 ## Combine objects to a list of preprocessed dataframes.
 ```{r}
   result <- list(
-    "biomass"          = biomass,       #1
-    "biomass_age"      = biomass_age,
-    "biomass_consumed" = bio_cons,
-    "biomass_spatial"  = bio_sp,
-    "diet"             = df_dm,
-    "eat_age"          = eat_age,       #5
-    "flux"             = flux,
-    "grazing"          = grazing,
-    "growth_age"       = growth_age,
-    "growth_rel_init"  = gr_rel_init,
-    "nums"             = nums,
-    "nums_age"         = nums_age,      #10
-    "nums_box"         = nums_box,
-    "physics"          = physics,
-    "resn_age"         = resn_age,
-    "sink"             = sink,
-    "spatial_overlap"  = sp_overlap,    #15
-    "ssb_rec"          = ssb_rec,
-    "structn_age"      = structn_age    
+    "biomass"                = biomass,       #1
+    "biomass_age"            = biomass_age,
+    "biomass_consumed"       = bio_cons,
+    "biomass_spatial_stanza" = bio_sp_stanza,
+    "diet"                   = df_dm,
+    "eat_age"                = eat_age,       #5
+    "flux"                   = flux,
+    "grazing"                = grazing,
+    "growth_age"             = growth_age,
+    "growth_rel_init"        = gr_rel_init,
+    "nums"                   = nums,
+    "nums_age"               = nums_age,      #10
+    "nums_box"               = nums_box,
+    "physics"                = physics,
+    "resn_age"               = resn_age,
+    "sink"                   = sink,
+    "spatial_overlap"        = sp_overlap,    #15
+    "ssb_rec"                = ssb_rec,
+    "structn_age"            = structn_age    
   )
 ```
 

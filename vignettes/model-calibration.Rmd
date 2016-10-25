@@ -53,6 +53,9 @@ ex_rec_ssb <- read.csv(file.path(dir, "setas-ssb-rec.csv"), stringsAsFactors = F
 
 # External biomass data
 ex_bio <- read.csv(file.path(dir, "setas-bench.csv"), stringsAsFactors = FALSE)
+
+# bgm file
+bgm <- "VMPA_setas.bgm"
 ```
 
 \newpage
@@ -263,7 +266,7 @@ for (i in seq_along(plots)) {
 
 # Spatial Plots
 ```{r}
-plot_spatial(result$)
+plot_spatial(result$biomass_spatial, bgm_as_df = )
 ```
 
 
