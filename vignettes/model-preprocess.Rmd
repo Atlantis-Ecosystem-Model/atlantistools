@@ -175,6 +175,7 @@ gr_rel_init <- growth_age %>%
     "biomass"          = biomass,       #1
     "biomass_age"      = biomass_age,
     "biomass_consumed" = bio_cons,
+    "biomass_spatial"  = bio_sp,
     "diet"             = df_dm,
     "eat_age"          = eat_age,       #5
     "flux"             = flux,

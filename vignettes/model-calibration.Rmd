@@ -217,7 +217,6 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(Numbers/Numb
 plot_add_box(plot)
 ```
 
-
 \newpage
 
 ## Biomass
@@ -263,4 +262,9 @@ for (i in seq_along(plots)) {
 \newpage
 
 # Spatial Plots
+```{r}
+plot_spatial(result$)
+```
+
+
 
