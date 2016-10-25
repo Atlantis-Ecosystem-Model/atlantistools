@@ -200,6 +200,15 @@ plot_add_box(plot)
 
 \newpage
 
+## Growth in relation to initial conditions
+```{r}
+plot_line(result$growth_rel_init, y = "gr_rel", col = "agecl") +
+  scale_y_continuous(expression((Growth - Growth[req])/Growth[req]))
+```
+
+
+\newpage
+
 ## Numbers
 ```{r, fig.height = fig_height2}
 df_rel <- convert_relative_initial(result$nums_age)
@@ -250,4 +259,8 @@ for (i in seq_along(plots)) {
   cat("\n\n")
 }
 ```
+
+\newpage
+
+# Spatial Plots
 

@@ -139,6 +139,33 @@ bio_cons <- calculate_consumed_biomass(eat = dfs_prod[[1]], grazing = dfs_prod[[
 
 # Calculate spatial overlap
 sp_overlap <- calculate_spatial_overlap(biomass_spatial = bio_sp, dietmatrix = dietmatrix, agemat = df_agemat)
+
+# Growth relative to initial conditions
+rec_weight <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, 
+                        group = get_age_acronyms(dir = dir, fgs = fgs), 
+                        parameter = c("KWRR", "KWSR", "AgeClassSize"))
+
+pd <- load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes) %>%
+  left_join(rec_weight) %>%
+  split(.$species)
+
+# Calculate weight difference from one ageclass to the next!
+for (i in seq_along(pd)) {
+  pd[[i]]$wdiff <- c((pd[[i]]$rn[1] + pd[[i]]$sn[1]) - (pd[[i]]$kwrr[1] + pd[[i]]$kwsr[1]),
+                     diff(pd[[i]]$rn + pd[[i]]$sn))
+}
+pd <- do.call(rbind, pd)
+pd$growth_req <- pd$wdiff / (365 * pd$ageclasssize)
+if (any(pd$growth_req < 0)) {
+  warning("Required growth negative for some groups. Please check your initial conditions files.")
+}
+
+gr_req <- pd %>%
+  select(species, agecl, growth_req)
+
+gr_rel_init <- growth_age %>%
+  left_join(gr_req) %>%
+  mutate(gr_rel = (atoutput - growth_req) / growth_req)
 ```
 
 
@@ -153,6 +180,7 @@ sp_overlap <- calculate_spatial_overlap(biomass_spatial = bio_sp, dietmatrix = d
     "flux"             = flux,
     "grazing"          = grazing,
     "growth_age"       = growth_age,
+    "growth_rel_init"  = gr_rel_init,
     "nums"             = nums,
     "nums_age"         = nums_age,      #10
     "nums_box"         = nums_box,

@@ -12,6 +12,7 @@
 #'   \item flux
 #'   \item grazing
 #'   \item growth_age
+#'   \item growth_rel_init
 #'   \item nums
 #'   \item nums_age
 #'   \item nums_box
