@@ -23,7 +23,10 @@ dk <- load_init_physics(dir = d, init = init, bboxes = bboxes, select_variable =
 
 dl <- load_init_stanza(dir = d, init = init, fgs = fgs, bboxes = bboxes)
 
+dm <- load_init_weight(dir = d, init = init, fgs = fgs, bboxes = bboxes)
+
 data <- de %>%
+  dplyr::filter(!is.na(atoutput)) %>%
   dplyr::group_by(species, agecl) %>%
   dplyr::summarise(out = unique(atoutput))
 
@@ -31,5 +34,7 @@ test_that("test output numbers", {
   expect_equal(dim(data), c(20, 3))
   # expect_equal(data$out[data$species == "Cod" & data$agecl == 7], 61272.89)
   # expect_equal(unique(df$atoutput[df$species == "Herring" & df$agecl == 9]), 718.66)
+  expect_equal(dim(dm), c(20, 4))
+
 })
 
