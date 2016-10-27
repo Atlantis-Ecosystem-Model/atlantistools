@@ -27,8 +27,8 @@
 #' # stanzas with \code{\link{combine_ages}}.
 #' bio_spatial <- combine_ages(ref_bio_sp, grp_col = "species", agemat = ref_agemat)
 #'
-#' # Apply \code{\link{plot_spatial}}
-#' grobs <- plot_spatial(bio_spatial, bgm_as_df, timesteps = 3)
+#' # Apply \code{\link{plot_spatial_box}}
+#' grobs <- plot_spatial_box(bio_spatial, bgm_as_df, timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[1]])
 #' gridExtra::grid.arrange(grobs[[9]])
 #'
@@ -36,12 +36,91 @@
 #' names(grobs)
 #'
 #' # Plot specific species
-#' grobs <- plot_spatial(bio_spatial, bgm_as_df,
+#' grobs <- plot_spatial_box(bio_spatial, bgm_as_df,
 #'                       select_species = "Shallow piscivorous fish", timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[1]])
 #' gridExtra::grid.arrange(grobs[[2]])
 
 plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2){
+  # Check input dataframe!
+  check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
+  check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
+
+  # Flip layers in bio_spatial!
+  bio_spatial <- flip_layers(bio_spatial)
+
+  # Create dataframe with all polygon + layer combinations.
+  full_grid <- expand.grid(polygon = unique(bgm_as_df$polygon), layer = min(bio_spatial$layer):max(bio_spatial$layer))
+  full_grid <- dplyr::left_join(full_grid, bgm_as_df)
+
+  # Filter by species if select_species not NULL!
+  # Warning: Will change input parameter which makes it harder to debug...
+  if (!is.null(select_species)) {
+    if (all(select_species %in% unique(bio_spatial$species))) {
+      bio_spatial <- dplyr::filter_(bio_spatial, ~species %in% select_species)
+    } else {
+      stop("Not all selected_species are present in bio_spatial.")
+    }
+  }
+
+  # Get available species and stanzas!
+  pred_stanza <- unique(dplyr::select_(bio_spatial, .dots = c("species", "species_stanza")))
+
+  # Step1: Calculate summary table
+  # - perc biomass per box and layer
+  perc_bio <- agg_perc(bio_spatial, groups = c("time", "species", "species_stanza"))
+
+  # Plot spatial distribution per species, species_stanza, timesteps and layer!
+  # Use layer (y-direction) and timestep (x-direction) to facet_grid
+  plot_spatial_species <- function(data, full_grid) {
+    # add time to polygon layout
+    bgrd <- merge(full_grid, unique(dplyr::select_(data, .dots = c("time"))))
+    data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
+    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~atoutput, group = ~factor(polygon))) +
+      ggplot2::geom_polygon(colour = "black") +
+      ggplot2::facet_grid(layer ~ time) +
+      ggplot2::scale_fill_gradient("biomass distribution", low = "red", high = "green") +
+      ggplot2::guides(fill = ggplot2::guide_colorbar(barwidth = 20)) +
+      ggplot2::coord_equal() +
+      theme_atlantis()
+
+    plot <- ggplot_custom(plot)
+
+    return(plot)
+  }
+
+  # Create panels
+  # 1. Overview of the polygon layout
+  bl <- plot_boxes(data = bgm_as_df)
+  bl <- bl + ggplot2::theme_void()
+  bl <- bl + ggplot2::theme(legend.position = "none")
+
+  # 2. Spatial distribution per predator and stanza per time, layer, polygon
+  dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
+    split_dfs(cols = c("species", "species_stanza"))
+  plots_spatial <- lapply(dfs_spatial, plot_spatial_species, full_grid = full_grid)
+
+  # 3. Biomasstimeseries per box
+  dfs_ts <- split_dfs(ts_bio, cols = c("species", "species_stanza"))
+  plots_ts <- lapply(dfs_ts, plot_ts_species)
+
+  # Combine plots!
+  grobs <- vector(mode = "list", length = nrow(pred_stanza))
+  for (i in seq_along(grobs)) {
+    header <- grid::textGrob(paste("Species:", pred_stanza[i, 1], "with stanza:", pred_stanza[i, 2]),
+                             gp = grid::gpar(fontsize = 18))
+
+    grobs[[i]] <- gridExtra::arrangeGrob(
+      grobs = c(list(header), list(plots_spatial[[i]]), list(bl), list(plots_ts[[i]])),
+      layout_matrix = matrix(c(rep(1, 4), c(rep(2, 3), 3), rep(c(rep(2, 3), 4), 2)), ncol = 4, byrow = TRUE),
+      heights = grid::unit(c(0.04, rep(0.32, 3)), units = "npc"))
+  }
+
+  names(grobs) <- apply(pred_stanza, MARGIN = 1, paste, collapse = " ")
+  return(grobs)
+}
+
+plot_spatial_ts <- function(bio_spatial, select_species = NULL){
   # Check input dataframe!
   check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
   check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
@@ -141,6 +220,7 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
   names(grobs) <- apply(pred_stanza, MARGIN = 1, paste, collapse = " ")
   return(grobs)
 }
+
 
 # Utility functions
 # Select timesteps
