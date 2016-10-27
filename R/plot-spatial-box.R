@@ -41,7 +41,7 @@
 #' gridExtra::grid.arrange(grobs[[1]])
 #' gridExtra::grid.arrange(grobs[[2]])
 
-plot_spatial <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2){
+plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2){
   # Check input dataframe!
   check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
   check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
