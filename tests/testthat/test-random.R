@@ -55,13 +55,17 @@ df_sp <- calculate_biomass_spatial(ref_nums, ref_structn, ref_resn, ref_n, ref_v
 bio_spatial <- combine_ages(df_sp, grp_col = "species", agemat = df_agemat)
 bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
 
-grob <- plot_spatial(bio_spatial, bgm_as_df, select_species = "Cephalopod", timesteps = 3)
+grob <- plot_spatial_box(bio_spatial, bgm_as_df, select_species = "Cephalopod", timesteps = 3)
+
+vol <- agg_data(ref_vol, groups = c("time", "polygon"), fun = sum, out = "volume")
+grob <- plot_spatial_ts(bio_spatial, bgm_as_df, vol, select_species = "Cephalopod")
 
 # plot_diet  --------------------------------------------------------------------------------------
 plots <- plot_diet(df_cons, wrap_col = "agecl")
 
 # plot_calibrate  ---------------------------------------------------------------------------------
-p <- plot_line(convert_relative_initial(preprocess$structn_age), col = "agecl") %>% plot_add_box()
+p <- plot_line(convert_relative_initial(preprocess$structn_age), col = "agecl")
+p <- plot_add_box(p)
 
 # plot_bench --------------------------------------------------------------------------------------
 data_comp <- preprocess$biomass
