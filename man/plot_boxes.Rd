@@ -4,13 +4,15 @@
 \alias{plot_boxes}
 \title{Plot layout of boxes!}
 \usage{
-plot_boxes(data)
+plot_boxes(data, color_boxes = TRUE)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
 }
 \value{
 ggplot2 object
+
+color_boxes logical indicating if polygons should be color coded or not.
 }
 \description{
 Plot layout of boxes!
@@ -18,7 +20,12 @@ Plot layout of boxes!
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+
+# Use color coding for polygons.
 plot_boxes(bgm_data)
+
+# Only use text to indicate polygons.
+plot_boxes(bgm_data, color_boxes = FALSE)
 }
 \seealso{
 Other plot functions: \code{\link{plot_bar}},
