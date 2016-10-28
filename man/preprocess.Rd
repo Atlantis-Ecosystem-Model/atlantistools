@@ -9,11 +9,13 @@
   \item biomass
   \item biomass_age
   \item biomass_consumed
+  \item biomass_spatial_stanza
   \item diet
   \item eat_age
   \item flux
   \item grazing
   \item growth_age
+  \item growth_rel_init
   \item nums
   \item nums_age
   \item nums_box

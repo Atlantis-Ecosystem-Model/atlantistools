@@ -52,6 +52,7 @@ Dataframe/ Plot.
 Sanity check initial conditions file
 }
 \examples{
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 \dontrun{
 dir <- system.file("extdata", "gns", package = "atlantistools")
 fgs <- "functionalGroups.csv"

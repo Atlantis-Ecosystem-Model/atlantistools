@@ -79,6 +79,8 @@ load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps,
 load_init_nonage(dir = dir, init = init, fgs = fgs, bboxes = bboxes, bps = bps)
 
 load_init_stanza(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
+
+load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
 }
 \author{
 Alexander Keth
