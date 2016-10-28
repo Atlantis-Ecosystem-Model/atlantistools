@@ -92,8 +92,6 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
   # Create panels
   # 1. Overview of the polygon layout
   bl <- plot_boxes(data = bgm_as_df)
-  bl <- bl + ggplot2::theme_void()
-  bl <- bl + ggplot2::theme(legend.position = "none")
 
   # 2. Spatial distribution per predator and stanza per time, layer, polygon
   dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
