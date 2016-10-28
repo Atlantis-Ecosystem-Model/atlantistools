@@ -28,6 +28,12 @@
 #'
 #' @examples
 #' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' init <- "INIT_VMPA_Jan2015.nc"
+#' prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
+#' fgs <- "SETasGroupsDem_NoCep.csv"
+#' bboxes <- get_boundary(load_box(dir = dir, bgm = "VMPA_setas.bgm"))
+#'
+#' data1 <- sc_init(dir, init, prm_biol, fgs, bboxes)
 
 #' \dontrun{
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
@@ -87,10 +93,11 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set
     if (length(acr_age) != length(pred)) stop("Not all predators present in functionalGroups file")
   }
 
-  bps <- load_bps(dir = dir, fgs = fgs, init = init)
+  # bps <- load_bps(dir = dir, fgs = fgs, init = init)
   groups <- get_groups(dir = dir, fgs = fgs)
   groups_age <- get_age_groups(dir = dir, fgs = fgs)
-  groups_rest <- groups[!is.element(groups, groups_age)]
+  groups_stanza <- fgs_data$Name[fgs_data$NumCohorts == 2]
+  groups_rest <- groups[!is.element(groups, c(groups_age, groups_stanza))]
   maxl <- max(get_layers(dir = dir, init = init)) + 1
 
   message("Read in data from out.nc, init.nc and prm.biol!")
@@ -164,7 +171,15 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set
   #                            select_variable = "N", bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
   preydens_invert <- load_init_nonage(dir = dir, init = init, fgs = fgs, select_groups = groups_rest,
-                                      bboxes = bboxes, bps = load_bps(dir = dir, fgs = fgs, init = init)) %>%
+                                      bboxes = bboxes, bps = load_bps(dir = dir, fgs = fgs, init = init))
+  if (length(groups_stanza) > 0) {
+    # calculate mean density over stanzas (This is used as hotfix...)
+    preydens_stanza <- load_init_stanza(dir = dir, init = init, fgs = fgs, select_groups = groups_stanza, bboxes = bboxes) %>%
+      agg_data(groups = c("polygon", "layer", "species"), fun = mean)
+    preydens_invert <- dplyr::bind_rows(preydens_invert, preydens_stanza)
+  }
+
+  preydens_invert <- preydens_invert %>%
     dplyr::mutate(prey_stanza = 2) %>%
     dplyr::inner_join(surface, by = c("polygon", "layer"))
     # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
