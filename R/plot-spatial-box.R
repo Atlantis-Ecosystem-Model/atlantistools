@@ -14,6 +14,8 @@
 #' @param timesteps Integer giving the number of timesteps to visualise. The minimum
 #' value is 2 (default). By default the start and end of the simulation is shown. In case
 #' timesteps > 2 equally spaced timesteps - 2 are added.
+#' @param polygon_overview numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
+#' upper right corner of the plot. Default is 0.2.
 #' @return grob of 3 ggplot2 plots.
 #' @export
 #'
@@ -37,12 +39,9 @@
 #'
 #' # Plot specific species
 #' grobs <- plot_spatial_box(bio_spatial, bgm_as_df,
-#'                       select_species = "Shallow piscivorous fish", timesteps = 3)
+#'                           select_species = "Shallow piscivorous fish", timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[1]])
 #' gridExtra::grid.arrange(grobs[[2]])
-#'
-#' # Timeseries
-#' vol <- agg_data(ref_vol, groups = c("time", "polygon"), fun = sum, out = "volume")
 
 plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2, polygon_overview = 0.2){
   # Check input dataframe!
@@ -66,9 +65,6 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
     }
   }
 
-  # Get available species and stanzas!
-  pred_stanza <- unique(dplyr::select_(bio_spatial, .dots = c("species", "species_stanza")))
-
   # Step1: Calculate summary table
   # - perc biomass per box and layer
   perc_bio <- agg_perc(bio_spatial, groups = c("time", "species", "species_stanza"))
@@ -78,6 +74,8 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
   plot_spatial_species <- function(data, full_grid) {
     # add time to polygon layout
     bgrd <- merge(full_grid, unique(dplyr::select_(data, .dots = c("time"))))
+    p_title <- paste("Species:", unique(data$species), "with stanza:", unique(data$species_stanza))
+
     data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~atoutput, group = ~factor(polygon))) +
       ggplot2::geom_polygon(colour = "black") +
@@ -85,110 +83,24 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
       ggplot2::scale_fill_gradient("biomass distribution", low = "red", high = "green") +
       ggplot2::guides(fill = ggplot2::guide_colorbar(barwidth = 20)) +
       ggplot2::coord_equal() +
-      theme_atlantis()
+      theme_atlantis() +
+      ggplot2::labs(title = p_title)
 
-    plot <- ggplot_custom(plot)
+    plot <- ggplot_custom(plot, scientific = FALSE)
 
     return(plot)
   }
 
-  # Create panels
-  # 1. Overview of the polygon layout
-  bl <- plot_boxes(data = bgm_as_df)
-
-  # 2. Spatial distribution per predator and stanza per time, layer, polygon
+  # Step2: Apply predator and stanza specific plot function
   dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
     split_dfs(cols = c("species", "species_stanza"))
   plots_spatial <- lapply(dfs_spatial, plot_spatial_species, full_grid = full_grid)
 
-  # Combine plots!
-  g2 <- gridExtra::arrangeGrob(bl, ncol = 1,
-                               heights = grid::unit(c(polygon_overview, 1 - polygon_overview), units = "npc"))
+  # Step3: Combine plots with polygon overview!
+  grobs <- lapply(plots_spatial, plot_add_polygon_overview, bgm_as_df = bgm_as_df, polygon_overview = polygon_overview)
 
-  grobs <- vector(mode = "list", length = nrow(pred_stanza))
-  for (i in seq_along(grobs)) {
-    header <- grid::textGrob(paste("Species:", pred_stanza[i, 1], "with stanza:", pred_stanza[i, 2]),
-                             gp = grid::gpar(fontsize = 18))
-    g1 <- gridExtra::arrangeGrob(grobs = c(list(header), list(plots_spatial[[i]])), ncol = 1,
-                                 heights = grid::unit(c(0.04, 0.96), units = "npc"))
-
-    grobs[[i]] <- gridExtra::arrangeGrob(grobs = list(g1, g2), ncol = 2,
-                                         widths = grid::unit(c(1 - polygon_overview, polygon_overview), units = "npc"))
-  }
-
-  names(grobs) <- apply(pred_stanza, MARGIN = 1, paste, collapse = " ")
   return(grobs)
 }
-
-plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, ncol = 7, polygon_overview = 0.2){
-  # Check input dataframe!
-  check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
-  check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
-
-  # Flip layers in bio_spatial!
-  bio_spatial <- flip_layers(bio_spatial)
-
-  # Filter by species if select_species not NULL!
-  # Warning: Will change input parameter which makes it harder to debug...
-  if (!is.null(select_species)) {
-    if (all(select_species %in% unique(bio_spatial$species))) {
-      bio_spatial <- dplyr::filter_(bio_spatial, ~species %in% select_species)
-    } else {
-      stop("Not all selected_species are present in bio_spatial.")
-    }
-  }
-
-  # Get available species and stanzas!
-  pred_stanza <- unique(dplyr::select_(bio_spatial, .dots = c("species", "species_stanza")))
-
-  # Step1: Calculate summary tables
-  # - biomass timeseries per box
-  ts_bio <- agg_data(bio_spatial, groups = c("time", "species", "species_stanza", "polygon"), fun = sum) %>%
-    dplyr::left_join(vol) %>%
-    dplyr::mutate(density = atoutput / volume)
-
-  plot_ts_species <- function(data) {
-    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~atoutput, colour = ~density)) +
-      ggplot2::geom_line() +
-      ggplot2::facet_wrap(~polygon, ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15)) +
-      # ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = function(x) scales::scientific(x, digits = 2)) +
-      ggplot2::scale_colour_gradientn("Biomassdensity [t/m^-3]", colours = grDevices::rainbow(n = 7),
-                                      labels = function(x) scales::scientific(x, digits = 2)) +
-      ggplot2::labs(x = "Time [years]", y = "Biomass [t]") +
-      theme_atlantis() +
-      ggplot2::theme(legend.position = "right")
-
-    plot <- ggplot_custom(plot)
-
-    return(plot)
-  }
-
-  # Create panels
-  # 1. Overview of the polygon layout
-  bl <- plot_boxes(data = bgm_as_df)
-
-  # 2. Timeseries per box
-  dfs_species <- split(ts_bio, ts_bio$species)
-  plots_ts_bio <- lapply(split(ts_bio, ts_bio$species), plot_ts_species)
-  plots_ts_bio <- lapply(split(ts_dns, ts_bio$species), plot_ts_species)
-
-
-  # Combine plots!
-  grobs <- vector(mode = "list", length = length(select_species))
-  for (i in seq_along(grobs)) {
-    header <- grid::textGrob(paste("Species:", pred_stanza[i, 1], "with stanza:", pred_stanza[i, 2]),
-                             gp = grid::gpar(fontsize = 18))
-
-    grobs[[i]] <- gridExtra::arrangeGrob(
-      grobs = c(list(header), list(plots_spatial[[i]]), list(bl), list(plots_ts[[i]])),
-      layout_matrix = matrix(c(rep(1, 4), c(rep(2, 3), 3), rep(c(rep(2, 3), 4), 2)), ncol = 4, byrow = TRUE),
-      heights = grid::unit(c(0.04, rep(0.32, 3)), units = "npc"))
-  }
-
-  names(grobs) <- apply(pred_stanza, MARGIN = 1, paste, collapse = " ")
-  return(grobs)
-}
-
 
 # Utility functions
 # Select timesteps

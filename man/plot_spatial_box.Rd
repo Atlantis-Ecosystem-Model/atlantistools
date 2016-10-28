@@ -5,7 +5,7 @@
 \title{Visualise the spatial distribution per species and stanza combination.}
 \usage{
 plot_spatial_box(bio_spatial, bgm_as_df, select_species = NULL,
-  timesteps = 2)
+  timesteps = 2, polygon_overview = 0.2)
 }
 \arguments{
 \item{bio_spatial}{Biomass per group and stanza in tonnes for each timestep,
@@ -25,6 +25,9 @@ to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat'
 \item{timesteps}{Integer giving the number of timesteps to visualise. The minimum
 value is 2 (default). By default the start and end of the simulation is shown. In case
 timesteps > 2 equally spaced timesteps - 2 are added.}
+
+\item{polygon_overview}{numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
+upper right corner of the plot. Default is 0.2.}
 }
 \value{
 grob of 3 ggplot2 plots.
@@ -52,7 +55,7 @@ names(grobs)
 
 # Plot specific species
 grobs <- plot_spatial_box(bio_spatial, bgm_as_df,
-                      select_species = "Shallow piscivorous fish", timesteps = 3)
+                          select_species = "Shallow piscivorous fish", timesteps = 3)
 gridExtra::grid.arrange(grobs[[1]])
 gridExtra::grid.arrange(grobs[[2]])
 }
