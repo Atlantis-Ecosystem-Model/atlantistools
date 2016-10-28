@@ -31,9 +31,13 @@ custom_map <- function(data, x, y) {
 }
 
 # Changes applied to every ggplot object within atlantistools.
-ggplot_custom <- function(plot) {
+ggplot_custom <- function(plot, scientific = TRUE) {
   plot <- plot + ggplot2::coord_cartesian(expand = FALSE)
-  plot <- plot + ggplot2::scale_y_continuous(labels = scales::scientific_format(digits = 2))
+  if (scientific) {
+    plot <- plot + ggplot2::scale_y_continuous(labels = scales::scientific_format(digits = 2))
+  } else {
+    plot <- plot + ggplot2::scale_y_continuous(labels = abbreviate)
+  }
   return(plot)
 }
 
