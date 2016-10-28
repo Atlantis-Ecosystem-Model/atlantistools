@@ -113,12 +113,10 @@ test_that("test output nitrogen", {
   expect_true(sd(test$check[!is.na(test$check)]) < 0.0000001)
 })
 
-# d <- system.file("extdata", "gns", package = "atlantistools")
-# bps <- load_bps(dir = d, fgs = "functionalGroups.csv", init = "init_simple_NorthSea.nc")
-# bboxes <- get_boundary(load_box(dir = d, bgm = "NorthSea.bgm"))
-# data <- load_nc(dir = d, nc = "init_simple_NorthSea.nc", bps = bps, fgs = "functionalGroups.csv",
-#                 select_groups = c("cod", "herring"), select_variable = "Nums",
-#                 prm_run = "NorthSea_run_fishing_F.prm", bboxes = bboxes)
 
+data <- load_nc_physics(dir = d,
+                        nc = "outputSETAS.nc",
+                        select_physics = c("hdsource", "hdsink", "eflux", "vflux"),
+                        aggregate_layers = FALSE, bboxes = bboxes, prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
 
 
