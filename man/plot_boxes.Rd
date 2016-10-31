@@ -8,11 +8,11 @@ plot_boxes(data, color_boxes = TRUE)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
+
+\item{color_boxes}{logical indicating if polygons should be color coded or not.}
 }
 \value{
 ggplot2 object
-
-color_boxes logical indicating if polygons should be color coded or not.
 }
 \description{
 Plot layout of boxes!
