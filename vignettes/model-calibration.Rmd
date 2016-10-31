@@ -264,9 +264,9 @@ for (i in seq_along(plots)) {
 
 \newpage
 
-# Spatial Plots
+# Spatial Plots 1
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
-plots <- plot_spatial(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(dir = dir, bgm = bgm), timesteps = 7)
+plots <- plot_spatial_box(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(dir = dir, bgm = bgm), timesteps = 7)
 for (i in seq_along(plots)) {
   cat(paste0("## Spatial Plot ", i, ": ", names(plots)[i]), sep = "\n")
   gridExtra::grid.arrange(plots[[i]])
@@ -274,5 +274,15 @@ for (i in seq_along(plots)) {
 }
 ```
 
+\newpage
 
+# Spatial Plots 2
+```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
+plots <- plot_spatial_ts(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(dir = dir, bgm = bgm), vol = result$vol)
+for (i in seq_along(plots)) {
+  cat(paste0("## Spatial Plot ", i, ": ", names(plots)[i]), sep = "\n")
+  gridExtra::grid.arrange(plots[[i]])
+  cat("\n\n")
+}
+```
 
