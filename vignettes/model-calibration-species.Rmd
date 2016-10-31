@@ -30,7 +30,7 @@ to the list of dataframes at the end of the preprocess vignette and change `mode
 library("atlantistools")
 library("gridExtra")
 
-# You should be able to build the vignette either by clicking on "Knit-PDF" or with
+# You should be able to build the vignette either by clicking on "Knit PDF" in RStudio or with
 # rmarkdown::render("model-calibration-species.Rmd")
 ```
 
