@@ -22,17 +22,17 @@ plot_boxes <- function(data, color_boxes = TRUE) {
   inside <- unique(subset(data, select = c("inside_lat", "inside_long", "polygon")))
   names(inside)[1:2] <- c("lat", "long")
 
-  plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, group = ~factor(polygon), label = ~polygon)) +
-    ggplot2::geom_polygon(colour = "black", fill = "white") +
-    ggplot2::geom_text(data = inside) +
-    ggplot2::theme_void()
+  plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, group = ~factor(polygon), label = ~polygon))
 
   if (color_boxes) {
-    plot <- plot + ggplot2::aes_(fill = ~factor(polygon))
-    plot <- plot + ggplot2::theme(legend.position = "none")
+    plot <- plot + ggplot2::geom_polygon(ggplot2::aes_(fill = ~factor(polygon)), colour = "black")
   } else {
-    # plot <- plot + ggplot2::geom_polygon(fill = "blue", alpha = 0.1)
+    plot <- plot + ggplot2::geom_polygon(colour = "black", fill = "white")
   }
+
+  plot <- plot + ggplot2::geom_text(data = inside)
+  plot <- plot + ggplot2::theme_void()
+  plot <- plot + ggplot2::theme(legend.position = "none")
 
   return(plot)
 }
