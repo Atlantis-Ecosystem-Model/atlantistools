@@ -9,11 +9,11 @@
 #' @param bgm_as_df *.bgm file converted to a dataframe. Please use \code{\link{convert_bgm}}
 #' to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat',
 #' 'inside_long' and 'polygon'.
+#' @param vol Volume per polygon and timestep. Use \code{\link{load_nc_phjysics}} and \code{\link{agg_data}} to
+#' create this dataframe. See model-preprocess.Rmd for details.
 #' @param select_species Character vector listing the species to plot. If no species are selected
 #' \code{NULL} (default) all available species are plotted.
-#' @param timesteps Integer giving the number of timesteps to visualise. The minimum
-#' value is 2 (default). By default the start and end of the simulation is shown. In case
-#' timesteps > 2 equally spaced timesteps - 2 are added.
+#' @param ncol Number of columns in final plot. Default = 7.
 #' @param polygon_overview numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
 #' upper right corner of the plot. Default is 0.2.
 #' @return grob of 3 ggplot2 plots.
@@ -59,7 +59,7 @@ plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, 
   # - biomass timeseries per box
   ts_bio <- agg_data(bio_spatial, groups = c("time", "species", "species_stanza", "polygon"), fun = sum) %>%
     dplyr::left_join(vol) %>%
-    dplyr::mutate(density = atoutput / volume)
+    dplyr::mutate_(.dots = stats::setNames(list(~atoutput / volume), "density"))
 
   plot_ts_species <- function(data, ncol) {
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~density, colour = ~atoutput)) +

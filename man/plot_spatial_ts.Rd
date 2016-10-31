@@ -19,15 +19,16 @@ to transform an agebased dataframe to a stanza based dataframe.}
 to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat',
 'inside_long' and 'polygon'.}
 
+\item{vol}{Volume per polygon and timestep. Use \code{\link{load_nc_phjysics}} and \code{\link{agg_data}} to
+create this dataframe. See model-preprocess.Rmd for details.}
+
 \item{select_species}{Character vector listing the species to plot. If no species are selected
 \code{NULL} (default) all available species are plotted.}
 
+\item{ncol}{Number of columns in final plot. Default = 7.}
+
 \item{polygon_overview}{numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
 upper right corner of the plot. Default is 0.2.}
-
-\item{timesteps}{Integer giving the number of timesteps to visualise. The minimum
-value is 2 (default). By default the start and end of the simulation is shown. In case
-timesteps > 2 equally spaced timesteps - 2 are added.}
 }
 \value{
 grob of 3 ggplot2 plots.
