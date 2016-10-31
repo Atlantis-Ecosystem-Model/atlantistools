@@ -19,8 +19,7 @@ to transform an agebased dataframe to a stanza based dataframe.}
 to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat',
 'inside_long' and 'polygon'.}
 
-\item{vol}{Volume per polygon and timestep. Use \code{\link{load_nc_phjysics}} and \code{\link{agg_data}} to
-create this dataframe. See model-preprocess.Rmd for details.}
+\item{vol}{Volume per polygon and timestep. See model-preprocess.Rmd for details.}
 
 \item{select_species}{Character vector listing the species to plot. If no species are selected
 \code{NULL} (default) all available species are plotted.}
