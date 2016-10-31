@@ -169,6 +169,10 @@ gr_req <- pd %>%
 gr_rel_init <- growth_age %>%
   left_join(gr_req) %>%
   mutate(gr_rel = (atoutput - growth_req) / growth_req)
+
+# Aggregate volume vertically.
+vol_ts <- agg_data(vol, groups = c("time", "polygon"), fun = sum, out = "volume")
+
 ```
 
 
@@ -193,7 +197,8 @@ gr_rel_init <- growth_age %>%
     "sink"                   = sink,
     "spatial_overlap"        = sp_overlap,    #15
     "ssb_rec"                = ssb_rec,
-    "structn_age"            = structn_age    
+    "structn_age"            = structn_age,    
+    "vol"                    = vol_ts
   )
 ```
 
