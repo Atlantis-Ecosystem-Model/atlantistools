@@ -25,6 +25,10 @@ plot <- plot_species(preprocess, species = "Shallow piscivorous fish")
 
 bio_conv <- get_conv_mgnbiot(dir, prm_biol)
 
+test_that("biomass convertion constant", {
+  expect_equal(bio_conv, 1.14e-07)
+})
+
 df_cons <- calculate_consumed_biomass(ref_eat, ref_grazing, ref_dm, ref_vol, bio_conv)
 
 # sc_init applied to dummy dataframes  ------------------------------------------------------------
