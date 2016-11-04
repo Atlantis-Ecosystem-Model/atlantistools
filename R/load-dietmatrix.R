@@ -45,7 +45,10 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
   coh2 <- acr[agecl == 2]
   coh1 <- acr[agecl == 1]
 
-  if (version_flag == 2) coh10 <- c(coh10, coh2); coh2 <- NULL
+  if (version_flag == 2) {
+    coh10 <- c(coh10, coh2)
+    coh2 <- NULL
+  }
 
   if (length(c(coh10, coh2, coh1)) != length(acr)) stop("Incomplete functional groups file.")
 
@@ -75,9 +78,10 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
   pred <- c(rep(coh10, each = 4),  coh1, rep(coh2, each = 2))
   if (length(pred) != nrow(dietmatrix)) stop("Incomplete rows in diet data.")
 
-  # Extract preys
+  # Extract preys. Add sediment prey to Carrion and Det groups!
   acronyms <- get_acronyms(dir = dir, fgs = fgs)
-  prey <- c(acronyms, paste0(acronyms[(length(acronyms) - 2):length(acronyms)], "sed"))
+  car_det <- fgs_data$Code[grep(pattern = "(\\_DET|CARRION)", x = fgs_data[, names(fgs_data) %in% c("InvertType", "GroupType")])]
+  prey <- c(acronyms, paste0(car_det, "sed"))
   if (length(prey) != ncol(dietmatrix)) stop("Incomplete columns in diet data")
 
   # Convert to dataframe.
