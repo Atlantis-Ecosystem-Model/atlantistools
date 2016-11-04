@@ -51,12 +51,12 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
 
   # Create vector of diet matrix strings available in prm_biol
   diet_strings <- c(
-    # groups with NumCohorts == 10
+    # groups with NumCohorts > 2
     as.vector(t(outer(X = as.vector(outer(X = paste0(pstring, 1:2), Y = coh10, FUN = paste0)),
                       Y = 1:2, FUN = paste0))),
     # groups with NumCohorts == 1
     paste0(pstring, coh1))
-    # groups with 1 < NumCohorts < 10
+    # groups with NumCohorts == 2
     if (length(coh2 > 0)) diet_strings <- c(diet_strings, as.vector(t(outer(X = paste0(pstring, coh2), Y = 1:2, FUN = paste0))))
 
   # Extract data from the biological parameter file.
