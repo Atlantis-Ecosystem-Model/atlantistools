@@ -121,9 +121,9 @@ write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
     # Some models overwrite invertebrate availabilities.
     warning(paste0("Multiple linesbreaks present in ", prm_biol,
                    ". End of dietmatrix might not be detected correctly. Please check your parameter file."))
-    dm_ids <- min(pos) : (pos[which(lags >= 4)] + 1)
+    dm_ids <- min(pos):(pos[which(lags >= 4)] + 1)
   } else {
-    dm_ids <- min(pos) : (max(pos) + 1)
+    dm_ids <- min(pos):(max(pos) + 1)
   }
 
   # Write dietmatrix to prm_biol
