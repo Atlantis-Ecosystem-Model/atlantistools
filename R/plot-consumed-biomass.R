@@ -113,5 +113,6 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # line 10:  add axis with major and minor ticks, without flipping the axis labels in the bottom half.
 }
 
-
-# plot_biomass_flow(df = data_cons, select_time = 3, show = 0.95)
+# Add some gns testing.
+# load("z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/preprocess-north-sea.rda", verbose = T)
+# plot_biomass_flow(df = result$biomass_consumed, show = 0.95)
