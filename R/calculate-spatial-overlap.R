@@ -70,7 +70,9 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   sis <- Map(schoener, predgrp = ps$species, ageclass = ps$agecl,
              MoreArgs = list(biomass = data_bio, avail = dietmatrix))
 
-  return(sis)
+  si_overall <- dplyr::bind_rows(sis)
+
+  return(si_overall)
 }
 
 # 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
@@ -117,7 +119,7 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
     dplyr::mutate_(.dots = stats::setNames(list(~si * avail), "si")) %>%
     agg_data(col = "si", groups = c("time", "pred", "agecl_pred"), out = "si", fun = sum)
 
-  return(list(dplyr::ungroup(si_spec), dplyr::ungroup(si_overall)))
+  return(dplyr::ungroup(si_overall))
 }
 
 
