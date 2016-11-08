@@ -16,6 +16,26 @@
 #' plot_consumed_biomass(ref_bio_cons)
 #' plot_consumed_biomass(ref_bio_cons, select_time = 1.8)
 #' plot_consumed_biomass(ref_bio_cons, select_time = 1.8, show = 0.99)
+#'
+#' # Add some gns testing.
+#' \dontrun{
+#' load("z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/preprocess-north-sea.rda", verbose = T)
+#' plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = 2.2)
+#'
+#' times <- c(0.2, seq(10, 90, 10), 99.8)
+#' par(mfcol = c(3, 4))
+#' for (i in seq_along(times)) {
+#'   plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = times[i])
+#' }
+#'
+#' times <- seq(0.2, 2.2, 0.2)
+#' # times <- times[times != 1]
+#' par(mfcol = c(3, 4))
+#' for (i in seq_along(times)) {
+#'   plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = times[i])
+#' }
+#' }
+
 
 plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95) {
   # Restrict to selected timestep!
@@ -46,15 +66,19 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # Setup final dataframes for plotting!
   clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
   # Will break if any predator only group is not grouped to Rest!
-  set_cols <- agg_data(clean_df, groups = "prey", fun = sum, out = "order") %>%
-    dplyr::rename_(.dots = c("group" = "prey")) %>%
+  d1 <- dplyr::select_(clean_df, .dots = c("group" = "pred", "atoutput"))
+  d2 <- dplyr::select_(clean_df, .dots = c("group" = "prey", "atoutput"))
+  set_cols <- dplyr::bind_rows(d1, d2) %>%
+    agg_data(groups = "group", fun = sum, out = "order") %>%
     dplyr::arrange_(~desc(order))
   set_cols$order <- 1:nrow(set_cols)
   set_cols$col <- rep(get_colpal(), 3)[1:nrow(set_cols)]
   grp_sp <- stringr::str_split(set_cols$group, pattern = " ", n = 2)
-  set_cols$reg1 <- sapply(grp_sp, function(x) x[1])
-  set_cols$reg2 <- sapply(grp_sp, function(x) x[2])
+  set_cols$reg1 <- abbreviate(sapply(grp_sp, function(x) x[1]))
+  set_cols$reg2 <- abbreviate(sapply(grp_sp, function(x) x[2]))
   set_cols$reg2[is.na(set_cols$reg2)] <- ""
+
+  clean_df$rank <- NULL
 
   # See: https://github.com/gjabel/migest/blob/master/demo/cfplot_reg2.R
   # for Details!
@@ -62,11 +86,13 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   circlize::circos.par(start.degree = 90, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
   graphics::par(mar = rep(0, 4))
 
-  circlize::chordDiagram(x = clean_df, grid.col = set_cols$col, transparency = 0.25,
+  # chordDiagramFromDataFrame has a weird if !is.null(df$rank) which throws a warning by default...
+  # Might be hard to bedug this in case of a different warning.
+  suppressWarnings(circlize::chordDiagram(x = clean_df, grid.col = set_cols$col, transparency = 0.25,
                          order = set_cols$group, directional = 1,
                          direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
                          annotationTrack = "grid", annotationTrackHeight = c(0.05, 0.1),
-                         link.arr.type = "big.arrow", link.sort = TRUE, link.largest.ontop = TRUE)
+                         link.arr.type = "big.arrow", link.sort = TRUE, link.largest.ontop = TRUE))
 
   # line 1: read in the data (clean_df) and set colours of the outer sectors (set_cols).
   # line 2: set order of outer sectors and indicates that chords should be directional.
@@ -90,9 +116,9 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
       reg2 = set_cols$reg2[set_cols$group == sector.index]
 
       test <- nchar(reg2)
-      circlize::circos.text(x = mean(xlim), y = ifelse(test == 0, yes = 6, no = 6.8),
+      circlize::circos.text(x = mean(xlim), y = ifelse(test == 0, yes = 6.8, no = 7.6),
                            labels = reg1, facing = "bending")
-      circlize::circos.text(x = mean(xlim), y = 5.2,
+      circlize::circos.text(x = mean(xlim), y = 6,
                             labels = reg2, facing = "bending")
 
       circlize::circos.axis(h = "top",
@@ -113,6 +139,5 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # line 10:  add axis with major and minor ticks, without flipping the axis labels in the bottom half.
 }
 
-# Add some gns testing.
-# load("z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/preprocess-north-sea.rda", verbose = T)
-# plot_biomass_flow(df = result$biomass_consumed, show = 0.95)
+
+
