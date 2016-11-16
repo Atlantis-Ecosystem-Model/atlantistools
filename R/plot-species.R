@@ -32,15 +32,6 @@ plot_species <- function(data_pre, species) {
     }
   }
 
-  # Change specific theme elemets of plots.
-  change_theme <- function(p) {
-    p <- p + ggplot2::theme(legend.position = "none",
-                            axis.title.x = ggplot2::element_blank(),
-                            strip.text = ggplot2::element_blank(),
-                            axis.text.y = ggplot2::element_text(angle = 90, hjust = 0.5))
-    return(p)
-  }
-
   # Main function code -----------------------------------------------------------------------------
   # Extract dfs from the list of preprocessed dataframes and perform some simple transformations!
   dfs <- list(data_pre$biomass, data_pre$biomass_age, data_pre$resn_age, data_pre$structn_age, data_pre$nums_age)
