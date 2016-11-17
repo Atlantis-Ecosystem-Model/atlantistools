@@ -22,6 +22,7 @@
 #' load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Megazoobenthos_N")
 
 load_init <- function(dir = getwd(), init, vars) {
+  # dummy
   read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
   on.exit(RNetCDF::close.nc(read_nc))
 
