@@ -29,5 +29,24 @@ Circle diagramm to visualise the consumed biomass for the whole system.
 plot_consumed_biomass(ref_bio_cons)
 plot_consumed_biomass(ref_bio_cons, select_time = 1.8)
 plot_consumed_biomass(ref_bio_cons, select_time = 1.8, show = 0.99)
+
+# Add some gns testing.
+\dontrun{
+load("z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/preprocess-north-sea.rda", verbose = T)
+plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = 2.2)
+
+times <- c(0.2, seq(10, 90, 10), 99.8)
+par(mfcol = c(3, 4))
+for (i in seq_along(times)) {
+  plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = times[i])
+}
+
+times <- seq(0.2, 2.2, 0.2)
+# times <- times[times != 1]
+par(mfcol = c(3, 4))
+for (i in seq_along(times)) {
+  plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = times[i])
+}
+}
 }
 
