@@ -17,6 +17,7 @@ r_github_packages:
 env:
   global:
   - _R_BUILD_COMPACT_VIGNETTES_=true
+  - _R_CHECK_COMPACT_VIGNETTES_=true
 
 after_success:
   - Rscript -e 'library(covr);codecov()'
