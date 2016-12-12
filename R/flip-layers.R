@@ -15,23 +15,21 @@
 
 flip_layers <- function(data) {
   if (any(!c("polygon", "layer") %in% names(data))) stop("Columns polygon and layer not present in data.")
+
+  # Create a df with fliped layers and normal layers based on the input dataframe.
   df <- unique(dplyr::select_(data, .dots = c("polygon", "layer")))
   sediment <- max(df$layer)
-  layers <- split(df, df$polygon)
+  df_fliped <- split(df, df$polygon) %>%
+    lapply(add_fliped_layers, sed = sediment) %>%
+    dplyr::bind_rows()
 
-  # for(i in seq_along(layers)) {
-  #   if()
-  # }
-  #
-  # , function(x) sort(x$layer))
-
-  df$layer_fliped <- unlist(lapply(layers, function(x) rev(x) + 1))
-
+  # Combine original dataframe with fliped layers and replace columns.
   data_fliped <- data %>%
-    dplyr::left_join(df, by = "polygon") %>%
-    dplyr::rename_(.dots = c("layer" = "layer.y"))
-  data_fliped$layer.x <- NULL
-  return(data_fliped)
+    dplyr::left_join(df_fliped, by = c("polygon", "layer"))
+  data_fliped$layer <- NULL
+  names(data_fliped)[names(data_fliped) == "layer_fliped"] <- "layer"
+
+    return(data_fliped)
 }
 
 add_fliped_layers <- function(df, sed) {
