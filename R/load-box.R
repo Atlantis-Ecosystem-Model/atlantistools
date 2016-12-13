@@ -61,6 +61,7 @@ load_box <- function(dir = getwd(), bgm) {
     out$vertmix <- gsr(info, "\\.vertmix")
     out$horizmix <- gsr(info, "\\.horizmix")
     out$vert <- gsr(info, "vert[[:space:]]")
+    out$botz <- gsr(info, "\\.botz")
     return(out)
   }
   get_face <- function(num, data) {
