@@ -159,3 +159,12 @@ write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
 
 
 
+# sicily debugging
+# dir <- "z:/my_data_alex/Matteo/"
+# prm_biol <- list.files(dir)[2]
+# fgs <- list.files(dir)[1]
+# transform <- FALSE
+# convert_names <- FALSE
+# version_flag <- 1
+# dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, transform, convert_names, version_flag)
+
