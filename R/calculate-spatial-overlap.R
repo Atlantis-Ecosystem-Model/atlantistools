@@ -70,9 +70,7 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   sis <- Map(schoener, predgrp = ps$species, ageclass = ps$agecl,
              MoreArgs = list(biomass = data_bio, avail = dietmatrix))
 
-  si_overall <- dplyr::bind_rows(sis)
-
-  return(si_overall)
+  return(sis)
 }
 
 # 3rd step: Calculate schoener index per pred / prey combination (including stanzas)
@@ -119,8 +117,62 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
     dplyr::mutate_(.dots = stats::setNames(list(~si * avail), "si")) %>%
     agg_data(col = "si", groups = c("time", "pred", "agecl_pred"), out = "si", fun = sum)
 
-  return(dplyr::ungroup(si_overall))
+  return(list(si_spec, si_overall))
 }
+
+
+# let's do some sicily debugging
+# d <- file.path("C:", "Users", "alexanderke", "Dropbox", "Atlantis_SoS_Files_Alex")
+#
+# list.files(d)
+#
+# bgm <- "geometry.bgm"
+# fgs <- "newFGHorMigr.csv"
+# init <- "inSic03052016.nc"
+# nc_gen <- "out_TS_TARGET4.nc"
+# prm_biol <- "Sic_biol_fishing_TARGET4.prm"
+# prm_run <- "Sic_run_fishing_F_gape100_65yr.prm"
+#
+# boundary_boxes <- get_boundary(boxinfo = load_box(dir = d, bgm = bgm))
+# epibenthic_groups <- load_bps(dir = d, fgs = fgs, init = init)
+#
+# groups <- get_groups(dir = d, fgs = fgs)
+# groups_age <- get_age_groups(dir = d, fgs = fgs)
+# groups_rest <- groups[!groups %in% groups_age]
+#
+# bio_conv <- get_conv_mgnbiot(dir = d, prm_biol = prm_biol)
+#
+# # Read in data ------------------------------------------------------------------------------------
+# vars <- list("Nums",     "StructN",  "ResN",     "N")
+# ncs  <- list(nc_gen,     nc_gen,     nc_gen,     nc_gen)
+# grps <- list(groups_age, groups_age, groups_age, groups_rest)
+# dfs <- Map(load_nc, nc = ncs, select_variable = vars, select_groups = grps,
+#            MoreArgs = list(dir = d, bps = epibenthic_groups, fgs = fgs, prm_run = prm_run, bboxes = boundary_boxes))
+#
+# df_vol_dz <- load_nc_physics(dir = d, nc = nc_gen, select_physics = c("volume", "dz"),
+#                              prm_run = prm_run, bboxes = boundary_boxes, aggregate_layers = F)
+#
+#
+# bio_sp <- calculate_biomass_spatial(nums = dfs[[1]], sn = dfs[[2]], rn = dfs[[3]], n = dfs[[4]],
+#                                     vol_dz = df_vol_dz, bio_conv = bio_conv, bps = epibenthic_groups)
+#
+# biomass_spatial <- bio_sp
+#
+# dietmatrix <- load_dietmatrix(dir = d, prm_biol, fgs, convert_names = TRUE, version_flag = 1)
+#
+# agemat <- prm_to_df(dir = d, prm_biol = prm_biol, fgs = fgs,
+#                     group = get_age_acronyms(dir = d, fgs = fgs),
+#                     parameter = "age_mat")
+#
+# sp_overlap <- calculate_spatial_overlap(biomass_spatial = bio_sp,
+#                                         dietmatrix = dietmatrix,
+#                                         agemat = agemat)
+
+
+
+
+
+
 
 
 
