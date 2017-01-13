@@ -26,8 +26,8 @@ df_bio3 <- rbind(dummy1, dummy2)
 
 
 test_that("test schoener calculations", {
-  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio1, avail = df_avail)$si, 0)
-  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio2, avail = df_avail)$si, 1)
-  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio3, avail = df_avail)$si, 0.5)
+  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio1, avail = df_avail)[[2]]$si, 0)
+  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio2, avail = df_avail)[[2]]$si, 1)
+  expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio3, avail = df_avail)[[2]]$si, 0.5)
 })
 
