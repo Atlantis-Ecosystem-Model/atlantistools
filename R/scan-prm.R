@@ -25,15 +25,11 @@ scan_prm <- function(chars, variable){
     if (length(pos) == 1) {
       return(pos)
     } else {
-      # mL and mQ are also found in jmL and jmQ... We need to add an exception
-      # here! The order of the exceptions have to match the order of the
-      # second item found (e.g. "mL_" --> "jmL_")
-      if (length(pos) == 2 & any(sapply(c("mL_", "mQ_", "mum_"), grepl, x = variable))) {
-        # Remove juveniale mortality
-        ex <- c("jmL_", "jmQ_", "crit_mum")
-        for (i in seq_along(ex)) {
-          if (any(grepl(pattern = ex[i], x = chars[pos]))) pos <- pos[!grepl(pattern = ex[i], x = chars[pos])]
-        }
+      # check if the variable is part of another variable and exclude those!
+      # We check for equality of the first two characters!
+      check <- substr(chars[pos], start = 1, stop = 2) %in% substr(variable, start = 1, stop = 2)
+      if (sum(check) == 1) { # apply the fix
+        pos <- pos[check]
         return(pos)
       } else {
         stop(paste("Variable", variable, "found multiple times."))

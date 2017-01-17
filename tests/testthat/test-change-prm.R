@@ -52,6 +52,26 @@ test_that("test scan_prm & extract_prm", {
   # }
 })
 
+# create dummy FLAGs wich are nested into each other!
+dummy <- c("WSK_age_mat 2", "LSK_age_mat 3", "SK_age_mat 4", "jmL_COD 0.001", "mL_COD 0.002", "mum_COD 25", "crit_mum_COD 30")
+prm_dummy <- prm_old_read
+prm_dummy[sample(1:length(prm_dummy), size = length(dummy), replace = F)] <- dummy
+
+test_that("test flags embedded in other flags", {
+  expect_equal(prm_dummy[scan_prm(chars = prm_dummy, variable = "WSK_age_mat")], dummy[1])
+  expect_equal(prm_dummy[scan_prm(chars = prm_dummy, variable = "LSK_age_mat")], dummy[2])
+  expect_equal(prm_dummy[scan_prm(chars = prm_dummy, variable = "SK_age_mat")], dummy[3])
+  expect_equal(prm_dummy[scan_prm(chars = prm_dummy, variable = "jmL_COD")], dummy[4])
+  expect_equal(prm_dummy[scan_prm(chars = prm_dummy, variable = "mL_COD")], dummy[5])
+  expect_equal(prm_dummy[scan_prm(chars = prm_dummy, variable = "mum_COD")], dummy[6])
+  expect_equal(prm_dummy[scan_prm(chars = prm_dummy, variable = "crit_mum_COD")], dummy[7])
+})
+
+
+
+
+
+
 
 
 
