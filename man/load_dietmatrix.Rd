@@ -53,5 +53,12 @@ dm <- load_dietmatrix(dir = d,
                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
                       fgs = "SETasGroupsDem_NoCep.csv")
 head(dm, n = 10)
+
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+dm <- load_dietmatrix(dir = d,
+                      prm_biol = "VMPA_setas_biol_fishing_New.prm",
+                      fgs = "SETasGroups.csv",
+                      version_flag = 1)
+head(dm, n = 10)
 }
 
