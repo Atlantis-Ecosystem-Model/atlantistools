@@ -19,7 +19,6 @@
 #' ggplot2::ggplot(data = nums_agg, ggplot2::aes(x = time, y = atoutput)) +
 #'    ggplot2::facet_wrap(~species) +
 #'    theme_atlantis()}
-#'
 
 theme_atlantis <- function(large = 22, medium = 18, small = 14, scale_font = 1, rot_xaxis_text = FALSE, rot_strips_y = TRUE){
   ggplot2::theme(
