@@ -350,15 +350,15 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
 # bps <- load_bps(dir, fgs, init)
 # groups <- get_groups(dir, fgs)
 # groups_age <- get_age_groups(dir, fgs)
+# groups_age <- c(groups_age, "Aquacult_Tuna")
 # select_groups <- groups[!groups %in% groups_age]
-# select_variable <- "N"
+# select_variable <- "Nums"
 # prm_run <- "GAB_run.prm"
 # bboxes <- get_boundary(boxinfo = load_box(dir, bgm))
 # check_acronyms <- TRUE
 # warn_zeros <- FALSE
 # report <- TRUE
 #
-# dfs_gen <- Map(load_nc, select_variable = vars, select_groups = grps,
-#                MoreArgs = list(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
+# test <- load_nc(dir, nc, fgs, bps, groups_age, select_variable, prm_run, bboxes)
 
 
