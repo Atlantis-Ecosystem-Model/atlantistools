@@ -66,7 +66,7 @@ converts them to a \code{data.frame}.
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 nc <- "outputSETAS.nc"
-bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
+bps <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
 fgs <- "SETasGroupsDem_NoCep.csv"
 bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
