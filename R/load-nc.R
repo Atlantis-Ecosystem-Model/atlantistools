@@ -161,7 +161,8 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
 
   # Get final species and number of ageclasses per species
   final_species <- select_groups[sapply(lapply(select_groups, grepl, x = search_clean), any)]
-  final_agecl <- fgs$NumCohorts[sapply(final_species, function(x) which(x == fgs$Name))]
+  id <- sapply(final_species, function(x) which(x == fgs$Name))
+  final_agecl <- fgs$NumCohorts[id] * fgs$NumGeneTypes[id]
 
   # This may allow init files to be loaded as well! Unfortunately "num_layers" is missing in
   # the init file. Therefore we also load in the general fiel to extract the layers!
@@ -360,5 +361,6 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
 # report <- TRUE
 #
 # test <- load_nc(dir, nc, fgs, bps, groups_age, select_variable, prm_run, bboxes)
+
 
 
