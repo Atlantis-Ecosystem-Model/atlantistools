@@ -40,7 +40,8 @@ get_groups <- function(dir = getwd(), fgs){
 #' @rdname get_groups
 get_age_groups <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs$Name[fgs$NumCohorts > 2]
+  supported_columns <- c("InvertType", "GroupType")
+  result <- fgs$Name[fgs$NumCohorts > 2 | (fgs$NumCohorts == 2 & grepl(pattern = "FISH", fgs[, is.element(names(fgs), supported_columns)]))]
   return(result)
 }
 
@@ -56,7 +57,8 @@ get_acronyms <- function(dir = getwd(), fgs){
 #' @rdname get_groups
 get_age_acronyms <- function(dir = getwd(), fgs){
   fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs$Code[fgs$NumCohorts > 2]
+  supported_columns <- c("InvertType", "GroupType")
+  result <- fgs$Code[fgs$NumCohorts > 2 | (fgs$NumCohorts == 2 & grepl(pattern = "FISH", fgs[, is.element(names(fgs), supported_columns)]))]
   return(result)
 }
 
@@ -81,3 +83,11 @@ get_fish_acronyms <- function(dir = getwd(), fgs){
   }
   return(result)
 }
+
+
+# dir <- "z:/R_codes/Thiebaut/"
+# fgs <- "CEP_Groups_onespawn.csv"
+# get_age_groups(dir, fgs)
+# get_age_acronyms(dir, fgs)
+
+
