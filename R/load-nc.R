@@ -364,15 +364,14 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
 
 # dir <- "z:/R_codes/Thiebaut/"
 # bgm <- "SEAP_extended_shelf.bgm"
-# nc <- "CEP_output.nc"
+# nc <- "CEP_outputPROD.nc"
 # fgs <- "CEP_Groups_onespawn.csv"
 # init <- "CEP_ic.nc"
 # bps <- load_bps(dir, fgs, init)
 # groups <- get_groups(dir, fgs)
 # groups_age <- get_age_groups(dir, fgs)
-# groups_age <- c(groups_age, "Aquacult_Tuna", "Ommas_Squids", "Ner_Squids", "Cuttlefishes", "Octopods", "Migratory_Octopods")
 # select_groups <- groups_age
-# select_variable <- "Nums"
+# select_variable <- "Eat"
 # prm_run <- "CEP_run.prm"
 # bboxes <- get_boundary(boxinfo = load_box(dir, bgm))
 # check_acronyms <- TRUE
