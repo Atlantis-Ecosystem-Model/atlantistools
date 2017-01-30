@@ -13,3 +13,10 @@ test_that("test file dimensions", {
   expect_equal(dim(load_fgs(dir = d, fgs = file))[2], 25)
 })
 
+
+test_that("test acronym extractions", {
+  expect_equal(get_nonage_acronyms(d, file), c("CEP", "BML", "PL", "DL", "DR", "DC"))
+  expect_equal(get_fish_acronyms(d, file), c("FPS", "FVS"))
+})
+
+
