@@ -88,13 +88,12 @@ physics <- load_nc_physics(dir = dir, nc = nc_gen,
                            select_physics = c("salt", "NO3", "NH3", "Temp", "Chl_a", "Denitrifiction"),
                            prm_run = prm_run, bboxes = bboxes, aggregate_layers = TRUE)
 
-vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume",
-                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
 vol_dz <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
                           prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
 dz <- dplyr::filter(vol_dz, variable == "dz")
+vol <- dplyr::filter(vol_dz, variable == "volume")
 
 nominal_dz <- load_init(dir = dir, init = init, vars = "nominal_dz") %>% 
   as.data.frame() %>% 
