@@ -97,7 +97,7 @@ vol <- dplyr::filter(vol_dz, variable == "volume")
 
 nominal_dz <- load_init(dir = dir, init = init, vars = "nominal_dz") %>% 
   as.data.frame() %>% 
-  dplyr::filter(!is.na(atoutput))
+  dplyr::filter(!is.na(layer))
 
 # Read in Dietcheck
 df_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck,
