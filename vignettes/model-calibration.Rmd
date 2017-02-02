@@ -155,9 +155,9 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ## Relative change of water column height compared to nominal_dz
 ```{r}
 check_dz <- result$dz %>% 
-  left_join(result$nominal_dz, by = c("polygon", "layer")) %>% 
-  mutate(check_dz = atoutput.x / atoutput.y) %>% 
-  filter(!is.na(check_dz)) # remove sediment layer
+  dplyr::left_join(result$nominal_dz, by = c("polygon", "layer")) %>% 
+  dplyr::mutate(check_dz = atoutput.x / atoutput.y) %>% 
+  dplyr::filter(!is.na(check_dz)) # remove sediment layer
 
 plot <- plot_line(check_dz, x = "time", y = "check_dz", wrap = "polygon", col = "layer")
 plot <- update_labels(plot, list(x = "Time [years]", y = expression(dz/nominal_dz)))
