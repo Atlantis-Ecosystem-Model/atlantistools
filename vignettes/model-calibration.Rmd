@@ -159,7 +159,8 @@ check_dz <- result$dz %>%
   mutate(check_dz = atoutput.x / atoutput.y) %>% 
   filter(!is.na(check_dz)) # remove sediment layer
 
-plot_line(check_dz, x = "time", y = "check_dz", wrap = "polygon", col = "layer")
+plot <- plot_line(check_dz, x = "time", y = "check_dz", wrap = "polygon", col = "layer")
+plot <- update_labels(plot, list(x = "Time [years]", y = expression(dz/nominal_dz)))
 ```
 
 
