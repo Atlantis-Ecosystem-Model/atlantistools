@@ -94,6 +94,12 @@ vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume",
 vol_dz <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
                           prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
+dz <- dplyr::filter(vol_dz, variable == "dz")
+
+nominal_dz <- load_init(dir = dir, init = init, vars = "nominal_dz") %>% 
+  as.data.frame() %>% 
+  dplyr::filter(!is.na(atoutput))
+
 # Read in Dietcheck
 df_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck,
                         fgs = fgs, prm_run = prm_run, version_flag = version_flag, convert_names = TRUE)
@@ -183,20 +189,22 @@ vol_ts <- agg_data(vol, groups = c("time", "polygon"), fun = sum, out = "volume"
     "biomass_age"            = biomass_age,
     "biomass_consumed"       = bio_cons,
     "biomass_spatial_stanza" = bio_sp_stanza,
-    "diet"                   = df_dm,
-    "eat_age"                = eat_age,       #5
+    "diet"                   = df_dm,         #5 
+    "dz"                     = dz,
+    "eat_age"                = eat_age,       
     "flux"                   = flux,
     "grazing"                = grazing,
-    "growth_age"             = growth_age,
+    "growth_age"             = growth_age,    #10
     "growth_rel_init"        = gr_rel_init,
+    "nominal_dz"             = nominal_dz,
     "nums"                   = nums,
-    "nums_age"               = nums_age,      #10
-    "nums_box"               = nums_box,
+    "nums_age"               = nums_age,      
+    "nums_box"               = nums_box,      #15
     "physics"                = physics,
     "resn_age"               = resn_age,
     "sink"                   = sink,
-    "spatial_overlap"        = sp_overlap,    #15
-    "ssb_rec"                = ssb_rec,
+    "spatial_overlap"        = sp_overlap,    
+    "ssb_rec"                = ssb_rec,       #20
     "structn_age"            = structn_age,    
     "vol"                    = vol_ts
   )
