@@ -95,7 +95,7 @@ get_layers <- function(dir = getwd(), init) {
 # column layers the sediment layer has the id 6.
 get_layerid <- function(num_layers, max_layer, n_boxes) {
   wc_id <- lapply(num_layers, function(x) rep(1, times = x))
-  wc_id <- lapply(wc_id, function(x) rev(cumsum(x) - 1)) # ids are in reverse order in the nc file
+  wc_id <- lapply(wc_id, function(x) cumsum(x) - 1) # ids are NOT in reverse order in the inital cond. nc file
   wc_fill <- lapply(num_layers, function(x) rep(NA, times = max_layer - x - 1))
   wc <- Map(f = c, wc_id, wc_fill)
   if (length(unique(sapply(wc, length))) != 1) stop("Layers inconsistent. Contact package development Team.")
