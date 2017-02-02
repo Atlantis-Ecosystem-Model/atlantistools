@@ -152,6 +152,19 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 
 \newpage
 
+## Relative change of water column height compared to nominal_dz
+```{r}
+check_dz <- result$dz %>% 
+  left_join(result$nominal_dz, by = c("polygon", "layer")) %>% 
+  mutate(check_dz = atoutput.x / atoutput.y) %>% 
+  filter(!is.na(check_dz)) # remove sediment layer
+
+plot_line(check_dz, x = "time", y = "check_dz", wrap = "polygon", col = "layer")
+```
+
+
+\newpage
+
 # Calibration plots
 ## Structural nitrogen
 ```{r, fig.height = fig_height2}
