@@ -86,7 +86,7 @@ sink <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("hdsource", "
 
 physics <- load_nc_physics(dir = dir, nc = nc_gen, 
                            select_physics = c("salt", "NO3", "NH3", "Temp", "Chl_a", "Denitrifiction"),
-                           prm_run = prm_run, bboxes = bboxes, aggregate_layers = TRUE)
+                           prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
 
 
 vol_dz <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
