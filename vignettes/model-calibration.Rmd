@@ -144,6 +144,25 @@ custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
 \newpage
 
+# Physics
+```{r, results = 'asis', fig.width = 30, fig.height = 12}
+physics <- result$physics %>%
+  flip_layers() %>%
+  split(., .$variable)
+
+plots <- lapply(physics, plot_line, wrap = NULL) %>% 
+  lapply(., custom_grid, grid_x = "polygon", grid_y = "layer")
+
+for (i in seq_along(plots)) {
+  cat(paste0("## ", names(plots)[i]), sep = "\n")
+  plot <- update_labels(plots[[i]], labels = list(y = names(plots)[i]))
+  print(plot)
+  cat("\n\n")
+}
+```
+
+\newpage
+
 ## Fluxes
 ```{r, fig.width = 30, fig.height = 12}
 plot <- plot_line(result$flux, wrap = NULL, col = "variable")
