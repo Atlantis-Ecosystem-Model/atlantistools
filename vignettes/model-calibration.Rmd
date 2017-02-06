@@ -163,9 +163,19 @@ for (i in seq_along(plots)) {
 
 \newpage
 
-## Fluxes
+## Fluxes 1
 ```{r, fig.width = 30, fig.height = 12}
-plot <- plot_line(result$flux, wrap = NULL, col = "variable")
+plot <- flip_layers(result$flux) %>% 
+  plot_line(wrap = NULL, col = "variable")
+custom_grid(plot, grid_x = "polygon", grid_y = "layer")
+```
+
+\newpage
+
+## Fluxes 2
+```{r, fig.width = 30, fig.height = 12}
+plot <- flip_layers(result$sink) %>% 
+  plot_line(wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
 
