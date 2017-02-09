@@ -249,7 +249,7 @@ plot_add_box(plot)
 ## Growth in relation to initial conditions
 ```{r}
 plot <- plot_line(result$growth_rel_init, y = "gr_rel", col = "agecl")
-ggplot2::update_labels(plot, list(y = expression((Growth - Growth[req])/Growth[req])))
+update_labels(plot, list(y = expression((Growth - Growth[req])/Growth[req])))
 ```
 
 
