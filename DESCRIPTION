@@ -26,6 +26,7 @@ Imports:
   gridExtra,
   scales,
   circlize,
-  RColorBrewer
+  RColorBrewer,
+  purrr
 VignetteBuilder: knitr
 
