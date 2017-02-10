@@ -25,3 +25,19 @@
 #   assign("report", TRUE, envir = .GlobalEnv)
 #   assign("warn_zeros", TRUE, envir = .GlobalEnv)
 # }
+
+# split dataframe in list of dataframe based on multiple (or a single) column.
+multisplit <- function(df, groups) {
+  for (i in seq_along(groups)) {
+    # first split results in a list of dataframes!
+    if (i == 1) result <- split(df, df[, groups[i]])
+    # sucessive splits work with a list of dataframes.
+    if (i > 1) {
+      result <- purrr::map(result, function(x) split(x, x[, groups[i]]))
+      # remove one dimension of the list to allow for the next split to work.
+      result <- purrr::flatten(result)
+    }
+  }
+  return(result)
+}
+
