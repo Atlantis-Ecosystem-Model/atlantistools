@@ -19,9 +19,9 @@
 #' functional groups (Only present in the sediment layer). The names have to match
 #' the column 'Name' in the 'functionalGroups.csv' file.
 #' @param select_groups Character vector of funtional groups which shall be read in.
-#' Names have to match the ones used in the ncdf file. Check column "Name" in
+#' Names have to match the ones used in the netcdf file. Check column "Name" in
 #' "functionalGroups.csv" for clarification.
-#' @param select_variable Character value spefifying which variable to load.
+#' @param select_variable Character value specifying which variable to load.
 #' Only one variable of the options available (i.e., \code{c(
 #' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 #' }) can be loaded at a time.
@@ -31,7 +31,7 @@
 #' folder/filename string and set dir to 'NULL'.
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
 #' @param check_acronyms Logical testing if functional-groups in
-#' select_groups are inactive in the current model run. The will be omitted
+#' select_groups are inactive in the current model run. They will be omitted
 #' in the output.
 #' @param warn_zeros Logical indicating if check for actual zeros in the
 #' data shall be printed or not.
@@ -164,7 +164,7 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
   final_agecl <- fgs$NumCohorts[sapply(final_species, function(x) which(x == fgs$Name))]
 
   # This may allow init files to be loaded as well! Unfortunately "num_layers" is missing in
-  # the init file. Therefore we also load in the general fiel to extract the layers!
+  # the init file. Therefore we also load in the general file to extract the layers!
   # nc = init-file, init = nc-file (very confusing....)
   # if (length(init) >= 1 & is.character(init)) {
   #   init <- convert_path(dir = dir, file = init)
