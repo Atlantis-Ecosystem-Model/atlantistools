@@ -6,6 +6,7 @@
 #' @param wrap Wraping column. Default is \code{'species'}
 #' @param col Column to use as colour. Default is \code{NULL}.
 #' @param ncol Number of columns in multipanel plot.
+#' @param yexpand Expands the y axis so it always includes 0. Default is \code{FALSE}.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions
@@ -50,11 +51,11 @@
 #' plot <- plot_line(preprocess$flux, wrap = NULL, col = "variable")
 #' custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 
-plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7) {
+plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7, yexpand = FALSE) {
   plot <- custom_map(data = data, x = x, y = y) +
     ggplot2::geom_line() +
     theme_atlantis()
-  if (!is.null(wrap)) plot <- custom_wrap(plot, col = wrap, ncol = ncol)
+  if (!is.null(wrap)) plot <- custom_wrap(plot, col = wrap, ncol = ncol, yexpand = yexpand)
   plot <- ggplot_custom(plot)
 
   # Add colour

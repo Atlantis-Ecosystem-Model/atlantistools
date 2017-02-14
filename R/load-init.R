@@ -20,8 +20,14 @@
 #' load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = c("Planktiv_S_Fish2_ResN",
 #'                                                              "Planktiv_S_Fish3_ResN"))
 #' load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Megazoobenthos_N")
+#'
+#' dir <- "C:/Users/siebo/Documents/Atlantis/BalticAtlantis/run_files_73days_Nej"
+#' init <- "new_init_Baltic_05Dec2015_v2.nc"
+#' vars <- "Sprat1_ResN"
+#' load_init(dir = dir, init = init, vars = vars)
 
 load_init <- function(dir = getwd(), init, vars) {
+  # dummy
   read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
   on.exit(RNetCDF::close.nc(read_nc))
 
