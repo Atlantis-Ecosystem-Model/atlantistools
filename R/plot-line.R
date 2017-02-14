@@ -55,7 +55,7 @@ plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = 
   plot <- custom_map(data = data, x = x, y = y) +
     ggplot2::geom_line() +
     theme_atlantis()
-  if (!is.null(wrap)) plot <- custom_wrap(plot, col = wrap, ncol = ncol, yexpand = yexpand)
+  if (!is.null(wrap)) plot <- custom_wrap(plot, col = wrap, ncol = ncol)
   plot <- ggplot_custom(plot)
 
   # Add colour
@@ -69,6 +69,9 @@ plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = 
     }
   }
 
+  if (yexpand == TRUE){
+    plot <- plot + ggplot2::expand_limits(y = 0)
+  }
   return(plot)
 }
 
