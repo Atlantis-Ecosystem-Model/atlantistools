@@ -87,3 +87,7 @@ plot <- plot_line(df_plot, col = "model")
 # ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 # plot_rec(preprocess_setas$ssb_rec, ex_data)
 
+# check new functionality of yexpand
+p <- plot_line(preprocess$structn_age, col = "agecl", yexpand = T)
+
+

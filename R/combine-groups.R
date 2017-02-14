@@ -1,6 +1,6 @@
 #' Combine values from different groups if specific groups only have a low contribution to the overall value.
 #'
-#' @param data Dataframe whose grouops shall be combined.
+#' @param data Dataframe whose groups shall be combined.
 #' @param group_col Character string giving the name of the group column in `data`.
 #' @param groups Vector of character strings giving the grouping variables.
 #' @param combine_thresh Integer indicating the number of groups to display. Default is \code{15}.
