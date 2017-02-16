@@ -1,7 +1,7 @@
 #' Change biological parameterfile for parameters which expect multiple values.
 #'
 #'
-#' This functionis is used to help automate the calibration routine for ATLANTIS models.
+#' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
 #' @param dir Character string giving the path of the Atlantis model folder.
 #' If data is stored in multiple folders (e.g. main model folder and output

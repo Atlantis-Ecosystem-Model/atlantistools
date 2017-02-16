@@ -17,7 +17,7 @@
 #' - get_age_groups extracts the column "Name". Selects groups with 10 ageclasses.
 #' - get_acronym extracts the column "Code"
 #' - get_age_acronym extracts the column "Code". Selects groups with 10 ageclasses.
-#' - get_nonage_acronym extracts the columne "Code". Only groups with ageclasses different from 10 are selected.
+#' - get_nonage_acronym extracts the columns "Code". Only groups with ageclasses different from 10 are selected.
 #' - get_fish_acronyms ectracts the column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
 
 #' @family get functions

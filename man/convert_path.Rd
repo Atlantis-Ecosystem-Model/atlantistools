@@ -18,7 +18,7 @@ Character string of the complete dir/filename string.
 Users can either store all their data (modelfiles and outputfiles)
 in one directory or use different directories for model data and
 output. In case you are using multiple folder please set the argument
-\code{dir} to \code{NULL} in all your function calls. In additon
+\code{dir} to \code{NULL} in all your function calls. In addition
 use the complete character string composed of path/file for all
 filename-parameters.
 }

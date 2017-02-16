@@ -56,7 +56,7 @@ data shall be printed or not.}
 not (\code{FALSE}).}
 }
 \value{
-A \code{data.frame} in long format with the following coumn names:
+A \code{data.frame} in long format with the following column names:
   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 }
 \description{

@@ -40,7 +40,7 @@ be passed directly.}
 parameterfile *.prm file with the new parameter values.
 }
 \description{
-This functionis is used to help automate the calibration routine for ATLANTIS models.
+This function is used to help automate the calibration routine for ATLANTIS models.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")

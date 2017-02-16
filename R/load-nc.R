@@ -39,7 +39,7 @@
 #' not (\code{FALSE}).
 #' @family load functions
 #' @export
-#' @return A \code{data.frame} in long format with the following coumn names:
+#' @return A \code{data.frame} in long format with the following column names:
 #'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 #'
 #' @keywords gen
