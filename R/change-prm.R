@@ -45,7 +45,7 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
 
   # Read in parameter file!
   prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
+  prm_biol_new <- readLines(con = prm_biol_new, warn = FALSE)
 
   # Function to update a specific parameter composed of a parameter string
   # a group acronym and a seperator (by default "_") found in a prm file.
@@ -87,4 +87,3 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
 
   invisible(prm_biol_new)
 }
-
