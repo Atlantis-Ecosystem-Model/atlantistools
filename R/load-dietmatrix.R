@@ -113,7 +113,7 @@ write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
   # Find dietmatrix in biological parameterfile!
   pstring <- "pPREY"
   biol <- convert_path(dir = dir, file = prm_biol)
-  biol <- readLines(biol)
+  biol <- readLines(biol, warn = FALSE)
   pos <- grep(pattern = pstring, x = biol)
 
   # Remove explanatory rows
@@ -149,6 +149,3 @@ write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
     }
   }
 }
-
-
-
