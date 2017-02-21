@@ -27,7 +27,7 @@
 #' load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
 
 load_bps <- function(dir = getwd(), fgs, init){
-  if (strsplit(init, "\\.")[[1]][2] != "nc") {
+  if (tail(unlist(strsplit(init, "\\.")), 1) != "nc") {
     stop(paste("The init argument", init, "does not end in .nc"))
   }
   if (!is.null(dir)) {
@@ -57,5 +57,3 @@ load_bps <- function(dir = getwd(), fgs, init){
   bps <- groups[bps_id]
   return(bps)
 }
-
-
