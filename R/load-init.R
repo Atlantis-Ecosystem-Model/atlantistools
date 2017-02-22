@@ -28,8 +28,8 @@ load_init <- function(dir = getwd(), init, vars) {
   # Extract ncdf dimensions!
   n_timesteps <- RNetCDF::dim.inq.nc(read_nc, 't')$length
   if (n_timesteps != 1) stop("More than 1 timestep! init was not an initial conditions file.")
-  n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 1)$length
-  n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
+  n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 'b')$length
+  n_layers    <- RNetCDF::dim.inq.nc(read_nc, 'z')$length
   num_layers <- get_layers(dir = dir, init = init)
   layerid <- get_layerid(num_layers = num_layers, max_layer = n_layers, n_boxes = n_boxes)
   var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(read_nc)$nvars - 1),
