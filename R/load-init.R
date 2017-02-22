@@ -31,6 +31,7 @@ load_init <- function(dir = getwd(), init, vars) {
   n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 'b')$length
   n_layers    <- RNetCDF::dim.inq.nc(read_nc, 'z')$length
   num_layers <- get_layers(dir = dir, init = init)
+  num_layers[is.na(num_layers)] <- 0
   layerid <- get_layerid(num_layers = num_layers, max_layer = n_layers, n_boxes = n_boxes)
   var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(read_nc)$nvars - 1),
                            function(x) RNetCDF::var.inq.nc(read_nc, x)$name)
