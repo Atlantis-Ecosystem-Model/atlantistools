@@ -22,8 +22,19 @@
 prm_to_df <- function(dir = getwd(), prm_biol, fgs, group, parameter) {
   # Extract data!
   prms <- lapply(parameter, set_single_prm, group = group)
-  values <- lapply(prms, extract_prm, dir = dir, prm_biol = prm_biol)
-
+    prm_biol_new <- convert_path(dir = dir, file = prm_biol)
+    prm_biol_new <- readLines(con = prm_biol_new, warn = FALSE)
+    prm.t  <- do.call(rbind, prms)[,1]
+    no.prm <- which(is.na(charmatch(prm.t, prm_biol_new)))
+    if(sum(no.prm) > 1 && unlist(strsplit(prm.t[no.prm], '_'))[2] == 'AgeClassSize'){
+        prms2  <- prms[- no.prm]
+        values <- lapply(prms2, extract_prm, dir = dir, prm_biol = prm_biol)
+        sps    <- which(load_fgs(dir = dir, fgs = fgs)$Code %in% group)
+        extr   <- load_fgs(dir = dir, fgs = fgs)$NumAgeClassSize[sps]
+        values[[no.prm]] <- extr
+    } else {
+        values <- lapply(prms, extract_prm, dir = dir, prm_biol = prm_biol)
+    }
   # Combine to df!
   df <- as.data.frame(do.call(cbind, values))
   names(df) <- tolower(parameter)
@@ -72,6 +83,3 @@ set_single_prm <- function(group, parameter) {
     paste(parameter, group, sep = "_")
   }
 }
-
-
-
