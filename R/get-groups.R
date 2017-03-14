@@ -1,16 +1,11 @@
 #' Collection of similar functions which get specific
 #' columns from the Atlantis \code{functionalGroups.csv}
 #'
-#' This collection of functions takes loaded functional
-#' groups, via the \code{\link{load_fgs}} function and creates various
+#' This collection of functions uses the dataframe of functional
+#' groups created with \code{\link{load_fgs}} and creates various
 #' character strings of group names or acronym names.
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
+#'
+#' @inheritParams load_fgs
 #'
 #' @details Currently, the following character strings can be created
 #' - get_groups extracts the column "Name"
@@ -25,61 +20,63 @@
 
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' get_age_groups(dir = d, fgs = "SETasGroupsDem_NoCep.csv")
-#' get_nonage_acronyms(dir = d, fgs = "SETasGroupsDem_NoCep.csv")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#'
+#' get_age_groups(fgs)
+#' get_nonage_acronyms(fgs)
 
 #' @export
 #' @rdname get_groups
 get_groups <- function(dir = getwd(), fgs){
-  fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs$Name
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df$Name
   return(result)
 }
 
 #' @export
 #' @rdname get_groups
-get_age_groups <- function(dir = getwd(), fgs){
-  fgs <- load_fgs(dir = dir, fgs = fgs)
+get_age_groups <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
   supported_columns <- c("InvertType", "GroupType")
-  result <- fgs$Name[fgs$NumCohorts > 2 | (fgs$NumCohorts == 2 & grepl(pattern = "FISH", fgs[, is.element(names(fgs), supported_columns)]))]
+  result <- fgs_df$Name[fgs_df$NumCohorts > 2 | (fgs_df$NumCohorts == 2 & grepl(pattern = "FISH", fgs_df[, is.element(names(fgs_df), supported_columns)]))]
   return(result)
 }
 
 #' @export
 #' @rdname get_groups
-get_acronyms <- function(dir = getwd(), fgs){
-  fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs[, names(fgs) == "Code"]
+get_acronyms <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df[, names(fgs_df) == "Code"]
   return(result)
 }
 
 #' @export
 #' @rdname get_groups
-get_age_acronyms <- function(dir = getwd(), fgs){
-  fgs <- load_fgs(dir = dir, fgs = fgs)
+get_age_acronyms <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
   supported_columns <- c("InvertType", "GroupType")
-  result <- fgs$Code[fgs$NumCohorts > 2 | (fgs$NumCohorts == 2 & grepl(pattern = "FISH", fgs[, is.element(names(fgs), supported_columns)]))]
+  result <- fgs_df$Code[fgs_df$NumCohorts > 2 | (fgs_df$NumCohorts == 2 & grepl(pattern = "FISH", fgs_df[, is.element(names(fgs_df), supported_columns)]))]
   return(result)
 }
 
 #' @export
 #' @rdname get_groups
-get_nonage_acronyms <- function(dir = getwd(), fgs){
-  fgs <- load_fgs(dir = dir, fgs = fgs)
-  result <- fgs$Code[fgs$NumCohorts <= 2]
+get_nonage_acronyms <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df$Code[fgs_df$NumCohorts <= 2]
   return(result)
 }
 
 #' @export
 #' @rdname get_groups
-get_fish_acronyms <- function(dir = getwd(), fgs){
-  fgs <- load_fgs(dir = dir, fgs = fgs)
+get_fish_acronyms <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
   # Older models use the column GroupType, newer ones use InvertType.
   supported_columns <- c("InvertType", "GroupType")
-  if (!any(is.element(names(fgs), supported_columns))) {
+  if (!any(is.element(names(fgs_df), supported_columns))) {
     stop(paste("Column names in fgs do not match any of", supported_columns))
   } else {
-    result <- fgs$Code[fgs[, is.element(names(fgs), supported_columns)] %in% c("FISH", "SHARK")]
+    result <- fgs_df$Code[fgs_df[, is.element(names(fgs_df), supported_columns)] %in% c("FISH", "SHARK")]
   }
   return(result)
 }

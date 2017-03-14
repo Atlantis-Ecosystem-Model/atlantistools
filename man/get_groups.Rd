@@ -12,32 +12,26 @@ columns from the Atlantis \code{functionalGroups.csv}}
 \usage{
 get_groups(dir = getwd(), fgs)
 
-get_age_groups(dir = getwd(), fgs)
+get_age_groups(fgs)
 
-get_acronyms(dir = getwd(), fgs)
+get_acronyms(fgs)
 
-get_age_acronyms(dir = getwd(), fgs)
+get_age_acronyms(fgs)
 
-get_nonage_acronyms(dir = getwd(), fgs)
+get_nonage_acronyms(fgs)
 
-get_fish_acronyms(dir = getwd(), fgs)
+get_fish_acronyms(fgs)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
+\item{fgs}{Name of the functional groups file which is typically saved as
+\code{functionalGroups.csv}.}
 }
 \value{
 Character string.
 }
 \description{
-This collection of functions takes loaded functional
-groups, via the \code{\link{load_fgs}} function and creates various
+This collection of functions uses the dataframe of functional
+groups created with \code{\link{load_fgs}} and creates various
 character strings of group names or acronym names.
 }
 \details{
@@ -51,8 +45,10 @@ Currently, the following character strings can be created
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-get_age_groups(dir = d, fgs = "SETasGroupsDem_NoCep.csv")
-get_nonage_acronyms(dir = d, fgs = "SETasGroupsDem_NoCep.csv")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+
+get_age_groups(fgs)
+get_nonage_acronyms(fgs)
 }
 \seealso{
 Other get functions: \code{\link{get_boundary}},
