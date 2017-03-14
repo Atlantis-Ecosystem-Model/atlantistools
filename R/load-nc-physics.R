@@ -66,7 +66,6 @@ load_nc_physics <- function(dir = getwd(),
   }
 
   # Check input of the nc file
-  file_ending(nc)
   if (!is.null(dir)) nc <- file.path(dir, nc)
 
   # Load ATLANTIS output!

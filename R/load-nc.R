@@ -2,19 +2,10 @@
 #'
 #' This function loads Atlantis outputfiles (any netcdf file) and
 #' converts them to a \code{data.frame}.
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param nc Character string giving the filename of netcdf file which
-#' shall be read in. Usually "output[...].nc". Currently the general-
-#' production- and catch.nc files can be loaded in. In case you are using
-#' multiple folder for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
+#'
+#' @inheritParams load_fgs
+#' @param nc Character string giving the connection of the netcdf file to read in.
+#' The filename usually contains \code{output} and ends in \code{.nc}".
 #' @param bps Vector of character strings giving the complete list of epibenthic
 #' functional groups (Only present in the sediment layer). The names have to match
 #' the column 'Name' in the 'functionalGroups.csv' file.
@@ -25,10 +16,8 @@
 #' Only one variable of the options available (i.e., \code{c(
 #' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 #' }) can be loaded at a time.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @param prm_run Character string giving the connection of the run parameterfile.
+#' The filename usually contains \code{run_fishing} and ends in \code{.prm}".
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
@@ -47,7 +36,7 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' nc <- "outputSETAS.nc"
+#' nc <- file.path(d, "outputSETAS.nc")
 #' bps <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
 #' fgs <- "SETasGroupsDem_NoCep.csv"
 #' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
@@ -79,7 +68,6 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
   fgs <- load_fgs(dir = dir, fgs = fgs)
 
   # Check input of the nc file
-  file_ending(nc)
   if (!is.null(dir)) nc <- file.path(dir, nc)
 
   # Check input structure!
