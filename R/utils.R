@@ -41,3 +41,7 @@ multisplit <- function(df, groups) {
   return(result)
 }
 
+file_ending <- function(filename, ending = "nc") {
+  file_ending <- strsplit(filename, "\\.")[[1]][length(strsplit(filename, "\\.")[[1]])]
+  if (file_ending != ending) stop(paste("The file", filename, "does not end in", ending))
+}
