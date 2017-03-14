@@ -27,6 +27,6 @@ Convert timestep to actual time!
 }
 \seealso{
 Other convert functions: \code{\link{convert_bgm}},
-  \code{\link{convert_factor}}, \code{\link{convert_path}}
+  \code{\link{convert_factor}}
 }
 
