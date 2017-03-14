@@ -1,20 +1,30 @@
 #' Extract values for Atlantis parameters from the biological parameter file.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
+#' @param prm_biol Character string giving the filename of the biological
+#' parameterfile. Usually "[...]biol_fishing[...].prm".
 #' @param variables Character string giving the flag to search for. This should be
 #' a combination of the parameter name and the group-Code.
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @return
+#'
+#' @examples
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+#'
+#' # You can pass a single variable
+#' extract_prm(prm_biol, variables = "KWRR_FVS")
+#'
+#' # Or multiple variables
+#' extract_prm(prm_biol, variables = paste("KWRR", c("FVS", "FPS"), sep = "_"))
+#'
+#' # Use extract_prm_cohort do extract data for age specific parameters.
+#' # They are usually stored in the next line following the parameter tag.
+#' extract_prm_cohort(prm_biol, variables = "C_FVS")
+#' extract_prm_cohort(prm_biol, variables = paste("C", c("FVS", "FPS"), sep = "_"))
 
 #' @export
-extract_prm <- function(dir = getwd(), prm_biol, variables) {
+extract_prm <- function(prm_biol, variables) {
   # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
+  prm_biol_new <- readLines(con = prm_biol)
 
   pos <- vapply(variables, scan_prm, FUN.VALUE = integer(1), chars = prm_biol_new)
   result <- prm_biol_new[pos]
@@ -26,10 +36,9 @@ extract_prm <- function(dir = getwd(), prm_biol, variables) {
 #' @export
 #' @rdname extract_prm
 # Extract value for a specific cohort parameter from a Vector of character strings.
-extract_prm_cohort <- function(dir = getwd(), prm_biol, variables) {
+extract_prm_cohort <- function(prm_biol, variables) {
   # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
+  prm_biol_new <- readLines(con = prm_biol)
 
   slice <- function(prm, variable) {
     pos <- scan_prm(chars = prm, variable = variable)
