@@ -3,17 +3,8 @@
 #' Extracts the diet matrix as long dataframe from the biological paremeter file
 #' of any ATLANTIS simulation.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
+#' @inheritParams extract_prm
+#' @inheritParams load_fgs
 #' @param transform Boolean indicating if the returned dataframe is displayed in
 #' "long" (\code{transform = TRUE, default}) or "wide" (\code{transform = FALSE})
 #' format. You should use the "wide" format in case you aim to change your
@@ -29,21 +20,24 @@
 #' @export
 
 #' @examples
+#' # Can be applied to trunk models.
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' dm <- load_dietmatrix(dir = d,
-#'                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-#'                       fgs = "SETasGroupsDem_NoCep.csv")
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#'
+#' dm <- load_dietmatrix(prm_biol, fgs)
 #' head(dm, n = 10)
 #'
+#' # And to bec-dev models.
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' dm <- load_dietmatrix(dir = d,
-#'                       prm_biol = "VMPA_setas_biol_fishing_New.prm",
-#'                       fgs = "SETasGroups.csv",
-#'                       version_flag = 1)
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_New.prm")
+#' fgs <- file.path(d, "SETasGroups.csv")
+#'
+#' dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
 #' head(dm, n = 10)
 
-load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, convert_names = FALSE, version_flag = 2) {
-  fgs_data <- load_fgs(dir = dir, fgs = fgs)
+load_dietmatrix <- function(prm_biol, fgs, transform = TRUE, convert_names = FALSE, version_flag = 2) {
+  fgs_data <- load_fgs(fgs = fgs)
   acr <- fgs_data$Code[fgs_data[, names(fgs_data)[names(fgs_data) %in% c("isPredator", "IsPredator")]] == 1]
   agecl <- fgs_data$NumCohorts[fgs_data[, names(fgs_data)[names(fgs_data) %in% c("isPredator", "IsPredator")]] == 1]
   pstring <- "pPREY"
@@ -70,7 +64,7 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
     if (length(coh2 > 0)) diet_strings <- c(diet_strings, as.vector(t(outer(X = paste0(pstring, coh2), Y = 1:2, FUN = paste0))))
 
   # Extract data from the biological parameter file.
-  dietmatrix <- extract_prm_cohort(dir = dir, prm_biol = prm_biol, variables = diet_strings)
+  dietmatrix <- extract_prm_cohort(prm_biol = prm_biol, variables = diet_strings)
   if (length(unique(sapply(dietmatrix, length))) != 1) {
     stop("Number of entries in dietmatrix are not equal. Check your dietmatrix.")
   } else {
@@ -86,7 +80,7 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
   if (length(pred) != nrow(dietmatrix)) stop("Incomplete rows in diet data.")
 
   # Extract preys. Add sediment prey to Carrion and Det groups!
-  acronyms <- get_acronyms(dir = dir, fgs = fgs)
+  acronyms <- get_acronyms(fgs = fgs)
   car_det <- fgs_data$Code[grep(pattern = "(\\_DET|CARRION)", x = fgs_data[, names(fgs_data) %in% c("InvertType", "GroupType")])]
   prey <- c(acronyms, paste0(car_det, "sed"))
   if (length(prey) != ncol(dietmatrix)) stop("Incomplete columns in diet data")
@@ -116,11 +110,10 @@ load_dietmatrix <- function(dir = getwd(), prm_biol, fgs, transform = TRUE, conv
 #' @export
 #' @rdname load_dietmatrix
 # Write dietmatrix dataframe in wide format to hdd.
-write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
+write_diet <- function(dietmatrix, prm_biol) {
   # Find dietmatrix in biological parameterfile!
   pstring <- "pPREY"
-  biol <- convert_path(dir = dir, file = prm_biol)
-  biol <- readLines(biol)
+  biol <- readLines(prm_biol)
   pos <- grep(pattern = pstring, x = biol)
 
   # Remove explanatory rows
@@ -150,7 +143,7 @@ write_diet <- function(dir = getwd(), dietmatrix, prm_biol) {
     if (length(dm_paste) == length(dm_ids)) {
       biol[dm_ids] <- dm_paste
       print("Writing new prm file!")
-      writeLines(biol, convert_path(dir = dir, file = prm_biol))
+      writeLines(biol, con = prm_biol)
     } else {
       stop("Dimensions do not match. Dietmatrix not updated!")
     }
