@@ -47,9 +47,8 @@ Change the availability of predator XXX on specific preygroups.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-dm <- load_dietmatrix(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-                      fgs = "SETasGroupsDem_NoCep.csv")
+dm <- load_dietmatrix(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
+                      fgs = file.path(d, "SETasGroupsDem_NoCep.csv"))
 
 dm1 <- change_avail(dietmatrix = dm,
                     pred = "FPS",
