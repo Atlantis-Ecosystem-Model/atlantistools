@@ -16,7 +16,8 @@ The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{bps}{Vector of character strings giving the complete list of epibenthic
 functional groups (Only present in the sediment layer). The names have to match
-the column 'Name' in the 'functionalGroups.csv' file.}
+the column 'Name' in the 'functionalGroups.csv' file. Can be created with
+\code{load_bps}.#'}
 
 \item{select_groups}{Character vector of funtional groups which shall be read in.
 Names have to match the ones used in the ncdf file. Check column "Name" in
@@ -30,7 +31,8 @@ Only one variable of the options available (i.e., \code{c(
 \item{prm_run}{Character string giving the connection of the run parameterfile.
 The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
-\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+\item{bboxes}{Integer vector giving the box-id of the boundary boxes.
+Can be created with \code{get_boundary}.}
 
 \item{check_acronyms}{Logical testing if functional-groups in
 select_groups are inactive in the current model run. The will be omitted

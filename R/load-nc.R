@@ -8,7 +8,8 @@
 #' The filename usually contains \code{output} and ends in \code{.nc}".
 #' @param bps Vector of character strings giving the complete list of epibenthic
 #' functional groups (Only present in the sediment layer). The names have to match
-#' the column 'Name' in the 'functionalGroups.csv' file.
+#' the column 'Name' in the 'functionalGroups.csv' file. Can be created with
+#' \code{load_bps}.#'
 #' @param select_groups Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the ncdf file. Check column "Name" in
 #' "functionalGroups.csv" for clarification.
@@ -19,6 +20,7 @@
 #' @param prm_run Character string giving the connection of the run parameterfile.
 #' The filename usually contains \code{run_fishing} and ends in \code{.prm}".
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' Can be created with \code{get_boundary}.
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
 #' in the output.
