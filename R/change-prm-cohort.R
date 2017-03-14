@@ -3,8 +3,7 @@
 #'
 #' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm".
+#' @inheritParams extract_prm
 #' @param select_acronyms Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the *.prm file. Check column "Code" in
 #' "functionalGroups.csv" for clarification.
