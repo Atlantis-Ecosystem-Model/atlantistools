@@ -27,7 +27,7 @@
 
 #' @export
 #' @rdname get_groups
-get_groups <- function(dir = getwd(), fgs){
+get_groups <- function(fgs){
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Name
   return(result)
