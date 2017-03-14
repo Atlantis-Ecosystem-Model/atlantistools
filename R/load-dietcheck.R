@@ -17,25 +17,26 @@
 #'   time, pred, habitat, prey and atoutput (i.e., variable).
 #'
 #' @examples
+#' # Apply to bec-dev models.
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
-#'                        fgs = "SETasGroups.csv",
-#'                        prm_run = "VMPA_setas_run_fishing_F_New.prm")
+#' dietcheck <- file.path(d, "outputSETASDietCheck.txt")
+#' fgs <- file.path(d, "SETasGroups.csv")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+#'
+#' diet <- load_dietcheck(dietcheck, fgs, prm_run, version_flag = 1)
 #' head(diet, n = 10)
 #'
+#' # Apply to trunk models.
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
-#'                        fgs = "SETasGroupsDem_NoCep.csv",
-#'                        prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
+#' dietcheck <- file.path(d, "outputSETASDietCheck.txt")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+
+#' diet <- load_dietcheck(dietcheck, fgs, prm_run)
 #' head(diet, n = 10)
 
 #BJS 7/6/16 change to be compatible with trunk version; added version_flag
 load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE, version_flag = 2) {
-    dietcheck <- convert_path(dir = dir, file = dietcheck)
-  if (!file.exists(dietcheck)) {
-    stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
-  }
-
   # read in diet information
   diet <- utils::read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
 
@@ -105,7 +106,7 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
   }
 
   # Convert timestep to time in years!
-  diet_long$time <- convert_time(dir = dir, prm_run = prm_run, col = diet_long$time)
+  diet_long$time <- convert_time(prm_run = prm_run, col = diet_long$time)
 
 
   return(diet_long)

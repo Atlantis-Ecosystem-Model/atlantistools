@@ -5,7 +5,7 @@
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
 load_dietcheck(dietcheck, fgs, prm_run, convert_names = FALSE,
-  report = FALSE, version_flag = 1)
+  report = FALSE, version_flag = 2)
 }
 \arguments{
 \item{dietcheck}{Character string of the DietCheck.txt file. Usually
