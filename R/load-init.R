@@ -1,10 +1,7 @@
-#' This function loads weight at age data (in mgN) from the initial conditions file.
+#' This function is used to read in data from the initial conditions file.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param init Character string giving the filename of the initial conditions netcdf file.
-#' Usually "init[...].nc".
+#' @param init Character string giving the connection of the initial conditions netcdf file.
+#' The filename usually contains \code{init} and ends in \cpde{.nc}.
 #' @param vars Vector of character strings giving the variables to extract from the
 #' netcdf file.
 #'
@@ -15,22 +12,23 @@
 #' @author Alexander Keth
 
 #' @examples
-#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Planktiv_S_Fish1_Nums")
-#' load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = c("Planktiv_S_Fish2_ResN",
-#'                                                              "Planktiv_S_Fish3_ResN"))
-#' load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Megazoobenthos_N")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' init <- file.path(d, "INIT_VMPA_Jan2015.nc")
+#'
+#' load_init(init, vars = "Planktiv_S_Fish1_Nums")
+#' load_init(init, vars = c("Planktiv_S_Fish2_ResN", "Planktiv_S_Fish3_ResN"))
+#' load_init(init, vars = "Megazoobenthos_N")
 #'
 #' \dontrun{
 #' dir <- "C:/Users/siebo/Documents/Atlantis/BalticAtlantis/run_files_73days_Nej"
-#' init <- "new_init_Baltic_05Dec2015_v2.nc"
+#' init <- file.path(dir, "new_init_Baltic_05Dec2015_v2.nc")
 #' vars <- "Sprat1_ResN"
-#' load_init(dir = dir, init = init, vars = vars)
+#' load_init(init = init, vars = vars)
 #' }
 
-load_init <- function(dir = getwd(), init, vars) {
+load_init <- function(init, vars) {
   # dummy
-  read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+  read_nc <- RNetCDF::open.nc(con = init)
   on.exit(RNetCDF::close.nc(read_nc))
 
   # Extract ncdf dimensions!
@@ -38,7 +36,7 @@ load_init <- function(dir = getwd(), init, vars) {
   if (n_timesteps != 1) stop("More than 1 timestep! init was not an initial conditions file.")
   n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 1)$length
   n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
-  num_layers <- get_layers(dir = dir, init = init)
+  num_layers <- get_layers(init = init)
   layerid <- get_layerid(num_layers = num_layers, max_layer = n_layers, n_boxes = n_boxes)
   var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(read_nc)$nvars - 1),
                            function(x) RNetCDF::var.inq.nc(read_nc, x)$name)
@@ -80,8 +78,8 @@ load_init <- function(dir = getwd(), init, vars) {
   return(df_list)
 }
 
-get_layers <- function(dir = getwd(), init) {
-  read_nc <- RNetCDF::open.nc(con = convert_path(dir = dir, file = init))
+get_layers <- function(init) {
+  read_nc <- RNetCDF::open.nc(con = init)
   on.exit(RNetCDF::close.nc(read_nc))
 
   num_layers <- RNetCDF::var.get.nc(ncfile = read_nc, variable = "numlayers")
