@@ -1,34 +1,32 @@
 #' Extract parameters from the biological parameter file and transform them to a dataframe.
 #'
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @inheritParams extract_prm
+#' @inheritParams load_fgs
 #' @param group Character vector giving the functional Groups to extract.
 #' @param parameter Character vector giving the parameters to extract.
-#' @inheritParams load_nc
 #' @return Dataframe with columns 'species' and as many columns as parameters.
 #' @export
 #'
 #' @examples
-#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-#' fgs <- "SETasGroupsDem_NoCep.csv"
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 #' group <- c("FPS", "FVS")
+#' parameter <- c("mum", "C")
 #'
-#' prm_to_df_ages(dir, prm_biol, fgs, group, parameter = c("mum", "C"))
-#' prm_to_df(dir, prm_biol, fgs, group, parameter = c("age_mat", "KWRR"))
+#' prm_to_df_ages(prm_biol, fgs, group, parameter)
+#' prm_to_df(prm_biol, fgs, group, parameter)
 
-prm_to_df <- function(dir = getwd(), prm_biol, fgs, group, parameter) {
+prm_to_df <- function(prm_biol, fgs, group, parameter) {
   # Extract data!
   prms <- lapply(parameter, set_single_prm, group = group)
-  values <- lapply(prms, extract_prm, dir = dir, prm_biol = prm_biol)
+  values <- lapply(prms, extract_prm, prm_biol = prm_biol)
 
   # Combine to df!
   df <- as.data.frame(do.call(cbind, values))
   names(df) <- tolower(parameter)
   df$species <- group
-  df$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = df$species)
+  df$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = df$species)
   df <- dplyr::select_(df, .dots = c("species", sort(names(df)[-ncol(df)])))
 
   return(df)
@@ -36,10 +34,10 @@ prm_to_df <- function(dir = getwd(), prm_biol, fgs, group, parameter) {
 
 #' @export
 #' @rdname prm_to_df
-prm_to_df_ages <- function(dir = getwd(), prm_biol, fgs, group, parameter) {
+prm_to_df_ages <- function(prm_biol, fgs, group, parameter) {
   # Extract data!
   prms <- lapply(parameter, set_single_prm, group = group)
-  values <- lapply(prms, extract_prm_cohort, dir = dir, prm_biol = prm_biol)
+  values <- lapply(prms, extract_prm_cohort, prm_biol = prm_biol)
 
   # Combine to df!
   nc <- sapply(values, function(x) sapply(x, length), USE.NAMES = FALSE)
@@ -56,7 +54,7 @@ prm_to_df_ages <- function(dir = getwd(), prm_biol, fgs, group, parameter) {
 
   result <- tidyr::spread_(data = df, key_col = "prm", value_col = "values")
 
-  result$species <- convert_factor(data_fgs = load_fgs(dir = dir, fgs = fgs), col = result$species)
+  result$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = result$species)
 
   return(result)
 }
