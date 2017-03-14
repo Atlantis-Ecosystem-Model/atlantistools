@@ -66,9 +66,7 @@ load_nc_physics <- function(dir = getwd(),
   }
 
   # Check input of the nc file
-  if (utils::tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
-    stop("The argument for nc,", nc, "does not end in nc")
-  }
+  file_ending(nc)
   if (!is.null(dir)) nc <- file.path(dir, nc)
 
   # Load ATLANTIS output!
