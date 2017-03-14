@@ -1,7 +1,7 @@
 #' This function is used to read in data from the initial conditions file.
 #'
 #' @param init Character string giving the connection of the initial conditions netcdf file.
-#' The filename usually contains \code{init} and ends in \cpde{.nc}.
+#' The filename usually contains \code{init} and ends in \code{.nc}.
 #' @param vars Vector of character strings giving the variables to extract from the
 #' netcdf file.
 #'

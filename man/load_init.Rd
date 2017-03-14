@@ -8,7 +8,7 @@ load_init(init, vars)
 }
 \arguments{
 \item{init}{Character string giving the connection of the initial conditions netcdf file.
-The filename usually contains \code{init} and ends in \cpde{.nc}.}
+The filename usually contains \code{init} and ends in \code{.nc}.}
 
 \item{vars}{Vector of character strings giving the variables to extract from the
 netcdf file.}
