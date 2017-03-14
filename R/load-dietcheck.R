@@ -3,11 +3,8 @@
 #' @inheritParams load_nc
 #' @inheritParams load_fgs
 #' @inheritParams load_dietmatrix
-#' @param dietcheck Character string of the DietCheck.txt file. Usually
-#' 'output[...]DietCheck.txt'. In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
+#' @param dietcheck Character string giving the connection of the dietcheck file.
+#' The filename usually contains \code{Dietcheck} and ends in \code{.txt}".
 #' @param report Logical indicating if incomplete DietCheck information shall
 #' be printed \code{TRUE} or not \code{FALSE}.
 #'
