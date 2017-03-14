@@ -27,9 +27,7 @@
 #' load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
 
 load_bps <- function(dir = getwd(), fgs, init){
-  if (strsplit(init, "\\.")[[1]][2] != "nc") {
-    stop(paste("The init argument", init, "does not end in .nc"))
-  }
+  file_ending(filename = init)
   if (!is.null(dir)) {
     init <- file.path(dir, init)
   }
