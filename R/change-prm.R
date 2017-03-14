@@ -3,13 +3,7 @@
 #'
 #' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @inheritParams extract_prm
 #' @param select_acronyms Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the *.prm file. Check column "Code" in
 #' "functionalGroups.csv" for clarification.
@@ -28,14 +22,15 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' new_prm <- change_prm(dir = d,
-#'                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+#'
+#' new_prm <- change_prm(prm_biol,
 #'                       select_acronyms = c("FPS", "FVS"),
 #'                       roc = c(2,3),
 #'                       parameter = "KWRR",
 #'                       save_to_disc = FALSE)
 
-change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
+change_prm <- function(prm_biol, select_acronyms, roc, parameter,
                        relative = TRUE, save_to_disc = TRUE, version_flag = 1) {
   if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
 
@@ -44,8 +39,7 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
   }
 
   # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
+  prm_biol_new <- readLines(con = prm_biol)
 
   # Function to update a specific parameter composed of a parameter string
   # a group acronym and a seperator (by default "_") found in a prm file.
