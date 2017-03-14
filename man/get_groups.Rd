@@ -10,7 +10,7 @@
 \title{Collection of similar functions which get specific
 columns from the Atlantis \code{functionalGroups.csv}}
 \usage{
-get_groups(dir = getwd(), fgs)
+get_groups(fgs)
 
 get_age_groups(fgs)
 
