@@ -21,6 +21,8 @@
 #' extract_prm_cohort(prm_biol, variables = "C_FVS")
 #' extract_prm_cohort(prm_biol, variables = paste("C", c("FVS", "FPS"), sep = "_"))
 
+# Use this to document prm_biol.
+
 #' @export
 extract_prm <- function(prm_biol, variables) {
   # Read in parameter file!
