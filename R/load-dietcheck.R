@@ -99,7 +99,7 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
   # Convert species codes to longnames!
   if (convert_names) {
     diet_long <- dplyr::mutate_at(diet_long, .cols = c("pred", "prey"), .funs = convert_factor,
-                                  data_fgs = load_fgs(dir = dir, fgs = fgs))
+                                  data_fgs = load_fgs(fgs = fgs))
   }
 
   # Convert timestep to time in years!
