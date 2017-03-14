@@ -36,21 +36,22 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' nc <- file.path(d, "outputSETAS.nc")
-#' bps <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
-#' fgs <- "SETasGroupsDem_NoCep.csv"
-#' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
-#' prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
 #'
-#' test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
+#' nc <- file.path(d, "outputSETAS.nc")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#' bps <- load_bps(init = file.path(d, "INIT_VMPA_Jan2015.nc"), fgs = fgs)
+#' bboxes <- get_boundary(boxinfo = load_box(bgm = file.path(d, "VMPA_setas.bgm")))
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+#'
+#' test <- load_nc(nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
 #'   select_variable = "ResN")
 #'
-#' test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
+#' test <- load_nc(nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
 #'   select_variable = "Nums")
 
-load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
+load_nc <- function(nc, fgs, bps, select_groups,
                     select_variable, prm_run, bboxes = c(0), check_acronyms = TRUE,
                     warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
@@ -65,10 +66,7 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
     stop(paste("Only", paste(supported_variables, collapse = ", "), "can be selected as 'select_variable'"))
   }
 
-  fgs <- load_fgs(dir = dir, fgs = fgs)
-
-  # Check input of the nc file
-  if (!is.null(dir)) nc <- file.path(dir, nc)
+  fgs <- load_fgs(fgs = fgs)
 
   # Check input structure!
   if (check_acronyms) {
@@ -323,7 +321,7 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
   result$species <- convert_factor(data_fgs = fgs, col = result$species)
 
   # Convert timestep to time in years!
-  result$time <- convert_time(dir = dir, prm_run = prm_run, col = result$time)
+  result$time <- convert_time(prm_run = prm_run, col = result$time)
 
   return(result)
 }
