@@ -1,26 +1,13 @@
 #' Load mortality information from outputSpecificPredMort.txt
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
+#' @inheritParams load_nc
+#' @inheritParams load_fgs
+#' @inheritParams load_dietmatrix
 #' @param specmort Character string of the outputSpecificPredMort.txt file. Usually
 #' 'output[...]SpecificPredMort.txt'. In case you are using
 #' multiple folders for your model files and outputfiles pass the complete
 #' folder/filename string as nc. In addition set dir to 'NULL' in this
 #' case.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' In addition set dir to 'NULL' in this case.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
-#' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-#' or not (default = \code{FALSE}).
-#' @param version_flag The version of atlantis that created the output files.
-#' 1 for bec_dev, 2 for trunk.
 #' @return Dataframe with information about ssb in tonnes and recruits in
 #' thousands.
 #' @export

@@ -28,7 +28,7 @@ be passed directly.}
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
 (\code{TRUE}) or not (\code{FALSE}).}
 
-\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
+\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.

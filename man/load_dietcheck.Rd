@@ -4,29 +4,21 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, fgs, prm_run,
-  convert_names = FALSE, report = FALSE, version_flag = 1)
+load_dietcheck(dietcheck, fgs, prm_run, convert_names = FALSE,
+  report = FALSE, version_flag = 1)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
 \item{dietcheck}{Character string of the DietCheck.txt file. Usually
 'output[...]DietCheck.txt'. In case you are using
 multiple folders for your model files and outputfiles pass the complete
 folder/filename string as nc. In addition set dir to 'NULL' in this
 case.}
 
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.
-In addition set dir to 'NULL' in this case.}
+\item{prm_run}{Character string giving the connection of the run parameterfile.
+The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
@@ -34,7 +26,7 @@ or not (default = \code{FALSE}).}
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
 
-\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
+\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:

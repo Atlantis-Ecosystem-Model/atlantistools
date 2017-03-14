@@ -11,10 +11,7 @@
 #' diet matrix entries.
 #' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 #' or not (default = \code{FALSE}).
-#' @param dietmatrix Dataframe in 'long' format containing information about availabilities
-#' with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
-#' 'avail'. The dataframe should be generated with \code{load_dietmatrix()}.
-#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
+#' @param version_flag The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.
 #' @return dataframe of the availability matrix in long format with columns
 #' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.
 #' @export

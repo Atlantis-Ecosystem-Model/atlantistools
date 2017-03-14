@@ -4,6 +4,7 @@
 #' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
 #' @inheritParams extract_prm
+#' @inheritParams load_dietmatrix
 #' @param select_acronyms Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the *.prm file. Check column "Code" in
 #' "functionalGroups.csv" for clarification.
@@ -16,7 +17,6 @@
 #' be passed directly.
 #' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
 #' (\code{TRUE}) or not (\code{FALSE}).
-#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
