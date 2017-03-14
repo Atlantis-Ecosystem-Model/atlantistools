@@ -8,8 +8,8 @@ change_prm_cohort(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
   save_to_disc = TRUE)
 }
 \arguments{
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm".}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
 \item{select_acronyms}{Character vector of funtional groups which shall be read in.
 Names have to match the ones used in the *.prm file. Check column "Code" in

@@ -1,7 +1,7 @@
 #' Extract values for Atlantis parameters from the biological parameter file.
 #'
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm".
+#' @param prm_biol Character string giving the connection to the biological parameterfile.
+#' The filename usually contains \code{biol_fishing} and does end in \code{.prm}.
 #' @param variables Character string giving the flag to search for. This should be
 #' a combination of the parameter name and the group-Code.
 #' @return

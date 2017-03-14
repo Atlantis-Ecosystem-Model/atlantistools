@@ -7,8 +7,8 @@
 load_fgs(fgs)
 }
 \arguments{
-\item{fgs}{Name of the functional groups file which is typically saved as
-\code{functionalGroups.csv}.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 }
 \value{
 A \code{data.frame} of functional group information.

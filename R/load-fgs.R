@@ -2,8 +2,8 @@
 #'
 #' Read in the functional group file as dataframe.
 #'
-#' @param fgs Name of the functional groups file which is typically saved as
-#' \code{functionalGroups.csv}.
+#' @param fgs Character string giving the connection to the functional groups file.
+#' The filename usually contains \code{Groups} and does end in \code{.csv}.
 #'
 #' @export
 #' @family load functions

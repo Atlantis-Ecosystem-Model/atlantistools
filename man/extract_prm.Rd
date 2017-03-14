@@ -10,8 +10,8 @@ extract_prm(prm_biol, variables)
 extract_prm_cohort(prm_biol, variables)
 }
 \arguments{
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm".}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
 \item{variables}{Character string giving the flag to search for. This should be
 a combination of the parameter name and the group-Code.}

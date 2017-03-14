@@ -10,11 +10,11 @@ prm_to_df(prm_biol, fgs, group, parameter)
 prm_to_df_ages(prm_biol, fgs, group, parameter)
 }
 \arguments{
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm".}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
-\item{fgs}{Name of the functional groups file which is typically saved as
-\code{functionalGroups.csv}.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{group}{Character vector giving the functional Groups to extract.}
 
