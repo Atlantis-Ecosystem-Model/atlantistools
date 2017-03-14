@@ -1,17 +1,18 @@
 #' Transform data from bgm-file to map dataframe.
 #'
-#' @param dir Path of the Atlantis model folder.
-#' @param bgm Character string giving the name of the atlantis bgm file.
+#' @inheritParams load_box
 #' @export
 #' @family convert functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' bgm <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+#' bgm <- file.path(d, "VMPA_setas.bgm")
+#'
+#' bgm <- convert_bgm(bgm)
 #' head(bgm)
 
-convert_bgm <- function(dir = getwd(), bgm) {
-  box <- load_box(dir = dir, bgm = bgm)
+convert_bgm <- function(bgm) {
+  box <- load_box(bgm = bgm)
 
   # Get info of projection used! Some models don't use '+' to split their
   # arguments in the projection. So we add them here ;)

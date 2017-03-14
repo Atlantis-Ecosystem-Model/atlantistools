@@ -19,8 +19,7 @@
 
 load_box <- function(bgm) {
   if (!file.exists(bgm)) {
-    stop(paste("The file", bgm, "does not exist in the specified dir\n",
-               "please check the arguments dir and bgm in load_box."))
+    stop(paste("The file", bgm, "does not exist"))
   }
 
   data <- readLines(bgm)
