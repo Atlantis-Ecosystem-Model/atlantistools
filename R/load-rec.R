@@ -1,22 +1,10 @@
 #' Load information for SSB and Recruits from an Atlantis model run.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param yoy Character string of the YOY.txt file. Usually
-#' 'output[...]YOY.txt'. In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case. Biomass in tonnes per spawning event summed over the total model domain.
-#' @param ssb Character string of the SSB.txt file. Usually
-#' 'output[...]SSB.txt'. In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @inheritParams extract_prm
+#' @param yoy Character string giving the connection of the YOY file.
+#' The filename usually contains \code{outputYOY} and ends in \code{.txt}".
+#' @param ssb Character string giving the connection of the YOY file.
+#' The filename usually contains \code{outputSSB} and ends in \code{.txt}".
 #' @return Dataframe with information about ssb in tonnes and recruits in
 #' thousands.
 #' @export
@@ -24,15 +12,16 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' load_rec(dir = d,
-#'    yoy = "outputSETASYOY.txt",
-#'    ssb = "outputSETASSSB.txt",
-#'    prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
+#' yoy <- file.path(d, "outputSETASYOY.txt")
+#' ssb <- file.path(d, "outputSETASSSB.txt")
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+#'
+#' load_rec(yoy, ssb, prm_biol)
 
-load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
+load_rec <- function(yoy, ssb, prm_biol) {
   # Read in files
-  ssb <- load_txt(dir = dir, file = ssb)
-  yoy <- load_txt(dir = dir, file = yoy)
+  ssb <- load_txt(file = ssb)
+  yoy <- load_txt(file = yoy)
 
   # Remove cohort information in yoy
   yoy$code <- gsub(pattern = ".0", replacement = "", x = yoy$code)
@@ -43,15 +32,14 @@ load_rec <- function(dir = getwd(), yoy, ssb, prm_biol) {
   result <- dplyr::inner_join(x = yoy, y = ssb, by = c("time", "code"))
 
   # Extract info about recruit weights from the biological parameterfile!
-  # string_prm_biol <- readLines(con = convert_path(dir = dir, file = prm_biol))
   acr <- unique(result$code)
-  kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_prm, dir = dir, prm_biol = prm_biol)
-  kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_prm, dir = dir, prm_biol = prm_biol)
+  kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_prm, prm_biol = prm_biol)
+  kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_prm, prm_biol = prm_biol)
   rec_weights <- data.frame(code = acr, rec_weights = unlist(kwrr) + unlist(kwsr), stringsAsFactors = F)
 
   # Combine with recruitment data and convert units!
   result <- dplyr::inner_join(x = result, y = rec_weights, by = "code")
-  bio_conv <- get_conv_mgnbiot(dir = dir, prm_biol = prm_biol)
+  bio_conv <- get_conv_mgnbiot(prm_biol = prm_biol)
   result$atoutput.x <- ((result$atoutput.x / bio_conv) / result$rec_weights) / 1000
 
   # Final data transformations
