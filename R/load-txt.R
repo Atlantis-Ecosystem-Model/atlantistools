@@ -1,12 +1,7 @@
 #' Function to load various txt files from Atlantis simulations
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param file Character string of the file. In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as to file. In addition set dir to 'NULL' in this
-#' case.
+#' @param file Character string giving the connection of the output file.
+#' The filename usually contains \code{output} and ends in \code{.txt}".
 #' @param id_col Character strings giving the names of the columns which are not variables.
 #' Data from all other columns will be gathered with tidyr.
 #' @return Dataframe in tidy format!
@@ -15,12 +10,13 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' load_txt(dir = d,
-#'    file = "outputSETASSSB.txt",
-#'    id_col = "Time")
+#' file <- file.path(d, "outputSETASSSB.txt")
+#' load_txt(file)
+#'
+#' file <- file.path(d, "outputSETASYOY.txt")
+#' load_txt(file)
 
-load_txt <- function(dir, file, id_col = "Time") {
-  file <- convert_path(dir = dir, file = file)
+load_txt <- function(file, id_col = "Time") {
   # This is the main time consuming step. Checked it with Rprof. E.g. reading in outputNorthSeaSpecificPredMort.txt
   # showed that reading in consumes 99% of the total time. Using read_delim from "readr" results in
   # a minor (~30%) increase in speed (not work implementing though...).
