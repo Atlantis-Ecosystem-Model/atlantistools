@@ -4,15 +4,12 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort, prm_run, fgs, convert_names = FALSE,
-  version_flag = 1)
+load_spec_mort(specmort, prm_run, fgs, convert_names = FALSE,
+  version_flag = 2)
 }
 \arguments{
-\item{specmort}{Character string of the outputSpecificPredMort.txt file. Usually
-'output[...]SpecificPredMort.txt'. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case.}
+\item{specmort}{Character string giving the connection of the specific mortality file.
+The filename usually contains \code{SpecificPredMort} and ends in \code{.txt}".}
 
 \item{prm_run}{Character string giving the connection of the run parameterfile.
 The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
@@ -34,18 +31,19 @@ Load mortality information from outputSpecificPredMort.txt
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-df <- load_spec_mort(dir = d,
-                     specmort = "outputSETASSpecificPredMort.txt",
-                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                     fgs = "SETasGroups.csv")
+specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+fgs <- file.path(d, "SETasGroups.csv")
+
+df <- load_spec_mort(specmort, prm_run, fgs, version_flag = 1)
 head(df)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-df <- load_spec_mort(dir = d,
-                     specmort = "outputSETASSpecificPredMort.txt",
-                     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                     fgs = "SETasGroupsDem_NoCep.csv",
-                     version_flag = 2)
+specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+
+df <- load_spec_mort(specmort, prm_run, fgs)
 head(df)
 }
 \seealso{
