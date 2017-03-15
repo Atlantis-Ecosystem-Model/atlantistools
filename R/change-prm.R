@@ -73,7 +73,7 @@ change_prm <- function(prm_biol, select_acronyms, roc, parameter,
 
   if (save_to_disc) {
     print("Writing new prm file!")
-    writeLines(text = prm_biol_new, con = convert_path(dir = dir, file = prm_biol), sep = "\n")
+    writeLines(text = prm_biol_new, con = prm_biol, sep = "\n")
   }
 
   invisible(prm_biol_new)
