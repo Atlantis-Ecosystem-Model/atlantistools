@@ -18,7 +18,7 @@ vignette: >
 \newpage
 
 NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
-due to the fact that the dummy setas file have a running time of 5 years.
+due to the fact that the dummy setas file have a simulation time of 5 years.
 
 In order to use this vignette make sure to render `model-preprocess.Rmd` first. Either save the resulting
 list of dataframes as shown in `data-raw/data-vignette-model-preprocess.R` or render both vignettes
