@@ -2,10 +2,9 @@ context("load-rec test output structure")
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-test <- load_rec(dir = d,
-                 yoy = "outputSETASYOY.txt",
-                 ssb = "outputSETASSSB.txt",
-                 prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
+test <- load_rec(yoy = file.path(d, "outputSETASYOY.txt"),
+                 ssb = file.path(d, "outputSETASSSB.txt"),
+                 prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"))
 
 ssb_raw <- read.csv(file.path(d, "outputSETASSSB.txt"), sep = " ")
 ssb_raw <- sum(sapply(ssb_raw[, 2:3], function(x) sum(unique(x))))
