@@ -10,7 +10,7 @@ convert_relative_initial(data, col = "atoutput")
 \item{data}{Dataframe to apply the transformation to.}
 
 \item{col}{Character value giving the name of the column to transform.
-Default is 'atoutput'.}
+Default is \code{"atoutput"}.}
 }
 \value{
 Dataframe with transformed column 'col'.

@@ -3,14 +3,16 @@
 #' This function is a customised theme for ggplot2 plots. It's applied
 #' by default to all plots created within \code{atlantistools}.
 #' @param large Integer giving the size of the font for the main parts of the plot.
+#' Default is \code{22}.
 #' @param medium Integer giving the size of the font used in the legend and
-#' facet labels.
+#' facet labels. Default is \code{18}.
 #' @param small Integer giving the size of the font used in the rest of the plot.
-#' @param scale_font Numeric used to scale all font sizes. Deafult is 1.
+#' Default is \code{14}.
+#' @param scale_font Numeric used to scale all font sizes. Default is \code{1}.
 #' @param rot_xaxis_text Logical indicating if x-axis text should be
-#' rotated by 45 degree.
+#' rotated by 45 degree. Default is \code{FALSE}.
 #' @param rot_strips_y Logical indicating if facet labels should be
-#' rotated by 90 degree.
+#' rotated by 90 degree. Default is \code{TRUE}.
 #' @family theme functions
 #' @export
 #'

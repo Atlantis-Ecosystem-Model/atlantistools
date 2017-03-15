@@ -9,7 +9,7 @@ preprocess_txt(df_txt, sep_col = "code", into)
 \arguments{
 \item{df_txt}{Dataframe read in with \code{load_txt()}.}
 
-\item{sep_col}{Column to seperate into multiple columns.}
+\item{sep_col}{Column to seperate into multiple columns. Default is \code{"code"}.}
 
 \item{into}{Character vector given the columns to split sep_col in.}
 }

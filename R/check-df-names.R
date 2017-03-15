@@ -6,6 +6,7 @@
 #' @param data Dataframe to check.
 #' @param expect Character vector giving the names of the expected columns
 #' @param optional Character vector giving the names of optional columns.
+#' Default is \code{NULL}.
 #' @export
 #'
 #' @examples \dontrun{

@@ -23,11 +23,11 @@
 #' Can be created with \code{get_boundary}.
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. The will be omitted
-#' in the output.
+#' in the output. Default is \code{TRUE}.
 #' @param warn_zeros Logical indicating if check for actual zeros in the
-#' data shall be printed or not.
+#' data shall be printed or not. Default is \code{FALSE}.
 #' @param report Logical indicating if progress bars shall be printed (\code{TRUE}) or
-#' not (\code{FALSE}).
+#' not (\code{FALSE}). Default is \code{TRUE}.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following column names:
@@ -54,7 +54,7 @@
 #'   select_variable = "Nums")
 
 load_nc <- function(nc, fgs, bps, select_groups,
-                    select_variable, prm_run, bboxes = c(0), check_acronyms = TRUE,
+                    select_variable, prm_run, bboxes, check_acronyms = TRUE,
                     warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes

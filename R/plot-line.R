@@ -5,7 +5,7 @@
 #' @param y y-variable. Default is \code{'atoutput'}.
 #' @param wrap Wraping column. Default is \code{'species'}
 #' @param col Column to use as colour. Default is \code{NULL}.
-#' @param ncol Number of columns in multipanel plot.
+#' @param ncol Number of columns in multipanel plot. Default is \code{7}.
 #' @param yexpand Expands the y axis so it always includes 0. Default is \code{FALSE}.
 #' @return ggplot2 object
 #' @export

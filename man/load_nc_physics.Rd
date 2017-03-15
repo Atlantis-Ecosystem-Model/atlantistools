@@ -24,7 +24,7 @@ Can be created with \code{get_boundary}.}
 aggregated (\code{TRUE}) or not (\code{FALSE}). Default is \code{FALSE}.}
 
 \item{warn_zeros}{Logical indicating if check for actual zeros in the
-data shall be printed or not.}
+data shall be printed or not. Default is \code{FALSE}.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:

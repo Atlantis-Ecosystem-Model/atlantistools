@@ -5,9 +5,10 @@
 #'
 #' @param data Dataframe the aggregation is applied to.
 #' @param col Column of the dataframe the summarise function is applied.
-#' Default is 'atoutput'.
+#' Default is \code{atoutput}.
 #' @param groups Vector of character strings giving the grouping variables.
 #' @param out Character string specifying the name of the output column.
+#' Default is \code{atoutput}.
 #' @param fun Aggregation function to apply.
 #' @return grouped datarame with the aggregated data.
 #' @export

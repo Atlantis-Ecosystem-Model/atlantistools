@@ -11,7 +11,7 @@ load_txt(file, id_col = "Time")
 The filename usually contains \code{output} and ends in \code{.txt}".}
 
 \item{id_col}{Character strings giving the names of the columns which are not variables.
-Data from all other columns will be gathered with tidyr.}
+Data from all other columns will be gathered with tidyr. Default is \code{"Time"}.}
 }
 \value{
 Dataframe in tidy format!

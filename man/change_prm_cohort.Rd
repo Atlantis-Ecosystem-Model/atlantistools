@@ -26,10 +26,10 @@ should be group specific.}
 Only one parameter can be selected per function call.}
 
 \item{relative}{Logical if TRUE values are changed relative to base values. If FALSE new values can
-be passed directly.}
+be passed directly. Default is \code{TRUE}.}
 
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
-(\code{TRUE}) or not (\code{FALSE}).}
+(\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.

@@ -34,7 +34,7 @@ For \code{load_init_physics} simply pass the names of the physical variables.}
 
 \item{select_groups}{Character vector of funtional groups which shall be read in.
 Names have to match the ones used in the ncdf file. Check column "Name" in
-"functionalGroups.csv" for clarification.}
+"functionalGroups.csv" for clarification. Default is \code{NULL} resulting in all available groups.}
 
 \item{bboxes}{Integer vector giving the box-id of the boundary boxes.
 Can be created with \code{get_boundary}.}

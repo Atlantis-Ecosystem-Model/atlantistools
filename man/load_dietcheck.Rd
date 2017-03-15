@@ -18,7 +18,7 @@ The filename usually contains \code{Groups} and does end in \code{.csv}.}
 The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-or not (default = \code{FALSE}).}
+or not (\code{FALSE}). Default is \code{FALSE}.}
 
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}

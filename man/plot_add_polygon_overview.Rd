@@ -14,7 +14,7 @@ to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat'
 'inside_long' and 'polygon'.}
 
 \item{polygon_overview}{numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
-upper right corner of the plot. Default is 0.2.}
+upper right corner of the plot. Default is \code{0.2}.}
 }
 \value{
 ggplot grob

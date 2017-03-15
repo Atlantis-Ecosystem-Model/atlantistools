@@ -3,7 +3,7 @@
 #' @param file Character string giving the connection of the output file.
 #' The filename usually contains \code{output} and ends in \code{.txt}".
 #' @param id_col Character strings giving the names of the columns which are not variables.
-#' Data from all other columns will be gathered with tidyr.
+#' Data from all other columns will be gathered with tidyr. Default is \code{"Time"}.
 #' @return Dataframe in tidy format!
 #' @export
 #' @family load functions
@@ -30,7 +30,7 @@ load_txt <- function(file, id_col = "Time") {
   # }
   #This assumes that Time will always be the first column and if there is ever anything besides just Time (such as a hidden character to start the file) it will revert the column name back to Time.
   #If this changes in the future, then this will be a functional error that might be hard to detect as it won't cause an error to be thrown
-  if(colnames(data)[1] != "Time") {
+  if (colnames(data)[1] != "Time") {
     data <- dplyr::rename_(data, Time = colnames(data)[1])
   }
 

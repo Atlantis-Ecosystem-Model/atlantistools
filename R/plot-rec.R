@@ -5,7 +5,7 @@
 #' (Usually output[...]YOY.txt' & 'output[...]SSB.txt') using
 #' \code{\link{load_rec}}.
 #' @param ex_data Dataframe to compare the atlantis run with.
-#' @param ncol Number of columns in multipanel plot.
+#' @param ncol Number of columns in multipanel plot. Default is \code{7}.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions
@@ -44,7 +44,7 @@ plot_rec <- function(data, ex_data, ncol = 7) {
 
   plot <- ggplot2::ggplot(data = comp, ggplot2::aes_(x = ~ssb, y = ~rec, shape = ~model, colour = ~as.numeric(time))) +
     ggplot2::geom_point() +
-    ggplot2::facet_wrap(~species, ncol = ncol, scale = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
+    ggplot2::facet_wrap(~species, ncol = ncol, scales = "free", labeller = ggplot2::label_wrap_gen(width = 15)) +
     ggplot2::scale_colour_gradient("Time", low = "red", high = "green" , breaks = time_numeric[pos], labels = time_date[pos]) +
     ggplot2::labs(x = "SSB [tonnes]", y = "Recruits [thousands]") +
     theme_atlantis() +

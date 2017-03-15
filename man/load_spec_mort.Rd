@@ -18,7 +18,7 @@ The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-or not (default = \code{FALSE}).}
+or not (\code{FALSE}). Default is \code{FALSE}.}
 
 \item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }

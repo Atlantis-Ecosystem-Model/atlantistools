@@ -16,9 +16,9 @@
 #' @param parameter Character value of the model parameter which shall be changed.
 #' Only one parameter can be selected per function call.
 #' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
-#' be passed directly.
+#' be passed directly. Default is \code{TRUE}.
 #' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
-#' (\code{TRUE}) or not (\code{FALSE}).
+#' (\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'

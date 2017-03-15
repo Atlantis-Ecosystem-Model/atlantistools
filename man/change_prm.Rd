@@ -5,7 +5,7 @@
 \title{Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.}
 \usage{
 change_prm(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
-  save_to_disc = TRUE, version_flag = 1)
+  save_to_disc = TRUE, version_flag = 2)
 }
 \arguments{
 \item{prm_biol}{Character string giving the connection to the biological parameterfile.
@@ -23,10 +23,10 @@ can be passed as roc.}
 Only one parameter can be selected per function call.}
 
 \item{relative}{Logical if TRUE values are changed relative to base values. If FALSE new values can
-be passed directly.}
+be passed directly. Default is \code{TRUE}.}
 
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
-(\code{TRUE}) or not (\code{FALSE}).}
+(\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.}
 
 \item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }

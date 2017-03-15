@@ -23,9 +23,11 @@ format. You should use the "wide" format in case you aim to change your
 diet matrix entries.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-or not (default = \code{FALSE}).}
+or not (\code{FALSE}). Default is \code{FALSE}.}
 
 \item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
+
+\item{dietmatrix}{Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}.}
 }
 \value{
 dataframe of the availability matrix in long format with columns

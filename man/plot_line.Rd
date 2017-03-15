@@ -18,7 +18,7 @@ plot_line(data, x = "time", y = "atoutput", wrap = "species",
 
 \item{col}{Column to use as colour. Default is \code{NULL}.}
 
-\item{ncol}{Number of columns in multipanel plot.}
+\item{ncol}{Number of columns in multipanel plot. Default is \code{7}.}
 
 \item{yexpand}{Expands the y axis so it always includes 0. Default is \code{FALSE}.}
 }

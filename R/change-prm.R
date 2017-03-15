@@ -5,6 +5,7 @@
 #'
 #' @inheritParams extract_prm
 #' @inheritParams load_dietmatrix
+#' @inheritParams change_prm_cohort
 #' @param select_acronyms Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the *.prm file. Check column "Code" in
 #' "functionalGroups.csv" for clarification.
@@ -13,10 +14,6 @@
 #' can be passed as roc.
 #' @param parameter Character value of the model parameter which shall be changed.
 #' Only one parameter can be selected per function call.
-#' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
-#' be passed directly.
-#' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
-#' (\code{TRUE}) or not (\code{FALSE}).
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
@@ -31,7 +28,7 @@
 #'                       save_to_disc = FALSE)
 
 change_prm <- function(prm_biol, select_acronyms, roc, parameter,
-                       relative = TRUE, save_to_disc = TRUE, version_flag = 1) {
+                       relative = TRUE, save_to_disc = TRUE, version_flag = 2) {
   if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
 
   if (length(select_acronyms) != length(roc)) {

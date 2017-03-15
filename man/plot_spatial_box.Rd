@@ -22,12 +22,12 @@ to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat'
 \item{select_species}{Character vector listing the species to plot. If no species are selected
 \code{NULL} (default) all available species are plotted.}
 
-\item{timesteps}{Integer giving the number of timesteps to visualise. The minimum
-value is 2 (default). By default the start and end of the simulation is shown. In case
-timesteps > 2 equally spaced timesteps - 2 are added.}
+\item{timesteps}{Integer giving the number of timesteps to visualise. Default is \code{2}.
+By default the start and end of the simulation is shown. In case
+timesteps > 2 equally spaced timesteps are added.}
 
 \item{polygon_overview}{numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
-upper right corner of the plot. Default is 0.2.}
+upper right corner of the plot.  Default is \code{0.2}.}
 }
 \value{
 grob of 3 ggplot2 plots.

@@ -7,7 +7,7 @@
 #'  has zeros as values remove these values. remove zeros overall!
 #'
 #' @param df_txt Dataframe read in with \code{load_txt()}.
-#' @param sep_col Column to seperate into multiple columns.
+#' @param sep_col Column to seperate into multiple columns. Default is \code{"code"}.
 #' @param into Character vector given the columns to split sep_col in.
 #' @return Tidy dataframe.
 #' @export

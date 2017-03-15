@@ -13,9 +13,9 @@ Consumed biomass in [t] is stored in column 'atoutput'. Should be generated with
 \code{link{calculate_consumed_biomass}}.}
 
 \item{select_time}{Numeric value to control the simulation time in years to visualise.
-By default the start of the simulation is shown.}
+By default the start of the simulation is shown. Default is \code{NULL}.}
 
-\item{show}{Numeric value between 0 - 1 to control the amount of links shown. Default value is 0.95.
+\item{show}{Numeric value between 0 - 1 to control the amount of links shown. Default is \code{0.95}.
 Thus, the most important 95% of the total biomass flows are shown. The remaining interactions
 are grouped together as 'Rest'.}
 }

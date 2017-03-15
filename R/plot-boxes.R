@@ -1,7 +1,7 @@
 #' Plot layout of boxes!
 #'
 #' @param data Dataframe to be plotted.
-#' @param color_boxes logical indicating if polygons should be color coded or not.
+#' @param color_boxes logical indicating if polygons should be color coded or not. Default is \code{TRUE}.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions

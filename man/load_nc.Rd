@@ -4,7 +4,7 @@
 \alias{load_nc}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc(nc, fgs, bps, select_groups, select_variable, prm_run, bboxes = c(0),
+load_nc(nc, fgs, bps, select_groups, select_variable, prm_run, bboxes,
   check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE)
 }
 \arguments{
@@ -36,13 +36,13 @@ Can be created with \code{get_boundary}.}
 
 \item{check_acronyms}{Logical testing if functional-groups in
 select_groups are inactive in the current model run. The will be omitted
-in the output.}
+in the output. Default is \code{TRUE}.}
 
 \item{warn_zeros}{Logical indicating if check for actual zeros in the
-data shall be printed or not.}
+data shall be printed or not. Default is \code{FALSE}.}
 
 \item{report}{Logical indicating if progress bars shall be printed (\code{TRUE}) or
-not (\code{FALSE}).}
+not (\code{FALSE}). Default is \code{TRUE}.}
 }
 \value{
 A \code{data.frame} in long format with the following column names:

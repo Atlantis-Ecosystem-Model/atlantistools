@@ -7,6 +7,9 @@
 #' For \code{load_init_age} this can be "Nums", "ResN", "StructN",
 #' For \code{load_init_nonage} please select "N" (default)
 #' For \code{load_init_physics} simply pass the names of the physical variables.
+#' @param select_groups Character vector of funtional groups which shall be read in.
+#' Names have to match the ones used in the ncdf file. Check column "Name" in
+#' "functionalGroups.csv" for clarification. Default is \code{NULL} resulting in all available groups.
 #' @family load functions
 #' @export
 #' @return A dataframes with columns atoutput, polygon, layer (if present), species (if present).
