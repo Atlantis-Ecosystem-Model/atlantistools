@@ -4,7 +4,7 @@
 #' The filename usually contains \code{biol_fishing} and does end in \code{.prm}.
 #' @param variables Character string giving the flag to search for. This should be
 #' a combination of the parameter name and the group-Code.
-#' @return
+#' @return numeric vector.
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")

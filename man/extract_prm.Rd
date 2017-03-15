@@ -17,7 +17,7 @@ The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 a combination of the parameter name and the group-Code.}
 }
 \value{
-
+numeric vector.
 }
 \description{
 Extract values for Atlantis parameters from the biological parameter file.
