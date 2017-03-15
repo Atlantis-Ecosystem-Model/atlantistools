@@ -3,6 +3,17 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.4.0.9000
+## New features
+Removed the `dir` parameter from all functions. This will provide the most flexibility in setting your
+Atlantis simulations. You can now use any kind of filestructure. The easiest way to use `atlantistools` 
+is to define the Atlantis folder as working directory in your active R session. In addition you should try
+to work with a R project. By doing so you can simply pass the filenames (no directory needed anymore) as
+parameters. In addition files in subdirectories are auto-completed in the R project (given you have the newest
+RStudio version).
+
+Unfortunately, this might break existing code but we will all benefit from this greatly in the future.
+
 # atlantistools 0.3.3.9000
 ## Development manifesto
 The internal structure of atlantistools was updadted considerably. Unfortunately, this might break existing code.
