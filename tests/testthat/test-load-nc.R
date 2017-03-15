@@ -1,8 +1,15 @@
 context("load_nc check structure and values in output dataframe")
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bps <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+
+nc1 <- file.path(d, "outputSETAS.nc")
+nc2 <- file.path(d, "outputSETASPROD.nc")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+init <- file.path(d, "INIT_VMPA_Jan2015.nc")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+bps <- load_bps(fgs = fgs, init = init)
+
+bboxes <- get_boundary(boxinfo = load_box(bgm = file.path(d, "VMPA_setas.bgm")))
 
 # d2 <- system.file("data", package = "atlantistools")
 #
@@ -11,17 +18,10 @@ bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 # load(c("ref_eat.rda", "ref_grazing.rda", "ref_n.rda", "ref_nums.rda"))
 
 # Test numbers!
-data <- load_nc(dir = d,
-                nc = "outputSETAS.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
+data <- load_nc(nc = nc1, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
-                select_variable = "Nums",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
-#
+                select_variable = "Nums")
+
 test_that("test column names", {
   expect_equal(names(data), names(ref_nums))
 })
@@ -36,17 +36,9 @@ test_that("test output numbers", {
 })
 #
 # Test nitrogen!
-
-data <- load_nc(dir = d,
-                nc = "outputSETAS.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
+data <- load_nc(nc = nc1, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
                 select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det"),
-                select_variable = "N",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
+                select_variable = "N")
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_n))
@@ -62,17 +54,9 @@ test_that("test output nitrogen", {
 })
 
 # Test Grazing!
-
-data <- load_nc(dir = d,
-                nc = "outputSETASPROD.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
+data <- load_nc(nc = nc2, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
                 select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det"),
-                select_variable = "Grazing",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
+                select_variable = "Grazing")
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_grazing))
@@ -88,17 +72,9 @@ test_that("test output nitrogen", {
 })
 
 # Test Eat!
-
-data <- load_nc(dir = d,
-                nc = "outputSETASPROD.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
-                select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
-                select_variable = "Eat",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
+data <- load_nc(nc = nc2, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
+                select_groups =  c("Planktiv_S_Fish", "Pisciv_S_Fish"),
+                select_variable = "Eat")
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_eat))
@@ -114,10 +90,8 @@ test_that("test output nitrogen", {
 })
 
 
-data <- load_nc_physics(dir = d,
-                        nc = "outputSETAS.nc",
-                        select_physics = c("hdsource", "hdsink", "eflux", "vflux"),
-                        aggregate_layers = FALSE, bboxes = bboxes, prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
+data <- load_nc_physics(nc = nc1, bboxes = bboxes, prm_run = prm_run,
+                        select_physics = c("hdsource", "hdsink", "eflux", "vflux"))
 
 # add some antarctic debugging
 # dir <- "c:/Users/alexanderke/Dropbox/Antarctic Atlantis/"
