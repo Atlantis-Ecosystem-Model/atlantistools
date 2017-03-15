@@ -8,7 +8,7 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+#' bgm_data <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 #'
 #' # Use color coding for polygons.
 #' plot_boxes(bgm_data)

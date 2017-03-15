@@ -10,7 +10,7 @@
 #' format. You should use the "wide" format in case you aim to change your
 #' diet matrix entries.
 #' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-#' or not (\code{FALSE}). Default is \code{FALSE}.
+#' or not (default = \code{FALSE}).
 #' @param version_flag The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.
 #' @return dataframe of the availability matrix in long format with columns
 #' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.

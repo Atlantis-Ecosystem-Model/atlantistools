@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @examples
-#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' bgm_as_df <- convert_bgm(bgm = file.path(d, "VMPA_setas.bgm"))
 #'
 #' p <- plot_line(preprocess$physics, wrap = NULL)
 #' p <- custom_grid(p, grid_x = "polygon", grid_y = "variable")

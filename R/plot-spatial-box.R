@@ -20,9 +20,9 @@
 #' @export
 #'
 #' @examples
-#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #'
-#' bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
+#' bgm_as_df <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 #'
 #' # Spatial distribution in Atlantis is based on adu- and juv stanzas.
 #' # Therefore, we need to aggregate the age-based biomass to

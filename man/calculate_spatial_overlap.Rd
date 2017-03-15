@@ -28,13 +28,13 @@ Calculate 3d overlap of predator groups with their prey over time using Schoener
 }
 \examples{
 # Using built in datasets.
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-fgs <- "SETasGroupsDem_NoCep.csv"
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 
-dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
-agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs,
-                    group = get_age_acronyms(dir = dir, fgs = fgs),
+dietmatrix <- load_dietmatrix(prm_biol, fgs, convert_names = TRUE)
+agemat <- prm_to_df(prm_biol = prm_biol, fgs = fgs,
+                    group = get_age_acronyms(fgs = fgs),
                     parameter = "age_mat")
 
 sp_overlap <- calculate_spatial_overlap(biomass_spatial = ref_bio_sp,
