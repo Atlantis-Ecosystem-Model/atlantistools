@@ -26,7 +26,7 @@ d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 The first step with `atlantistools` is the extraction of data from the atlantis simulation.
 Data is transformed following the 'tidy-dataframe' framework from Hadley Wickham.
 Output from various variables (individual weight, physics, consumption...) is standardised to a uniform format.
-To further simplify subsequnt analysis the following transformations are applied:
+To further simplify subsequent analysis the following transformations are applied:
 - Simulation time is standardised to time in years.
 - Group names are converted according to the colum 'LongName' in the functional groups file. 
 - Data from boundary boxes and islands is removed.
@@ -35,75 +35,66 @@ To further simplify subsequnt analysis the following transformations are applied
 
 # Extract numbers per species, timestep, polygon, layer and ageclass
 ```{r}
-nums <- load_nc(dir = d, nc = "outputSETAS.nc", 
-                fgs = "SETasGroupsDem_NoCep.csv", 
+nums <- load_nc(nc = file.path(d, "outputSETAS.nc"), 
+                fgs = file.path(d, "SETasGroupsDem_NoCep.csv"), 
                 bps = c("Filter_Shallow", "Filter_Other", "Filter_Deep", "Benthic_grazer", 
                         "Macrobenth_Deep", "Megazoobenthos", "Macrobenth_Shallow", "Macroalgae"), 
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
                 select_variable = "Nums", 
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"), 
                 bboxes = c(0, 6, 7, 8, 9, 10))
 ```
 
 ## Extract structural nitrogen per species, timestep, polygon, layer and ageclass
 ```{r}
-structn <- load_nc(dir = d, nc = "outputSETAS.nc", 
-                   fgs = "SETasGroupsDem_NoCep.csv", 
+structn <- load_nc(nc = file.path(d, "outputSETAS.nc"), 
+                fgs = file.path(d, "SETasGroupsDem_NoCep.csv"),  
                    bps = c("Filter_Shallow", "Filter_Other", "Filter_Deep", "Benthic_grazer", 
                            "Macrobenth_Deep", "Megazoobenthos", "Macrobenth_Shallow", "Macroalgae"), 
                    select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
                    select_variable = "StructN", 
-                   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                   prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"), 
                    bboxes = c(0, 6, 7, 8, 9, 10))
 ```
 
 ## Use build in functions to extract epibenthic groups and boundary boxes
 ```{r}
-boundary_boxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
-epibenthic_groups <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
+boundary_boxes <- get_boundary(boxinfo = load_box(file.path(d, "VMPA_setas.bgm")))
+epibenthic_groups <- load_bps(fgs = file.path(d, "SETasGroupsDem_NoCep.csv"), init = file.path(d, "INIT_VMPA_Jan2015.nc"))
 
-resn <- load_nc(dir = d, nc = "outputSETAS.nc", 
-                fgs = "SETasGroupsDem_NoCep.csv", 
+resn <- load_nc(nc = file.path(d, "outputSETAS.nc"), 
+                fgs = file.path(d, "SETasGroupsDem_NoCep.csv"), 
                 bps = epibenthic_groups, 
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
                 select_variable = "ResN", 
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"), 
                 bboxes = boundary_boxes)
 ```
 
 ## Extract consumption from non-age-based groups species, timestep and polygon
 ```{r}
-grazing <- load_nc(dir = d, nc = "outputSETASPROD.nc", 
-                   fgs = "SETasGroupsDem_NoCep.csv", 
+grazing <- load_nc(nc = file.path(d, "outputSETASPROD.nc"), 
+                   fgs = file.path(d, "SETasGroupsDem_NoCep.csv"), 
                    bps = epibenthic_groups, 
                    select_groups = c("Megazoobenthos", "Cephalopod"), 
                    select_variable = "Grazing", 
-                   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                   prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"), 
                    bboxes = boundary_boxes)
 ```
 
 ## Extract Volume per polygon, layer and timestep.
 ```{r}
-physics <- load_nc_physics(dir = d, nc = "outputSETAS.nc", select_physics = "volume", 
-                           prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
+physics <- load_nc_physics(nc = file.path(d, "outputSETAS.nc"), select_physics = "volume", 
+                           prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"),
                            bboxes = boundary_boxes, aggregate_layers = FALSE)
 ```
 
 
-
-
-Most `load` functions in `atlantistools` need a directory to search for specific model files. There are 2 ways to pass the directory:
-
-All your model files are stored in one directory. The files can now be accesed via their name. The directory can be set/passed in two ways:
-
-Set your working directory in R to your atlantis model folder. In this case you don't have to pass the directory to any function call.
-Pass the directory of your Atlantis folder as Object (this is the approach which is used here) to the argument `dir`.
-  
-In case you are using different folders for generic model files and output files the directory can be set as described above. However you need to
-implement the output subfolder into the name of your outputfiles:
+All filenames used in the `load` functions have to be passed as character string giving the connection to the specific files. The easiest way to use
+`atlantistools` is to define the Atlantis directory as working directory in your R session. By doing so, you can simply pass the filenames themselfes. like:
 
 ```{r, eval = FALSE}
-structn <- load_nc(dir = d, nc = "output\outputSETAS.nc", 
+structn <- load_nc(nc = "outputSETAS.nc", 
                    fgs = "SETasGroupsDem_NoCep.csv", 
                    bps = c("Filter_Shallow", "Filter_Other", "Filter_Deep", "Benthic_grazer", 
                            "Macrobenth_Deep", "Megazoobenthos", "Macrobenth_Shallow", "Macroalgae"), 
@@ -112,6 +103,25 @@ structn <- load_nc(dir = d, nc = "output\outputSETAS.nc",
                    prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
                    bboxes = c(0, 6, 7, 8, 9, 10))
 ```
+
+In case you work within a R project all those filenames can be easily auto-completed with the `tab` key.
+
+In case you are using different folders for generic model files and output files you need to
+implement the output subfolder into the name of your outputfiles (this is done automatically via auto completion within a R project):
+
+```{r, eval = FALSE}
+structn <- load_nc(nc = "output\outputSETAS.nc", 
+                   fgs = "SETasGroupsDem_NoCep.csv", 
+                   bps = c("Filter_Shallow", "Filter_Other", "Filter_Deep", "Benthic_grazer", 
+                           "Macrobenth_Deep", "Megazoobenthos", "Macrobenth_Shallow", "Macroalgae"), 
+                   select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"), 
+                   select_variable = "StructN", 
+                   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", 
+                   bboxes = c(0, 6, 7, 8, 9, 10))
+```
+
+Unfortunately, it is not advised to change the directory within a vignette. Sadly, the demo vignette has to be stored in a different
+location as the example model files which come shipped with `atlantistools` making it nearly impossible to demonstrate the proper function calls inside the vignette.
 
 ## Atlantistools offers a set of functions to calculate model diagnostics.
 
@@ -120,31 +130,31 @@ per polygon and layer.
 
 
 ```{r}
-bboxes <- get_boundary(boxinfo = load_box(d, bgm = "VMPA_setas.bgm"))
-nc_gen <- "outputSETAS.nc"
-nc_prod <- "outputSETASPROD.nc"
-prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-fgs <- "SETasGroupsDem_NoCep.csv"
-bps <- load_bps(d, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
-bio_conv <- get_conv_mgnbiot(dir = d, prm_biol = prm_biol)
+bboxes <- get_boundary(boxinfo = load_box(file.path(d, "VMPA_setas.bgm")))
+nc_gen   <- file.path(d, "outputSETAS.nc")
+nc_prod  <- file.path(d, "outputSETASPROD.nc")
+prm_run  <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+fgs      <- file.path(d, "SETasGroupsDem_NoCep.csv")
+bps <- load_bps(fgs = fgs, init = file.path(d, "INIT_VMPA_Jan2015.nc"))
+bio_conv <- get_conv_mgnbiot(prm_biol = prm_biol)
 
 groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
 groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det")
 
-nums <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+nums <- load_nc(nc = nc_gen, bps = bps, fgs = fgs,
                 select_groups = groups_age, select_variable = "Nums",
                 prm_run = prm_run, bboxes = bboxes)
-sn <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+sn <- load_nc(nc = nc_gen, bps = bps, fgs = fgs,
               select_groups = groups_age, select_variable = "StructN",
               prm_run = prm_run, bboxes = bboxes)
-rn <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+rn <- load_nc(nc = nc_gen, bps = bps, fgs = fgs,
               select_groups = groups_age, select_variable = "ResN",
               prm_run = prm_run, bboxes = bboxes)
-n <- load_nc(dir = d, nc = nc_gen, bps = bps, fgs = fgs,
+n <- load_nc(nc = nc_gen, bps = bps, fgs = fgs,
              select_groups = groups_rest, select_variable = "N",
              prm_run = prm_run, bboxes = bboxes)
-vol <- load_nc_physics(dir = d, nc = nc_gen, select_physics = c("volume", "dz"),
+vol <- load_nc_physics(nc = nc_gen, select_physics = c("volume", "dz"),
                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
 df_bio_spatial <- calculate_biomass_spatial(nums = nums, sn = sn, rn = rn, n = n, vol_dz = vol,
@@ -155,27 +165,27 @@ Use `calculate_consumed_biomass` to calculate the consumed biomass of each prey 
 per timestep and polygon.
 
 ```{r}
-bboxes <- get_boundary(boxinfo = load_box(d, bgm = "VMPA_setas.bgm"))
-nc_gen <- "outputSETAS.nc"
-nc_prod <- "outputSETASPROD.nc"
-prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-fgs <- "SETasGroupsDem_NoCep.csv"
-bps <- load_bps(d, fgs = fgs, init = "INIT_VMPA_Jan2015.nc")
-bio_conv <- get_conv_mgnbiot(dir = d, prm_biol = prm_biol)
+bboxes <- get_boundary(boxinfo = load_box(file.path(d, "VMPA_setas.bgm")))
+nc_gen   <- file.path(d, "outputSETAS.nc")
+nc_prod  <- file.path(d, "outputSETASPROD.nc")
+prm_run  <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+fgs      <- file.path(d, "SETasGroupsDem_NoCep.csv")
+bps <- load_bps(fgs = fgs, init = file.path(d, "INIT_VMPA_Jan2015.nc"))
+bio_conv <- get_conv_mgnbiot(prm_biol = prm_biol)
 
 groups_age <- c("Planktiv_S_Fish", "Pisciv_S_Fish")
 groups_rest <- c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det")
 
-df_eat <- load_nc(dir = d, nc = nc_prod, bps = bps, fgs = fgs,
+df_eat <- load_nc(nc = nc_prod, bps = bps, fgs = fgs,
                select_groups = groups_age, select_variable = "Eat",
                prm_run = prm_run, bboxes = bboxes)
-df_grz <- load_nc(dir = d, nc = nc_prod, bps = bps, fgs = fgs,
+df_grz <- load_nc(nc = nc_prod, bps = bps, fgs = fgs,
                select_groups = groups_rest, select_variable = "Grazing",
                prm_run = prm_run, bboxes = bboxes)
-df_dm <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
+df_dm <- load_dietcheck(dietcheck = file.path(d, "outputSETASDietCheck.txt"),
                         fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
-vol <- load_nc_physics(dir = d, nc = nc_gen, select_physics = "volume",
+vol <- load_nc_physics(nc = nc_gen, select_physics = "volume",
                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
 df_cons <- calculate_consumed_biomass(eat = df_eat, grazing = df_grz, dm = df_dm,
@@ -248,7 +258,7 @@ plot_add_box(plot, range = c(0.8, 0.4))
 plot <- plot_line(ref_physics, wrap = NULL)
 custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
-flux <- load_nc_physics(dir = d, nc = nc_gen, select_physics = c("eflux", "vflux"),
+flux <- load_nc_physics(nc = nc_gen, select_physics = c("eflux", "vflux"),
                         prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
 
 plot <- plot_line(flux, wrap = NULL, col = "variable")
@@ -261,7 +271,7 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 Always add a spatial representation of your model if you have issues with model tuning. This makes the life of Bec and Beth much easier.
 
 ```{r, fig.width = 7, fig.height = 5}
-bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+bgm_data <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 plot_boxes(bgm_data)
 ```
 
@@ -321,8 +331,7 @@ change the existing valu by multiplication with a factor or set a new absolut va
 we increase the existing value by a factor of 2.
 
 ```{r}
-new_prm <-  change_prm(dir = d, 
-                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", 
+new_prm <-  change_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), 
                        select_acronyms = "FPS", 
                        roc = 2, 
                        parameter = "KWRR", 
@@ -334,15 +343,14 @@ thoroughly so you would normally set `save_to_disc` to `TRUE` to overwrite your 
 parameter file with the newly generated one Please make sure to backup your original files beforehand.
 
 ```{r}
-extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", variable = "KWRR_FPS")
-extract_prm(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", variable = "KWSR_FPS")
+extract_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), variables = "KWRR_FPS")
+extract_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), variables = "KWSR_FPS")
 ```
 
 You can also pass a vector of groups to change the parameter for multiple functional groups with a single call to `change_prm`.
 
 ```{r}
-new_prm <-  change_prm(dir = d, 
-                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", 
+new_prm <-  change_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), 
                        select_acronyms = c("FPL", "FPO", "FPS", "FVD", "FVV", "FVS", "FVB", "FVT", "FVO"), 
                        roc = runif(n = 9, min = 2, max = 5), 
                        parameter = "KWRR", 
@@ -357,8 +365,7 @@ In case you want to change the parameter values for cohort structured groups wit
 works with parameters whose values are stored in the next row following the flag in the *.prm file.
 
 ```{r}
-new_prm <-  change_prm_cohort(dir = d, 
-                              prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", 
+new_prm <-  change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), 
                               select_acronyms = c("FPL", "FPO"), 
                               roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10), 
                               parameter = "C", 
