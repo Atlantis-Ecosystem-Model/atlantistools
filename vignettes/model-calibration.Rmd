@@ -46,16 +46,16 @@ This section is used to read in the SETAS dummy files. Please change this accord
 ```{r}
 result <- preprocess
 
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
 # External recruitment data
-ex_rec_ssb <- read.csv(file.path(dir, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
+ex_rec_ssb <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 
 # External biomass data
-ex_bio <- read.csv(file.path(dir, "setas-bench.csv"), stringsAsFactors = FALSE)
+ex_bio <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
 
 # bgm file
-bgm <- "VMPA_setas.bgm"
+bgm <- file.path(d, "VMPA_setas.bgm")
 ```
 
 \newpage
@@ -309,7 +309,7 @@ for (i in seq_along(plots)) {
 
 # Spatial Plots 1
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
-plots <- plot_spatial_box(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(dir = dir, bgm = bgm), timesteps = 7)
+plots <- plot_spatial_box(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(bgm = bgm), timesteps = 7)
 for (i in seq_along(plots)) {
   cat(paste0("## Spatial Plot ", i, ": ", names(plots)[i]), sep = "\n")
   gridExtra::grid.arrange(plots[[i]])
@@ -321,7 +321,7 @@ for (i in seq_along(plots)) {
 
 # Spatial Plots 2
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
-plots <- plot_spatial_ts(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(dir = dir, bgm = bgm), vol = result$vol)
+plots <- plot_spatial_ts(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(bgm = bgm), vol = result$vol)
 for (i in seq_along(plots)) {
   cat(paste0("## Spatial Plot ", i, ": ", names(plots)[i]), sep = "\n")
   gridExtra::grid.arrange(plots[[i]])
