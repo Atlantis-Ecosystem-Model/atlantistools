@@ -20,7 +20,19 @@
 prm_to_df <- function(prm_biol, fgs, group, parameter) {
   # Extract data!
   prms <- lapply(parameter, set_single_prm, group = group)
-  values <- lapply(prms, extract_prm, prm_biol = prm_biol)
+  prm_biol_new <- readLines(con = prm_biol, warn = FALSE)
+
+  prm_t  <- do.call(rbind, prms)[,1]
+  no_prm <- which(is.na(charmatch(prm_t, prm_biol_new)))
+  if (sum(no_prm) > 1 && unlist(strsplit(prm_t[no_prm], '_'))[2] == 'AgeClassSize') {
+    prms2  <- prms[-no_prm]
+    values <- lapply(prms2, extract_prm, prm_biol = prm_biol)
+    sps    <- which(load_fgs(fgs = fgs)$Code %in% group)
+    extr   <- load_fgs(fgs = fgs)$NumAgeClassSize[sps]
+    values[[no_prm]] <- extr
+  } else {
+    values <- lapply(prms, extract_prm, prm_biol = prm_biol)
+  }
 
   # Combine to df!
   df <- as.data.frame(do.call(cbind, values))
@@ -70,6 +82,3 @@ set_single_prm <- function(group, parameter) {
     paste(parameter, group, sep = "_")
   }
 }
-
-
-

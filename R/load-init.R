@@ -32,11 +32,13 @@ load_init <- function(init, vars) {
   on.exit(RNetCDF::close.nc(read_nc))
 
   # Extract ncdf dimensions!
-  n_timesteps <- RNetCDF::dim.inq.nc(read_nc, 0)$length
+  n_timesteps <- RNetCDF::dim.inq.nc(read_nc, 't')$length
   if (n_timesteps != 1) stop("More than 1 timestep! init was not an initial conditions file.")
-  n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 1)$length
-  n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
-  num_layers <- get_layers(init = init)
+  n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 'b')$length
+  n_layers    <- RNetCDF::dim.inq.nc(read_nc, 'z')$length
+  num_layers <- get_layers(dir = dir, init = init)
+  num_layers[is.na(num_layers)] <- 0
+
   layerid <- get_layerid(num_layers = num_layers, max_layer = n_layers, n_boxes = n_boxes)
   var_names_ncdf <- sapply(seq_len(RNetCDF::file.inq.nc(read_nc)$nvars - 1),
                            function(x) RNetCDF::var.inq.nc(read_nc, x)$name)
@@ -120,4 +122,3 @@ remove_bboxes <- function(df, bboxes) {
   if (!any(names(df) == "polygon")) stop("No column polygon in df. Cannot remove boundary boxes.")
   df %>% dplyr::filter_(~!(polygon %in% bboxes))
 }
-

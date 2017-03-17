@@ -111,8 +111,7 @@ load_dietmatrix <- function(prm_biol, fgs, transform = TRUE, convert_names = FAL
 write_diet <- function(dietmatrix, prm_biol) {
   # Find dietmatrix in biological parameterfile!
   pstring <- "pPREY"
-  biol <- readLines(prm_biol)
-  pos <- grep(pattern = pstring, x = biol)
+  biol <- readLines(prm_biol, warn = FALSE)
 
   # Remove explanatory rows
   pos <- pos[pos != vapply(c("pPREY1FY1", "pPREY1FY2"), FUN = grep, FUN.VALUE = integer(1), x = biol)]
