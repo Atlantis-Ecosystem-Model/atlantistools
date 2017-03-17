@@ -36,7 +36,7 @@ change_prm <- function(prm_biol, select_acronyms, roc, parameter,
   }
 
   # Read in parameter file!
-  prm_biol_new <- readLines(con = prm_biol)
+  prm_biol_new <- readLines(con = prm_biol, warn = FALSE)
 
   # Function to update a specific parameter composed of a parameter string
   # a group acronym and a seperator (by default "_") found in a prm file.
@@ -78,4 +78,3 @@ change_prm <- function(prm_biol, select_acronyms, roc, parameter,
 
   invisible(prm_biol_new)
 }
-

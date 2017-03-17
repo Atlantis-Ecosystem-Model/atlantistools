@@ -26,7 +26,7 @@
 #' @export
 extract_prm <- function(prm_biol, variables) {
   # Read in parameter file!
-  prm_biol_new <- readLines(con = prm_biol)
+  prm_biol_new <- readLines(con = prm_biol, warn = FALSE)
 
   pos <- vapply(variables, scan_prm, FUN.VALUE = integer(1), chars = prm_biol_new)
   result <- prm_biol_new[pos]
@@ -40,7 +40,7 @@ extract_prm <- function(prm_biol, variables) {
 # Extract value for a specific cohort parameter from a Vector of character strings.
 extract_prm_cohort <- function(prm_biol, variables) {
   # Read in parameter file!
-  prm_biol_new <- readLines(con = prm_biol)
+  prm_biol_new <- readLines(con = prm_biol, warn = FALSE)
 
   slice <- function(prm, variable) {
     pos <- scan_prm(chars = prm, variable = variable)
@@ -62,5 +62,3 @@ extract_prm_cohort <- function(prm_biol, variables) {
   # }
   return(values)
 }
-
-

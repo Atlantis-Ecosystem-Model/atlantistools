@@ -14,12 +14,17 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#'
 #' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 #' init <- file.path(d, "INIT_VMPA_Jan2015.nc")
 #'
 #' load_bps(fgs, init)
 
 load_bps <- function(fgs, init){
+  if (utils::tail(unlist(strsplit(init, "\\.")), 1) != "nc") {
+    stop(paste("The init argument", init, "does not end in .nc"))
+  }
+
   init_read <- RNetCDF::open.nc(con = init)
   on.exit(RNetCDF::close.nc(init_read))
 
@@ -43,5 +48,3 @@ load_bps <- function(fgs, init){
   bps <- groups[bps_id]
   return(bps)
 }
-
-
