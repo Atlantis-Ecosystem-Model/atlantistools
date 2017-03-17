@@ -21,7 +21,7 @@
 #' load_bps(fgs, init)
 
 load_bps <- function(fgs, init){
-  if (tail(unlist(strsplit(init, "\\.")), 1) != "nc") {
+  if (utils::tail(unlist(strsplit(init, "\\.")), 1) != "nc") {
     stop(paste("The init argument", init, "does not end in .nc"))
   }
 
