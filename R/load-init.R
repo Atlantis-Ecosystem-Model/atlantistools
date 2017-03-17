@@ -36,7 +36,7 @@ load_init <- function(init, vars) {
   if (n_timesteps != 1) stop("More than 1 timestep! init was not an initial conditions file.")
   n_boxes     <- RNetCDF::dim.inq.nc(read_nc, 'b')$length
   n_layers    <- RNetCDF::dim.inq.nc(read_nc, 'z')$length
-  num_layers <- get_layers(dir = dir, init = init)
+  num_layers <- get_layers(init = init)
   num_layers[is.na(num_layers)] <- 0
 
   layerid <- get_layerid(num_layers = num_layers, max_layer = n_layers, n_boxes = n_boxes)
