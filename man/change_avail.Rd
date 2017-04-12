@@ -70,4 +70,3 @@ dm2 <- change_avail(dietmatrix = dm,
 dm2[apply(apply(dm2[, 5:ncol(dm2)], MARGIN = 2,
 function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
 }
-

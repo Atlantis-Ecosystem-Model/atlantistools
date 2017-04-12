@@ -3,8 +3,8 @@
 \name{load_init_age}
 \alias{load_init_age}
 \alias{load_init_nonage}
-\alias{load_init_physics}
 \alias{load_init_stanza}
+\alias{load_init_physics}
 \alias{load_init_weight}
 \title{This function loads weight at age data (in mgN) from the initial conditions file.}
 \usage{
@@ -70,9 +70,6 @@ load_init_nonage(init = init, fgs = fgs, bboxes = bboxes, bps = bps)
 load_init_stanza(init = init, fgs = fgs, bboxes = bboxes)
 load_init_weight(init = init, fgs = fgs, bboxes = bboxes)
 }
-\author{
-Alexander Keth
-}
 \seealso{
 Other load functions: \code{\link{load_box}},
   \code{\link{load_bps}}, \code{\link{load_dietcheck}},
@@ -81,4 +78,6 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-
+\author{
+Alexander Keth
+}

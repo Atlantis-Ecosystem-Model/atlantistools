@@ -22,4 +22,3 @@ Calculate relative timeseries using the initial value as benchmark.
 df <- convert_relative_initial(ref_structn)
 head(df[df$layer == 1, ], n = 15)
 }
-

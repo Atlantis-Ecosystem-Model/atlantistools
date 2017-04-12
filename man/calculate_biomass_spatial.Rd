@@ -91,4 +91,3 @@ dfs <- Map(load_nc, select_variable = vars, select_groups = grps,
 df <- calculate_biomass_spatial(nums = dfs[[1]], sn = dfs[[2]], rn = dfs[[3]], n = dfs[[4]],
                                 vol_dz = vol, bio_conv = bio_conv, bps = bps)
 }
-

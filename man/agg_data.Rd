@@ -35,4 +35,3 @@ used in dplyr to aggregate dataframes.
 \examples{
 agg_ref_nums <- agg_data(data = ref_nums, groups = c("species", "agecl"), fun = mean)
 }
-

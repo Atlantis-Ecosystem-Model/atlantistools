@@ -34,4 +34,3 @@ plot_add_range(plot, ex_data)
 \seealso{
 Other low-level-plot functions: \code{\link{plot_add_box}}
 }
-

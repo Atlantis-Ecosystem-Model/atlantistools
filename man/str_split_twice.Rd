@@ -23,4 +23,3 @@ all (min_only = FALSE) or only the first (min_only = T) numeric value found in t
 str_split_twice(char = "Hello   15")
 str_split_twice(char = "flag1 15  16\\t15", min_only = FALSE)
 }
-

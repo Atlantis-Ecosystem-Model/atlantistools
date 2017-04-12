@@ -34,9 +34,6 @@ vars <- "Sprat1_ResN"
 load_init(init = init, vars = vars)
 }
 }
-\author{
-Alexander Keth
-}
 \seealso{
 Other load functions: \code{\link{load_box}},
   \code{\link{load_bps}}, \code{\link{load_dietcheck}},
@@ -45,4 +42,6 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-
+\author{
+Alexander Keth
+}

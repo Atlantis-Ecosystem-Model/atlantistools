@@ -75,4 +75,3 @@ vol <- load_nc_physics(nc = nc_gen, select_physics = "volume",
 df <- calculate_consumed_biomass(eat = df_eat, grazing = df_grz, dm = df_dm,
                                  vol = vol, bio_conv = bio_conv)
 }
-

@@ -35,4 +35,3 @@ ggplot2::ggplot(data = nums_agg, ggplot2::aes(x = time, y = atoutput)) +
    ggplot2::facet_wrap(~species) +
    theme_atlantis()}
 }
-

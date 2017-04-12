@@ -23,4 +23,3 @@ This function is used to match the labels of the plots!
 Other convert functions: \code{\link{convert_bgm}},
   \code{\link{convert_time}}
 }
-

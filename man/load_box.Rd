@@ -23,9 +23,6 @@ bgm <- file.path(d, "VMPA_setas.bgm")
 
 boxes <- load_box(bgm)
 }
-\author{
-Kelli Faye Johnson
-}
 \seealso{
 Other load functions: \code{\link{load_bps}},
   \code{\link{load_dietcheck}}, \code{\link{load_fgs}},
@@ -34,4 +31,6 @@ Other load functions: \code{\link{load_bps}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-
+\author{
+Kelli Faye Johnson
+}

@@ -37,4 +37,3 @@ extract_prm(prm_biol, variables = paste("KWRR", c("FVS", "FPS"), sep = "_"))
 extract_prm_cohort(prm_biol, variables = "C_FVS")
 extract_prm_cohort(prm_biol, variables = paste("C", c("FVS", "FPS"), sep = "_"))
 }
-

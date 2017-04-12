@@ -41,4 +41,3 @@ sp_overlap <- calculate_spatial_overlap(biomass_spatial = ref_bio_sp,
                                         dietmatrix = dietmatrix,
                                         agemat = agemat)
 }
-

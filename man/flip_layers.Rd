@@ -24,4 +24,3 @@ data <- rbind(expand.grid(species = "sp1", polygon = 0, layer = 0:7),
 data$atoutput <- runif(nrow(data), min = 0, max = 2)
 flip_layers(data)
 }
-

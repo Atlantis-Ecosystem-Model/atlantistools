@@ -23,4 +23,3 @@ ref_dietmatrix
 See \code{data-raw/data-create-reference-dfs.R} for further information.
 }
 \keyword{datasets}
-

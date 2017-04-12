@@ -29,4 +29,3 @@ df <- combine_groups(ref_dm, group_col = "prey", combine_thresh = 2)
 \seealso{
 Other combine functions: \code{\link{combine_runs}}
 }
-

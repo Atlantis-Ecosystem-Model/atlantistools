@@ -24,4 +24,3 @@ head(bgm)
 Other convert functions: \code{\link{convert_factor}},
   \code{\link{convert_time}}
 }
-

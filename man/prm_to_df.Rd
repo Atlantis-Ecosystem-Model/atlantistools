@@ -36,4 +36,3 @@ parameter <- c("mum", "C")
 prm_to_df_ages(prm_biol, fgs, group, parameter)
 prm_to_df(prm_biol, fgs, group, parameter)
 }
-

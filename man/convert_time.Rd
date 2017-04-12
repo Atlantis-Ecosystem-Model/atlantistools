@@ -23,4 +23,3 @@ Convert timestep to actual time!
 Other convert functions: \code{\link{convert_bgm}},
   \code{\link{convert_factor}}
 }
-
