@@ -4,7 +4,7 @@
 \alias{get_growth_fishbase}
 \title{Extract growth parameters from www.fishbase.org.}
 \usage{
-get_growth_fishbase(fish, exclude_subspecies = T)
+get_growth_fishbase(fish)
 }
 \arguments{
 \item{fish}{Vector of fish species with genus and species information.}

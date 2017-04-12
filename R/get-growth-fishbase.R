@@ -12,8 +12,8 @@
 #' extract_linf_k_fishbase(c("Gadus morhua", "Merlangius merlangus"))
 #' @export
 
-get_growth_fishbase <- function(fish, exclude_subspecies = T){
-  ids <- get_ids_fishbase(fish, exclude_subspecies)
+get_growth_fishbase <- function(fish){
+  ids <- get_ids_fishbase(fish)
 
   # Split up Names in species and genus part to generate URLs
   ge <- sapply(stringr::str_split(ids[[2]], pattern = " "),function(x)x[1])
