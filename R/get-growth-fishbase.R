@@ -86,6 +86,6 @@ url_to_refid <- function(url) {
     stringr::str_split(., pattern = "ID=") %>%
     purrr::map_int(., ~as.integer(.[2]))
 
-  return(ids)
+  return(unique(ids))
 }
 
