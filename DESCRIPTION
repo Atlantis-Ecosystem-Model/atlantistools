@@ -28,5 +28,7 @@ Imports:
   circlize,
   RColorBrewer,
   purrr,
-  rfishbase
+  rfishbase,
+  rvest,
+  XML
 VignetteBuilder: knitr
