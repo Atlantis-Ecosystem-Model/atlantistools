@@ -21,5 +21,6 @@ The IDs are needed to generate the URLs lateron. At the moment subspecies can on
 }
 \examples{
 fish <- c("Gadus morhua", "Merlangius merlangus")
-extract_linf_k_fishbase(c("Gadus morhua", "Merlangius merlangus"))
+df <- get_growth_fishbase(fish)
+head(df)
 }

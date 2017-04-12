@@ -9,7 +9,9 @@
 #' The IDs are needed to generate the URLs lateron. At the moment subspecies can only be excluded from the extraction.
 #' @examples
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
-#' extract_linf_k_fishbase(c("Gadus morhua", "Merlangius merlangus"))
+#' df <- get_growth_fishbase(fish)
+#' head(df)
+
 #' @export
 
 get_growth_fishbase <- function(fish){
@@ -37,7 +39,7 @@ get_growth_fishbase <- function(fish){
   # Extract data from fishbase!
   result <- list()
   for (i in seq_along(urls)) {
-    result[[i]] <- XML::readHTMLTable(doc = urls[i], which = 3)
+    result[[i]] <- XML::readHTMLTable(doc = urls[i], which = 3, stringsAsFactors = FALSE)
   }
 
   # add names to dataframes
@@ -45,7 +47,15 @@ get_growth_fishbase <- function(fish){
     result[[i]]$species <- ids[[2]][i]
   }
 
-  result <- do.call(rbind, result)
+  # Cleanup
+  # Convert chr columns to numeric if possible.
+  result <- dplyr::bind_rows(result)
+  result <- result[, 2:dim(result)[2]]
+  result[result == ""] <- NA
+  num_cols <- which(purrr::map_lgl(result, ~!any(is.na(suppressWarnings(as.numeric(.[!is.na(.)]))))))
+  names(result) <- c("linf", "length_type", "k", "to", "sex", "m", "temp", "lm", "a", "country", "locality",
+                     "questionable", "captive", "species")
+  result <- dplyr::mutate_at(result, num_cols, as.numeric)
 
   # find reference urls.
   ref_urls <- purrr::map(urls, xml2::read_html) %>%
@@ -53,20 +63,10 @@ get_growth_fishbase <- function(fish){
     purrr::map(., ~rvest::html_attr(., "href")) %>%
     purrr::map(., ~.[stringr::str_detect(., pattern = "FishPopGrowthSummary")])
 
-  # Cleanup
-  result_backup <- result
-  names(result) <- c("", "linf", "length_type", "k", "to", "sex", "m", "temp", "lm", "a", "country", "locality",
-                     "questionable", "captive", "species")
-  result <- result[, 2:dim(result)[2]]
-  result$linf <- as.numeric(as.character(result$linf))
-  result$k <- as.numeric(as.character(result$k))
-  result$country <- as.character(result$country)
-  result$locality <- as.character(result$locality)
-
   # check if result and urls match.
-  count <- atlantistools::agg_data(result, col = "linf", groups = "species", out = "count", fun = length)
+  count <- agg_data(result, col = "linf", groups = "species", out = "count", fun = length)
   if (all(count$count == purrr::map_int(ref_urls, length))) {
-    result$ref_url <- purrr::flatten(ref_urls)
+    result$ref_url <- unlist(ref_urls)
   } else {
     warning("ref_urls and final table do not match.")
   }
