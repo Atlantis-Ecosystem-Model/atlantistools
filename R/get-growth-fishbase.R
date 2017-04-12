@@ -29,9 +29,9 @@ get_growth_fishbase <- function(fish){
   # WARNING: The following ids are hard-coded!!!
   pos_missing <- c(pos_missing)
   if (length(pos_missing) >= 1) {
-    missing_species <- sort(ids[[2]][pos_missing])
+    missing_species <- sort(names(ids)[pos_missing])
     warning("No growth information available:\n", paste(missing_species, collapse = "\n "))
-    ids <- lapply(ids, function(x)x[-pos_missing])
+    ids <- ids[-pos_missing]
     fishbase <- fishbase[-pos_missing]
     urls <- urls[-pos_missing]
   }
@@ -44,7 +44,7 @@ get_growth_fishbase <- function(fish){
 
   # add names to dataframes
   for (i in seq_along(result)) {
-    result[[i]]$species <- ids[[2]][i]
+    result[[i]]$species <- names(ids)[i]
   }
 
   # Cleanup
