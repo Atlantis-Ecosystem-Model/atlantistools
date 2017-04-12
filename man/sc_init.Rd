@@ -5,7 +5,8 @@
 \alias{plot_sc_init}
 \title{Sanity check initial conditions file}
 \usage{
-sc_init(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL)
+sc_init(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL,
+  version_flag = 2)
 
 plot_sc_init(df, mult_mum, mult_c, pred = NULL)
 }
@@ -27,6 +28,8 @@ predators are selected.}
 
 \item{set_avail}{Numeric value. All present availabilities can be set to a spefiic value.
 Default value is \code{NULL} which results in no changes to the present availability matrix.}
+
+\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 
 \item{df}{Dataframe to pass to \code{plot_sc_init()}. df should be generated with
 sc_init or read in from *.rda (also generated with sc_init()).}

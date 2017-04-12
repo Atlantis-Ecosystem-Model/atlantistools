@@ -4,6 +4,7 @@
 #' @inheritParams load_init
 #' @inheritParams extract_prm
 #' @inheritParams load_nc
+#' @inheritParams load_dietmatrix
 #' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
 #' predators are selected.
 #' @param set_avail Numeric value. All present availabilities can be set to a spefiic value.
@@ -70,9 +71,8 @@
 # pred <- pred[!pred %in% c("SB", "CET", "SXX", "SHK")]
 # sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = pred, no_avail = T)
 
-
 # function start
-sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL) {
+sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL, version_flag = 2) {
   fgs_data <- load_fgs(fgs = fgs)
 
   if (is.null(pred)) {
@@ -186,7 +186,7 @@ sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL) 
   ass_type$grp <- NULL
   ass_type$prey <- convert_factor(data_fgs = fgs_data, col = ass_type$prey)
 
-  dm <- load_dietmatrix(prm_biol = prm_biol, fgs = fgs, convert_names = TRUE) %>%
+  dm <- load_dietmatrix(prm_biol = prm_biol, fgs = fgs, convert_names = TRUE, version_flag = version_flag) %>%
     dplyr::filter_(~avail != 0) %>%
     dplyr::left_join(ass_type, by = "prey")
   if (!is.null(set_avail)) dm$avail <- set_avail
