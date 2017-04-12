@@ -16,10 +16,9 @@ get_growth_fishbase <- function(fish){
   ids <- get_ids_fishbase(fish)
 
   # Split up Names in species and genus part to generate URLs
-  ge <- sapply(stringr::str_split(ids[[2]], pattern = " "),function(x)x[1])
-  sp <- sapply(stringr::str_split(ids[[2]], pattern = " "),function(x)x[2])
+  ge_sp <- split_species(names(ids))
 
-  urls <- paste0("http://fishbase.org/PopDyn/PopGrowthList.php?ID=", ids[[1]], "&GenusName=", ge, "&SpeciesName=", sp, "&fc=183")
+  urls <- paste0("http://fishbase.org/PopDyn/PopGrowthList.php?ID=", ids, "&GenusName=", ge_sp$ge, "&SpeciesName=", ge_sp$sp, "&fc=183")
 
   fishbase <- lapply(urls, readLines, warn = F, n = 20)
 
@@ -27,7 +26,7 @@ get_growth_fishbase <- function(fish){
   pos_missing <- which(grepl("The system found no growth information for the requested specie.", fishbase))
   # WARNING: The following ids are hard-coded!!!
   pos_missing <- c(pos_missing)
-  if(length(pos_missing) >= 1){
+  if (length(pos_missing) >= 1) {
     missing_species <- sort(ids[[2]][pos_missing])
     warning("No growth information available:\n", paste(missing_species, collapse = "\n "))
     ids <- lapply(ids, function(x)x[-pos_missing])
@@ -37,12 +36,12 @@ get_growth_fishbase <- function(fish){
 
   # Extract data from fishbase!
   result <- list()
-  for(i in seq_along(urls)){
+  for (i in seq_along(urls)) {
     result[[i]] <- XML::readHTMLTable(doc = urls[i], which = 3)
   }
 
   # add names to dataframes
-  for(i in seq_along(result)){
+  for (i in seq_along(result)) {
     result[[i]]$species <- ids[[2]][i]
   }
 
