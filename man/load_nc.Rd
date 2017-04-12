@@ -69,9 +69,6 @@ test <- load_nc(nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxe
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "Nums")
 }
-\author{
-Alexander Keth
-}
 \seealso{
 Other load functions: \code{\link{load_box}},
   \code{\link{load_bps}}, \code{\link{load_dietcheck}},
@@ -80,5 +77,7 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
+\author{
+Alexander Keth
+}
 \keyword{gen}
-

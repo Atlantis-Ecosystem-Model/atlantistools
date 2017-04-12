@@ -29,4 +29,3 @@ head(test[[1]])
 \seealso{
 Other combine functions: \code{\link{combine_groups}}
 }
-

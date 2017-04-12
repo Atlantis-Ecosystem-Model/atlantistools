@@ -22,6 +22,7 @@ to get the biomass pool information.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+
 fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 init <- file.path(d, "INIT_VMPA_Jan2015.nc")
 
@@ -37,4 +38,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-

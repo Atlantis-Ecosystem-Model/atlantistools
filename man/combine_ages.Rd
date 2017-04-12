@@ -35,4 +35,3 @@ agemat <- prm_to_df(prm_biol = prm_biol, fgs = fgs,
 
 combine_ages(ref_nums, grp_col = "species", agemat = agemat)
 }
-

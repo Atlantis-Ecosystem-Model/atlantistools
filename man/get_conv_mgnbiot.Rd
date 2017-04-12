@@ -28,4 +28,3 @@ get_conv_mgnbiot(prm_biol)
 Other get functions: \code{\link{get_boundary}},
   \code{\link{get_colpal}}, \code{\link{get_groups}}
 }
-

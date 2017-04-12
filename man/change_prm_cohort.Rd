@@ -57,4 +57,3 @@ new_prm <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Tr
                              parameter = "C",
                              save_to_disc = FALSE)
 }
-

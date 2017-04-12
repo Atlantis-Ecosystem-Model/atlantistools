@@ -63,4 +63,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_txt}}
 }
 \keyword{gen}
-

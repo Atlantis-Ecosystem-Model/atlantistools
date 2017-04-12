@@ -22,4 +22,3 @@ ref_nums
 Numbers at age data.
 }
 \keyword{datasets}
-

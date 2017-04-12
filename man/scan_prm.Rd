@@ -14,4 +14,3 @@ scan_prm(chars, variable)
 \description{
 Scan character vector for specific flag!
 }
-

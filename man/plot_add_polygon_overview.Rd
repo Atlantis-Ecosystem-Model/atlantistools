@@ -32,4 +32,3 @@ p <- custom_grid(p, grid_x = "polygon", grid_y = "variable")
 grob <- plot_add_polygon_overview(p, bgm_as_df)
 gridExtra::grid.arrange(grob)
 }
-

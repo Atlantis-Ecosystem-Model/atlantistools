@@ -48,4 +48,3 @@ Other plot functions: \code{\link{plot_bar}},
   \code{\link{plot_diet_bec_dev}}, \code{\link{plot_line}},
   \code{\link{plot_rec}}, \code{\link{plot_species}}
 }
-

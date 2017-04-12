@@ -59,4 +59,3 @@ grobs <- plot_spatial_box(bio_spatial, bgm_as_df,
 gridExtra::grid.arrange(grobs[[1]])
 gridExtra::grid.arrange(grobs[[2]])
 }
-

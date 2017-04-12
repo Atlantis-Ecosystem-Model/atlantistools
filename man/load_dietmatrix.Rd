@@ -54,4 +54,3 @@ fgs <- file.path(d, "SETasGroups.csv")
 dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
 head(dm, n = 10)
 }
-

@@ -54,4 +54,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_nc}}, \code{\link{load_rec}},
   \code{\link{load_txt}}
 }
-

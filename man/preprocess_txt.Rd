@@ -33,4 +33,3 @@ df <- load_txt(file = file.path(d, "outputSETASSpecificMort.txt"))
 df <- preprocess_txt(df_txt = df, into = c("species", "agecl", "empty_col", "mort"))
 head(df)
 }
-
