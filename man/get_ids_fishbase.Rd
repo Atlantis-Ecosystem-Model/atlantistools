@@ -22,7 +22,5 @@ The IDs are needed to generate URLs to scan www.fishbase.org for detailed inform
 \examples{
 fish <- c("Gadus morhua", "Merlangius merlangus", "Clupea harengus")
 get_ids_fishbase(fish)
-fish <- c("xxx yyy", "Merlangius merlangus")
-get_ids_fishbase(fish)
 }
 \keyword{gen}
