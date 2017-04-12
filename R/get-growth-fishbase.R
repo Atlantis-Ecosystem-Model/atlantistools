@@ -74,4 +74,18 @@ get_growth_fishbase <- function(fish){
   return(result)
 }
 
+# url <- result$ref_url[1]
+url_to_refid <- function(url) {
+  # extract links from html
+  links <- xml2::read_html(paste0("http://www.fishbase.se/", url)) %>%
+    rvest::html_nodes(., "a") %>%
+    rvest::html_attr(., "href")
+
+  # extract reference ids
+  ids <- links[which(stringr::str_detect(links, pattern = "References"))[1:2]] %>%
+    stringr::str_split(., pattern = "ID=") %>%
+    purrr::map_int(., ~as.integer(.[2]))
+
+  return(ids)
+}
 
