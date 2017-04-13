@@ -2,18 +2,22 @@
 % Please edit documentation in R/get-growth-fishbase.R
 \name{get_growth_fishbase}
 \alias{get_growth_fishbase}
-\title{Extract growth parameters from www.fishbase.org.}
+\title{Extract growth parameters from www.fishbase.se.}
 \usage{
-get_growth_fishbase(fish)
+get_growth_fishbase(fish, mirror = "se")
 }
 \arguments{
 \item{fish}{Vector of fish species with genus and species information.}
+
+\item{mirror}{Character string defining the url mirror to use. Defaults to \code{se}.
+In case data extraction is slow use a different mirror. Try to avoid frequently used mirrors
+like \code{uk} or \code{com}.}
 }
 \value{
 Dataframe with species, country, locality, linf and k.
 }
 \description{
-This function extracts values for Linf, k  and t0 from www.fishbase.org
+This function extracts values for Linf, k  and t0 from www.fishbase.se
 }
 \details{
 Before the actual extraction takes place fishbaseh IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
@@ -23,4 +27,9 @@ The IDs are needed to generate the urls lateron.
 fish <- c("Gadus morhua", "Merlangius merlangus")
 df <- get_growth_fishbase(fish)
 head(df)
+
+# Only use for debugging purposes.
+\dontrun{
+fish <- read.csv("Z:/my_data_alex/fish_species_names_from_ibts.csv", stringsAsFactors = FALSE)[, 1]
+}
 }

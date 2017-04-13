@@ -1,8 +1,11 @@
-#' Extract growth parameters from www.fishbase.org.
+#' Extract growth parameters from www.fishbase.se.
 #'
 #'
-#' This function extracts values for Linf, k  and t0 from www.fishbase.org
+#' This function extracts values for Linf, k  and t0 from www.fishbase.se
 #' @param fish Vector of fish species with genus and species information.
+#' @param mirror Character string defining the url mirror to use. Defaults to \code{se}.
+#' In case data extraction is slow use a different mirror. Try to avoid frequently used mirrors
+#' like \code{uk} or \code{com}.
 #' @return Dataframe with species, country, locality, linf and k.
 #'
 #' @details Before the actual extraction takes place fishbaseh IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
@@ -11,16 +14,21 @@
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
 #' df <- get_growth_fishbase(fish)
 #' head(df)
+#'
+#' # Only use for debugging purposes.
+#' \dontrun{
+#' fish <- read.csv("Z:/my_data_alex/fish_species_names_from_ibts.csv", stringsAsFactors = FALSE)[, 1]
+#' }
 
 #' @export
 
-get_growth_fishbase <- function(fish){
+get_growth_fishbase <- function(fish, mirror = "se"){
   ids <- get_ids_fishbase(fish)
 
   # Split up Names in species and genus part to generate URLs
   ge_sp <- split_species(names(ids))
 
-  urls <- paste0("http://fishbase.org/PopDyn/PopGrowthList.php?ID=", ids, "&GenusName=", ge_sp$ge, "&SpeciesName=", ge_sp$sp, "&fc=183")
+  urls <- paste0("http://fishbase.", mirror, "/PopDyn/PopGrowthList.php?ID=", ids, "&GenusName=", ge_sp$ge, "&SpeciesName=", ge_sp$sp, "&fc=183")
 
   fishbase <- lapply(urls, readLines, warn = F, n = 20)
 
@@ -70,9 +78,9 @@ get_growth_fishbase <- function(fish){
 }
 
 # url <- result$ref_url[1]
-url_to_refid <- function(url) {
+url_to_refid <- function(url, mirror = "se") {
   # extract links from html
-  links <- xml2::read_html(paste0("http://www.fishbase.se/", url)) %>%
+  links <- xml2::read_html(paste0("http://www.fishbase.", mirror, "/", url)) %>%
     rvest::html_nodes(., "a") %>%
     rvest::html_attr(., "href")
 

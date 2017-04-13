@@ -1,11 +1,11 @@
 #' Extract fishbase IDs using the package "rfishbase" to generate species specific fishbase URLs
 #'
 #' This function extracts fishbase IDs using the database provided by the "rifishbase" package.
-#' @param fish Vector of fish species with genus and species information.
+#' @inheritParams get_growth_fishbase
 #' @return named vector with species names and fishbase IDs.
 #'
 #' @details The function depends on the package "rfishbase" which creates a local copy of the fishbase database.
-#' The IDs are needed to generate URLs to scan www.fishbase.org for detailed informations about fish growth for example.
+#' The IDs are needed to generate URLs to scan www.fishbase.se for detailed informations about fish growth for example.
 #' @keywords gen
 #' @examples
 #' fish <- c("Gadus morhua", "Merlangius merlangus", "Clupea harengus")

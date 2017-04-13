@@ -17,7 +17,7 @@ This function extracts fishbase IDs using the database provided by the "rifishba
 }
 \details{
 The function depends on the package "rfishbase" which creates a local copy of the fishbase database.
-The IDs are needed to generate URLs to scan www.fishbase.org for detailed informations about fish growth for example.
+The IDs are needed to generate URLs to scan www.fishbase.se for detailed informations about fish growth for example.
 }
 \examples{
 fish <- c("Gadus morhua", "Merlangius merlangus", "Clupea harengus")
