@@ -13,11 +13,11 @@ get_growth_fishbase(fish)
 Dataframe with species, country, locality, linf and k.
 }
 \description{
-This function extracts values for Linf and k from www.fishbase.org
+This function extracts values for Linf, k  and t0 from www.fishbase.org
 }
 \details{
-Before the actual extraction takes place fishbaseh IDs for every species are extracted using the function "get_ids_fishbase".
-The IDs are needed to generate the URLs lateron. At the moment subspecies can only be excluded from the extraction.
+Before the actual extraction takes place fishbaseh IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
+The IDs are needed to generate the urls lateron.
 }
 \examples{
 fish <- c("Gadus morhua", "Merlangius merlangus")

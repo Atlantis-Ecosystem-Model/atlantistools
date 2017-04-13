@@ -1,12 +1,12 @@
 #' Extract growth parameters from www.fishbase.org.
 #'
 #'
-#' This function extracts values for Linf and k from www.fishbase.org
+#' This function extracts values for Linf, k  and t0 from www.fishbase.org
 #' @param fish Vector of fish species with genus and species information.
 #' @return Dataframe with species, country, locality, linf and k.
 #'
-#' @details Before the actual extraction takes place fishbaseh IDs for every species are extracted using the function "get_ids_fishbase".
-#' The IDs are needed to generate the URLs lateron. At the moment subspecies can only be excluded from the extraction.
+#' @details Before the actual extraction takes place fishbaseh IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
+#' The IDs are needed to generate the urls lateron.
 #' @examples
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
 #' df <- get_growth_fishbase(fish)

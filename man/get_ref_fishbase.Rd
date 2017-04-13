@@ -7,13 +7,13 @@
 get_ref_fishbase(growth_fishbase)
 }
 \arguments{
-\item{growth_fishbase}{Dataframe generated with \link{get_growth_fishbase}.}
+\item{growth_fishbase}{Dataframe generated with \code{\link{get_growth_fishbase}}.}
 }
 \value{
 Dataframe
 }
 \description{
-This function extracts values for Linf and k from www.fishbase.org
+Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
 }
 \examples{
 fish <- c("Gadus morhua", "Merlangius merlangus")

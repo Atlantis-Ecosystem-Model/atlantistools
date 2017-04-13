@@ -1,8 +1,8 @@
 #' Extract the bibliographic info from www.fishbase.org.
 #'
 #'
-#' This function extracts values for Linf and k from www.fishbase.org
-#' @param growth_fishbase Dataframe generated with \link{get_growth_fishbase}.
+#' Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
+#' @param growth_fishbase Dataframe generated with \code{\link{get_growth_fishbase}}.
 #' @return Dataframe
 #' @export
 #'
