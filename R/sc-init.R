@@ -228,11 +228,10 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
   mults <- data.frame(id = 1:length(mult1), mult_mum = mult1, mult_c = mult2)
 
   # Would have liked to do this with Map but it does not work....
-  i = 1
-  result <- vector(mode = "list", length = length(mult1))
+   result <- vector(mode = "list", length = length(mult1))
   for (i in seq_along(result)) {
-    dd <- calc_growth(df = df, mult_mum = mult1[i], mult_c = mult2[i])
-    dd$id <- i
+    dd          <- calc_growth(df = df, mult_mum = mult1[i], mult_c = mult2[i])
+    dd$id       <- i
     result[[i]] <- dd
   }
   result <- do.call(rbind, result) %>%
