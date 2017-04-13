@@ -18,7 +18,7 @@
 
 agg_data <- function(data, col = "atoutput", groups, out = "atoutput", fun){
   result <- group_data(data, groups = groups) %>%
-    dplyr::summarise_(.dots = stats::setNames(list(lazyeval::interp(~fun(var), var = as.name(col))), out))
+    dplyr::summarise_(.dots = stats::setNames(list(lazyeval::interp(~fun(var, na.rm = TRUE), var = as.name(col))), out))
   return(dplyr::ungroup(result))
 }
 
@@ -38,6 +38,3 @@ group_data <- function(data, groups) {
     dplyr::group_by_(.dots = dots)
   return(grouped_df)
 }
-
-
-

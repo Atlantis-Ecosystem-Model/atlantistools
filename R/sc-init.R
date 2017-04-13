@@ -87,7 +87,7 @@ sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL, 
   groups_age <- get_age_groups(fgs = fgs)
   groups_stanza <- fgs_data$Name[fgs_data$NumCohorts == 2]
   groups_rest <- groups[!is.element(groups, c(groups_age, groups_stanza))]
-  maxl <- max(get_layers(init = init)) + 1
+  maxl <- max(get_layers(init = init), na.rm = TRUE) + 1
 
   message("Read in data from out.nc, init.nc and prm.biol!")
   # Extract volume per box and layer!
@@ -103,7 +103,7 @@ sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL, 
     dplyr::select_(quote(-variable))
 
   # Extract data for age based groups
-  pd1 <- prm_to_df(prm_biol = prm_biol, fgs = fgs, group = acr_age,
+  pd1 <- prm_to_df(prm_biol  = prm_biol, fgs = fgs, group = acr_age,
                    parameter = c("KWRR", "KWSR", "AgeClassSize", "age_mat"))
   pd2 <- prm_to_df_ages(prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("mum", "C"))
   pd <- dplyr::left_join(pd1, pd2, by = c("species"))
@@ -190,8 +190,7 @@ sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL, 
     dplyr::filter_(~avail != 0) %>%
     dplyr::left_join(ass_type, by = "prey")
   if (!is.null(set_avail)) dm$avail <- set_avail
-
-  # Combine everything to one dataframe!
+  ## Combine everything to one dataframe!
   result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) %>%
     dplyr::left_join(asseff, by = "species") %>%
     dplyr::inner_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
@@ -229,6 +228,7 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
   mults <- data.frame(id = 1:length(mult1), mult_mum = mult1, mult_c = mult2)
 
   # Would have liked to do this with Map but it does not work....
+  i = 1
   result <- vector(mode = "list", length = length(mult1))
   for (i in seq_along(result)) {
     dd <- calc_growth(df = df, mult_mum = mult1[i], mult_c = mult2[i])
@@ -251,6 +251,3 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
 
   return(plot)
 }
-
-
-
