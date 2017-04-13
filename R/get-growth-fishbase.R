@@ -37,25 +37,19 @@ get_growth_fishbase <- function(fish){
   }
 
   # Extract data from fishbase!
-  result <- list()
-  for (i in seq_along(urls)) {
-    result[[i]] <- XML::readHTMLTable(doc = urls[i], which = 3, stringsAsFactors = FALSE)
-  }
+  result <- purrr::map(urls, xml2::read_html) %>%
+    purrr::map(., rvest::html_table) %>%
+    purrr::map(., 3)
 
   # add names to dataframes
-  for (i in seq_along(result)) {
-    result[[i]]$species <- names(ids)[i]
-  }
+  result <- purrr::map2_df(.x = result, .y = fish, ~tibble::add_column(.x, rep(.y, times = nrow(.x)))) %>%
+    purrr::set_names(., c("xxx", "linf", "length_type", "k", "to", "sex", "m", "temp", "lm", "a",
+                          "country", "locality", "questionable", "captive", "species"))
 
   # Cleanup
   # Convert chr columns to numeric if possible.
-  result <- dplyr::bind_rows(result)
-  result <- result[, 2:dim(result)[2]]
+  result$xxx <- NULL
   result[result == ""] <- NA
-  num_cols <- which(purrr::map_lgl(result, ~!any(is.na(suppressWarnings(as.numeric(.[!is.na(.)]))))))
-  names(result) <- c("linf", "length_type", "k", "to", "sex", "m", "temp", "lm", "a", "country", "locality",
-                     "questionable", "captive", "species")
-  result <- dplyr::mutate_at(result, num_cols, as.numeric)
 
   # find reference urls.
   ref_urls <- purrr::map(urls, xml2::read_html) %>%
