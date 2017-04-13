@@ -77,7 +77,7 @@ get_growth_fishbase <- function(fish, mirror = "se"){
     result$ref_url <- unlist(ref_urls)
     ref_ids <- purrr::map(result$ref_url, url_to_refid)
     result$main_ref <- purrr::map_int(ref_ids, 1)
-    result$data_ref <- purrr::map_int(ref_ids, 1)
+    result$data_ref <- purrr::map_int(ref_ids, 2)
   } else {
     warning("ref_urls and final table do not match.")
   }
