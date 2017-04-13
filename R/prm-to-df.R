@@ -29,14 +29,14 @@ prm_to_df <- function(prm_biol, fgs, group, parameter) {
     values <- lapply(prms2, extract_prm, prm_biol = prm_biol)
     sps    <- which(load_fgs(fgs = fgs)$Code %in% group)
     extr   <- load_fgs(fgs = fgs)$NumAgeClassSize[sps]
-    values[[no_prm]] <- extr
+    values[[length(values) + 1]] <- extr
+    parameter                    <- c(parameter[-no_prm], parameter[no_prm])
   } else {
     values <- lapply(prms, extract_prm, prm_biol = prm_biol)
   }
-
   # Combine to df!
-  df <- as.data.frame(do.call(cbind, values))
-  names(df) <- tolower(parameter)
+  df         <- as.data.frame(do.call(cbind, values))
+  names(df)  <- tolower(parameter)
   df$species <- group
   df$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = df$species)
   df <- dplyr::select_(df, .dots = c("species", sort(names(df)[-ncol(df)])))
