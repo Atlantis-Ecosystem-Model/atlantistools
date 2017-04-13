@@ -29,3 +29,24 @@ test_that("test extraction of references for sprat", {
   expect_true(str_detect(df3$ref[df3$ref_id == 1771], "Growth and age composition of sprat stock"))
 })
 
+# use this for internal testing only
+# fish <- read.csv("Z:/my_data_alex/fish_species_names_from_ibts.csv", stringsAsFactors = FALSE)[, 1]
+# url <- get_growth_fishbase(fish)
+# test_url <- urls$ref_url
+# use the following ids to test the function. the have 1-5 listed references.
+# 1, 2, 3, 16, 697
+
+# use this to check the package.
+test_url <- "/popdyn/FishPopGrowthSummary.php?ID=861&pref=312&sex=unsexed&loo=56.80000&k=0.53000&id2=845&genusname=Scyliorhinus&speciesname=canicula&fc=183&gm_loo=75.682521749986&gm_lm=49.520370700602&gm_m=0.184&gm_k=0.20812285885834&vautoctr=2040&gm_lm_rl=0.62928533390764"
+
+tests <- purrr::map_chr(test_url, ~paste0("http://www.fishbase.se/", .)) %>%
+  purrr::map(., xml2::read_html) %>%
+  purrr::map(., rvest::html_text)
+
+test_that("test extraction of references for sprat", {
+  expect_true(all(stringr::str_detect(tests, "Main Ref. :")))
+  expect_true(all(stringr::str_detect(tests, "Data Ref. :")))
+  expect_true(all(stringr::str_detect(tests, "Data Type :")))
+  expect_true(all(url_to_refid(test_url), c(312, 1231)))
+})
+
