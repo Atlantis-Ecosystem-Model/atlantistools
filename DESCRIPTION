@@ -30,5 +30,6 @@ Imports:
   purrr,
   rfishbase,
   rvest,
-  XML
+  xml2,
+  tibble
 VignetteBuilder: knitr
