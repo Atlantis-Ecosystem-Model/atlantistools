@@ -4,6 +4,7 @@
 #' This function extracts values for Linf and k from www.fishbase.org
 #' @param growth_fishbase Dataframe generated with \link{get_growth_fishbase}.
 #' @return Dataframe
+#' @export
 #'
 #' @examples
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
