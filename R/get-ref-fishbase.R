@@ -2,6 +2,7 @@
 #'
 #'
 #' Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
+#' @inheritParams get_growth_fishbase
 #' @param growth_fishbase Dataframe generated with \link{get_growth_fishbase}.
 #' @return Dataframe
 #' @export

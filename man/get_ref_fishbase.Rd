@@ -8,6 +8,10 @@ get_ref_fishbase(growth_fishbase, mirror = "se")
 }
 \arguments{
 \item{growth_fishbase}{Dataframe generated with \link{get_growth_fishbase}.}
+
+\item{mirror}{Character string defining the url mirror to use. Defaults to \code{se}.
+In case data extraction is slow use a different mirror. Try to avoid frequently used mirrors
+like \code{uk} or \code{com}.}
 }
 \value{
 Dataframe
