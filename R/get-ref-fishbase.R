@@ -22,8 +22,8 @@ get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
 
   # calculate perc ref entry and remove duplicates!
   clean_ref$perc <- 1
-  clean_ref <- agg_perc(clean_ref, col = "perc", groups = c("species"), out = "perc") %>%
-    agg_data(., col = "perc", groups = c("species", "ref_type", "ref_id"), out = "perc", fun = sum)
+  clean_ref <- agg_data(clean_ref, col = "perc", groups = c("species", "ref_type", "ref_id"), out = "n", fun = sum) %>%
+    agg_perc(., col = "n", groups = c("species"), out = "perc")
 
   # Extract data from fishbase.org
   ref <- purrr::map_chr(clean_ref$ref_id, ~paste0("http://www.fishbase.", mirror, "/References/FBRefSummary.php?ID=", .)) %>%
