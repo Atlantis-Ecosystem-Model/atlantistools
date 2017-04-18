@@ -3,7 +3,7 @@ context("test extraction of data from fishbase.")
 df1 <- get_growth_fishbase("Sprattus sprattus")
 
 test_that("test extraction for sprat", {
-  expect_equal(dim(df1), c(25, 16))
+  expect_equal(dim(df1), c(25, 17))
   expect_equivalent(df1$linf[5], 13.4)
   expect_equivalent(df1$k[12],  0.298)
   expect_equivalent(df1$locality[23], "Kattegat")
@@ -12,7 +12,7 @@ test_that("test extraction for sprat", {
 df2 <- get_growth_fishbase("Anguilla anguilla")
 
 test_that("test extraction for eel", {
-  expect_equal(dim(df2), c(43, 16))
+  expect_equal(dim(df2), c(43, 17))
   expect_equivalent(df2$linf[10], 50.1)
   expect_equivalent(df2$k[19],  0.078)
   expect_equivalent(df2$locality[4], "Monaci lagoon")
@@ -45,6 +45,6 @@ test_that("test extraction of references for sprat", {
   expect_true(all(stringr::str_detect(tests, "Main Ref. :")))
   expect_true(all(stringr::str_detect(tests, "Data Ref. :")))
   expect_true(all(stringr::str_detect(tests, "Data Type :")))
-  expect_true(all(url_to_refid(test_url), c(312, 1231)))
+  expect_equal(url_to_refid(test_url), c(312, 1231))
 })
 
