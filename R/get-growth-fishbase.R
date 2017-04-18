@@ -39,8 +39,6 @@ get_growth_fishbase <- function(fish, mirror = "se"){
 
   # First remove Species without Growth information!
   pos_missing <- which(grepl("The system found no growth information for the requested specie.", fishbase))
-  # WARNING: The following ids are hard-coded!!!
-  pos_missing <- c(pos_missing)
   if (length(pos_missing) >= 1) {
     missing_species <- sort(names(ids)[pos_missing])
     warning(paste("No growth information available for", length(pos_missing), "species:\n"), paste(missing_species, collapse = "\n"))
