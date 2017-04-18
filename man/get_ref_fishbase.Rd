@@ -16,8 +16,11 @@ Dataframe
 Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
 }
 \examples{
+\dontrun{
 fish <- c("Gadus morhua", "Merlangius merlangus")
 growth_fishbase <- get_growth_fishbase(fish)
 get_ref_fishbase(growth_fishbase)
+}
 growth_fishbase <- get_growth_fishbase("Scyliorhinus canicula")
+df <- get_ref_fishbase(growth_fishbase)
 }
