@@ -41,7 +41,7 @@ get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
     stop("Some reference IDs are wrong.") # Pretty sure this does never happen...
   }
 
-  # Extract information from references
+  # Extract additional information from references
   clean_ref$year <- as.integer(purrr::map_chr(clean_ref$ref, str_split_twice))
   clean_ref$author <- stringr::str_sub(clean_ref$ref, end = stringr::str_locate(string = clean_ref$ref, pattern = as.character(clean_ref$year))[, 1] - 3)
 
