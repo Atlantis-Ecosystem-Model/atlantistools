@@ -1,9 +1,8 @@
-#' Extract the bibliographic info from www.fishbase.se.
+#' Extract the bibliographic info from www.fishbase.org.
 #'
 #'
-#' Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.se
-#' @inheritParams get_growth_fishbase
-#' @param growth_fishbase Dataframe generated with \code{\link{get_growth_fishbase}}.
+#' Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
+#' @param growth_fishbase Dataframe generated with \link{get_growth_fishbase}.
 #' @return Dataframe
 #' @export
 #'
@@ -12,7 +11,6 @@
 #' growth_fishbase <- get_growth_fishbase(fish)
 #' get_ref_fishbase(growth_fishbase)
 #' growth_fishbase <- get_growth_fishbase("Scyliorhinus canicula")
-#'
 
 get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
   # extract unique reference and species combinations
@@ -24,7 +22,7 @@ get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
 
   # calculate perc ref entry and remove duplicates!
   clean_ref$perc <- 1
-  agg_ref <- agg_perc(clean_ref, col = "perc", groups = c("species"), out = "perc") %>%
+  clean_ref <- agg_perc(clean_ref, col = "perc", groups = c("species"), out = "perc") %>%
     agg_data(., col = "perc", groups = c("species", "ref_type", "ref_id"), out = "perc", fun = sum)
 
   # Extract data from fishbase.org
