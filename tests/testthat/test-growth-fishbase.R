@@ -1,7 +1,5 @@
 context("test extraction of data from fishbase.")
 
-library("stringr")
-
 df1 <- get_growth_fishbase("Sprattus sprattus")
 
 test_that("test extraction for sprat", {
@@ -24,9 +22,9 @@ test_that("test extraction for eel", {
 df3 <- get_ref_fishbase(df1)
 
 test_that("test extraction of references for sprat", {
-  expect_true(str_detect(df3$ref[df3$ref_id == 312], "A preliminary compilation of fish length growth parameters."))
-  expect_true(str_detect(df3$ref[df3$ref_id == 56764], "Some Biological characteristics of sprat"))
-  expect_true(str_detect(df3$ref[df3$ref_id == 1771], "Growth and age composition of sprat stock"))
+  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 312], "A preliminary compilation of fish length growth parameters."))
+  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 56764], "Some Biological characteristics of sprat"))
+  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 1771], "Growth and age composition of sprat stock"))
 })
 
 # use this for internal testing only
