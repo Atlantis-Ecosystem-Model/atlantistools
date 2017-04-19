@@ -80,6 +80,10 @@ get_growth_fishbase <- function(fish, mirror = "se"){
     warning("ref_urls and final table do not match.")
   }
 
+  # Add missing species
+  if (length(pos_missing) >= 1) {
+    result
+  }
   return(result)
 }
 

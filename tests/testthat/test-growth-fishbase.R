@@ -48,3 +48,12 @@ test_that("test extraction of references for sprat", {
   expect_equal(url_to_refid(test_url), c(312, 1231))
 })
 
+# test NA handling
+df <- get_growth_fishbase(c("Gadus morhua", "Alosa agone"))
+
+#' head(df)
+
+
+
+
+
