@@ -25,6 +25,8 @@ get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
   clean_ref <- tidyr::gather_(data = clean_ref, key_col = "ref_type", value_col = "ref_id", gather_cols = c("main_ref", "data_ref"), na.rm = TRUE)
 
   # calculate perc ref entry and remove duplicates!
+  # Complete NA entries (NA in every column) are removed at this point.
+  # Thus there is no need to add NA handling to the function.
   clean_ref$perc <- 1
   clean_ref <- agg_data(clean_ref, col = "perc", groups = c("species", "ref_type", "ref_id"), out = "n", fun = sum) %>%
     agg_perc(., col = "n", groups = "species", out = "perc")
