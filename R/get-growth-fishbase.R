@@ -85,7 +85,7 @@ get_growth_fishbase <- function(fish, mirror = "se"){
     }
 
     # Add missing species
-    if (length(missing_species) >= 1) {
+    if (length(pos_missing) >= 1) {
       add_missing <- result[1:length(missing_species), ]
       add_missing[,] <- NA
       add_missing$species <- missing_species
