@@ -49,9 +49,13 @@ test_that("test extraction of references for sprat", {
 })
 
 # test NA handling
-df <- get_growth_fishbase(c("Gadus morhua", "Alosa agone"))
+df <- get_growth_fishbase(c("Alosa agone", "Scyliorhinus canicula"))
 
-#' head(df)
+test_that("error and NA handling", {
+  expect_error(get_growth_fishbase("Alosa agone"), "None of the species have information about growth.")
+  expect_equal(sum(is.na(df[df$species == "Alosa agone", ])), 16)
+  expect_equal(nrow(is.na(df[df$species == "Alosa agone", ])), 1)
+})
 
 
 
