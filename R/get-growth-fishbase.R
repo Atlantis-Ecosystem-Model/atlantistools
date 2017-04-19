@@ -35,10 +35,13 @@ get_growth_fishbase <- function(fish, mirror = "se"){
 
   urls <- paste0("http://fishbase.", mirror, "/PopDyn/PopGrowthList.php?ID=", ids, "&GenusName=", ge_sp$ge, "&SpeciesName=", ge_sp$sp, "&fc=183")
 
-  fishbase <- lapply(urls, readLines, warn = F, n = 20)
+  fishbase <- purrr::map(urls, xml2::read_html)
 
   # First remove Species without Growth information!
-  pos_missing <- which(grepl("The system found no growth information for the requested specie.", fishbase))
+  pos_missing <- purrr::map(fishbase, rvest::html_text) %>%
+    purrr::map_lgl(., ~grepl("The system found no growth information for the requested specie.", .)) %>%
+    which(.)
+
   if (length(pos_missing) >= 1) {
     missing_species <- sort(names(ids)[pos_missing])
     warning(paste("No growth information available for", length(pos_missing), "species:\n"), paste(missing_species, collapse = "\n"))
@@ -47,9 +50,8 @@ get_growth_fishbase <- function(fish, mirror = "se"){
     urls <- urls[-pos_missing]
   }
 
-  # Extract data from fishbase!
-  result <- purrr::map(urls, xml2::read_html) %>%
-    purrr::map(., rvest::html_table) %>%
+  # Extract data table from fishbase!
+  result <- purrr::map(fishbase, rvest::html_table) %>%
     purrr::map(., 3)
 
   # add names to dataframes
@@ -63,8 +65,7 @@ get_growth_fishbase <- function(fish, mirror = "se"){
   result[result == ""] <- NA
 
   # find reference urls.
-  ref_urls <- purrr::map(urls, xml2::read_html) %>%
-    purrr::map(., ~rvest::html_nodes(., "a")) %>%
+  ref_urls <- purrr::map(fishbase, ~rvest::html_nodes(., "a")) %>%
     purrr::map(., ~rvest::html_attr(., "href")) %>%
     purrr::map(., ~.[stringr::str_detect(., pattern = "FishPopGrowthSummary")])
 
