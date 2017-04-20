@@ -36,7 +36,7 @@ get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
     purrr::map(., xml2::read_html) %>%
     purrr::map(., rvest::html_table)
 
-  # Some reference links are broken on fishbase
+  # Some reference links are broken on fishbase: e.g http://www.fishbase.se/References/FBRefSummary.php?ID=27034
   good_links <- purrr::map_lgl(ref, ~length(.) == 1)
   ref <- purrr::map_if(ref, good_links, ~.[[1]][1, 2])
   ref[!good_links] <- NA
