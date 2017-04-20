@@ -34,8 +34,13 @@ get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
   # Extract data from fishbase.org
   ref <- purrr::map_chr(clean_ref$ref_id, ~paste0("http://www.fishbase.", mirror, "/References/FBRefSummary.php?ID=", .)) %>%
     purrr::map(., xml2::read_html) %>%
-    purrr::map(., rvest::html_table) %>%
-    purrr::map_chr(., ~.[[1]][1, 2]) # annoying nested list...
+    purrr::map(., rvest::html_table)
+
+  # Some reference links are broken on fishbase
+  good_links <- purrr::map_lgl(ref, ~length(.) == 1)
+  ref <- purrr::map_if(ref, good_links, ~.[[1]][1, 2])
+  ref[!good_links] <- NA
+  ref <- purrr::flatten_chr(ref)
 
   # Add references to datatable.
   if (length(ref) == nrow(clean_ref)) {
