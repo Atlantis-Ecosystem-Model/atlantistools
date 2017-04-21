@@ -12,7 +12,7 @@ and layer. This dataframe should be generated with \code{\link{calculate_biomass
 
 \item{dietmatrix}{Availability matrix given in the biological parameter file.
 This dataframe should be generated with \code{\link{load_dietmatrix}}. Please
-make sure to use \code{convert_names = TRUE} in \code{load_dietmatrix}.}
+make sure to use \code{convert_names = TRUE} in \code{\link{load_dietmatrix}}.}
 
 \item{agemat}{First mature age class for age structured groups. This dataframe should
 be generated with \code{\link{prm_to_df}} using "age_mat" as parameter.}

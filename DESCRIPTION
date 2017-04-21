@@ -27,5 +27,9 @@ Imports:
   scales,
   circlize,
   RColorBrewer,
-  purrr
+  purrr,
+  rfishbase,
+  rvest,
+  xml2,
+  tibble
 VignetteBuilder: knitr

@@ -1,7 +1,7 @@
 #' Low level plotting function to add range of observed values to time series plots.
 #'
 #' This function can be used to add the range of observed data to a timeseries plot
-#' generated with \code{plot_ts()}. The density of the color gives an indication
+#' generated with \code{\link{plot_line}}. The density of the color gives an indication
 #' of the likelihood of the value.
 #'
 #' @param plot ggplot2 object.
