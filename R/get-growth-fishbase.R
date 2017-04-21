@@ -11,15 +11,16 @@
 #' @details Before the actual extraction takes place fishbaseh IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
 #' The IDs are needed to generate the urls lateron.
 #' @examples
+#' \dontrun{
+#' # For some reason the examples break with appveyor.
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
 #' df <- get_growth_fishbase(fish)
 #' head(df)
 #'
 #' df <- get_growth_fishbase(fish, mirror = "de")
 #' head(df)
-
+#'
 #' # Only use for debugging purposes.
-#' \dontrun{
 #' fish <- read.csv("Z:/my_data_alex/fish_species_names_from_ibts.csv", stringsAsFactors = FALSE)[, 1]
 #' url <- get_growth_fishbase(fish)
 #' url <- urls$ref_url

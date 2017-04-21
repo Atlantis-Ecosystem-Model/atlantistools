@@ -12,9 +12,10 @@
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
 #' growth_fishbase <- get_growth_fishbase(fish)
 #' get_ref_fishbase(growth_fishbase)
-#' }
+#'
 #' growth_fishbase <- get_growth_fishbase("Scyliorhinus canicula")
 #' df <- get_ref_fishbase(growth_fishbase)
+#' }
 
 get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
   # extract unique reference and species combinations
