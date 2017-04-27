@@ -100,8 +100,8 @@ load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, convert_names
   names(diet_long)[names(diet_long) == colnames(diet)[2]] <- "pred" #bjs predator -> colnames(diet)[2]
 
   if(version_flag == 2) {
-
     names(diet_long)[names(diet_long) == colnames(diet)[3]] <- "agecl" #bjs cohort -> colnames(diet)[3]
+    diet_long <- diet_long[-which(diet_long$prey == "Updated"),]
   }
 
   names(diet_long) <- tolower(names(diet_long))
