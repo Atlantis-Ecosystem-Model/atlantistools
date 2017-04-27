@@ -19,4 +19,3 @@ ggplot2 plot.
 \description{
 Utility functions used for various plotting routines within atlantistools.
 }
-

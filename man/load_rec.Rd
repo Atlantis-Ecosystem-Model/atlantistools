@@ -4,29 +4,17 @@
 \alias{load_rec}
 \title{Load information for SSB and Recruits from an Atlantis model run.}
 \usage{
-load_rec(dir = getwd(), yoy, ssb, prm_biol)
+load_rec(yoy, ssb, prm_biol)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{yoy}{Character string giving the connection of the YOY file.
+The filename usually contains \code{outputYOY} and ends in \code{.txt}".}
 
-\item{yoy}{Character string of the YOY.txt file. Usually
-'output[...]YOY.txt'. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case. Biomass in tonnes per spawning event summed over the total model domain.}
+\item{ssb}{Character string giving the connection of the YOY file.
+The filename usually contains \code{outputSSB} and ends in \code{.txt}".}
 
-\item{ssb}{Character string of the SSB.txt file. Usually
-'output[...]SSB.txt'. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case.}
-
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 }
 \value{
 Dataframe with information about ssb in tonnes and recruits in
@@ -37,10 +25,11 @@ Load information for SSB and Recruits from an Atlantis model run.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-load_rec(dir = d,
-   yoy = "outputSETASYOY.txt",
-   ssb = "outputSETASSSB.txt",
-   prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
+yoy <- file.path(d, "outputSETASYOY.txt")
+ssb <- file.path(d, "outputSETASSSB.txt")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+
+load_rec(yoy, ssb, prm_biol)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
@@ -50,4 +39,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_nc}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-

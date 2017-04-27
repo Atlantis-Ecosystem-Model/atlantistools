@@ -10,7 +10,7 @@ str_split_twice(char, min_only = TRUE)
 \item{char}{Character string.}
 
 \item{min_only}{Logical specifying if only the first numeric value (\code{TRUE}) or
-all numeric values (\code{FALSE}) should be returned.}
+all numeric values (\code{FALSE}) should be returned. Default is \code{TRUE}.}
 }
 \value{
 numeric values forund in the passed string.
@@ -23,4 +23,3 @@ all (min_only = FALSE) or only the first (min_only = T) numeric value found in t
 str_split_twice(char = "Hello   15")
 str_split_twice(char = "flag1 15  16\\t15", min_only = FALSE)
 }
-

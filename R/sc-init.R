@@ -1,19 +1,10 @@
 #' Sanity check initial conditions file
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param init Character string giving the filename of the initial conditions netcdf
-#' file Usually "init[...].nc".
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
-#' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' @inheritParams load_fgs
+#' @inheritParams load_init
+#' @inheritParams extract_prm
+#' @inheritParams load_nc
+#' @inheritParams load_dietmatrix
 #' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
 #' predators are selected.
 #' @param set_avail Numeric value. All present availabilities can be set to a spefiic value.
@@ -27,13 +18,13 @@
 #' @return Dataframe/ Plot.
 #'
 #' @examples
-#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' init <- "INIT_VMPA_Jan2015.nc"
-#' prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-#' fgs <- "SETasGroupsDem_NoCep.csv"
-#' bboxes <- get_boundary(load_box(dir = dir, bgm = "VMPA_setas.bgm"))
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' init <- file.path(d, "INIT_VMPA_Jan2015.nc")
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#' bboxes <- get_boundary(load_box(bgm = file.path(d, "VMPA_setas.bgm")))
 #'
-#' data1 <- sc_init(dir, init, prm_biol, fgs, bboxes)
+#' data1 <- sc_init(init, prm_biol, fgs, bboxes)
 
 #' \dontrun{
 #' dir <- system.file("extdata", "gns", package = "atlantistools")
@@ -80,29 +71,27 @@
 # pred <- pred[!pred %in% c("SB", "CET", "SXX", "SHK")]
 # sc_init(dir, nc, init, prm_biol, fgs, bboxes, pred = pred, no_avail = T)
 
-
 # function start
-sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL) {
-  fgs_data <- load_fgs(dir = dir, fgs = fgs)
+sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL, version_flag = 2) {
+  fgs_data <- load_fgs(fgs = fgs)
 
   if (is.null(pred)) {
-    acr_age <- get_age_acronyms(dir = dir, fgs = fgs)
+    acr_age <- get_age_acronyms(fgs = fgs)
   } else {
     acr_age <- fgs_data$Code[is.element(fgs_data$LongName, pred)]
     if (length(acr_age) == 0) stop("Please provide pred as LongName.")
     if (length(acr_age) != length(pred)) stop("Not all predators present in functionalGroups file")
   }
 
-  # bps <- load_bps(dir = dir, fgs = fgs, init = init)
-  groups <- get_groups(dir = dir, fgs = fgs)
-  groups_age <- get_age_groups(dir = dir, fgs = fgs)
+  groups <- get_groups(fgs = fgs)
+  groups_age <- get_age_groups(fgs = fgs)
   groups_stanza <- fgs_data$Name[fgs_data$NumCohorts == 2]
   groups_rest <- groups[!is.element(groups, c(groups_age, groups_stanza))]
-  maxl <- max(get_layers(dir = dir, init = init)) + 1
+  maxl <- max(get_layers(init = init), na.rm = TRUE) + 1
 
   message("Read in data from out.nc, init.nc and prm.biol!")
   # Extract volume per box and layer!
-  vol <- load_init_physics(dir = dir, init = init, select_variable = "volume", bboxes = bboxes)
+  vol <- load_init_physics(init = init, select_variable = "volume", bboxes = bboxes)
 
   surface <- vol %>%
     dplyr::filter_(~layer != maxl) %>%
@@ -114,13 +103,13 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set
     dplyr::select_(quote(-variable))
 
   # Extract data for age based groups
-  pd1 <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age,
+  pd1 <- prm_to_df(prm_biol  = prm_biol, fgs = fgs, group = acr_age,
                    parameter = c("KWRR", "KWSR", "AgeClassSize", "age_mat"))
-  pd2 <- prm_to_df_ages(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("mum", "C"))
+  pd2 <- prm_to_df_ages(prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("mum", "C"))
   pd <- dplyr::left_join(pd1, pd2, by = c("species"))
   pd <- split(pd, pd$species)
 
-  weights <- load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes)
+  weights <- load_init_weight(init = init, fgs = fgs, bboxes = bboxes)
 
   # Calculate weight difference from one ageclass to the next!
   for (i in seq_along(pd)) {
@@ -136,7 +125,7 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set
   }
 
   # Extract assimilation efficiencies per predator group!
-  asseff <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("E", "EPlant", "EDL", "EDR")) %>%
+  asseff <- prm_to_df(prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("E", "EPlant", "EDL", "EDR")) %>%
     tidyr::gather_(key_col = "ass_type", value_col = "asseff", gather_cols = names(.)[names(.) != "species"])
 
   # Extract prey densities!
@@ -147,12 +136,12 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set
   # nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums",
   #                 fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
-  nums <- load_init_age(dir = dir, init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
+  nums <- load_init_age(init = init, fgs = fgs, select_variable = "Nums", bboxes = bboxes) %>%
     dplyr::inner_join(surface, by = c("polygon", "layer")) # not needed in case numbers are already only in surface in init file
 
   # Add stanzas for all age-based groups!
-  all_age_acr <- get_age_acronyms(dir = dir, fgs = fgs)
-  stanzas <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = all_age_acr, parameter = "age_mat")
+  all_age_acr <- get_age_acronyms(fgs = fgs)
+  stanzas <- prm_to_df(prm_biol = prm_biol, fgs = fgs, group = all_age_acr, parameter = "age_mat")
   nums <- dplyr::left_join(nums, stanzas, by = "species")
   nums$prey_stanza <- ifelse(nums$agecl < nums$age_mat, 1, 2)
 
@@ -170,11 +159,11 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set
   # preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
   #                            select_variable = "N", bboxes = bboxes) %>%
   #   dplyr::filter(time == 0)
-  preydens_invert <- load_init_nonage(dir = dir, init = init, fgs = fgs, select_groups = groups_rest,
-                                      bboxes = bboxes, bps = load_bps(dir = dir, fgs = fgs, init = init))
+  preydens_invert <- load_init_nonage(init = init, fgs = fgs, select_groups = groups_rest,
+                                      bboxes = bboxes, bps = load_bps(fgs = fgs, init = init))
   if (length(groups_stanza) > 0) {
     # calculate mean density over stanzas (This is used as hotfix...)
-    preydens_stanza <- load_init_stanza(dir = dir, init = init, fgs = fgs, select_groups = groups_stanza, bboxes = bboxes) %>%
+    preydens_stanza <- load_init_stanza(init = init, fgs = fgs, select_groups = groups_stanza, bboxes = bboxes) %>%
       agg_data(groups = c("polygon", "layer", "species"), fun = mean)
     preydens_invert <- dplyr::bind_rows(preydens_invert, preydens_stanza)
   }
@@ -197,12 +186,11 @@ sc_init <- function(dir = getwd(), init, prm_biol, fgs, bboxes, pred = NULL, set
   ass_type$grp <- NULL
   ass_type$prey <- convert_factor(data_fgs = fgs_data, col = ass_type$prey)
 
-  dm <- load_dietmatrix(dir = dir, prm_biol = prm_biol, fgs = fgs, convert_names = TRUE) %>%
+  dm <- load_dietmatrix(prm_biol = prm_biol, fgs = fgs, convert_names = TRUE, version_flag = version_flag) %>%
     dplyr::filter_(~avail != 0) %>%
     dplyr::left_join(ass_type, by = "prey")
   if (!is.null(set_avail)) dm$avail <- set_avail
-
-  # Combine everything to one dataframe!
+  ## Combine everything to one dataframe!
   result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) %>%
     dplyr::left_join(asseff, by = "species") %>%
     dplyr::inner_join(dm, by = c("species" = "pred", "pred_stanza", "ass_type")) %>%
@@ -240,10 +228,10 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
   mults <- data.frame(id = 1:length(mult1), mult_mum = mult1, mult_c = mult2)
 
   # Would have liked to do this with Map but it does not work....
-  result <- vector(mode = "list", length = length(mult1))
+   result <- vector(mode = "list", length = length(mult1))
   for (i in seq_along(result)) {
-    dd <- calc_growth(df = df, mult_mum = mult1[i], mult_c = mult2[i])
-    dd$id <- i
+    dd          <- calc_growth(df = df, mult_mum = mult1[i], mult_c = mult2[i])
+    dd$id       <- i
     result[[i]] <- dd
   }
   result <- do.call(rbind, result) %>%
@@ -262,6 +250,3 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
 
   return(plot)
 }
-
-
-

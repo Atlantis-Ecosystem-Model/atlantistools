@@ -11,7 +11,8 @@ check_df_names(data, expect, optional = NULL)
 
 \item{expect}{Character vector giving the names of the expected columns}
 
-\item{optional}{Character vector giving the names of optional columns.}
+\item{optional}{Character vector giving the names of optional columns.
+Default is \code{NULL}.}
 }
 \description{
 This function is used in most plotting routines to check if the correct dataframe
@@ -22,4 +23,3 @@ is passed.
 check_df_names(preprocess$biomass_age, expect = c("time", "species", "atoutput", "ages"))
 }
 }
-

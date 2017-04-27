@@ -5,7 +5,7 @@
 #'
 #' @param char Character string.
 #' @param min_only Logical specifying if only the first numeric value (\code{TRUE}) or
-#' all numeric values (\code{FALSE}) should be returned.
+#' all numeric values (\code{FALSE}) should be returned. Default is \code{TRUE}.
 #' @return numeric values forund in the passed string.
 #' @export
 #'
@@ -16,7 +16,7 @@
 # Split any character string multiple times and retrun the first (min_only = T)
 # or all (min_only = F) numeric values found.
 str_split_twice <- function(char, min_only = TRUE){
-  patterns <- c(" ", "\t", ",")
+  patterns <- c(" ", "\t", ",", "\n", "\r")
   if (all(!stringr::str_detect(string = char, pattern = patterns))) {
     stop("Neither space nor tab present.")
   }

@@ -4,23 +4,14 @@
 \alias{load_bps}
 \title{Extracts the names of the epibenthic biomasspools from the initial conditions file.}
 \usage{
-load_bps(dir = getwd(), fgs, init)
+load_bps(fgs, init)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
-
-\item{init}{Character string giving the filename of netcdf init-file which
-shall be read in. Usually "init[...].nc". In case you are using
-multiple folder for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case.}
+\item{init}{Character string giving the connection of the initial conditions netcdf file.
+The filename usually contains \code{init} and ends in \code{.nc}.}
 }
 \value{
 Character \code{vector} of epibenthic biomass pools.
@@ -31,7 +22,11 @@ to get the biomass pool information.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
+
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+init <- file.path(d, "INIT_VMPA_Jan2015.nc")
+
+load_bps(fgs, init)
 }
 \seealso{
 \code{\link{load_fgs}}
@@ -43,4 +38,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-

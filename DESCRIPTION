@@ -1,7 +1,7 @@
 Package: atlantistools
 Type: Package
 Title: Process and visualise output from Atlantis models
-Version: 0.3.3.9000
+Version: 0.4.0.9000
 Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
 Description: Helper tools to extract and visualise atlantis output.
 URL: https://github.com/alketh/atlantistools
@@ -9,7 +9,7 @@ Depends:
     R (>= 3.2.3)
 License: GPL
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests:
   testthat,
   knitr,
@@ -26,6 +26,10 @@ Imports:
   gridExtra,
   scales,
   circlize,
-  RColorBrewer
+  RColorBrewer,
+  purrr,
+  rfishbase,
+  rvest,
+  xml2,
+  tibble
 VignetteBuilder: knitr
-

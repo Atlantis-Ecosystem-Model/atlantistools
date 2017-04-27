@@ -1,9 +1,9 @@
 context("convert_factor tests")
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-file <- "SETasGroupsDem_NoCep.csv"
+file <- file.path(d, "SETasGroupsDem_NoCep.csv")
 
-fgs <- load_fgs(dir = d, fgs = file)
+fgs <- load_fgs(file)
 
 newcol <- convert_factor(data_fgs = fgs, col = fgs$Name)
 newcol2 <- convert_factor(data_fgs = fgs, col = fgs$Code)

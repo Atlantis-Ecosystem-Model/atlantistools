@@ -3,18 +3,8 @@
 #' Use \code{fgs} \code{data.frame} as read in by \code{\link{load_fgs}}
 #' to get the biomass pool information.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
-#' @param init Character string giving the filename of netcdf init-file which
-#' shall be read in. Usually "init[...].nc". In case you are using
-#' multiple folder for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
+#' @inheritParams load_fgs
+#' @inheritParams load_init
 #'
 #' @export
 #' @family load functions
@@ -24,24 +14,25 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
+#'
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#' init <- file.path(d, "INIT_VMPA_Jan2015.nc")
+#'
+#' load_bps(fgs, init)
 
-load_bps <- function(dir = getwd(), fgs, init){
-  if (strsplit(init, "\\.")[[1]][2] != "nc") {
+load_bps <- function(fgs, init){
+  if (utils::tail(unlist(strsplit(init, "\\.")), 1) != "nc") {
     stop(paste("The init argument", init, "does not end in .nc"))
   }
-  if (!is.null(dir)) {
-    init <- file.path(dir, init)
-  }
 
-  init <- RNetCDF::open.nc(con = init)
-  on.exit(RNetCDF::close.nc(init))
+  init_read <- RNetCDF::open.nc(con = init)
+  on.exit(RNetCDF::close.nc(init_read))
 
-  fgs <- load_fgs(dir = dir, fgs = fgs)
+  fgs <- load_fgs(fgs = fgs)
 
   all_groups <- fgs$Name
-  init_vars <- sapply(seq_len(RNetCDF::file.inq.nc(init)$nvars - 1),
-                      function(x) RNetCDF::var.inq.nc(init, x)$name)
+  init_vars <- sapply(seq_len(RNetCDF::file.inq.nc(init_read)$nvars - 1),
+                      function(x) RNetCDF::var.inq.nc(init_read, x)$name)
 
   search_string <- paste(all_groups, "N", sep = "_")
   search_string <- search_string[is.element(search_string, init_vars)]
@@ -50,12 +41,10 @@ load_bps <- function(dir = getwd(), fgs, init){
 
   bps_id <- vector()
   for (i in seq_along(search_string)) {
-    bps_id[i] <- RNetCDF::var.inq.nc(ncfile = init, variable = search_string[i])$ndims
+    bps_id[i] <- RNetCDF::var.inq.nc(ncfile = init_read, variable = search_string[i])$ndims
   }
   bps_id <- which(bps_id == 2)
 
   bps <- groups[bps_id]
   return(bps)
 }
-
-

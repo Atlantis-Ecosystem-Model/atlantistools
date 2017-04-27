@@ -12,16 +12,16 @@
 #' @param vol Volume per polygon and timestep. See model-preprocess.Rmd for details.
 #' @param select_species Character vector listing the species to plot. If no species are selected
 #' \code{NULL} (default) all available species are plotted.
-#' @param ncol Number of columns in final plot. Default = 7.
+#' @param ncol Number of columns in final plot. Default is \code{7}.
 #' @param polygon_overview numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
-#' upper right corner of the plot. Default is 0.2.
+#' upper right corner of the plot. Default is \code{0.2}.
 #' @return grob of 3 ggplot2 plots.
 #' @export
 #'
 #' @examples
-#' dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #'
-#' bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
+#' bgm_as_df <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 #' vol <- agg_data(ref_vol, groups = c("time", "polygon"), fun = sum, out = "volume")
 #'
 #' # Spatial distribution in Atlantis is based on adu- and juv stanzas.
@@ -33,6 +33,19 @@
 #' grobs <- plot_spatial_ts(bio_spatial, bgm_as_df, vol)
 #' gridExtra::grid.arrange(grobs[[1]])
 #' gridExtra::grid.arrange(grobs[[7]])
+
+# check plot layout
+# load("c:/ATLANTIS_output/1582_v.19.4.1_ATLANTIS_NS/preprocess-north-sea.rda", verbose = TRUE)
+# bgm_as_df <- convert_bgm(dir = "c:/ATLANTIS_Stuff/Baseruns/1559_v.18.0.0_ATLANTIS_NS/", bgm = "NorthSea.bgm")
+# df <- subset(result$biomass_spatial_stanza, species == "Sprat" & species_stanza == 1 & polygon == 14)
+# bio_spatial <- df
+# vol <- result$vol
+#
+#
+# g <- plot_spatial_ts(df, bgm_as_df, result$vol)
+# gridExtra::grid.arrange(g[[1]])
+#
+# names(result)
 
 plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, ncol = 7, polygon_overview = 0.2) {
   # Check input dataframe!
@@ -62,7 +75,7 @@ plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, 
 
   plot_ts_species <- function(data, ncol) {
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~density, colour = ~atoutput)) +
-      ggplot2::geom_line() +
+      ggplot2::geom_line(lineend = "round") +
       ggplot2::facet_wrap(~polygon, ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15)) +
       # ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = function(x) scales::scientific(x, digits = 2)) +
       ggplot2::scale_colour_gradientn(paste("Biomass [t]", sep = "\n"), colours = grDevices::rainbow(n = 7),

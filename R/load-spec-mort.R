@@ -1,26 +1,10 @@
 #' Load mortality information from outputSpecificPredMort.txt
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param specmort Character string of the outputSpecificPredMort.txt file. Usually
-#' 'output[...]SpecificPredMort.txt'. In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' In addition set dir to 'NULL' in this case.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
-#' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-#' or not (default = \code{FALSE}).
-#' @param version_flag The version of atlantis that created the output files.
-#' 1 for bec_dev, 2 for trunk.
+#' @inheritParams load_nc
+#' @inheritParams load_fgs
+#' @inheritParams load_dietmatrix
+#' @param specmort Character string giving the connection of the specific mortality file.
+#' The filename usually contains \code{SpecificPredMort} and ends in \code{.txt}".
 #' @return Dataframe with information about ssb in tonnes and recruits in
 #' thousands.
 #' @export
@@ -28,31 +12,32 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' df <- load_spec_mort(dir = d,
-#'                      specmort = "outputSETASSpecificPredMort.txt",
-#'                      prm_run = "VMPA_setas_run_fishing_F_New.prm",
-#'                      fgs = "SETasGroups.csv")
+#' specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+#' fgs <- file.path(d, "SETasGroups.csv")
+#'
+#' df <- load_spec_mort(specmort, prm_run, fgs, version_flag = 1)
 #' head(df)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' df <- load_spec_mort(dir = d,
-#'                      specmort = "outputSETASSpecificPredMort.txt",
-#'                      prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-#'                      fgs = "SETasGroupsDem_NoCep.csv",
-#'                      version_flag = 2)
+#' specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#'
+#' df <- load_spec_mort(specmort, prm_run, fgs)
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_spec_mort <- function(dir = getwd(), specmort, prm_run, fgs, convert_names = FALSE, version_flag = 1) {
+load_spec_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, version_flag = 2) {
   if (version_flag == 1) {
-    mort <- load_txt(dir = dir, file = specmort)
+    mort <- load_txt(file = specmort)
     mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "stock", "pred", "mort"), convert = TRUE)
     # check uniqueness of column notsure and mort
     if (any(sapply(mort[, c("stock", "mort")], function(x) length(unique(x))) != 1)) {
       stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
     }
   } else if (version_flag == 2) {
-    mort <- load_txt(dir = dir, file = specmort, id_col = c("Time", "Group", "Cohort", "Stock"))
+    mort <- load_txt(file = specmort, id_col = c("Time", "Group", "Cohort", "Stock"))
     mort <- dplyr::rename_(mort, prey = ~group, agecl = ~cohort, pred = ~code)
     if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
       stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
@@ -80,11 +65,11 @@ load_spec_mort <- function(dir = getwd(), specmort, prm_run, fgs, convert_names 
 
   # Convert species codes to longnames!
   if (convert_names) {
-    mort <- dplyr::mutate_at(mort, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = load_fgs(dir = dir, fgs = fgs))
+    mort <- dplyr::mutate_at(mort, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = load_fgs(fgs = fgs))
   }
 
   # Convert time
-  mort$time <- convert_time(dir = dir, prm_run = prm_run, col = mort$time)
+  mort$time <- convert_time(prm_run = prm_run, col = mort$time)
 
   return(mort)
 }

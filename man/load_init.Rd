@@ -2,17 +2,13 @@
 % Please edit documentation in R/load-init.R
 \name{load_init}
 \alias{load_init}
-\title{This function loads weight at age data (in mgN) from the initial conditions file.}
+\title{This function is used to read in data from the initial conditions file.}
 \usage{
-load_init(dir = getwd(), init, vars)
+load_init(init, vars)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{init}{Character string giving the filename of the initial conditions netcdf file.
-Usually "init[...].nc".}
+\item{init}{Character string giving the connection of the initial conditions netcdf file.
+The filename usually contains \code{init} and ends in \code{.nc}.}
 
 \item{vars}{Vector of character strings giving the variables to extract from the
 netcdf file.}
@@ -21,17 +17,22 @@ netcdf file.}
 A list of dataframes with columns atoutput, polygon and layer (if present).
 }
 \description{
-This function loads weight at age data (in mgN) from the initial conditions file.
+This function is used to read in data from the initial conditions file.
 }
 \examples{
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Planktiv_S_Fish1_Nums")
-load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = c("Planktiv_S_Fish2_ResN",
-                                                             "Planktiv_S_Fish3_ResN"))
-load_init(dir = dir, init = "INIT_VMPA_Jan2015.nc", vars = "Megazoobenthos_N")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+init <- file.path(d, "INIT_VMPA_Jan2015.nc")
+
+load_init(init, vars = "Planktiv_S_Fish1_Nums")
+load_init(init, vars = c("Planktiv_S_Fish2_ResN", "Planktiv_S_Fish3_ResN"))
+load_init(init, vars = "Megazoobenthos_N")
+
+\dontrun{
+dir <- "C:/Users/siebo/Documents/Atlantis/BalticAtlantis/run_files_73days_Nej"
+init <- file.path(dir, "new_init_Baltic_05Dec2015_v2.nc")
+vars <- "Sprat1_ResN"
+load_init(init = init, vars = vars)
 }
-\author{
-Alexander Keth
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
@@ -41,4 +42,6 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-
+\author{
+Alexander Keth
+}

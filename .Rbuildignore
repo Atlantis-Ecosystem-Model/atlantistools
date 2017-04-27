@@ -6,3 +6,4 @@
 NEWS\.Rmd
 ^data-raw$
 ^appveyor\.yml$
+

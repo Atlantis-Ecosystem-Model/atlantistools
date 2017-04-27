@@ -21,6 +21,5 @@ This function is used to match the labels of the plots!
 }
 \seealso{
 Other convert functions: \code{\link{convert_bgm}},
-  \code{\link{convert_path}}, \code{\link{convert_time}}
+  \code{\link{convert_time}}
 }
-

@@ -9,7 +9,7 @@ plot_boxes(data, color_boxes = TRUE)
 \arguments{
 \item{data}{Dataframe to be plotted.}
 
-\item{color_boxes}{logical indicating if polygons should be color coded or not.}
+\item{color_boxes}{logical indicating if polygons should be color coded or not. Default is \code{TRUE}.}
 }
 \value{
 ggplot2 object
@@ -19,7 +19,7 @@ Plot layout of boxes!
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+bgm_data <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 
 # Use color coding for polygons.
 plot_boxes(bgm_data)
@@ -33,4 +33,3 @@ Other plot functions: \code{\link{plot_bar}},
   \code{\link{plot_line}}, \code{\link{plot_rec}},
   \code{\link{plot_species}}
 }
-

@@ -4,36 +4,23 @@
 \alias{load_spec_mort}
 \title{Load mortality information from outputSpecificPredMort.txt}
 \usage{
-load_spec_mort(dir = getwd(), specmort, prm_run, fgs, convert_names = FALSE,
-  version_flag = 1)
+load_spec_mort(specmort, prm_run, fgs, convert_names = FALSE,
+  version_flag = 2)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{specmort}{Character string giving the connection of the specific mortality file.
+The filename usually contains \code{SpecificPredMort} and ends in \code{.txt}".}
 
-\item{specmort}{Character string of the outputSpecificPredMort.txt file. Usually
-'output[...]SpecificPredMort.txt'. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case.}
+\item{prm_run}{Character string giving the connection of the run parameterfile.
+The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.
-In addition set dir to 'NULL' in this case.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
 
-\item{version_flag}{The version of atlantis that created the output files.
-1 for bec_dev, 2 for trunk.}
+\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
 Dataframe with information about ssb in tonnes and recruits in
@@ -44,18 +31,19 @@ Load mortality information from outputSpecificPredMort.txt
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-df <- load_spec_mort(dir = d,
-                     specmort = "outputSETASSpecificPredMort.txt",
-                     prm_run = "VMPA_setas_run_fishing_F_New.prm",
-                     fgs = "SETasGroups.csv")
+specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+fgs <- file.path(d, "SETasGroups.csv")
+
+df <- load_spec_mort(specmort, prm_run, fgs, version_flag = 1)
 head(df)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-df <- load_spec_mort(dir = d,
-                     specmort = "outputSETASSpecificPredMort.txt",
-                     prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                     fgs = "SETasGroupsDem_NoCep.csv",
-                     version_flag = 2)
+specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+
+df <- load_spec_mort(specmort, prm_run, fgs)
 head(df)
 }
 \seealso{
@@ -66,4 +54,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_nc}}, \code{\link{load_rec}},
   \code{\link{load_txt}}
 }
-

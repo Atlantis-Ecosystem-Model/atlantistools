@@ -1,14 +1,14 @@
 #' Plot layout of boxes!
 #'
 #' @param data Dataframe to be plotted.
-#' @param color_boxes logical indicating if polygons should be color coded or not.
+#' @param color_boxes logical indicating if polygons should be color coded or not. Default is \code{TRUE}.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' bgm_data <- convert_bgm(dir = d, bgm = "VMPA_setas.bgm")
+#' bgm_data <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 #'
 #' # Use color coding for polygons.
 #' plot_boxes(bgm_data)

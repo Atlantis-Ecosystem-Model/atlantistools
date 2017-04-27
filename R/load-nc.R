@@ -2,22 +2,14 @@
 #'
 #' This function loads Atlantis outputfiles (any netcdf file) and
 #' converts them to a \code{data.frame}.
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param nc Character string giving the filename of netcdf file which
-#' shall be read in. Usually "output[...].nc". Currently the general-
-#' production- and catch.nc files can be loaded in. In case you are using
-#' multiple folder for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' In addition set dir to 'NULL' in this case.
+#'
+#' @inheritParams load_fgs
+#' @param nc Character string giving the connection of the netcdf file to read in.
+#' The filename usually contains \code{output} and ends in \code{.nc}".
 #' @param bps Vector of character strings giving the complete list of epibenthic
 #' functional groups (Only present in the sediment layer). The names have to match
-#' the column 'Name' in the 'functionalGroups.csv' file.
+#' the column 'Name' in the 'functionalGroups.csv' file. Can be created with
+#' \code{load_bps}.#'
 #' @param select_groups Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the netcdf file. Check column "Name" in
 #' "functionalGroups.csv" for clarification.
@@ -25,44 +17,44 @@
 #' Only one variable of the options available (i.e., \code{c(
 #' "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 #' }) can be loaded at a time.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @param prm_run Character string giving the connection of the run parameterfile.
+#' The filename usually contains \code{run_fishing} and ends in \code{.prm}".
 #' @param bboxes Integer vector giving the box-id of the boundary boxes.
+#' Can be created with \code{get_boundary}.
 #' @param check_acronyms Logical testing if functional-groups in
 #' select_groups are inactive in the current model run. They will be omitted
 #' in the output.
 #' @param warn_zeros Logical indicating if check for actual zeros in the
-#' data shall be printed or not.
+#' data shall be printed or not. Default is \code{FALSE}.
 #' @param report Logical indicating if progress bars shall be printed (\code{TRUE}) or
-#' not (\code{FALSE}).
+#' not (\code{FALSE}). Default is \code{TRUE}.
 #' @family load functions
 #' @export
-#' @return A \code{data.frame} in long format with the following coumn names:
+#' @return A \code{data.frame} in long format with the following column names:
 #'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 #'
 #' @keywords gen
 #' @author Alexander Keth
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' nc <- "outputSETAS.nc"
-#' bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
-#' fgs <- "SETasGroups.csv"
-#' bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
-#' prm_run <- "VMPA_setas_run_fishing_F_New.prm"
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #'
-#' test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
+#' nc <- file.path(d, "outputSETAS.nc")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#' bps <- load_bps(init = file.path(d, "INIT_VMPA_Jan2015.nc"), fgs = fgs)
+#' bboxes <- get_boundary(boxinfo = load_box(bgm = file.path(d, "VMPA_setas.bgm")))
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+#'
+#' test <- load_nc(nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
 #'   select_variable = "ResN")
 #'
-#' test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
+#' test <- load_nc(nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
 #'   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
 #'   select_variable = "Nums")
 
-load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
-                    select_variable, prm_run, bboxes = c(0), check_acronyms = TRUE,
+load_nc <- function(nc, fgs, bps, select_groups,
+                    select_variable, prm_run, bboxes, check_acronyms = TRUE,
                     warn_zeros = FALSE, report = TRUE) {
   # NOTE: The extraction procedure may look a bit complex... A different approach would be to
   # create a dataframe for each variable (e.g. GroupAge_Nums) and combine all dataframes
@@ -76,13 +68,7 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
     stop(paste("Only", paste(supported_variables, collapse = ", "), "can be selected as 'select_variable'"))
   }
 
-  fgs <- load_fgs(dir = dir, fgs = fgs)
-
-  # Check input of the nc file
-  if (utils::tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
-    stop("The argument for nc,", nc, "does not end in nc")
-  }
-  if (!is.null(dir)) nc <- file.path(dir, nc)
+  fgs <- load_fgs(fgs = fgs)
 
   # Check input structure!
   if (check_acronyms) {
@@ -161,7 +147,8 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
 
   # Get final species and number of ageclasses per species
   final_species <- select_groups[sapply(lapply(select_groups, grepl, x = search_clean), any)]
-  final_agecl <- fgs$NumCohorts[sapply(final_species, function(x) which(x == fgs$Name))]
+  id <- sapply(final_species, function(x) which(x == fgs$Name))
+  final_agecl <- fgs$NumCohorts[id] * fgs$NumGeneTypes[id]
 
   # This may allow init files to be loaded as well! Unfortunately "num_layers" is missing in
   # the init file. Therefore we also load in the general file to extract the layers!
@@ -336,7 +323,47 @@ load_nc <- function(dir = getwd(), nc, fgs, bps, select_groups,
   result$species <- convert_factor(data_fgs = fgs, col = result$species)
 
   # Convert timestep to time in years!
-  result$time <- convert_time(dir = dir, prm_run = prm_run, col = result$time)
+  result$time <- convert_time(prm_run = prm_run, col = result$time)
 
   return(result)
 }
+
+# Add some debugging
+# dir <- "z:/R_codes/Heidi/GABout_v1_converwrong/"
+# bgm <- "GAB_xy.bgm"
+# nc <- "GAB.nc"
+# fgs <- "GAB_Groups.csv"
+# init <- "inGAB.nc"
+# bps <- load_bps(dir, fgs, init)
+# groups <- get_groups(dir, fgs)
+# groups_age <- get_age_groups(dir, fgs)
+# groups_age <- c(groups_age, "Aquacult_Tuna")
+# select_groups <- groups[!groups %in% groups_age]
+# select_variable <- "Nums"
+# prm_run <- "GAB_run.prm"
+# bboxes <- get_boundary(boxinfo = load_box(dir, bgm))
+# check_acronyms <- TRUE
+# warn_zeros <- FALSE
+# report <- TRUE
+#
+# test <- load_nc(dir, nc, fgs, bps, groups_age, select_variable, prm_run, bboxes)
+
+# dir <- "z:/R_codes/Thiebaut/"
+# bgm <- "SEAP_extended_shelf.bgm"
+# nc <- "CEP_outputPROD.nc"
+# fgs <- "CEP_Groups_onespawn.csv"
+# init <- "CEP_ic.nc"
+# bps <- load_bps(dir, fgs, init)
+# groups <- get_groups(dir, fgs)
+# groups_age <- get_age_groups(dir, fgs)
+# select_groups <- groups_age
+# select_variable <- "Eat"
+# prm_run <- "CEP_run.prm"
+# bboxes <- get_boundary(boxinfo = load_box(dir, bgm))
+# check_acronyms <- TRUE
+# warn_zeros <- FALSE
+# report <- TRUE
+#
+# test <- load_nc(dir, nc, fgs, bps, groups_age, select_variable, prm_run, bboxes)
+
+

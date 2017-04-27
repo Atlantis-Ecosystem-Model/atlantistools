@@ -16,7 +16,7 @@ ggplot2 plot.
 }
 \description{
 This function can be used to add the range of observed data to a timeseries plot
-generated with \code{plot_ts()}. The density of the color gives an indication
+generated with \code{\link{plot_line}}. The density of the color gives an indication
 of the likelihood of the value.
 }
 \examples{
@@ -34,4 +34,3 @@ plot_add_range(plot, ex_data)
 \seealso{
 Other low-level-plot functions: \code{\link{plot_add_box}}
 }
-

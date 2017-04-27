@@ -14,5 +14,10 @@ r_binary_packages:
 r_github_packages:
   - jimhester/covr
 
+env:
+  global:
+  - _R_BUILD_COMPACT_VIGNETTES_="gs+qpdf"
+  - _R_CHECK_COMPACT_VIGNETTES_="gs+qpdf"
+
 after_success:
   - Rscript -e 'library(covr);codecov()'

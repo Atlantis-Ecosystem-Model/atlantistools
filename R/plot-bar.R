@@ -1,7 +1,7 @@
 #' Function to plot relative contribution of biomass and numbers per cohort.
 #'
 #' @inheritParams plot_line
-#' @param fill Column to use as filling colour. Default is 'species'.
+#' @param fill Column to use as filling colour. Default is \code{"species"}.
 #' @return ggplot2 object
 #' @export
 #' @family plot functions

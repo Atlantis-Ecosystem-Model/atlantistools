@@ -9,7 +9,7 @@ plot_add_box(plot, range = c(0.5, 0.2))
 \arguments{
 \item{plot}{ggplot2 object.}
 
-\item{range}{max and min relative change of data.}
+\item{range}{max and min relative change of data. Default is \code{c(0.5, 0.2)}.}
 }
 \value{
 ggplot2 plot.
@@ -33,4 +33,3 @@ plot_add_box(plot, range = c(0.8, 0.4))
 \seealso{
 Other low-level-plot functions: \code{\link{plot_add_range}}
 }
-

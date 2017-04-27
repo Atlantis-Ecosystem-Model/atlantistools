@@ -4,18 +4,12 @@
 \alias{change_prm}
 \title{Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.}
 \usage{
-change_prm(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
-  relative = TRUE, save_to_disc = TRUE, version_flag = 1)
+change_prm(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
+  save_to_disc = TRUE, version_flag = 2)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
 \item{select_acronyms}{Character vector of funtional groups which shall be read in.
 Names have to match the ones used in the *.prm file. Check column "Code" in
@@ -29,26 +23,26 @@ can be passed as roc.}
 Only one parameter can be selected per function call.}
 
 \item{relative}{Logical if TRUE values are changed relative to base values. If FALSE new values can
-be passed directly.}
+be passed directly. Default is \code{TRUE}.}
 
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
-(\code{TRUE}) or not (\code{FALSE}).}
+(\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.}
 
-\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
+\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.
 }
 \description{
-This functionis is used to help automate the calibration routine for ATLANTIS models.
+This function is used to help automate the calibration routine for ATLANTIS models.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-new_prm <- change_prm(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+
+new_prm <- change_prm(prm_biol,
                       select_acronyms = c("FPS", "FVS"),
                       roc = c(2,3),
                       parameter = "KWRR",
                       save_to_disc = FALSE)
 }
-

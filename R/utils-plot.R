@@ -16,12 +16,9 @@ custom_grid <- function(plot, grid_x, grid_y) {
 }
 
 # Customised nse version of facet_wrap used within atlantistools
-custom_wrap <- function(plot, col, ncol = 7, yexpand = FALSE) {
+custom_wrap <- function(plot, col, ncol = 7) {
   plot <- plot + ggplot2::facet_wrap(stats::as.formula(paste("~", paste(col, collapse = "+"))),
                                      scales = "free_y", ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15))
-  if (yexpand == TRUE){
-    plot <- plot + expand_limits(y = 0)
-  }
   return(plot)
 }
 

@@ -5,24 +5,16 @@
 \alias{prm_to_df_ages}
 \title{Extract parameters from the biological parameter file and transform them to a dataframe.}
 \usage{
-prm_to_df(dir = getwd(), prm_biol, fgs, group, parameter)
+prm_to_df(prm_biol, fgs, group, parameter)
 
-prm_to_df_ages(dir = getwd(), prm_biol, fgs, group, parameter)
+prm_to_df_ages(prm_biol, fgs, group, parameter)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{group}{Character vector giving the functional Groups to extract.}
 
@@ -35,12 +27,12 @@ Dataframe with columns 'species' and as many columns as parameters.
 Extract parameters from the biological parameter file and transform them to a dataframe.
 }
 \examples{
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-fgs <- "SETasGroupsDem_NoCep.csv"
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 group <- c("FPS", "FVS")
+parameter <- c("mum", "C")
 
-prm_to_df_ages(dir, prm_biol, fgs, group, parameter = c("mum", "C"))
-prm_to_df(dir, prm_biol, fgs, group, parameter = c("age_mat", "KWRR"))
+prm_to_df_ages(prm_biol, fgs, group, parameter)
+prm_to_df(prm_biol, fgs, group, parameter)
 }
-

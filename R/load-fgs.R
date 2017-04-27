@@ -2,9 +2,8 @@
 #'
 #' Read in the functional group file as dataframe.
 #'
-#' @param dir Path of the Atlantis model folder.
-#' @param fgs Name of the functional groups file which is typically saved as
-#' \code{functionalGroups.csv}.
+#' @param fgs Character string giving the connection to the functional groups file.
+#' The filename usually contains \code{Groups} and does end in \code{.csv}.
 #'
 #' @export
 #' @family load functions
@@ -14,18 +13,16 @@
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' file <- "SETasGroups.csv"
-#' fgs <- load_fgs(d, file)
+#' fgs <- load_fgs(file.path(d, file))
 #' head(fgs)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' file <- "SETasGroupsDem_NoCep.csv"
-#' fgs <- load_fgs(d, file)
+#' fgs <- load_fgs(file.path(d, file))
 #' head(fgs)
 
-load_fgs <- function(dir = getwd(), fgs) {
-  if (!is.null(dir)) fgs <- file.path(dir, fgs)
-  result <- utils::read.table(file = fgs, sep = ",",
-                       header = TRUE, stringsAsFactors = FALSE)
+load_fgs <- function(fgs) {
+  result <- utils::read.table(file = fgs, sep = ",", header = TRUE, stringsAsFactors = FALSE)
   # Rename column longname if space is present in raw file.
   names(result)[names(result) == "Long.Name"] <- "LongName"
   return(result)

@@ -1,8 +1,15 @@
 context("load_nc check structure and values in output dataframe")
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bps <- load_bps(dir = d, fgs = "SETasGroupsDem_NoCep.csv", init = "INIT_VMPA_Jan2015.nc")
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+
+nc1 <- file.path(d, "outputSETAS.nc")
+nc2 <- file.path(d, "outputSETASPROD.nc")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+init <- file.path(d, "INIT_VMPA_Jan2015.nc")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+bps <- load_bps(fgs = fgs, init = init)
+
+bboxes <- get_boundary(boxinfo = load_box(bgm = file.path(d, "VMPA_setas.bgm")))
 
 # d2 <- system.file("data", package = "atlantistools")
 #
@@ -11,17 +18,10 @@ bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
 # load(c("ref_eat.rda", "ref_grazing.rda", "ref_n.rda", "ref_nums.rda"))
 
 # Test numbers!
-data <- load_nc(dir = d,
-                nc = "outputSETAS.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
+data <- load_nc(nc = nc1, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
                 select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
-                select_variable = "Nums",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
-#
+                select_variable = "Nums")
+
 test_that("test column names", {
   expect_equal(names(data), names(ref_nums))
 })
@@ -36,17 +36,9 @@ test_that("test output numbers", {
 })
 #
 # Test nitrogen!
-
-data <- load_nc(dir = d,
-                nc = "outputSETAS.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
+data <- load_nc(nc = nc1, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
                 select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det"),
-                select_variable = "N",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
+                select_variable = "N")
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_n))
@@ -62,17 +54,9 @@ test_that("test output nitrogen", {
 })
 
 # Test Grazing!
-
-data <- load_nc(dir = d,
-                nc = "outputSETASPROD.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
+data <- load_nc(nc = nc2, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
                 select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det"),
-                select_variable = "Grazing",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
+                select_variable = "Grazing")
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_grazing))
@@ -88,17 +72,9 @@ test_that("test output nitrogen", {
 })
 
 # Test Eat!
-
-data <- load_nc(dir = d,
-                nc = "outputSETASPROD.nc",
-                bps = bps,
-                fgs = "SETasGroupsDem_NoCep.csv",
-                select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
-                select_variable = "Eat",
-                prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-                bboxes = bboxes,
-                check_acronyms = TRUE,
-                report = FALSE)
+data <- load_nc(nc = nc2, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
+                select_groups =  c("Planktiv_S_Fish", "Pisciv_S_Fish"),
+                select_variable = "Eat")
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_eat))
@@ -114,9 +90,84 @@ test_that("test output nitrogen", {
 })
 
 
-data <- load_nc_physics(dir = d,
-                        nc = "outputSETAS.nc",
-                        select_physics = c("hdsource", "hdsink", "eflux", "vflux"),
-                        aggregate_layers = FALSE, bboxes = bboxes, prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
+data <- load_nc_physics(nc = nc1, bboxes = bboxes, prm_run = prm_run,
+                        select_physics = c("hdsource", "hdsink", "eflux", "vflux"))
+
+# add some antarctic debugging
+# dir <- "c:/Users/alexanderke/Dropbox/Antarctic Atlantis/"
+# bgm <- "Antarctica_28.bgm"
+# fgs <- "AntarcticGroups.csv"
+# init <- "input.nc"
+# nc <- "output2/output.nc"
+# prm_run <- "SO28_run.prm"
+#
+# select_variable <- "N"
+# bboxes <- get_boundary(boxinfo = load_box(dir = dir, bgm = bgm))
+# bps <- load_bps(dir = dir, fgs = fgs, init = init)
+# groups <- get_groups(dir, fgs)
+# groups_age <- get_age_groups(dir, fgs)
+# select_groups <- groups[!groups %in% groups_age]
+# check_acronyms <- TRUE
+# warn_zeros <- FALSE
+# report <- TRUE
+#
+# df <- load_nc(dir, nc, fgs, bps, select_groups, select_variable, prm_run, bboxes)
+#
+# at_out <- RNetCDF::open.nc(con = file.path(dir, nc))
+# at_in <- RNetCDF::open.nc(con = file.path(dir, init))
+# at_data <- vector(mode = "list", length = length(select_groups))
+# at_init <- at_data
+# for (i in seq_along(at_data)) {
+#   at_data[[i]] <- RNetCDF::var.get.nc(ncfile = at_out, variable = paste0(select_groups, "_N")[i])
+#   at_init[[i]] <- RNetCDF::var.get.nc(ncfile = at_in, variable = paste0(select_groups, "_N")[i])
+# }
+
+# get_epi_array_dim <- function(nc, groups) {
+#   nc_read <- RNetCDF::open.nc(con = nc)
+#   variables <- paste0(groups, "_N")
+#   ncs <- lapply(variables, RNetCDF::var.get.nc, ncfile = nc_read)
+#   ids <- sapply(ncs, function(x) length(dim(x)))
+#   groups[ids == min(ids)]
+# }
+#
+#
+# get_epi_array_attr <- function(nc, groups) {
+#   nc_read <- RNetCDF::open.nc(con = nc)
+#   variables <- paste0(groups, "_N")
+#   ids <- lapply(variables, RNetCDF::var.inq.nc, ncfile = nc_read)
+#   ids <- sapply(ids, function(x) x$ndims)
+#   groups[ids == min(ids)]
+# }
+#
+# # Get epibenthic groups for Antarctic model
+# dir <- "c:/Users/alexanderke/Dropbox/Antarctic Atlantis"
+# groups <- get_groups(dir, fgs = "AntarcticGroups.csv")
+#
+# get_epi_array_dim(file.path(dir, "output2/output.nc"), groups)
+# get_epi_array_dim(file.path(dir, "input.nc"), groups)
+#
+# get_epi_array_attr(file.path(dir, "output2/output.nc"), groups)
+# get_epi_array_attr(file.path(dir, "input.nc"), groups)
+#
+# load_bps(dir, fgs = "AntarcticGroups.csv", init = "input.nc")
+#
+# # Get epibenthic groups for GNS model. This will not work on your machine!
+# dir <- "z:/Atlantis_models/baserun"
+# groups <- get_groups(dir, fgs = "functionalGroups.csv")
+# get_epi_array_dim(file.path(dir, "outputNorthSea.nc"), groups)
+# get_epi_array_dim(file.path(dir, "init_NorthSea.nc"), groups)
+#
+# get_epi_array_attr(file.path(dir, "outputNorthSea.nc"), groups)
+# get_epi_array_attr(file.path(dir, "init_NorthSea.nc"), groups)
+#
+# load_bps(dir, fgs = "functionalGroups.csv", init = "init_NorthSea.nc")
+
+
+
+
+
+
+
+
 
 

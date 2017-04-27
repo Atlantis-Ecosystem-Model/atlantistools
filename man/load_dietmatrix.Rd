@@ -5,25 +5,17 @@
 \alias{write_diet}
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
-load_dietmatrix(dir = getwd(), prm_biol, fgs, transform = TRUE,
-  convert_names = FALSE, version_flag = 2)
+load_dietmatrix(prm_biol, fgs, transform = TRUE, convert_names = FALSE,
+  version_flag = 2)
 
-write_diet(dir = getwd(), dietmatrix, prm_biol)
+write_diet(dietmatrix, prm_biol)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{transform}{Boolean indicating if the returned dataframe is displayed in
 "long" (\code{transform = TRUE, default}) or "wide" (\code{transform = FALSE})
@@ -33,11 +25,9 @@ diet matrix entries.}
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
 
-\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
+\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 
-\item{dietmatrix}{Dataframe in 'long' format containing information about availabilities
-with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
-'avail'. The dataframe should be generated with \code{load_dietmatrix()}.}
+\item{dietmatrix}{Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}.}
 }
 \value{
 dataframe of the availability matrix in long format with columns
@@ -48,10 +38,19 @@ Extracts the diet matrix as long dataframe from the biological paremeter file
 of any ATLANTIS simulation.
 }
 \examples{
+# Can be applied to trunk models.
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-dm <- load_dietmatrix(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-                      fgs = "SETasGroupsDem_NoCep.csv")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+
+dm <- load_dietmatrix(prm_biol, fgs)
+head(dm, n = 10)
+
+# And to bec-dev models.
+d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_New.prm")
+fgs <- file.path(d, "SETasGroups.csv")
+
+dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
 head(dm, n = 10)
 }
-

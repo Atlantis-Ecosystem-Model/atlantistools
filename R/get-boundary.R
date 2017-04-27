@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
+#' boxes <- load_box(bgm = file.path(d, "VMPA_setas.bgm"))
 #' get_boundary(boxinfo = boxes)
 
 get_boundary <- function(boxinfo) {

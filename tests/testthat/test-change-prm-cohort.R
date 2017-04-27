@@ -4,15 +4,13 @@ d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
 prm_old <- readLines(file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"))
 
-prm_new <- change_prm_cohort(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-                      select_acronyms = c("FPS", "FVS"),
-                      roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
-                      parameter = "C",
-                      save_to_disc = FALSE)
+prm_new <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
+                             select_acronyms = c("FPS", "FVS"),
+                             roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
+                             parameter = "C",
+                             save_to_disc = FALSE)
 
-prm_new2 <- change_prm_cohort(dir = d,
-                             prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+prm_new2 <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
                              select_acronyms = c("FPS", "FVS"),
                              roc = list(rep(2, times = 10), rep(2, times = 10)),
                              parameter = "C",
@@ -30,8 +28,7 @@ test_that("test change_prm_cohort", {
   expect_equal(str_split_twice(char = prm_old[pos[1] + 1], min_only = FALSE) * 2,
                str_split_twice(char = prm_new2[pos[1] + 1], min_only = FALSE))
 
-  expect_error(change_prm_cohort(dir = d,
-                                 prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+  expect_error(change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
                                  select_acronyms = c("FPS", "FVS"),
                                  roc = matrix(rep(2, times = 18), nrow = 2, ncol = 9),
                                  parameter = "C",
@@ -40,7 +37,7 @@ test_that("test change_prm_cohort", {
 })
 
 
-prm <- change_prm_cohort(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", select_acronyms = "FPS", roc = c(100, 200),
+prm <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), select_acronyms = "FPS", roc = c(100, 200),
                          parameter = "mL", relative = F, save_to_disc = F)
 
 test_that("test external mortalities in trunc models", {

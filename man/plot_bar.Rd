@@ -14,11 +14,11 @@ plot_bar(data, x = "time", y = "atoutput", fill = "species",
 
 \item{y}{y-variable. Default is \code{'atoutput'}.}
 
-\item{fill}{Column to use as filling colour. Default is 'species'.}
+\item{fill}{Column to use as filling colour. Default is \code{"species"}.}
 
 \item{wrap}{Wraping column. Default is \code{'species'}}
 
-\item{ncol}{Number of columns in multipanel plot.}
+\item{ncol}{Number of columns in multipanel plot. Default is \code{7}.}
 }
 \value{
 ggplot2 object
@@ -47,4 +47,3 @@ Other plot functions: \code{\link{plot_boxes}},
   \code{\link{plot_line}}, \code{\link{plot_rec}},
   \code{\link{plot_species}}
 }
-

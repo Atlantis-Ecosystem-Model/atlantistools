@@ -4,12 +4,11 @@
 \alias{load_box}
 \title{Load the box specification file for an Atlantis scenario}
 \usage{
-load_box(dir = getwd(), bgm)
+load_box(bgm)
 }
 \arguments{
-\item{dir}{Path of the Atlantis model folder.}
-
-\item{bgm}{Character string giving the name of the atlantis bgm file.}
+\item{bgm}{Character string giving the connection to the atlantis bgm file.
+The filename ends in \code{.bgm}.}
 }
 \value{
 A list of information regarding boxes for an Atlantis scenario.
@@ -20,10 +19,9 @@ for an Atlantis scenario.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
-}
-\author{
-Kelli Faye Johnson
+bgm <- file.path(d, "VMPA_setas.bgm")
+
+boxes <- load_box(bgm)
 }
 \seealso{
 Other load functions: \code{\link{load_bps}},
@@ -33,4 +31,6 @@ Other load functions: \code{\link{load_bps}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-
+\author{
+Kelli Faye Johnson
+}

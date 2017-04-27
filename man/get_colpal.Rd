@@ -19,4 +19,3 @@ with feeding data).
 Other get functions: \code{\link{get_boundary}},
   \code{\link{get_conv_mgnbiot}}, \code{\link{get_groups}}
 }
-

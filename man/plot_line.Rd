@@ -5,7 +5,7 @@
 \title{Function to plot time series of atlantis ncdf output.}
 \usage{
 plot_line(data, x = "time", y = "atoutput", wrap = "species",
-  col = NULL, ncol = 7)
+  col = NULL, ncol = 7, yexpand = FALSE)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
@@ -18,7 +18,9 @@ plot_line(data, x = "time", y = "atoutput", wrap = "species",
 
 \item{col}{Column to use as colour. Default is \code{NULL}.}
 
-\item{ncol}{Number of columns in multipanel plot.}
+\item{ncol}{Number of columns in multipanel plot. Default is \code{7}.}
+
+\item{yexpand}{Expands the y axis so it always includes 0. Default is \code{FALSE}.}
 }
 \value{
 ggplot2 object
@@ -72,4 +74,3 @@ Other plot functions: \code{\link{plot_bar}},
   \code{\link{plot_diet_bec_dev}}, \code{\link{plot_diet}},
   \code{\link{plot_rec}}, \code{\link{plot_species}}
 }
-

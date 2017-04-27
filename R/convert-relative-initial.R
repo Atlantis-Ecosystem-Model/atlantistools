@@ -2,7 +2,7 @@
 #'
 #' @param data Dataframe to apply the transformation to.
 #' @param col Character value giving the name of the column to transform.
-#' Default is 'atoutput'.
+#' Default is \code{"atoutput"}.
 #' @return Dataframe with transformed column 'col'.
 #' @export
 #'

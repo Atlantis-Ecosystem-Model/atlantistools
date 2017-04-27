@@ -5,17 +5,11 @@
 \title{Extract conversion factor used to transform data from nitrogen in mg to
 biomass in tonnes.}
 \usage{
-get_conv_mgnbiot(dir = getwd(), prm_biol)
+get_conv_mgnbiot(prm_biol)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 }
 \value{
 Conversion factor as numeric value.
@@ -26,10 +20,11 @@ biomass in tonnes.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-get_conv_mgnbiot(dir = d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+
+get_conv_mgnbiot(prm_biol)
 }
 \seealso{
 Other get functions: \code{\link{get_boundary}},
   \code{\link{get_colpal}}, \code{\link{get_groups}}
 }
-

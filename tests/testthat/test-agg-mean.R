@@ -16,4 +16,16 @@ test_that("test data grouping", {
   expect_is(group_data(ref_nums, groups = c("species", "agecl")), "grouped_df")
 })
 
+
+df <- data.frame(time = rep(1:3, times = 2),
+                 spec = rep(1:2, each = 3),
+                 value = 1:6)
+
+res <- agg_data(data = df, col = "value", groups = "spec", out = "test", fun = sum)
+
+test_that("test data grouping", {
+  expect_equal(dim(res), c(2, 2))
+  expect_equal(res$test, c(6, 15))
+})
+
 # add commented line

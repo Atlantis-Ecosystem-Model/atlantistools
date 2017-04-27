@@ -4,18 +4,12 @@
 \alias{change_prm_cohort}
 \title{Change biological parameterfile for parameters which expect multiple values.}
 \usage{
-change_prm_cohort(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
-  relative = TRUE, save_to_disc = TRUE)
+change_prm_cohort(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
+  save_to_disc = TRUE)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
 \item{select_acronyms}{Character vector of funtional groups which shall be read in.
 Names have to match the ones used in the *.prm file. Check column "Code" in
@@ -32,33 +26,34 @@ should be group specific.}
 Only one parameter can be selected per function call.}
 
 \item{relative}{Logical if TRUE values are changed relative to base values. If FALSE new values can
-be passed directly.}
+be passed directly. Default is \code{TRUE}.}
 
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
-(\code{TRUE}) or not (\code{FALSE}).}
+(\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.
 }
 \description{
-This functionis is used to help automate the calibration routine for ATLANTIS models.
+This function is used to help automate the calibration routine for ATLANTIS models.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-new_prm <- change_prm_cohort(dir = d,
-                             prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+new_prm <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
                              select_acronyms = c("FPS", "FVS"),
                              roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
                              parameter = "C",
                              save_to_disc = FALSE)
+# C_FPS is in line 640. Old values are 0.0002 0.3 0.6 0.6 0.6 0.6 0.5 0.5 0.4 and 0.4.
+new_prm[640:641]
+# C_FVS is in line 652. Old values are 40.0 40.0 40.0 120.0 150.0 250.0 250.0 300.0 300.0 and 300.0.
+new_prm[652:653]
 
 # Also works for lists as argument
-new_prm <- change_prm_cohort(dir = d,
-                             prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+new_prm <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
                              select_acronyms = c("FPS", "FVS"),
                              roc = list(rep(3, times = 10), rep(2, times = 10)),
                              parameter = "C",
                              save_to_disc = FALSE)
 }
-

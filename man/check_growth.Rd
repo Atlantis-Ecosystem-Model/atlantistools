@@ -12,7 +12,7 @@ This should be generated with \code{preprocess()}. You can test either structura
 reserve weight.}
 
 \item{yearly}{Logical specifying if relative change in individual weight shall be calculated
-on a yearly basis (\code{TRUE}) ot not (default, \code{FALSE}).}
+on a yearly basis (\code{TRUE}) ot not (\code{FALSE}). Default is \code{FALSE}.}
 }
 \value{
 Dataframe showing the output of the linear model fit (slope & F-statistic) per
@@ -26,4 +26,3 @@ check_growth(preprocess$structn_age)
 check_growth(preprocess$resn_age)
 check_growth(preprocess$resn_age, yearly = TRUE)
 }
-

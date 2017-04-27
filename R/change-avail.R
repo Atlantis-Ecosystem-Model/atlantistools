@@ -8,32 +8,31 @@
 #' @param pred Character vector of predator Acronyms (see \code{get_acronyms()}).
 #' Selecting \code{NULL} as pred results in all predators being selected. This
 #' can be helpful if you want to increase the feeding pressure on a specific
-#' prey item by all groups.
+#' prey item by all groups. Default is \code{NULL}.
 #' @param pred_stanza Integer vector indicating if the predator is juvenile (= 1) or
 #' adult (= 2). \code{pred} and \code{pred_stanza} need to be of the same length.
 #' In rare instances, e.g. pred_stanza being \code{NULL} or one single integer
 #' either all pred_stanzas are selected or the single pred_stanza is applied to all
-#' predators.
+#' predators. Default is \code{NULL}.
 #' @param prey List of character vectors of prey Acronyms (see \code{get_acronyms()}).
 #' \code{pred} and \code{prey} need to be of the same length. Selecting \code{NULL} as
 #' prey results in all prey groups being selected. This
 #' can be helpful if you want to increase the available prey for a specific predator
-#' overall.
+#' overall. Default is \code{NULL}.
 #' @param roc Vector of multiplication factors which shall be applied to the old set of parameters.
 #' Please supply one value per selected group. In case relative is FALSE the new absolute values
 #' can be passed as roc.
 #' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
-#' be passed directly.
+#' be passed directly. Default is \code{NULL}.
 #' @param consecutive Boolean indicating if multiple calls to change_avail are performed one after
-#' another. Default is \code{FALSE}.
+#' another \code{TRUE}. Default is \code{FALSE}.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' dm <- load_dietmatrix(dir = d,
-#'                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-#'                       fgs = "SETasGroupsDem_NoCep.csv")
+#' dm <- load_dietmatrix(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
+#'                       fgs = file.path(d, "SETasGroupsDem_NoCep.csv"))
 #'
 #' dm1 <- change_avail(dietmatrix = dm,
 #'                     pred = "FPS",

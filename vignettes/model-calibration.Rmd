@@ -46,16 +46,16 @@ This section is used to read in the SETAS dummy files. Please change this accord
 ```{r}
 result <- preprocess
 
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
 # External recruitment data
-ex_rec_ssb <- read.csv(file.path(dir, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
+ex_rec_ssb <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 
 # External biomass data
-ex_bio <- read.csv(file.path(dir, "setas-bench.csv"), stringsAsFactors = FALSE)
+ex_bio <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
 
 # bgm file
-bgm <- "VMPA_setas.bgm"
+bgm <- file.path(d, "VMPA_setas.bgm")
 ```
 
 \newpage
@@ -144,11 +144,54 @@ custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
 \newpage
 
-## Fluxes
+# Physics
+```{r, results = 'asis', fig.width = 30, fig.height = 12}
+physics <- result$physics %>%
+  flip_layers() %>%
+  split(., .$variable)
+
+plots <- lapply(physics, plot_line, wrap = NULL) %>% 
+  lapply(., custom_grid, grid_x = "polygon", grid_y = "layer")
+
+for (i in seq_along(plots)) {
+  cat(paste0("## ", names(plots)[i]), sep = "\n")
+  plot <- update_labels(plots[[i]], labels = list(y = names(plots)[i]))
+  print(plot)
+  cat("\n\n")
+}
+```
+
+\newpage
+
+## Fluxes 1
 ```{r, fig.width = 30, fig.height = 12}
-plot <- plot_line(result$flux, wrap = NULL, col = "variable")
+plot <- flip_layers(result$flux) %>% 
+  plot_line(wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
+
+\newpage
+
+## Fluxes 2
+```{r, fig.width = 30, fig.height = 12}
+plot <- flip_layers(result$sink) %>% 
+  plot_line(wrap = NULL, col = "variable")
+custom_grid(plot, grid_x = "polygon", grid_y = "layer")
+```
+
+\newpage
+
+## Relative change of water column height compared to nominal_dz
+```{r}
+check_dz <- result$dz %>% 
+  dplyr::left_join(result$nominal_dz, by = c("polygon", "layer")) %>% 
+  dplyr::mutate(check_dz = atoutput.x / atoutput.y) %>% 
+  dplyr::filter(!is.na(check_dz)) # remove sediment layer
+
+plot <- plot_line(check_dz, x = "time", y = "check_dz", wrap = "polygon", col = "layer")
+update_labels(plot, list(x = "Time [years]", y = expression(dz/nominal_dz)))
+```
+
 
 \newpage
 
@@ -205,8 +248,8 @@ plot_add_box(plot)
 
 ## Growth in relation to initial conditions
 ```{r}
-plot_line(result$growth_rel_init, y = "gr_rel")
-# update_labels(plot, list(y = expression((Growth - Growth[req])/Growth[req])))
+plot <- plot_line(result$growth_rel_init, y = "gr_rel", col = "agecl")
+update_labels(plot, list(y = expression((Growth - Growth[req])/Growth[req])))
 ```
 
 
@@ -266,7 +309,7 @@ for (i in seq_along(plots)) {
 
 # Spatial Plots 1
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
-plots <- plot_spatial_box(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(dir = dir, bgm = bgm), timesteps = 7)
+plots <- plot_spatial_box(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(bgm = bgm), timesteps = 7)
 for (i in seq_along(plots)) {
   cat(paste0("## Spatial Plot ", i, ": ", names(plots)[i]), sep = "\n")
   gridExtra::grid.arrange(plots[[i]])
@@ -278,7 +321,7 @@ for (i in seq_along(plots)) {
 
 # Spatial Plots 2
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
-plots <- plot_spatial_ts(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(dir = dir, bgm = bgm), vol = result$vol)
+plots <- plot_spatial_ts(result$biomass_spatial_stanza, bgm_as_df = convert_bgm(bgm = bgm), vol = result$vol)
 for (i in seq_along(plots)) {
   cat(paste0("## Spatial Plot ", i, ": ", names(plots)[i]), sep = "\n")
   gridExtra::grid.arrange(plots[[i]])

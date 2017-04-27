@@ -11,5 +11,8 @@ test_that("test str_split_twice", {
   expect_equal(length(str_split_twice(char = "\t4   6\t12   23\t\t", min_only = FALSE)), 4)
 
   expect_equal(length(str_split_twice("check_wc_dz: Resetting dz in box 2, layer 0 from 4.6608 to 6", min_only = FALSE)), 4)
+
+  # Used for reference id extraction in get_growth_fishbase.
+  expect_equal(str_split_twice("Main Ref. :\r\n\t\t\r\n\t\t\r\n\t\t\t81067     Data Ref. :81067\t\t\r\n\t\r\n\t"), 81067)
 })
 

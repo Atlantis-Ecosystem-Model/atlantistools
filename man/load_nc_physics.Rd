@@ -4,37 +4,27 @@
 \alias{load_nc_physics}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc_physics(dir = getwd(), nc, select_physics, prm_run, aggregate_layers,
-  bboxes, warn_zeros = FALSE)
+load_nc_physics(nc, select_physics, prm_run, bboxes, aggregate_layers = FALSE,
+  warn_zeros = FALSE)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{nc}{Character string giving the filename of netcdf file which
-shall be read in. Usually "output[...].nc". Currently the general-
-production- and catch.nc files can be loaded in. In case you are using
-multiple folder for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case.}
+\item{nc}{Character string giving the connection of the netcdf file to read in.
+The filename usually contains \code{output} and ends in \code{.nc}".}
 
 \item{select_physics}{Character vector of physical variables which shall be read in.
 Names have to match the ones used in the ncdf file.}
 
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.
-In addition set dir to 'NULL' in this case.}
+\item{prm_run}{Character string giving the connection of the run parameterfile.
+The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
+
+\item{bboxes}{Integer vector giving the box-id of the boundary boxes.
+Can be created with \code{get_boundary}.}
 
 \item{aggregate_layers}{Logical indicating if values for layers should be
-aggregated (\code{TRUE}) or not (\code{FALSE}).}
-
-\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+aggregated (\code{TRUE}) or not (\code{FALSE}). Default is \code{FALSE}.}
 
 \item{warn_zeros}{Logical indicating if check for actual zeros in the
-data shall be printed or not.}
+data shall be printed or not. Default is \code{FALSE}.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -48,19 +38,20 @@ This functions converts the ATLANTIS output to a dataframe which can be processe
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
-  select_physics = c("salt", "NO3", "volume"),
-  prm_run = "VMPA_setas_run_fishing_F_New.prm",
-  aggregate_layers = FALSE,
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+nc <- file.path(d, "outputSETAS.nc")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
+select_physics <- c("salt", "NO3", "volume")
+
+test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
 str(test)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
-  select_physics = c("salt", "NO3", "volume"),
-  prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-  aggregate_layers = FALSE,
-  bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+nc <- file.path(d, "outputSETAS.nc")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
+
+test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
 str(test)
 }
 \seealso{
@@ -72,4 +63,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_txt}}
 }
 \keyword{gen}
-

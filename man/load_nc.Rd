@@ -4,30 +4,20 @@
 \alias{load_nc}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc(dir = getwd(), nc, fgs, bps, select_groups, select_variable, prm_run,
-  bboxes = c(0), check_acronyms = TRUE, warn_zeros = FALSE,
-  report = TRUE)
+load_nc(nc, fgs, bps, select_groups, select_variable, prm_run, bboxes,
+  check_acronyms = TRUE, warn_zeros = FALSE, report = TRUE)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{nc}{Character string giving the connection of the netcdf file to read in.
+The filename usually contains \code{output} and ends in \code{.nc}".}
 
-\item{nc}{Character string giving the filename of netcdf file which
-shall be read in. Usually "output[...].nc". Currently the general-
-production- and catch.nc files can be loaded in. In case you are using
-multiple folder for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case.}
-
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.
-In addition set dir to 'NULL' in this case.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{bps}{Vector of character strings giving the complete list of epibenthic
 functional groups (Only present in the sediment layer). The names have to match
-the column 'Name' in the 'functionalGroups.csv' file.}
+the column 'Name' in the 'functionalGroups.csv' file. Can be created with
+\code{load_bps}.#'}
 
 \item{select_groups}{Character vector of funtional groups which shall be read in.
 Names have to match the ones used in the ncdf file. Check column "Name" in
@@ -38,25 +28,24 @@ Only one variable of the options available (i.e., \code{c(
 "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 }) can be loaded at a time.}
 
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{prm_run}{Character string giving the connection of the run parameterfile.
+The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
-\item{bboxes}{Integer vector giving the box-id of the boundary boxes.}
+\item{bboxes}{Integer vector giving the box-id of the boundary boxes.
+Can be created with \code{get_boundary}.}
 
 \item{check_acronyms}{Logical testing if functional-groups in
 select_groups are inactive in the current model run. The will be omitted
-in the output.}
+in the output. Default is \code{TRUE}.}
 
 \item{warn_zeros}{Logical indicating if check for actual zeros in the
-data shall be printed or not.}
+data shall be printed or not. Default is \code{FALSE}.}
 
 \item{report}{Logical indicating if progress bars shall be printed (\code{TRUE}) or
-not (\code{FALSE}).}
+not (\code{FALSE}). Default is \code{TRUE}.}
 }
 \value{
-A \code{data.frame} in long format with the following coumn names:
+A \code{data.frame} in long format with the following column names:
   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 }
 \description{
@@ -64,23 +53,21 @@ This function loads Atlantis outputfiles (any netcdf file) and
 converts them to a \code{data.frame}.
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-nc <- "outputSETAS.nc"
-bps <- load_bps(dir = d, fgs = "SETasGroups.csv", init = "init_vmpa_setas_25032013.nc")
-fgs <- "SETasGroups.csv"
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
-prm_run <- "VMPA_setas_run_fishing_F_New.prm"
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
+nc <- file.path(d, "outputSETAS.nc")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+bps <- load_bps(init = file.path(d, "INIT_VMPA_Jan2015.nc"), fgs = fgs)
+bboxes <- get_boundary(boxinfo = load_box(bgm = file.path(d, "VMPA_setas.bgm")))
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+
+test <- load_nc(nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "ResN")
 
-test <- load_nc(dir = d, nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
+test <- load_nc(nc = nc, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes,
   select_groups = c("Planktiv_S_Fish", "Cephalopod", "Diatom"),
   select_variable = "Nums")
-}
-\author{
-Alexander Keth
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
@@ -90,5 +77,7 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
+\author{
+Alexander Keth
+}
 \keyword{gen}
-

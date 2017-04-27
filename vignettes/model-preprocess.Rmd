@@ -12,12 +12,12 @@ vignette: >
 ## Motivation
 This Vignette is used to load in and preprocess autput from an Atlantis simulation. Given
 the complexity of the model output and the time it takes to process it the vignette has three main
-porposes
+purposes
 1. Standardise various output formats (netcdf, txt) and structures to a unified format. 
 2. Aggregate the complex Atlantis output in meaningul ways. E.g. horizontally and vertically.
-3. Save the preprocessed output as a list of dataframes to save computation time and make it easier to share model output.
+3. Save the preprocessed output as a list of dataframes to save computation time and to make it easier to share model output.
 
-Please feelfree to modify the vignette to your likings by adding your personal calculation procedures. I will try
+Please feel free to modify the vignette to your likings by adding your personal calculation procedures. I will try
 to update this vignette as frequently as possible to make sure most functionality within
 atlantistools is present.
 
@@ -32,34 +32,36 @@ library("dplyr")
 ```
 
 ## User Input
-This section is used to define simulation specific variables. Please change this accordingly.
+This section is used to define simulation specific variables. Please change this accordingly. I highly advice 
+to set the Atlantis directory as working directory in your R session. In addition you should try to work within a
+R project. By doing so there is no need to create the connections to the model files with calls to `file.path()`. You
+can simply pass the names of the files as arguments. Please make sure to add subdirectories in case you use different
+folders for input- and output model files.
 
 ```{r}
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-nc_gen <- "outputSETAS.nc"
-nc_prod <- "outputSETASPROD.nc"
-dietcheck <- "outputSETASDietCheck.txt"
-yoy <- "outputSETASYOY.txt"
-ssb <- "outputSETASSSB.txt"
-version_flag <- 2
-
-prm_run <- "VMPA_setas_run_fishing_F_Trunk.prm"
-prm_biol <- "VMPA_setas_biol_fishing_Trunk.prm"
-fgs <- "SETasGroupsDem_NoCep.csv"
-bgm <- "VMPA_setas.bgm"
-init <- "INIT_VMPA_Jan2015.nc"
+nc_gen    <- file.path(d, "outputSETAS.nc")
+nc_prod   <- file.path(d, "outputSETASPROD.nc")
+dietcheck <- file.path(d, "outputSETASDietCheck.txt")
+yoy       <- file.path(d, "outputSETASYOY.txt")
+ssb       <- file.path(d, "outputSETASSSB.txt")
+prm_run   <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+prm_biol  <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+fgs       <- file.path(d, "SETasGroupsDem_NoCep.csv")
+bgm       <- file.path(d, "VMPA_setas.bgm")
+init      <- file.path(d, "INIT_VMPA_Jan2015.nc")
 ```
 
 ## Define additional variables using build in atlantistools functions.
 ```{r}
-bboxes <- get_boundary(boxinfo = load_box(dir, bgm))
-bps <- load_bps(dir, fgs, init)
-bio_conv <- get_conv_mgnbiot(dir, prm_biol)
+bboxes <- get_boundary(boxinfo = load_box(bgm))
+bps <- load_bps(fgs, init)
+bio_conv <- get_conv_mgnbiot(prm_biol)
 
 # By default data from all groups within the simulation is extracted!
-groups <- get_groups(dir, fgs)
-groups_age <- get_age_groups(dir, fgs)
+groups <- get_groups(fgs)
+groups_age <- get_age_groups(fgs)
 groups_rest <- groups[!groups %in% groups_age]
 ```
 
@@ -69,41 +71,50 @@ groups_rest <- groups[!groups %in% groups_age]
 vars <- list("Nums", "StructN", "ResN", "N")
 grps <- list(groups_age, groups_age, groups_age, groups_rest)
 dfs_gen <- Map(load_nc, select_variable = vars, select_groups = grps,
-               MoreArgs = list(dir = dir, nc = nc_gen, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
+               MoreArgs = list(nc = nc_gen, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
 
 # Read in raw untransformed data from nc_prod
 vars <- list("Eat", "Grazing", "Growth")
 grps <- list(groups_age, groups_rest, groups_age)
 dfs_prod <- Map(load_nc, select_variable = vars, select_groups = grps,
-                MoreArgs = list(dir = dir, nc = nc_prod, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
+                MoreArgs = list(nc = nc_prod, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes))
 
 # Read in physics
-flux <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("eflux", "vflux"),
-                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
+flux <- load_nc_physics(nc = nc_gen, select_physics = c("eflux", "vflux"),
+                        prm_run = prm_run, bboxes = bboxes)
 
-sink <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("hdsource", "hdsink"),
-                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
+sink <- load_nc_physics(nc = nc_gen, select_physics = c("hdsource", "hdsink"),
+                        prm_run = prm_run, bboxes = bboxes)
 
-physics <- load_nc_physics(dir = dir, nc = nc_gen, 
+physics <- load_nc_physics(nc = nc_gen, 
                            select_physics = c("salt", "NO3", "NH3", "Temp", "Chl_a", "Denitrifiction"),
-                           prm_run = prm_run, bboxes = bboxes, aggregate_layers = TRUE)
+                           prm_run = prm_run, bboxes = bboxes)
 
-vol <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = "volume",
-                       prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+# exclude sediment layer from salinity
+physics <- filter(physics, !(variable == "salt" & layer == max(layer) & time == min(time)))
+# exlucde water column from Denitrifiction
+physics <- filter(physics, !(variable == "Denitrifiction" & layer != max(layer) & time == min(time)))
 
-vol_dz <- load_nc_physics(dir = dir, nc = nc_gen, select_physics = c("volume", "dz"),
-                          prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
+vol_dz <- load_nc_physics(nc = nc_gen, select_physics = c("volume", "dz"),
+                          prm_run = prm_run, bboxes = bboxes)
+
+dz <- dplyr::filter(vol_dz, variable == "dz")
+vol <- dplyr::filter(vol_dz, variable == "volume")
+
+nominal_dz <- load_init(init = init, vars = "nominal_dz") %>% 
+  as.data.frame() %>% 
+  dplyr::filter(!is.na(layer))
 
 # Read in Dietcheck
-df_dm <- load_dietcheck(dir = dir, dietcheck = dietcheck,
-                        fgs = fgs, prm_run = prm_run, version_flag = version_flag, convert_names = TRUE)
+df_dm <- load_dietcheck(dietcheck = dietcheck,
+                        fgs = fgs, prm_run = prm_run, convert_names = TRUE)
 
 # Read in SSB/R
-ssb_rec <- load_rec(dir = dir, yoy = yoy, ssb = ssb, prm_biol = prm_biol)
+ssb_rec <- load_rec(yoy = yoy, ssb = ssb, prm_biol = prm_biol)
 
 # Read in misc  
-df_agemat <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(dir, fgs), parameter = "age_mat")
-dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, convert_names = TRUE)
+df_agemat <- prm_to_df(prm_biol = prm_biol, fgs = fgs, group = get_age_acronyms(fgs), parameter = "age_mat")
+dietmatrix <- load_dietmatrix(prm_biol, fgs, convert_names = TRUE)
 ```
 
 ## Apply preprocess calculations
@@ -144,11 +155,11 @@ bio_cons <- calculate_consumed_biomass(eat = dfs_prod[[1]], grazing = dfs_prod[[
 sp_overlap <- calculate_spatial_overlap(biomass_spatial = bio_sp, dietmatrix = dietmatrix, agemat = df_agemat)
 
 # Growth relative to initial conditions
-rec_weight <- prm_to_df(dir = dir, prm_biol = prm_biol, fgs = fgs, 
-                        group = get_age_acronyms(dir = dir, fgs = fgs), 
+rec_weight <- prm_to_df(prm_biol = prm_biol, fgs = fgs, 
+                        group = get_age_acronyms(fgs = fgs), 
                         parameter = c("KWRR", "KWSR", "AgeClassSize"))
 
-pd <- load_init_weight(dir = dir, init = init, fgs = fgs, bboxes = bboxes) %>%
+pd <- load_init_weight(init = init, fgs = fgs, bboxes = bboxes) %>%
   left_join(rec_weight) %>%
   split(.$species)
 
@@ -183,20 +194,22 @@ vol_ts <- agg_data(vol, groups = c("time", "polygon"), fun = sum, out = "volume"
     "biomass_age"            = biomass_age,
     "biomass_consumed"       = bio_cons,
     "biomass_spatial_stanza" = bio_sp_stanza,
-    "diet"                   = df_dm,
-    "eat_age"                = eat_age,       #5
+    "diet"                   = df_dm,         #5 
+    "dz"                     = dz,
+    "eat_age"                = eat_age,       
     "flux"                   = flux,
     "grazing"                = grazing,
-    "growth_age"             = growth_age,
+    "growth_age"             = growth_age,    #10
     "growth_rel_init"        = gr_rel_init,
+    "nominal_dz"             = nominal_dz,
     "nums"                   = nums,
-    "nums_age"               = nums_age,      #10
-    "nums_box"               = nums_box,
+    "nums_age"               = nums_age,      
+    "nums_box"               = nums_box,      #15
     "physics"                = physics,
     "resn_age"               = resn_age,
     "sink"                   = sink,
-    "spatial_overlap"        = sp_overlap,    #15
-    "ssb_rec"                = ssb_rec,
+    "spatial_overlap"        = sp_overlap,    
+    "ssb_rec"                = ssb_rec,       #20
     "structn_age"            = structn_age,    
     "vol"                    = vol_ts
   )

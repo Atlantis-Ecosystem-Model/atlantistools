@@ -2,27 +2,12 @@
 #'
 #'
 #' This function loads Atlantis outputfiles (netcdf) and converts them to a dataframe.
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param nc Character string giving the filename of netcdf file which
-#' shall be read in. Usually "output[...].nc". Currently the general-
-#' production- and catch.nc files can be loaded in. In case you are using
-#' multiple folder for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
+#'
+#' @inheritParams load_nc
 #' @param select_physics Character vector of physical variables which shall be read in.
 #' Names have to match the ones used in the ncdf file.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' In addition set dir to 'NULL' in this case.
 #' @param aggregate_layers Logical indicating if values for layers should be
-#' aggregated (\code{TRUE}) or not (\code{FALSE}).
-#' @param bboxes Integer vector giving the box-id of the boundary boxes.
-#' @param warn_zeros Logical indicating if check for actual zeros in the
-#' data shall be printed or not.
+#' aggregated (\code{TRUE}) or not (\code{FALSE}). Default is \code{FALSE}.
 #' @family load functions
 #' @export
 #' @return A \code{data.frame} in long format with the following coumn names:
@@ -33,43 +18,37 @@
 #' @keywords gen
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
-#'   select_physics = c("salt", "NO3", "volume"),
-#'   prm_run = "VMPA_setas_run_fishing_F_New.prm",
-#'   aggregate_layers = FALSE,
-#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+#' nc <- file.path(d, "outputSETAS.nc")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+#' bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
+#' select_physics <- c("salt", "NO3", "volume")
+#'
+#' test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
 #' str(test)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' test <- load_nc_physics(dir = d, nc = "outputSETAS.nc",
-#'   select_physics = c("salt", "NO3", "volume"),
-#'   prm_run = "VMPA_setas_run_fishing_F_Trunk.prm",
-#'   aggregate_layers = FALSE,
-#'   bboxes = get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm")))
+#' nc <- file.path(d, "outputSETAS.nc")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+#' bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
+#'
+#' test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
 #' str(test)
 
-load_nc_physics <- function(dir = getwd(),
-                            nc,
+load_nc_physics <- function(nc,
                             select_physics,
                             prm_run,
-                            aggregate_layers,
                             bboxes,
+                            aggregate_layers = FALSE,
                             warn_zeros = FALSE){
   if (is.null(select_physics)) stop("No physical variables selected.")
   supported_variables <- c("salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a", "hdsource", "hdsink",
-                           "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz", "nominal_dz")
+                           "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz")
 
   wrong_input <- select_physics[which(!is.element(select_physics, supported_variables))]
 
   if (length(wrong_input) >= 1) {
     stop(paste(wrong_input, "not part of", paste(supported_variables, collapse = ", ")))
   }
-
-  # Check input of the nc file
-  if (utils::tail(strsplit(nc, "\\.")[[1]], 1) != "nc") {
-    stop("The argument for nc,", nc, "does not end in nc")
-  }
-  if (!is.null(dir)) nc <- file.path(dir, nc)
 
   # Load ATLANTIS output!
   at_out <- RNetCDF::open.nc(con = nc)
@@ -169,7 +148,7 @@ load_nc_physics <- function(dir = getwd(),
       dplyr::summarise_(atoutput = ~mean(atoutput))
   }
 
-  result$time <- convert_time(dir = dir, prm_run = prm_run, col = result$time)
+  result$time <- convert_time(prm_run = prm_run, col = result$time)
 
   return(result)
 }

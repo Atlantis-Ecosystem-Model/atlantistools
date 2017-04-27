@@ -14,7 +14,7 @@ to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat'
 'inside_long' and 'polygon'.}
 
 \item{polygon_overview}{numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
-upper right corner of the plot. Default is 0.2.}
+upper right corner of the plot. Default is \code{0.2}.}
 }
 \value{
 ggplot grob
@@ -23,8 +23,8 @@ ggplot grob
 Add spatial representation of polygon layout to a ggplot2 object.
 }
 \examples{
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+bgm_as_df <- convert_bgm(bgm = file.path(d, "VMPA_setas.bgm"))
 
 p <- plot_line(preprocess$physics, wrap = NULL)
 p <- custom_grid(p, grid_x = "polygon", grid_y = "variable")
@@ -32,4 +32,3 @@ p <- custom_grid(p, grid_x = "polygon", grid_y = "variable")
 grob <- plot_add_polygon_overview(p, bgm_as_df)
 gridExtra::grid.arrange(grob)
 }
-

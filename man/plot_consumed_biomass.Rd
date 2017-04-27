@@ -13,9 +13,9 @@ Consumed biomass in [t] is stored in column 'atoutput'. Should be generated with
 \code{link{calculate_consumed_biomass}}.}
 
 \item{select_time}{Numeric value to control the simulation time in years to visualise.
-By default the start of the simulation is shown.}
+By default the start of the simulation is shown. Default is \code{NULL}.}
 
-\item{show}{Numeric value between 0 - 1 to control the amount of links shown. Default value is 0.95.
+\item{show}{Numeric value between 0 - 1 to control the amount of links shown. Default is \code{0.95}.
 Thus, the most important 95% of the total biomass flows are shown. The remaining interactions
 are grouped together as 'Rest'.}
 }
@@ -29,5 +29,23 @@ Circle diagramm to visualise the consumed biomass for the whole system.
 plot_consumed_biomass(ref_bio_cons)
 plot_consumed_biomass(ref_bio_cons, select_time = 1.8)
 plot_consumed_biomass(ref_bio_cons, select_time = 1.8, show = 0.99)
+
+# Add some gns testing.
+\dontrun{
+load("z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/preprocess-north-sea.rda", verbose = T)
+plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = 2.2)
+
+times <- c(0.2, seq(10, 90, 10), 99.8)
+par(mfcol = c(3, 4))
+for (i in seq_along(times)) {
+  plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = times[i])
 }
 
+times <- seq(0.2, 2.2, 0.2)
+# times <- times[times != 1]
+par(mfcol = c(3, 4))
+for (i in seq_along(times)) {
+  plot_consumed_biomass(result$biomass_consumed, show = 0.95, select_time = times[i])
+}
+}
+}

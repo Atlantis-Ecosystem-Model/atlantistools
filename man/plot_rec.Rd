@@ -14,7 +14,7 @@ This is created from atlantis output files YOY.txt and SSB.txt
 
 \item{ex_data}{Dataframe to compare the atlantis run with.}
 
-\item{ncol}{Number of columns in multipanel plot.}
+\item{ncol}{Number of columns in multipanel plot. Default is \code{7}.}
 }
 \value{
 ggplot2 object
@@ -35,4 +35,3 @@ Other plot functions: \code{\link{plot_bar}},
   \code{\link{plot_diet_bec_dev}}, \code{\link{plot_diet}},
   \code{\link{plot_line}}, \code{\link{plot_species}}
 }
-

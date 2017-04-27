@@ -4,7 +4,8 @@
 \alias{plot_diet}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_diet(bio_consumed, species = NULL, wrap_col, combine_thresh = 7)
+plot_diet(bio_consumed, species = NULL, wrap_col = "agecl",
+  combine_thresh = 7)
 }
 \arguments{
 \item{bio_consumed}{Consumed biomass of prey groups by predatorgroup and agecl in tonnes
@@ -16,12 +17,12 @@ Consumed biomass in [t] is stored in column 'atoutput'. Should be generated with
 \code{NULL} resulting in all available species being ploted.}
 
 \item{wrap_col}{Character specifying the column of the dataframe to be used as multipanel plot.
-Currently only "agecl" is supported.}
+Default is \code{"agecl"}.}
 
 \item{combine_thresh}{Number of different categories to plot. Lets say predator X has eaten
 20 different prey items. If you only want to show the 3 most important prey items set
 \code{combine_thresh} to 3. As rule of thumb values < 10 are useful otherwise to many
-colors are used in the plots.}
+colors are used in the plots. Default is \code{7}.}
 }
 \value{
 List of grobs composed of ggplot2 objects.
@@ -30,7 +31,7 @@ List of grobs composed of ggplot2 objects.
 Visualise diet proportions form predator and prey perspective. The upper panel
 plot shows the predator perspective while the lower panel plot shows the prey perspective
 for a given group. Please note that this function only works with models
-based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to get an indication
+based on the trunk code. Bec_dev models should use \code{\link{plot_diet_bec_dev}} to get an indication
 of the feeding interactions.
 }
 \examples{
@@ -47,4 +48,3 @@ Other plot functions: \code{\link{plot_bar}},
   \code{\link{plot_diet_bec_dev}}, \code{\link{plot_line}},
   \code{\link{plot_rec}}, \code{\link{plot_species}}
 }
-

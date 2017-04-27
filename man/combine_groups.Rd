@@ -8,7 +8,7 @@ combine_groups(data, group_col, groups = names(data)[!is.element(names(data),
   c("atoutput", "time", group_col))], combine_thresh = 15)
 }
 \arguments{
-\item{data}{Dataframe whose grouops shall be combined.}
+\item{data}{Dataframe whose groups shall be combined.}
 
 \item{group_col}{Character string giving the name of the group column in `data`.}
 
@@ -29,4 +29,3 @@ df <- combine_groups(ref_dm, group_col = "prey", combine_thresh = 2)
 \seealso{
 Other combine functions: \code{\link{combine_runs}}
 }
-

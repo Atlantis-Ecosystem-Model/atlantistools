@@ -6,21 +6,20 @@
 #' @family load functions
 #' @author Kelli Faye Johnson
 #'
-#' @param dir Path of the Atlantis model folder.
-#' @param bgm Character string giving the name of the atlantis bgm file.
+#' @param bgm Character string giving the connection to the atlantis bgm file.
+#' The filename ends in \code{.bgm}.
 #'
 #' @return A list of information regarding boxes for an Atlantis scenario.
 #' @export
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
+#' bgm <- file.path(d, "VMPA_setas.bgm")
+#'
+#' boxes <- load_box(bgm)
 
-load_box <- function(dir = getwd(), bgm) {
-  if (!is.null(dir)) bgm <- file.path(dir, bgm)
-
+load_box <- function(bgm) {
   if (!file.exists(bgm)) {
-    stop(paste("The file", bgm, "does not exist in the specified dir\n",
-               "please check the arguments dir and bgm in load_box."))
+    stop(paste("The file", bgm, "does not exist"))
   }
 
   data <- readLines(bgm)
@@ -61,6 +60,7 @@ load_box <- function(dir = getwd(), bgm) {
     out$vertmix <- gsr(info, "\\.vertmix")
     out$horizmix <- gsr(info, "\\.horizmix")
     out$vert <- gsr(info, "vert[[:space:]]")
+    out$botz <- gsr(info, "\\.botz")
     return(out)
   }
   get_face <- function(num, data) {

@@ -4,29 +4,18 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dir = getwd(), dietcheck, fgs, prm_run,
-  convert_names = FALSE, report = FALSE, version_flag = 1)
+load_dietcheck(dietcheck, fgs, prm_run, convert_names = FALSE,
+  report = FALSE, version_flag = 2)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
+\item{dietcheck}{Character string giving the connection of the dietcheck file.
+The filename usually contains \code{Dietcheck} and ends in \code{.txt}".}
 
-\item{dietcheck}{Character string of the DietCheck.txt file. Usually
-'output[...]DietCheck.txt'. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as nc. In addition set dir to 'NULL' in this
-case.}
+\item{fgs}{Character string giving the connection to the functional groups file.
+The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
-\item{fgs}{Character string giving the filename of 'functionalGroups.csv'
-file. In case you are using multiple folders for your model files and
-outputfiles pass the complete folder/filename string as fgs.}
-
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.
-In addition set dir to 'NULL' in this case.}
+\item{prm_run}{Character string giving the connection of the run parameterfile.
+The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
@@ -34,7 +23,7 @@ or not (default = \code{FALSE}).}
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
 
-\item{version_flag}{The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.}
+\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
 A \code{data.frame} in long format with the following coumn names:
@@ -44,16 +33,21 @@ A \code{data.frame} in long format with the following coumn names:
 Read in the atlantis dietcheck.txt file and perform some basic data transformations.
 }
 \examples{
+# Apply to bec-dev models.
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
-                       fgs = "SETasGroups.csv",
-                       prm_run = "VMPA_setas_run_fishing_F_New.prm")
+dietcheck <- file.path(d, "outputSETASDietCheck.txt")
+fgs <- file.path(d, "SETasGroups.csv")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+
+diet <- load_dietcheck(dietcheck, fgs, prm_run, version_flag = 1)
 head(diet, n = 10)
 
+# Apply to trunk models.
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
-                       fgs = "SETasGroupsDem_NoCep.csv",
-                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
+dietcheck <- file.path(d, "outputSETASDietCheck.txt")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+diet <- load_dietcheck(dietcheck, fgs, prm_run)
 head(diet, n = 10)
 }
 \seealso{
@@ -64,4 +58,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_rec}}, \code{\link{load_spec_mort}},
   \code{\link{load_txt}}
 }
-

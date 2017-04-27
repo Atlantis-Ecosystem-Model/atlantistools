@@ -18,7 +18,7 @@ In case you aim to plot SpecMort.txt data use either "agecl" or "stanza".}
 \item{combine_thresh}{Number of different categories to plot. Lets say predator X has eaten
 20 different prey items. If you only want to show the 3 most important prey items set
 \code{combine_thresh} to 3. As rule of thumb values < 10 are useful otherwise to many
-colors are used in the plots.}
+colors are used in the plots. Default is \code{15}.}
 }
 \value{
 List of ggplot2 objects.
@@ -56,4 +56,3 @@ Other plot functions: \code{\link{plot_bar}},
   \code{\link{plot_line}}, \code{\link{plot_rec}},
   \code{\link{plot_species}}
 }
-

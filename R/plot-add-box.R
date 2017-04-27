@@ -1,7 +1,7 @@
 #' Low level plotting function to add sudo confidence range to calibration plots.
 #'
 #' @param plot ggplot2 object.
-#' @param range max and min relative change of data.
+#' @param range max and min relative change of data. Default is \code{c(0.5, 0.2)}.
 #' @return ggplot2 plot.
 #' @export
 #' @family low-level-plot functions

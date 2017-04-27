@@ -5,7 +5,8 @@ context("change_avail test parameter update.")
 # }
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-dm <- load_dietmatrix(d, prm_biol = "VMPA_setas_biol_fishing_Trunk.prm", fgs = "SETasGroupsDem_NoCep.csv")
+dm <- load_dietmatrix(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
+                      fgs = file.path(d, "SETasGroupsDem_NoCep.csv"))
 
 test_val <- 0.1234
 

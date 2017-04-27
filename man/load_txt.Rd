@@ -4,20 +4,14 @@
 \alias{load_txt}
 \title{Function to load various txt files from Atlantis simulations}
 \usage{
-load_txt(dir, file, id_col = "Time")
+load_txt(file, id_col = "Time")
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{file}{Character string of the file. In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string as to file. In addition set dir to 'NULL' in this
-case.}
+\item{file}{Character string giving the connection of the output file.
+The filename usually contains \code{output} and ends in \code{.txt}".}
 
 \item{id_col}{Character strings giving the names of the columns which are not variables.
-Data from all other columns will be gathered with tidyr.}
+Data from all other columns will be gathered with tidyr. Default is \code{"Time"}.}
 }
 \value{
 Dataframe in tidy format!
@@ -27,9 +21,11 @@ Function to load various txt files from Atlantis simulations
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-load_txt(dir = d,
-   file = "outputSETASSSB.txt",
-   id_col = "Time")
+file <- file.path(d, "outputSETASSSB.txt")
+load_txt(file)
+
+file <- file.path(d, "outputSETASYOY.txt")
+load_txt(file)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
@@ -39,4 +35,3 @@ Other load functions: \code{\link{load_box}},
   \code{\link{load_nc}}, \code{\link{load_rec}},
   \code{\link{load_spec_mort}}
 }
-

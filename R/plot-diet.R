@@ -3,7 +3,7 @@
 #' Visualise diet proportions form predator and prey perspective. The upper panel
 #' plot shows the predator perspective while the lower panel plot shows the prey perspective
 #' for a given group. Please note that this function only works with models
-#' based on the trunk code. Bec_dev models should use \code{plot_diet_bec_dev} to get an indication
+#' based on the trunk code. Bec_dev models should use \code{\link{plot_diet_bec_dev}} to get an indication
 #' of the feeding interactions.
 #'
 #' @param bio_consumed Consumed biomass of prey groups by predatorgroup and agecl in tonnes
@@ -13,11 +13,11 @@
 #' @param species Character string giving the acronyms of the species you aim to plot. Default is
 #' \code{NULL} resulting in all available species being ploted.
 #' @param wrap_col Character specifying the column of the dataframe to be used as multipanel plot.
-#' Currently only "agecl" is supported.
+#' Default is \code{"agecl"}.
 #' @param combine_thresh Number of different categories to plot. Lets say predator X has eaten
 #' 20 different prey items. If you only want to show the 3 most important prey items set
 #' \code{combine_thresh} to 3. As rule of thumb values < 10 are useful otherwise to many
-#' colors are used in the plots.
+#' colors are used in the plots. Default is \code{7}.
 #' @return List of grobs composed of ggplot2 objects.
 #' @export
 #' @family plot functions
@@ -30,7 +30,7 @@
 #' # Use names() to get the species names!
 #' names(plots)
 
-plot_diet <- function(bio_consumed, species = NULL, wrap_col, combine_thresh = 7) {
+plot_diet <- function(bio_consumed, species = NULL, wrap_col = "agecl", combine_thresh = 7) {
   # Check input dataframe structure.
   check_df_names(data = bio_consumed, expect = c("pred", "agecl", "time", "prey", "atoutput"), optional = "polygon")
 

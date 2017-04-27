@@ -1,15 +1,9 @@
 #' Change biological parameterfile for parameters which expect multiple values.
 #'
 #'
-#' This functionis is used to help automate the calibration routine for ATLANTIS models.
+#' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @inheritParams extract_prm
 #' @param select_acronyms Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the *.prm file. Check column "Code" in
 #' "functionalGroups.csv" for clarification.
@@ -22,37 +16,38 @@
 #' @param parameter Character value of the model parameter which shall be changed.
 #' Only one parameter can be selected per function call.
 #' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
-#' be passed directly.
+#' be passed directly. Default is \code{TRUE}.
 #' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
-#' (\code{TRUE}) or not (\code{FALSE}).
+#' (\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #'
-#' new_prm <- change_prm_cohort(dir = d,
-#'                              prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#' new_prm <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
 #'                              select_acronyms = c("FPS", "FVS"),
 #'                              roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10),
 #'                              parameter = "C",
 #'                              save_to_disc = FALSE)
+#' # C_FPS is in line 640. Old values are 0.0002 0.3 0.6 0.6 0.6 0.6 0.5 0.5 0.4 and 0.4.
+#' new_prm[640:641]
+#' # C_FVS is in line 652. Old values are 40.0 40.0 40.0 120.0 150.0 250.0 250.0 300.0 300.0 and 300.0.
+#' new_prm[652:653]
 #'
 #' # Also works for lists as argument
-#' new_prm <- change_prm_cohort(dir = d,
-#'                              prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#' new_prm <- change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
 #'                              select_acronyms = c("FPS", "FVS"),
 #'                              roc = list(rep(3, times = 10), rep(2, times = 10)),
 #'                              parameter = "C",
 #'                              save_to_disc = FALSE)
 
-# dir <- file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")
-# prm_biol <- "NorthSea_biol_fishing.prm"
+# prm_biol <- file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS", "NorthSea_biol_fishing.prm")
 # select_acronyms <- c("COD", "WHG")
 # roc <- list(COD = 1:12,
 #             HER = 1:8)
 
-change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter, relative = TRUE, save_to_disc = TRUE) {
+change_prm_cohort <- function(prm_biol, select_acronyms, roc, parameter, relative = TRUE, save_to_disc = TRUE) {
     if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
 
     # Convert to matrix if only one species is selected and roc is a vector!
@@ -71,8 +66,7 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
       }
 
       # Read in parameter file!
-      prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-      prm_biol_new <- readLines(con = prm_biol_new)
+      prm_biol_new <- readLines(con = prm_biol)
 
       # Function to update a specific parameter composed of a parameter string
       # a group acronym and a seperator (by default "_") found in a prm file.
@@ -113,7 +107,7 @@ change_prm_cohort <- function(dir = getwd(), prm_biol, select_acronyms, roc, par
 
       if (save_to_disc) {
         print("Writing new prm file!")
-        writeLines(text = prm_biol_new, con = convert_path(dir = dir, file = prm_biol), sep = "\n")
+        writeLines(text = prm_biol_new, con = prm_biol, sep = "\n")
       }
 
       invisible(prm_biol_new)

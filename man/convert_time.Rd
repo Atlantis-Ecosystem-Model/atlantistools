@@ -4,17 +4,11 @@
 \alias{convert_time}
 \title{Convert timestep to actual time!}
 \usage{
-convert_time(dir = getwd(), prm_run, col)
+convert_time(prm_run, col)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{prm_run}{Character string giving the filename of the run
-parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{prm_run}{Character string giving the connection of the run parameterfile.
+The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
 \item{col}{Numeric vector. Usually a column in a dataframe with information about time.
 Either given as timesteps or days.}
@@ -27,6 +21,5 @@ Convert timestep to actual time!
 }
 \seealso{
 Other convert functions: \code{\link{convert_bgm}},
-  \code{\link{convert_factor}}, \code{\link{convert_path}}
+  \code{\link{convert_factor}}
 }
-

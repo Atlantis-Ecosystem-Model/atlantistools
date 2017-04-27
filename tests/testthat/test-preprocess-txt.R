@@ -2,7 +2,7 @@ context("preprocess_txt check structure and output")
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-bboxes <- get_boundary(boxinfo = load_box(dir = d, bgm = "VMPA_setas.bgm"))
+bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
 
 df <- data.frame(code = letters[1:10], age1 = 1:10, age2 = 11:20, stringsAsFactors = FALSE)
 

@@ -16,11 +16,12 @@ group_data(data, groups)
 \item{data}{Dataframe the aggregation is applied to.}
 
 \item{col}{Column of the dataframe the summarise function is applied.
-Default is 'atoutput'.}
+Default is \code{atoutput}.}
 
 \item{groups}{Vector of character strings giving the grouping variables.}
 
-\item{out}{Character string specifying the name of the output column.}
+\item{out}{Character string specifying the name of the output column.
+Default is \code{atoutput}.}
 
 \item{fun}{Aggregation function to apply.}
 }
@@ -34,4 +35,3 @@ used in dplyr to aggregate dataframes.
 \examples{
 agg_ref_nums <- agg_data(data = ref_nums, groups = c("species", "agecl"), fun = mean)
 }
-

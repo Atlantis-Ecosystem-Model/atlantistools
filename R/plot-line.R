@@ -5,7 +5,7 @@
 #' @param y y-variable. Default is \code{'atoutput'}.
 #' @param wrap Wraping column. Default is \code{'species'}
 #' @param col Column to use as colour. Default is \code{NULL}.
-#' @param ncol Number of columns in multipanel plot.
+#' @param ncol Number of columns in multipanel plot. Default is \code{7}.
 #' @param yexpand Expands the y axis so it always includes 0. Default is \code{FALSE}.
 #' @return ggplot2 object
 #' @export
@@ -55,7 +55,7 @@ plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = 
   plot <- custom_map(data = data, x = x, y = y) +
     ggplot2::geom_line() +
     theme_atlantis()
-  if (!is.null(wrap)) plot <- custom_wrap(plot, col = wrap, ncol = ncol, yexpand = yexpand)
+  if (!is.null(wrap)) plot <- custom_wrap(plot, col = wrap, ncol = ncol)
   plot <- ggplot_custom(plot)
 
   # Add colour
@@ -69,6 +69,9 @@ plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = 
     }
   }
 
+  if (yexpand == TRUE){
+    plot <- plot + ggplot2::expand_limits(y = 0)
+  }
   return(plot)
 }
 

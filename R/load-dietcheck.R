@@ -1,26 +1,12 @@
 #' Read in the atlantis dietcheck.txt file and perform some basic data transformations.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param dietcheck Character string of the DietCheck.txt file. Usually
-#' 'output[...]DietCheck.txt'. In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string as nc. In addition set dir to 'NULL' in this
-#' case.
-#' @param fgs Character string giving the filename of 'functionalGroups.csv'
-#' file. In case you are using multiple folders for your model files and
-#' outputfiles pass the complete folder/filename string as fgs.
-#' @param prm_run Character string giving the filename of the run
-#' parameterfile. Usually "[...]run_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
-#' In addition set dir to 'NULL' in this case.
-#' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
-#' or not (default = \code{FALSE}).
+#' @inheritParams load_nc
+#' @inheritParams load_fgs
+#' @inheritParams load_dietmatrix
+#' @param dietcheck Character string giving the connection of the dietcheck file.
+#' The filename usually contains \code{Dietcheck} and ends in \code{.txt}".
 #' @param report Logical indicating if incomplete DietCheck information shall
 #' be printed \code{TRUE} or not \code{FALSE}.
-#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
 #'
 #' @family load functions
 #' @export
@@ -28,25 +14,26 @@
 #'   time, pred, habitat, prey and atoutput (i.e., variable).
 #'
 #' @examples
+#' # Apply to bec-dev models.
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
-#'                        fgs = "SETasGroups.csv",
-#'                        prm_run = "VMPA_setas_run_fishing_F_New.prm")
+#' dietcheck <- file.path(d, "outputSETASDietCheck.txt")
+#' fgs <- file.path(d, "SETasGroups.csv")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
+#'
+#' diet <- load_dietcheck(dietcheck, fgs, prm_run, version_flag = 1)
 #' head(diet, n = 10)
 #'
+#' # Apply to trunk models.
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' diet <- load_dietcheck(dir = d, dietcheck = "outputSETASDietCheck.txt",
-#'                        fgs = "SETasGroupsDem_NoCep.csv",
-#'                        prm_run = "VMPA_setas_run_fishing_F_Trunk.prm")
+#' dietcheck <- file.path(d, "outputSETASDietCheck.txt")
+#' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
+
+#' diet <- load_dietcheck(dietcheck, fgs, prm_run)
 #' head(diet, n = 10)
 
 #BJS 7/6/16 change to be compatible with trunk version; added version_flag
-load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE, version_flag = 1) {
-    dietcheck <- convert_path(dir = dir, file = dietcheck)
-  if (!file.exists(dietcheck)) {
-    stop(paste("File", dietcheck, "not found. Plase check parameters dir and dietcheck."))
-  }
-
+load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE, version_flag = 2) {
   # read in diet information
   diet <- utils::read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
 
@@ -112,11 +99,11 @@ load_dietcheck <- function(dir = getwd(), dietcheck, fgs, prm_run, convert_names
   # Convert species codes to longnames!
   if (convert_names) {
     diet_long <- dplyr::mutate_at(diet_long, .cols = c("pred", "prey"), .funs = convert_factor,
-                                  data_fgs = load_fgs(dir = dir, fgs = fgs))
+                                  data_fgs = load_fgs(fgs = fgs))
   }
 
   # Convert timestep to time in years!
-  diet_long$time <- convert_time(dir = dir, prm_run = prm_run, col = diet_long$time)
+  diet_long$time <- convert_time(prm_run = prm_run, col = diet_long$time)
 
 
   return(diet_long)

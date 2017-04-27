@@ -23,10 +23,11 @@ devtools::install_github("alketh/atlantistools", build_vignettes = TRUE)
 vignette("package-demo", package = "atlantistools")
 ```
 
-You can customise the build in vignettes to automate the simulate model - check output cycle during model calibration. Currently there are 3 vignettes available.
+You can customise the build in vignettes to automate the simulate model - check output cycle during model calibration. Currently there are 4 vignettes available.
 
-1.  model-calibration.Rmd
-2.  model-calibration-species.Rmd
-3.  model-comparison.Rmd
+1.  model-preprocess.Rmd
+2.  model-calibration.Rmd
+3.  model-calibration-species.Rmd
+4.  model-comparison.Rmd
 
 In order to use the vignettes please make sure to use the latest version of RStudio (<https://www.rstudio.com/products/RStudio/>). In addition you need to install pandoc (<http://pandoc.org/installing.html>) and LaTex (I recommend MikTex, <http://miktex.org/download>) on your system. Depending on the LaTex package compendium you selected you might need to install the following additional LaTex packages to create pdfs: url, fancyvrb, framed and titling. You should be prompted in doing so when you try to create your first pdf.

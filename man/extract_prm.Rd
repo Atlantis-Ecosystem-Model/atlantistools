@@ -5,24 +5,35 @@
 \alias{extract_prm_cohort}
 \title{Extract values for Atlantis parameters from the biological parameter file.}
 \usage{
-extract_prm(dir = getwd(), prm_biol, variables)
+extract_prm(prm_biol, variables)
 
-extract_prm_cohort(dir = getwd(), prm_biol, variables)
+extract_prm_cohort(prm_biol, variables)
 }
 \arguments{
-\item{dir}{Character string giving the path of the Atlantis model folder.
-If data is stored in multiple folders (e.g. main model folder and output
-folder) you should use 'NULL' as dir.}
-
-\item{prm_biol}{Character string giving the filename of the biological
-parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-multiple folders for your model files and outputfiles pass the complete
-folder/filename string and set dir to 'NULL'.}
+\item{prm_biol}{Character string giving the connection to the biological parameterfile.
+The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
 \item{variables}{Character string giving the flag to search for. This should be
 a combination of the parameter name and the group-Code.}
 }
+\value{
+numeric vector.
+}
 \description{
 Extract values for Atlantis parameters from the biological parameter file.
 }
+\examples{
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
 
+# You can pass a single variable
+extract_prm(prm_biol, variables = "KWRR_FVS")
+
+# Or multiple variables
+extract_prm(prm_biol, variables = paste("KWRR", c("FVS", "FPS"), sep = "_"))
+
+# Use extract_prm_cohort do extract data for age specific parameters.
+# They are usually stored in the next line following the parameter tag.
+extract_prm_cohort(prm_biol, variables = "C_FVS")
+extract_prm_cohort(prm_biol, variables = paste("C", c("FVS", "FPS"), sep = "_"))
+}

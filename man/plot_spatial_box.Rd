@@ -22,12 +22,12 @@ to convert your bgm-file to a dataframe with columns 'lat', 'long', 'inside_lat'
 \item{select_species}{Character vector listing the species to plot. If no species are selected
 \code{NULL} (default) all available species are plotted.}
 
-\item{timesteps}{Integer giving the number of timesteps to visualise. The minimum
-value is 2 (default). By default the start and end of the simulation is shown. In case
-timesteps > 2 equally spaced timesteps - 2 are added.}
+\item{timesteps}{Integer giving the number of timesteps to visualise. Default is \code{2}.
+By default the start and end of the simulation is shown. In case
+timesteps > 2 equally spaced timesteps are added.}
 
 \item{polygon_overview}{numeric value between 0 and 1 indicating the size used to plot the polygon overview in the
-upper right corner of the plot. Default is 0.2.}
+upper right corner of the plot.  Default is \code{0.2}.}
 }
 \value{
 grob of 3 ggplot2 plots.
@@ -36,9 +36,9 @@ grob of 3 ggplot2 plots.
 Visualise the spatial distribution per species and stanza combination.
 }
 \examples{
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-bgm_as_df <- convert_bgm(dir, bgm = "VMPA_setas.bgm")
+bgm_as_df <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 
 # Spatial distribution in Atlantis is based on adu- and juv stanzas.
 # Therefore, we need to aggregate the age-based biomass to
@@ -59,4 +59,3 @@ grobs <- plot_spatial_box(bio_spatial, bgm_as_df,
 gridExtra::grid.arrange(grobs[[1]])
 gridExtra::grid.arrange(grobs[[2]])
 }
-

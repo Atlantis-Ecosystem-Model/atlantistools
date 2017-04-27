@@ -18,11 +18,8 @@ specifying which boxes are along the boundary.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-boxes <- load_box(dir = d, bgm = "VMPA_setas.bgm")
+boxes <- load_box(bgm = file.path(d, "VMPA_setas.bgm"))
 get_boundary(boxinfo = boxes)
-}
-\author{
-Kelli Faye Johnson
 }
 \seealso{
 \code{\link{load_box}}
@@ -33,4 +30,6 @@ Other get functions: \code{\link{get_colpal}},
 Other get functions: \code{\link{get_colpal}},
   \code{\link{get_conv_mgnbiot}}, \code{\link{get_groups}}
 }
-
+\author{
+Kelli Faye Johnson
+}

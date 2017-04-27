@@ -1,15 +1,11 @@
 #' Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.
 #'
 #'
-#' This functionis is used to help automate the calibration routine for ATLANTIS models.
+#' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
-#' @param dir Character string giving the path of the Atlantis model folder.
-#' If data is stored in multiple folders (e.g. main model folder and output
-#' folder) you should use 'NULL' as dir.
-#' @param prm_biol Character string giving the filename of the biological
-#' parameterfile. Usually "[...]biol_fishing[...].prm". In case you are using
-#' multiple folders for your model files and outputfiles pass the complete
-#' folder/filename string and set dir to 'NULL'.
+#' @inheritParams extract_prm
+#' @inheritParams load_dietmatrix
+#' @inheritParams change_prm_cohort
 #' @param select_acronyms Character vector of funtional groups which shall be read in.
 #' Names have to match the ones used in the *.prm file. Check column "Code" in
 #' "functionalGroups.csv" for clarification.
@@ -18,25 +14,21 @@
 #' can be passed as roc.
 #' @param parameter Character value of the model parameter which shall be changed.
 #' Only one parameter can be selected per function call.
-#' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
-#' be passed directly.
-#' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
-#' (\code{TRUE}) or not (\code{FALSE}).
-#' @param version_flag The version of atlantis that created the output files. 1 for bec_dev, 2 for trunk.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' new_prm <- change_prm(dir = d,
-#'                       prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
+#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+#'
+#' new_prm <- change_prm(prm_biol,
 #'                       select_acronyms = c("FPS", "FVS"),
 #'                       roc = c(2,3),
 #'                       parameter = "KWRR",
 #'                       save_to_disc = FALSE)
 
-change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
-                       relative = TRUE, save_to_disc = TRUE, version_flag = 1) {
+change_prm <- function(prm_biol, select_acronyms, roc, parameter,
+                       relative = TRUE, save_to_disc = TRUE, version_flag = 2) {
   if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
 
   if (length(select_acronyms) != length(roc)) {
@@ -44,8 +36,7 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
   }
 
   # Read in parameter file!
-  prm_biol_new <- convert_path(dir = dir, file = prm_biol)
-  prm_biol_new <- readLines(con = prm_biol_new)
+  prm_biol_new <- readLines(con = prm_biol, warn = FALSE)
 
   # Function to update a specific parameter composed of a parameter string
   # a group acronym and a seperator (by default "_") found in a prm file.
@@ -82,9 +73,8 @@ change_prm <- function(dir = getwd(), prm_biol, select_acronyms, roc, parameter,
 
   if (save_to_disc) {
     print("Writing new prm file!")
-    writeLines(text = prm_biol_new, con = convert_path(dir = dir, file = prm_biol), sep = "\n")
+    writeLines(text = prm_biol_new, con = prm_biol, sep = "\n")
   }
 
   invisible(prm_biol_new)
 }
-

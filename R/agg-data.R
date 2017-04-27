@@ -5,9 +5,10 @@
 #'
 #' @param data Dataframe the aggregation is applied to.
 #' @param col Column of the dataframe the summarise function is applied.
-#' Default is 'atoutput'.
+#' Default is \code{atoutput}.
 #' @param groups Vector of character strings giving the grouping variables.
 #' @param out Character string specifying the name of the output column.
+#' Default is \code{atoutput}.
 #' @param fun Aggregation function to apply.
 #' @return grouped datarame with the aggregated data.
 #' @export
@@ -17,7 +18,7 @@
 
 agg_data <- function(data, col = "atoutput", groups, out = "atoutput", fun){
   result <- group_data(data, groups = groups) %>%
-    dplyr::summarise_(.dots = stats::setNames(list(lazyeval::interp(~fun(var), var = as.name(col))), out))
+    dplyr::summarise_(.dots = stats::setNames(list(lazyeval::interp(~fun(var, na.rm = TRUE), var = as.name(col))), out))
   return(dplyr::ungroup(result))
 }
 
@@ -37,6 +38,3 @@ group_data <- function(data, groups) {
     dplyr::group_by_(.dots = dots)
   return(grouped_df)
 }
-
-
-

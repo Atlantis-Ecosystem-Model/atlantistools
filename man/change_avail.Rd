@@ -15,29 +15,29 @@ with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code', 'prey_id' and
 \item{pred}{Character vector of predator Acronyms (see \code{get_acronyms()}).
 Selecting \code{NULL} as pred results in all predators being selected. This
 can be helpful if you want to increase the feeding pressure on a specific
-prey item by all groups.}
+prey item by all groups. Default is \code{NULL}.}
 
 \item{pred_stanza}{Integer vector indicating if the predator is juvenile (= 1) or
 adult (= 2). \code{pred} and \code{pred_stanza} need to be of the same length.
 In rare instances, e.g. pred_stanza being \code{NULL} or one single integer
 either all pred_stanzas are selected or the single pred_stanza is applied to all
-predators.}
+predators. Default is \code{NULL}.}
 
 \item{prey}{List of character vectors of prey Acronyms (see \code{get_acronyms()}).
 \code{pred} and \code{prey} need to be of the same length. Selecting \code{NULL} as
 prey results in all prey groups being selected. This
 can be helpful if you want to increase the available prey for a specific predator
-overall.}
+overall. Default is \code{NULL}.}
 
 \item{roc}{Vector of multiplication factors which shall be applied to the old set of parameters.
 Please supply one value per selected group. In case relative is FALSE the new absolute values
 can be passed as roc.}
 
 \item{relative}{Logical if TRUE values are changed relative to base values. If FALSE new values can
-be passed directly.}
+be passed directly. Default is \code{NULL}.}
 
 \item{consecutive}{Boolean indicating if multiple calls to change_avail are performed one after
-another. Default is \code{FALSE}.}
+another \code{TRUE}. Default is \code{FALSE}.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.
@@ -47,9 +47,8 @@ Change the availability of predator XXX on specific preygroups.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-dm <- load_dietmatrix(dir = d,
-                      prm_biol = "VMPA_setas_biol_fishing_Trunk.prm",
-                      fgs = "SETasGroupsDem_NoCep.csv")
+dm <- load_dietmatrix(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
+                      fgs = file.path(d, "SETasGroupsDem_NoCep.csv"))
 
 dm1 <- change_avail(dietmatrix = dm,
                     pred = "FPS",
@@ -71,4 +70,3 @@ dm2 <- change_avail(dietmatrix = dm,
 dm2[apply(apply(dm2[, 5:ncol(dm2)], MARGIN = 2,
 function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
 }
-

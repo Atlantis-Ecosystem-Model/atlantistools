@@ -2,13 +2,16 @@ context("load_dietcheck test datastructure")
 
 diet <- ref_dm
 
-diet2 <- load_dietcheck(system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
-                       dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroupsDem_NoCep.csv",
-                       prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", report = FALSE, version_flag = 2)
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 
-diet3 <- suppressWarnings(load_dietcheck(system.file("extdata", "setas-model-new-trunk", package = "atlantistools"),
-                        dietcheck = "outputSETASDietCheck.txt", fgs = "SETasGroupsDem_NoCep.csv",
-                        prm_run = "VMPA_setas_run_fishing_F_Trunk.prm", report = TRUE, version_flag = 2))
+diet2 <- load_dietcheck(dietcheck = file.path(d, "outputSETASDietCheck.txt"),
+                        fgs = file.path(d, "SETasGroupsDem_NoCep.csv"),
+                        prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"), report = FALSE, version_flag = 2)
+
+# This is only used for code-coverage purposes.
+diet3 <- suppressWarnings(load_dietcheck(dietcheck = file.path(d, "outputSETASDietCheck.txt"),
+                        fgs = file.path(d, "SETasGroupsDem_NoCep.csv"),
+                        prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"), report = TRUE, version_flag = 2))
 
 test_that("test output numbers trunk", {
   # expect_true(all(abs(test1$check - 1) < 0.001))
