@@ -20,6 +20,10 @@
 #' df <- get_growth_fishbase(fish, mirror = "de")
 #' head(df)
 #'
+#' fish <- c("Sprattus sprattus")
+#' df <- get_growth_fishbase(fish)
+#' head(df)
+
 #' # Only use for debugging purposes.
 #' fish <- read.csv("Z:/my_data_alex/fish_species_names_from_ibts.csv", stringsAsFactors = FALSE)[, 1]
 #' url <- get_growth_fishbase(fish)
