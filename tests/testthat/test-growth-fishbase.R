@@ -1,14 +1,14 @@
-# context("test extraction of data from fishbase.")
-#
-# df1 <- get_growth_fishbase("Sprattus sprattus")
-#
-# test_that("test extraction for sprat", {
-#   expect_equal(dim(df1), c(25, 17))
-#   expect_equivalent(df1$linf[5], 13.4)
-#   expect_equivalent(df1$k[12],  0.298)
-#   expect_equivalent(df1$locality[23], "Kattegat")
-# })
-#
+context("test extraction of data from fishbase.")
+
+df1 <- get_growth_fishbase("Sprattus sprattus")
+
+test_that("test extraction for sprat", {
+  expect_equal(dim(df1), c(25, 17))
+  expect_equivalent(df1$linf[5], 13.4)
+  expect_equivalent(df1$k[12],  0.298)
+  expect_equivalent(df1$locality[23], "Kattegat")
+})
+
 # df2 <- get_growth_fishbase("Anguilla anguilla")
 #
 # test_that("test extraction for eel", {
