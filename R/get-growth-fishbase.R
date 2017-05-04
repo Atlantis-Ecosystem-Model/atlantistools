@@ -78,9 +78,9 @@ get_growth_fishbase <- function(fish, mirror = "se"){
       purrr::map(., ~.[stringr::str_detect(., pattern = "FishPopGrowthSummary")])
 
     # check if result and urls match. Rearrange due to alphabetical ordering in df.
-    count <- agg_data(result, col = "linf", groups = "species", out = "count", fun = length)
-    count <- count[match(names(ids), count$species), ]
-    if (all(count$count == purrr::map_int(ref_urls, length))) {
+    count <- split(result, result$species) %>%
+      purrr::map_int(., nrow)
+    if (all(count == purrr::map_int(ref_urls, length))) {
       result$ref_url <- unlist(ref_urls)
       ref_ids <- purrr::map(result$ref_url, url_to_refid)
       result$main_ref <- purrr::map_int(ref_ids, 1)
