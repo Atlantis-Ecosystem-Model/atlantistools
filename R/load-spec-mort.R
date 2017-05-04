@@ -71,6 +71,10 @@ load_spec_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, versio
   # Convert time
   mort$time <- convert_time(prm_run = prm_run, col = mort$time)
 
+  # For some weird reason putput rows with exact yearly output are duplicated...
+  # ***This will cause a potentially unnoticed bug when this issue in the output file gets fixed
+  mort <- agg_data(data = mort, groups = c("time", "pred", "agecl", "prey"), fun = mean)
+
   return(mort)
 }
 
