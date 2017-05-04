@@ -7,7 +7,7 @@ Description: Helper tools to extract and visualise atlantis output.
 URL: https://github.com/alketh/atlantistools
 Depends:
     R (>= 3.2.3)
-License: GPL
+License: GPL-3
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests:
