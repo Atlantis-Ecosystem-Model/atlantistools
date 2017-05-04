@@ -8,7 +8,7 @@
 load_dietmatrix(prm_biol, fgs, transform = TRUE, convert_names = FALSE,
   version_flag = 2)
 
-write_diet(dietmatrix, prm_biol)
+write_diet(dietmatrix, prm_biol, write = TRUE)
 }
 \arguments{
 \item{prm_biol}{Character string giving the connection to the biological parameterfile.
@@ -27,7 +27,11 @@ or not (default = \code{FALSE}).}
 
 \item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 
-\item{dietmatrix}{Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}.}
+\item{dietmatrix}{Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}
+using \code{transform = FALSE}.}
+
+\item{write}{Logical Overwrite the existing parameterfile (TRUE) or not (FALSE).
+Defaults to \code{TRUE}.}
 }
 \value{
 dataframe of the availability matrix in long format with columns
@@ -53,4 +57,12 @@ fgs <- file.path(d, "SETasGroups.csv")
 
 dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
 head(dm, n = 10)
+
+# Use write_diet to update your existing parameterfile.
+dietmatrix <- load_dietmatrix(prm_biol, fgs, transform = FALSE)
+write <- FALSE
+
+# Write is set to FALSE here for technical reasons. Make sure to set it to TRUE in case you
+# want to update your file.
+new_diet <- write_diet(dietmatrix, prm_biol, write = FALSE)
 }

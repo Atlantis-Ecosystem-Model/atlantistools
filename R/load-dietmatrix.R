@@ -14,7 +14,10 @@
 #' @param version_flag The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.
 #' @return dataframe of the availability matrix in long format with columns
 #' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.
-#' @param dietmatrix Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}.
+#' @param dietmatrix Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}
+#' using \code{transform = FALSE}.
+#' @param write Logical Overwrite the existing parameterfile (TRUE) or not (FALSE).
+#' Defaults to \code{TRUE}.
 #' @export
 
 #' @examples
@@ -33,6 +36,15 @@
 #'
 #' dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
 #' head(dm, n = 10)
+#'
+#' # Use write_diet to update your existing parameterfile.
+#' dietmatrix <- load_dietmatrix(prm_biol, fgs, transform = FALSE)
+#' write <- FALSE
+#'
+#' # Write is set to FALSE here for technical reasons. Make sure to set it to TRUE in case you
+#' # want to update your file.
+#' new_diet <- write_diet(dietmatrix, prm_biol, write = FALSE)
+
 
 load_dietmatrix <- function(prm_biol, fgs, transform = TRUE, convert_names = FALSE, version_flag = 2) {
   fgs_data <- load_fgs(fgs = fgs)
@@ -92,7 +104,7 @@ load_dietmatrix <- function(prm_biol, fgs, transform = TRUE, convert_names = FAL
 
   # Transform to long format
   if (transform) {
-    result <- tidyr::gather_(data = result, key = "prey", value = "avail",
+    result <- tidyr::gather_(data = result, key_col = "prey", value_col = "avail",
                              names(result)[!is.element(names(result), c("pred", "pred_stanza", "prey_stanza", "code"))])
     prey_order <- data.frame(prey = prey, prey_id = 1:length(prey), stringsAsFactors = FALSE)
     result <- dplyr::left_join(result, prey_order, by = "prey")
@@ -108,13 +120,14 @@ load_dietmatrix <- function(prm_biol, fgs, transform = TRUE, convert_names = FAL
 #' @export
 #' @rdname load_dietmatrix
 # Write dietmatrix dataframe in wide format to hdd.
-write_diet <- function(dietmatrix, prm_biol) {
+write_diet <- function(dietmatrix, prm_biol, write = TRUE) {
   # Find dietmatrix in biological parameterfile!
   pstring <- "pPREY"
   biol <- readLines(prm_biol, warn = FALSE)
 
   # Remove explanatory rows
-  pos <- pos[pos != vapply(c("pPREY1FY1", "pPREY1FY2"), FUN = grep, FUN.VALUE = integer(1), x = biol)]
+  pos <- grep(pattern = pstring, x = biol)
+  pos <- pos[!pos %in% vapply(c("pPREY1FY1", "pPREY1FY2"), FUN = grep, FUN.VALUE = integer(1), x = biol)]
 
   # Define start and end of dietmatrix
   lags <- diff(pos)
@@ -139,8 +152,11 @@ write_diet <- function(dietmatrix, prm_biol) {
 
     if (length(dm_paste) == length(dm_ids)) {
       biol[dm_ids] <- dm_paste
-      print("Writing new prm file!")
-      writeLines(biol, con = prm_biol)
+      if (write) {
+        print("Writing new prm file!")
+        writeLines(biol, con = prm_biol)
+      }
+      invisible(biol)
     } else {
       stop("Dimensions do not match. Dietmatrix not updated!")
     }
