@@ -86,9 +86,12 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
                               gather_cols = names(diet)[prey_col_start:ncol(diet)])
   names(diet_long)[names(diet_long) == "Predator"] <- "pred" #bjs predator -> colnames(diet)[2]
 
-  if(version_flag == 2) {
+  if (version_flag == 2) {
     names(diet_long)[names(diet_long) == "Cohort"] <- "agecl" #bjs cohort -> colnames(diet)[3]
-    diet_long <- diet_long[-which(diet_long$prey == "Updated"),]
+    # Column Updated was added to runk code.
+    if ("Updated" %in% names(diet_long)) {
+      diet_long <- diet_long[-which(diet_long$prey == "Updated"), ]
+    }
   }
 
   names(diet_long) <- tolower(names(diet_long))
