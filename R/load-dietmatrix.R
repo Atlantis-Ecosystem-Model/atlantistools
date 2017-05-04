@@ -16,8 +16,8 @@
 #' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.
 #' @param dietmatrix Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}
 #' using \code{transform = FALSE}.
-#' @param write Logical Overwrite the existing parameterfile (TRUE) or not (FALSE).
-#' Defaults to \code{TRUE}.
+#' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
+#' (\code{TRUE}) or not (\code{FALSE}). Defaults to \code{TRUE}.
 #' @export
 
 #' @examples
@@ -121,7 +121,7 @@ load_dietmatrix <- function(prm_biol, fgs, transform = TRUE, convert_names = FAL
 #' @export
 #' @rdname load_dietmatrix
 # Write dietmatrix dataframe in wide format to hdd.
-write_diet <- function(dietmatrix, prm_biol, write = TRUE) {
+write_diet <- function(dietmatrix, prm_biol, save_to_disc = TRUE) {
   # Find dietmatrix in biological parameterfile!
   pstring <- "pPREY"
   biol <- readLines(prm_biol, warn = FALSE)
@@ -153,7 +153,7 @@ write_diet <- function(dietmatrix, prm_biol, write = TRUE) {
 
     if (length(dm_paste) == length(dm_ids)) {
       biol[dm_ids] <- dm_paste
-      if (write) {
+      if (save_to_disc) {
         print("Writing new prm file!")
         writeLines(biol, con = prm_biol)
       }

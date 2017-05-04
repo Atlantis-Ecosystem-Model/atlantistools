@@ -8,7 +8,7 @@
 load_dietmatrix(prm_biol, fgs, transform = TRUE, convert_names = FALSE,
   version_flag = 2)
 
-write_diet(dietmatrix, prm_biol, write = TRUE)
+write_diet(dietmatrix, prm_biol, save_to_disc = TRUE)
 }
 \arguments{
 \item{prm_biol}{Character string giving the connection to the biological parameterfile.
@@ -30,8 +30,8 @@ or not (default = \code{FALSE}).}
 \item{dietmatrix}{Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}
 using \code{transform = FALSE}.}
 
-\item{write}{Logical Overwrite the existing parameterfile (TRUE) or not (FALSE).
-Defaults to \code{TRUE}.}
+\item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
+(\code{TRUE}) or not (\code{FALSE}). Defaults to \code{TRUE}.}
 }
 \value{
 dataframe of the availability matrix in long format with columns
