@@ -18,7 +18,7 @@
 #' @param relative Logical if TRUE values are changed relative to base values. If FALSE new values can
 #' be passed directly. Default is \code{TRUE}.
 #' @param save_to_disc Logical indicating if the resulting prm file should be overwritten
-#' (\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.
+#' (\code{TRUE}) or not (\code{FALSE}). Defaults to \code{TRUE}.
 #' @return parameterfile *.prm file with the new parameter values.
 #' @export
 #'

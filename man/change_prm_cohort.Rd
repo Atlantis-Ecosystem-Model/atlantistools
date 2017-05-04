@@ -29,7 +29,7 @@ Only one parameter can be selected per function call.}
 be passed directly. Default is \code{TRUE}.}
 
 \item{save_to_disc}{Logical indicating if the resulting prm file should be overwritten
-(\code{TRUE}) or not (\code{FALSE}). Default is \code{TRUE}.}
+(\code{TRUE}) or not (\code{FALSE}). Defaults to \code{TRUE}.}
 }
 \value{
 parameterfile *.prm file with the new parameter values.
