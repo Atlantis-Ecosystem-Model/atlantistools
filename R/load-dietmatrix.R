@@ -29,6 +29,14 @@
 #' dm <- load_dietmatrix(prm_biol, fgs)
 #' head(dm, n = 10)
 #'
+#' # Use write_diet to update your existing parameterfile.
+#' dietmatrix <- load_dietmatrix(prm_biol, fgs, transform = FALSE)
+#' write <- FALSE
+#'
+#' # Write is set to FALSE here for technical reasons. Make sure to set it to TRUE in case you
+#' # want to update your file.
+#' new_diet <- write_diet(dietmatrix, prm_biol, write = FALSE)
+#'
 #' # And to bec-dev models.
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 #' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_New.prm")
@@ -37,13 +45,6 @@
 #' dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
 #' head(dm, n = 10)
 #'
-#' # Use write_diet to update your existing parameterfile.
-#' dietmatrix <- load_dietmatrix(prm_biol, fgs, transform = FALSE)
-#' write <- FALSE
-#'
-#' # Write is set to FALSE here for technical reasons. Make sure to set it to TRUE in case you
-#' # want to update your file.
-#' new_diet <- write_diet(dietmatrix, prm_biol, write = FALSE)
 
 
 load_dietmatrix <- function(prm_biol, fgs, transform = TRUE, convert_names = FALSE, version_flag = 2) {
