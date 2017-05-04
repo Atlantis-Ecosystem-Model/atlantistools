@@ -1,5 +1,8 @@
 language: r
 
+r:
+- oldrel
+
 warnings_are_errors: true
 
 sudo: required
