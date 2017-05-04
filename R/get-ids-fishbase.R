@@ -30,7 +30,7 @@ get_ids_fishbase <- function(fish){
   }
 
   pos <- purrr::map_int(pos, which)
-  pos <- fishbase_data$SpecCode[pos]
+  pos <- atlantistools::fishbase_data$SpecCode[pos]
   names(pos) <- fish
 
   return(pos)

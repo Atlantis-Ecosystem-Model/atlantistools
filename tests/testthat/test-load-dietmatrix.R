@@ -16,7 +16,7 @@ test_that("test output numbers", {
 dm <- load_dietmatrix(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
                       fgs = file.path(d, "SETasGroupsDem_NoCep.csv"), transform = FALSE)
 
-dm_new <- write_diet(dietmatrix = dm, prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), write = FALSE)
+dm_new <- write_diet(dietmatrix = dm, prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), save_to_disc = FALSE)
 
 test_that("test output numbers", {
   expect_equal(length(dm_new), 1630)
