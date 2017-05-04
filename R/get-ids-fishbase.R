@@ -16,12 +16,10 @@ get_ids_fishbase <- function(fish){
   # Check if every fishname is composed of genus and species!
   if (any(vapply(stringr::str_split(fish, pattern = " "), length, FUN.VALUE = integer(1)) < 2)) stop("Fishnames not complete.")
 
-  fish_data <- rfishbase::fishbase
-
   ge_sp <- split_species(fish)
 
   # get fishbase ids
-  pos <- purrr::map2(.x = ge_sp$ge, .y = ge_sp$sp, ~fish_data$Genus == .x & fish_data$Species == .y)
+  pos <- purrr::map2(.x = ge_sp$ge, .y = ge_sp$sp, ~fishbase_data$Genus == .x & fishbase_data$Species == .y)
 
   # report species not found in database
   missing <- purrr::map_int(pos, sum) == 0
@@ -32,7 +30,7 @@ get_ids_fishbase <- function(fish){
   }
 
   pos <- purrr::map_int(pos, which)
-  pos <- fish_data$SpecCode[pos]
+  pos <- fishbase_data$SpecCode[pos]
   names(pos) <- fish
 
   return(pos)
