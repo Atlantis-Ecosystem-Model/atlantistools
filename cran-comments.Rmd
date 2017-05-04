@@ -6,14 +6,18 @@
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
+
+There were 2 NOTEs:
+
+* checking CRAN incoming feasibility ... NOTE
+  Maintainer: 'Alexander Keth <alexander.keth@uni-hamburg.de>'
+  
 This is my first CRAN submission.
 
-There was 1 NOTE:
-
-checking installed package size ... NOTE
-  installed size is  5.2Mb
+* checking installed package size ... NOTE
+  installed size is  5.6Mb
   sub-directories of 1Mb or more:
-    doc       1.6Mb
+    doc       1.5Mb
     extdata   3.0Mb
 
 Example input files are drastically reduced in size (from more than 200MB down to 3MB).
