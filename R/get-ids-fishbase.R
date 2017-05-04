@@ -19,7 +19,7 @@ get_ids_fishbase <- function(fish){
   ge_sp <- split_species(fish)
 
   # get fishbase ids
-  pos <- purrr::map2(.x = ge_sp$ge, .y = ge_sp$sp, ~fishbase_data$Genus == .x & fishbase_data$Species == .y)
+  pos <- purrr::map2(.x = ge_sp$ge, .y = ge_sp$sp, ~atlantistools::fishbase_data$Genus == .x & atlantistools::fishbase_data$Species == .y)
 
   # report species not found in database
   missing <- purrr::map_int(pos, sum) == 0
