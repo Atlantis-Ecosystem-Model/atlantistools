@@ -38,7 +38,7 @@ load_spec_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, versio
     }
   } else if (version_flag == 2) {
     mort <- load_txt(file = specmort, id_col = c("Time", "Group", "Cohort", "Stock"))
-    mort <- dplyr::rename_(mort, prey = ~group, agecl = ~cohort, pred = ~code)
+    mort <- dplyr::rename_(mort, pred = ~group, agecl = ~cohort, prey = ~code)
     if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
       stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
     }
