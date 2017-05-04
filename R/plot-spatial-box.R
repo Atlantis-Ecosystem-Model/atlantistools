@@ -29,6 +29,7 @@
 #' # stanzas with \code{\link{combine_ages}}.
 #' bio_spatial <- combine_ages(ref_bio_sp, grp_col = "species", agemat = ref_agemat)
 #'
+#' \dontrun{
 #' # Apply \code{\link{plot_spatial_box}}
 #' grobs <- plot_spatial_box(bio_spatial, bgm_as_df, timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[1]])
@@ -36,12 +37,12 @@
 #'
 #' # use names() to select specific plots
 #' names(grobs)
+#' }
 #'
 #' # Plot specific species
 #' grobs <- plot_spatial_box(bio_spatial, bgm_as_df,
 #'                           select_species = "Shallow piscivorous fish", timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[1]])
-#' gridExtra::grid.arrange(grobs[[2]])
 
 plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2, polygon_overview = 0.2){
   # Check input dataframe!

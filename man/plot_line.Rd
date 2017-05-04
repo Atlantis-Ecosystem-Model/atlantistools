@@ -50,6 +50,7 @@ comp$model <- factor(comp$model, levels = lev_ord)
 # Create plot
 plot_line(comp, col = "model")
 
+\dontrun{
 # Use \\code{\\link{convert_relative_initial}} and \\code{\\link{plot_add_box}}
 # with \\code{\\link{plot_line}}. Use \\code{\\link{convert_relative_initial}} to
 # generate a relative time series first.
@@ -67,6 +68,7 @@ custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
 plot <- plot_line(preprocess$flux, wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
+}
 }
 \seealso{
 Other plot functions: \code{\link{plot_bar}},

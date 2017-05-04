@@ -45,6 +45,7 @@ bgm_as_df <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 # stanzas with \\code{\\link{combine_ages}}.
 bio_spatial <- combine_ages(ref_bio_sp, grp_col = "species", agemat = ref_agemat)
 
+\dontrun{
 # Apply \\code{\\link{plot_spatial_box}}
 grobs <- plot_spatial_box(bio_spatial, bgm_as_df, timesteps = 3)
 gridExtra::grid.arrange(grobs[[1]])
@@ -52,10 +53,10 @@ gridExtra::grid.arrange(grobs[[9]])
 
 # use names() to select specific plots
 names(grobs)
+}
 
 # Plot specific species
 grobs <- plot_spatial_box(bio_spatial, bgm_as_df,
                           select_species = "Shallow piscivorous fish", timesteps = 3)
 gridExtra::grid.arrange(grobs[[1]])
-gridExtra::grid.arrange(grobs[[2]])
 }

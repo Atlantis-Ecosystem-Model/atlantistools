@@ -33,6 +33,7 @@
 #' # Create plot
 #' plot_line(comp, col = "model")
 #'
+#' \dontrun{
 #' # Use \code{\link{convert_relative_initial}} and \code{\link{plot_add_box}}
 #' # with \code{\link{plot_line}}. Use \code{\link{convert_relative_initial}} to
 #' # generate a relative time series first.
@@ -50,6 +51,7 @@
 #'
 #' plot <- plot_line(preprocess$flux, wrap = NULL, col = "variable")
 #' custom_grid(plot, grid_x = "polygon", grid_y = "layer")
+#' }
 
 plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7, yexpand = FALSE) {
   plot <- custom_map(data = data, x = x, y = y) +

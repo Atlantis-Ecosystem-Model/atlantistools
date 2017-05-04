@@ -17,5 +17,7 @@ Plot spatial overlap.
 }
 \examples{
 sp_overlap <- calculate_spatial_overlap(ref_bio_sp, ref_dietmatrix, ref_agemat)
+\dontrun{
 plot_spatial_overlap(sp_overlap)
+}
 }

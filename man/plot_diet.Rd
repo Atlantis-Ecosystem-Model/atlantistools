@@ -35,12 +35,17 @@ based on the trunk code. Bec_dev models should use \code{\link{plot_diet_bec_dev
 of the feeding interactions.
 }
 \examples{
+\dontrun{
 plots <- plot_diet(ref_bio_cons, wrap_col = "agecl")
 gridExtra::grid.arrange(plots[[1]])
 gridExtra::grid.arrange(plots[[7]])
 
 # Use names() to get the species names!
 names(plots)
+}
+
+plot <- plot_diet(ref_bio_cons, species = "Small planktivorous fish", wrap_col = "agecl")
+gridExtra::grid.arrange(plot[[1]])
 }
 \seealso{
 Other plot functions: \code{\link{plot_bar}},
