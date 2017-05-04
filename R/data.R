@@ -247,4 +247,5 @@
 #'   \item{\code{Order}}{character.}
 #'   \item{\code{Class}}{character.}
 #' }
+#' @source \url{http://www.fishbase.org/} rfishbase::fishbase
 "fishbase_data"
