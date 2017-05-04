@@ -1,7 +1,7 @@
 Package: atlantistools
 Type: Package
 Title: Process and Visualise Output from Atlantis Models
-Version: 0.4.0.9000
+Version: 0.4.1
 Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
 Description: Helper tools to extract and visualise atlantis output.
 URL: https://github.com/alketh/atlantistools
