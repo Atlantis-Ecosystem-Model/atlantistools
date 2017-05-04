@@ -1,30 +1,29 @@
 context("test extraction of data from fishbase.")
 
-df1 <- get_growth_fishbase("Sprattus sprattus")
+df1 <- get_growth_fishbase("Scyliorhinus canicula")
 
 test_that("test extraction for sprat", {
-  expect_equal(dim(df1), c(25, 17))
-  expect_equivalent(df1$linf[5], 13.4)
-  expect_equivalent(df1$k[12],  0.298)
-  expect_equivalent(df1$locality[23], "Kattegat")
+  expect_equal(dim(df1), c(4, 17))
+  expect_equivalent(df1$linf[3], 87.4)
+  expect_equivalent(df1$k[2], 0.15)
+  expect_equivalent(df1$locality[1], "Central Adriatic, 100-200 m depth")
 })
 
-df2 <- get_growth_fishbase("Anguilla anguilla")
-
-test_that("test extraction for eel", {
-  expect_equal(dim(df2), c(43, 17))
-  expect_equivalent(df2$linf[10], 50.1)
-  expect_equivalent(df2$k[19],  0.078)
-  expect_equivalent(df2$locality[4], "Monaci lagoon")
-})
+# df2 <- get_growth_fishbase("Anguilla anguilla")
+#
+# test_that("test extraction for eel", {
+#   expect_equal(dim(df2), c(43, 17))
+#   expect_equivalent(df2$linf[10], 50.1)
+#   expect_equivalent(df2$k[19],  0.078)
+#   expect_equivalent(df2$locality[4], "Monaci lagoon")
+# })
 
 
 df3 <- get_ref_fishbase(df1)
 
 test_that("test extraction of references for sprat", {
-  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 312], "A preliminary compilation of fish length growth parameters."))
-  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 56764], "Some Biological characteristics of sprat"))
-  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 1771], "Growth and age composition of sprat stock"))
+  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 1231], "Zupanovic, S., 1961. Contribution"))
+  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 81067], "Ivory, P., F. Jeal and C.P. Nolan, 2005. Age determination"))
 })
 
 # use this for internal testing only
