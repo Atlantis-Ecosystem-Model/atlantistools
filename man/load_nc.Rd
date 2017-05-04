@@ -20,10 +20,10 @@ the column 'Name' in the 'functionalGroups.csv' file. Can be created with
 \code{load_bps}.#'}
 
 \item{select_groups}{Character vector of funtional groups which shall be read in.
-Names have to match the ones used in the ncdf file. Check column "Name" in
+Names have to match the ones used in the netcdf file. Check column "Name" in
 "functionalGroups.csv" for clarification.}
 
-\item{select_variable}{Character value spefifying which variable to load.
+\item{select_variable}{Character value specifying which variable to load.
 Only one variable of the options available (i.e., \code{c(
 "N", "Nums", "ResN", "StructN", "Eat", "Growth", "Prodn", "Grazing")
 }) can be loaded at a time.}
@@ -35,8 +35,8 @@ The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 Can be created with \code{get_boundary}.}
 
 \item{check_acronyms}{Logical testing if functional-groups in
-select_groups are inactive in the current model run. The will be omitted
-in the output. Default is \code{TRUE}.}
+select_groups are inactive in the current model run. They will be omitted
+in the output.}
 
 \item{warn_zeros}{Logical indicating if check for actual zeros in the
 data shall be printed or not. Default is \code{FALSE}.}
