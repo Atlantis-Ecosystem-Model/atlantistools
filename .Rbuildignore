@@ -6,4 +6,5 @@
 NEWS\.Rmd
 ^data-raw$
 ^appveyor\.yml$
+cran-comments.md
 
