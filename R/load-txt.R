@@ -25,11 +25,13 @@ load_txt <- function(file, id_col = "Time") {
   #BJS: If the file has a Unicode UTF-8 BOM (hidden character) at the beginning of the file then remove it
   #
   #This is a bit of a hack, but I'm not sure how else to work around as the BOM has only appeared in one test file
-  # if(identical(colnames(data)[1], "ï..Time")) { #couldn't use this because building the package converted ï so it would not match
-  #   data <- dplyr::rename(data, Time = "ï..Time")
+  # if(identical(colnames(data)[1], "i..Time")) { #couldn't use this because building the package converted i so it would not match
+  #   data <- dplyr::rename(data, Time = "i..Time")
   # }
-  #This assumes that Time will always be the first column and if there is ever anything besides just Time (such as a hidden character to start the file) it will revert the column name back to Time.
-  #If this changes in the future, then this will be a functional error that might be hard to detect as it won't cause an error to be thrown
+  # This assumes that Time will always be the first column and if there is ever anything besides
+  # just Time (such as a hidden character to start the file) it will revert the column name back
+  # to Time. If this changes in the future, then this will be a functional error that might be
+  # hard to detect as it won't cause an error to be thrown
   if (colnames(data)[1] != "Time") {
     data <- dplyr::rename_(data, Time = colnames(data)[1])
   }

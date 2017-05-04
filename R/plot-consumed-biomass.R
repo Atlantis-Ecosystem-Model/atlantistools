@@ -101,7 +101,7 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # line 4: annotations outside the sectors are not plotted, but provides a track measures.
   # line 5: use big arrows, sort the chords left to right in each sector and plot the smallest chords first.
 
-  # Create space between x-axis ticks. In total 24 ticks for the whole circle --> every 15°
+  # Create space between x-axis ticks. In total 24 ticks for the whole circle --> every 15 degree.
   sectors <- sapply(circlize::get.all.sector.index(), circlize::get.cell.meta.data, name = "xlim")[2, ]
   tick_step <- sum(sectors) / 24
 
