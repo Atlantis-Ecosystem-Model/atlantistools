@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-growth-fishbase.R
 \name{get_growth_fishbase}
 \alias{get_growth_fishbase}
-\title{Extract growth parameters from www.fishbase.se.}
+\title{Extract growth parameters from http:://www.fishbase.se.}
 \usage{
 get_growth_fishbase(fish, mirror = "se")
 }
@@ -17,7 +17,7 @@ like \code{uk} or \code{com}.}
 Dataframe with species, country, locality, linf and k.
 }
 \description{
-This function extracts values for Linf, k  and t0 from www.fishbase.se
+This function extracts values for Linf, k  and t0 from http:://www.fishbase.se
 }
 \details{
 Before the actual extraction takes place fishbaseh IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
