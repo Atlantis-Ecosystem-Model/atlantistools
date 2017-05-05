@@ -13,10 +13,12 @@ addons:
   apt:
     sources:
       - debian-sid
-    packages:
-      - libudunits2-dev
-      - libnetcdf-dev
-      - libproj-dev
+
+apt_packages:
+- libudunits2-dev
+- libnetcdf-dev
+- libproj-dev
+- libfreetype6-dev
 
 r_binary_packages:
 - proj4
