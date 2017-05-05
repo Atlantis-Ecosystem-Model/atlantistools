@@ -1,7 +1,7 @@
-#' Extract growth parameters from www.fishbase.se.
+#' Extract growth parameters from http:://www.fishbase.se.
 #'
 #'
-#' This function extracts values for Linf, k  and t0 from www.fishbase.se
+#' This function extracts values for Linf, k  and t0 from http:://www.fishbase.se
 #' @param fish Vector of fish species with genus and species information.
 #' @param mirror Character string defining the url mirror to use. Defaults to \code{se}.
 #' In case data extraction is slow use a different mirror. Try to avoid frequently used mirrors
