@@ -5,6 +5,7 @@ Version: 0.4.1
 Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
 Description: Helper tools to extract and visualise atlantis output.
 URL: https://github.com/alketh/atlantistools
+BugReports: https://github.com/alketh/atlantistools/issues
 Depends:
     R (>= 3.2.3)
 License: GPL-3
