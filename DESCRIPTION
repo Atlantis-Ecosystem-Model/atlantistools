@@ -3,21 +3,7 @@ Type: Package
 Title: Process and Visualise Output from Atlantis Models
 Version: 0.4.1
 Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
-Description: Atlantis is an end-to-end marine ecosystem modelling framework. It was originally developed
-in Australia by E.A. Fulton and A.D.M. Smith (2007) and has since been adopted in many marine ecosystems
-arround the world (http://atlantis.cmar.csiro.au/www/en/atlantis.html). 
-The output of an Atlantis simulation is stored in various file formats like
-netcdf, txt and different output structures are used for various output variables like e.g. 
-productivity or biomass. Atlantistools is used to convert these various output types to a unified format
-according to the tidy-dataframe approach by Wickham (2014). Additionally, ecological metrics like for example spatial
-overlap of predator and prey or consumption can be calculated and visualised with atlantistools. Due to the
-unified data structure it is very easy to share model output with each other and perform model comparisons.
-
-Fulton, E.A., Smith, A.D.M. and Smith, D.C., (2007) Alternative Management Strategies for Southeast Australian Commonwealth 
-Fisheries. Stage 2 Quantitative Management Strategy Evaluation. Australian Fisheries Management Authority Report.
-
-Wickham, H. (2014) Tidy Data. Journal of Statistical Software, Volume 59, Issue 10.
-
+Description: Atlantis is an end-to-end marine ecosystem modelling framework. It was originally developed in Australia by E.A. Fulton and A.D.M. Smith (2007) and has since been adopted in many marine ecosystems around the world (http://atlantis.cmar.csiro.au/www/en/atlantis.html). The output of an Atlantis simulation is stored in various file formats like netcdf and txt and different output structures are used for the output variables like e.g. productivity or biomass. Atlantistools is used to convert the diferent output types to a unified format according to the "tidy-data" approach by H. Wickham (2014). Additionally, ecological metrics like for example spatial overlap of predator and prey or consumption can be calculated and visualised with atlantistools. Due to the unified data structure it is very easy to share model output with each other and perform model comparisons.
 URL: https://github.com/alketh/atlantistools
 BugReports: https://github.com/alketh/atlantistools/issues
 Depends:
