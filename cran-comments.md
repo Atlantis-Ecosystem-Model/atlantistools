@@ -4,7 +4,7 @@ suggestions by Uwe Ligges:
 
 * Explain the terms "Atlantis Models" and "atlantis output" in the DESCRIPTION
 
-* Add a reference to the DESCRIPTION
+* Add references to the DESCRIPTION
 
 ## Test environments
 * local windows 7, R 3.3.3
