@@ -6,6 +6,24 @@ suggestions by Uwe Ligges:
 
 * Add references to the DESCRIPTION
 
+This is a resubmission of a resubmission. I would like to apalogise at this point for the introduction
+of additional mistakes by myself. I should have made sure to rerun devtools::release() before the
+resubmission instead of a simple devtools::check().
+In this version I have applied the following changes based on 
+suggestions by Kurt Hornik:
+
+* Replace "Atlantistools is used" with "This package is used" in the DESCRIOPTION
+
+* Put the URL in the DESCRIOPTION inside <...>
+
+* Fix mis-spelled words in DESCRIPTION: diferent (6:511) to different
+
+* Unfortunetaly, there is no doi available for the first cited publication because it's a report. 
+Following is the complete reference detail:
+
+Fulton, E. A., Smith, A. D. M. & Smith, D. C. Alternative management strategies for southeast Australian commonwealth fisheries: stage 2: quantitative management strategy
+evaluation. (Commonwealth Scientific and Industrial Research Organisation (CSIRO) Hobart, 2007).
+
 ## Test environments
 * local windows 7, R 3.3.3
 * ubuntu 12.04.05 LTS (on travis-ci), R Under development (unstable) (2017-04-29 r72639)
