@@ -1,3 +1,11 @@
+## Resubmission
+This is a resubmission. In this version I have applied the following changes based on 
+suggestions by Uwe Ligges:
+
+* Explain the terms "Atlantis Models" and "atlantis output" in the DESCRIPTION
+
+* Add a reference to the DESCRIPTION
+
 ## Test environments
 * local windows 7, R 3.3.3
 * ubuntu 12.04.05 LTS (on travis-ci), R Under development (unstable) (2017-04-29 r72639)
