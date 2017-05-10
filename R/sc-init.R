@@ -119,14 +119,14 @@ sc_init <- function(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL, 
   }
   pd <- do.call(rbind, pd)
   pd$pred_stanza <- ifelse(pd$agecl < pd$age_mat, 1, 2)
-  pd$growth_req <- pd$wdiff / (365 *pd$ageclasssize)
+  pd$growth_req <- pd$wdiff / (365 * pd$ageclasssize)
   if (any(pd$growth_req < 0)) {
     warning("Required growth negative for some groups. Please check your initial conditions files.")
   }
 
   # Extract assimilation efficiencies per predator group!
   asseff <- prm_to_df(prm_biol = prm_biol, fgs = fgs, group = acr_age, parameter = c("E", "EPlant", "EDL", "EDR")) %>%
-    tidyr::gather_(key_col = "ass_type", value_col = "asseff", gather_cols = names(.)[names(.) != "species"])
+    tidyr::gather_(data = ., key_col = "ass_type", value_col = "asseff", gather_cols = names(.)[names(.) != "species"])
 
   # Extract prey densities!
   # Convert numbers to biomass density! --> distribute over watercolumn!

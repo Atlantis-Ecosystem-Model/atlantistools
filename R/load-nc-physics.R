@@ -136,7 +136,7 @@ load_nc_physics <- function(nc,
   min_pools <- is.element(result$atoutput, c(0, 1e-08, 1e-16))
   if (length(min_pools) > 0) {
     print_min_pools <- sum(min_pools)
-    if (print_min_pools > 0 & warn_zeros){
+    if (print_min_pools > 0 & warn_zeros) {
       warning(paste0(round(print_min_pools/dim(result)[1] * 100), "% of entries are min-pools (0, 1e-08, 1e-16)"))
     }
     result <- result[!min_pools, ]

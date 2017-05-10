@@ -456,5 +456,5 @@
 <polyline points='79.13,351.28 81.87,351.28 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMHw3MjB8NTc2fDA=)' />
 <g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='378.74' y='573.04' style='font-size: 22.00px; font-family: Liberation Sans;' textLength='41.56px' lengthAdjust='spacingAndGlyphs'>time</text></g>
 <g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text transform='translate(19.71,348.99) rotate(-90)' style='font-size: 22.00px; font-family: Liberation Sans;' textLength='79.51px' lengthAdjust='spacingAndGlyphs'>atoutput</text></g>
-<g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='81.87' y='20.73' style='font-size: 26.40px; font-family: Liberation Sans;' textLength='89.62px' lengthAdjust='spacingAndGlyphs'>line plot</text></g>
+<g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='81.87' y='20.73' style='font-size: 26.40px; font-family: Liberation Sans;' textLength='336.73px' lengthAdjust='spacingAndGlyphs'>line plot preprocess$biomass</text></g>
 </svg>

@@ -25,7 +25,7 @@ test_that("test output numbers", {
   # end of new diet matrix
   expect_equal(dm_new[143], paste(dm[nrow(dm), c(5:ncol(dm))], collapse = "\t"))
   # Rest of the file did not change
-  expect_true(grepl(pattern = "# Clearance rates for consumers", x =dm_new[609]))
+  expect_true(grepl(pattern = "# Clearance rates for consumers", x = dm_new[609]))
 })
 
 
