@@ -15,6 +15,7 @@ output:
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/atlantistools)](https://cran.r-project.org/package=atlantistools)
 [![codecov](https://img.shields.io/codecov/c/github/alketh/atlantistools.svg)](https://codecov.io/github/alketh/atlantistools)
 
+
 `atlantistools` is a data processing and visualisation tool for R, which helps to process output from Atlantis models within R.
 Using atlantistools makes sure that Atlantis users use the same input/output file structure which facilitates intra and inter model comparisons.
 
