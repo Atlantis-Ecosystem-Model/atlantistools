@@ -50,7 +50,6 @@ file_ending <- function(filename, ending = "nc") {
 
 release_questions <- function() {
   c(
-    "Have you compressed the vignettes with tools::compactPDF(gs_quality = 'ebook')",
-    "Is inst/cacert.pem up to date?"
+    "Have you compressed the vignettes with tools::compactPDF(gs_quality = 'ebook')"
   )
 }
