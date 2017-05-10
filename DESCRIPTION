@@ -15,7 +15,8 @@ Suggests:
   testthat,
   knitr,
   rmarkdown,
-  vdiffr
+  vdiffr,
+  rfishbase
 Imports:
   dplyr,
   magrittr,
@@ -30,7 +31,6 @@ Imports:
   circlize,
   RColorBrewer,
   purrr,
-  rfishbase,
   rvest,
   xml2,
   tibble
