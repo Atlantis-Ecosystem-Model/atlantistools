@@ -37,7 +37,7 @@ plot_bar(df)
 # This function can also be used to plot age-specific data.
 plot_bar(preprocess$nums_age, fill = "agecl", wrap = "species")
 
-# Please use \\code{\\link{agg_perc}} to visualise the relative cohort structure over time.
+# Please use \\code{\\link{agg_perc}} to visualize the relative cohort structure over time.
 df <- agg_perc(preprocess$nums_age, groups = c("time", "species"))
 plot_bar(df, fill = "agecl", wrap = "species")
 }

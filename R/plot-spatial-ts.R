@@ -1,4 +1,4 @@
-#' Visualise the spatial distribution per species and stanza combination.
+#' Visualize the spatial distribution per species and stanza combination.
 #'
 #' @param bio_spatial Biomass per group and stanza in tonnes for each timestep,
 #' layer and polygon. This dataframe should be generated with

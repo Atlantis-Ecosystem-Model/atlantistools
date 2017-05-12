@@ -11,7 +11,7 @@ change_prm_cohort(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
 \item{prm_biol}{Character string giving the connection to the biological parameterfile.
 The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
-\item{select_acronyms}{Character vector of funtional groups which shall be read in.
+\item{select_acronyms}{Character vector of functional groups which shall be read in.
 Names have to match the ones used in the *.prm file. Check column "Code" in
 "functionalGroups.csv" for clarification.}
 

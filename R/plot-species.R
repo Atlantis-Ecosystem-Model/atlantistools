@@ -1,4 +1,4 @@
-#' Create species specific overvie plot.
+#' Create species specific overview plot.
 #'
 #' This plotting routine is based on Raphael's (Ifremer) plotting routine
 #' used during model calibration. Currently 6 plots are created by default:

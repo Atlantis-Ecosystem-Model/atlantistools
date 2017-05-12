@@ -1,7 +1,7 @@
 #' Create discrete color palette used in plots.
 #'
 #' The colors are derived from http://colorbrewer2.org/ using the palette
-#' 12-class Paired. In addition 9 different grey tones were added in
+#' 12-class Paired. In addition 9 different gray tones were added in
 #' case more than 12 categories are needed (This happens quite often
 #' with feeding data).
 #' @return Vector of colors in hexadecimal code.

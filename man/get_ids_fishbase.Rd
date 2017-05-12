@@ -13,7 +13,7 @@ get_ids_fishbase(fish)
 named vector with species names and fishbase IDs.
 }
 \description{
-This function extracts fishbase IDs using the database provided by the "rifishbase" package.
+This function extracts fishbase IDs using the database provided by the \code{rfishbase} package.
 }
 \details{
 The function depends on the package "rfishbase" which creates a local copy of the fishbase database.

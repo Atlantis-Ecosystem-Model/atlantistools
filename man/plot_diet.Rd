@@ -28,7 +28,7 @@ colors are used in the plots. Default is \code{7}.}
 List of grobs composed of ggplot2 objects.
 }
 \description{
-Visualise diet proportions form predator and prey perspective. The upper panel
+Visualize diet proportions form predator and prey perspective. The upper panel
 plot shows the predator perspective while the lower panel plot shows the prey perspective
 for a given group. Please note that this function only works with models
 based on the trunk code. Bec_dev models should use \code{\link{plot_diet_bec_dev}} to get an indication

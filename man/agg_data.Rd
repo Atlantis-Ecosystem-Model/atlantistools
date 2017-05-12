@@ -29,7 +29,7 @@ Default is \code{atoutput}.}
 grouped datarame with the aggregated data.
 }
 \description{
-This function is a 'wrapper' for the group_by and summarise procedure
+This function is a 'wrapper' for the group_by and summarize procedure
 used in dplyr to aggregate dataframes.
 }
 \examples{

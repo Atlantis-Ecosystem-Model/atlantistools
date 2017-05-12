@@ -17,7 +17,7 @@ combine_groups(data, group_col, groups = names(data)[!is.element(names(data),
 \item{combine_thresh}{Integer indicating the number of groups to display. Default is \code{15}.}
 }
 \value{
-dataframe with groupgs combined to "Rest" if contribution is low.
+dataframe with groups combined to "Rest" if contribution is low.
 }
 \description{
 Combine values from different groups if specific groups only have a low contribution to the overall value.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/flip-layers.R
 \name{flip_layers}
 \alias{flip_layers}
-\title{Flip layers for visualisation.}
+\title{Flip layers for visualization.}
 \usage{
 flip_layers(data)
 }

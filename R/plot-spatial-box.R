@@ -1,4 +1,4 @@
-#' Visualise the spatial distribution per species and stanza combination.
+#' Visualize the spatial distribution per species and stanza combination.
 #'
 #' @param bio_spatial Biomass per group and stanza in tonnes for each timestep,
 #' layer and polygon. This dataframe should be generated with
@@ -11,7 +11,7 @@
 #' 'inside_long' and 'polygon'.
 #' @param select_species Character vector listing the species to plot. If no species are selected
 #' \code{NULL} (default) all available species are plotted.
-#' @param timesteps Integer giving the number of timesteps to visualise. Default is \code{2}.
+#' @param timesteps Integer giving the number of timesteps to visualize. Default is \code{2}.
 #' By default the start and end of the simulation is shown. In case
 #' timesteps > 2 equally spaced timesteps are added.
 #' @param polygon_overview numeric value between 0 and 1 indicating the size used to plot the polygon overview in the

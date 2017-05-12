@@ -2,7 +2,7 @@
 % Please edit documentation in R/change-prm.R
 \name{change_prm}
 \alias{change_prm}
-\title{Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.}
+\title{Change biological parameterfile to simplify automated ATLANTIS calibrations.}
 \usage{
 change_prm(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
   save_to_disc = TRUE, version_flag = 2)
@@ -11,7 +11,7 @@ change_prm(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
 \item{prm_biol}{Character string giving the connection to the biological parameterfile.
 The filename usually contains \code{biol_fishing} and does end in \code{.prm}.}
 
-\item{select_acronyms}{Character vector of funtional groups which shall be read in.
+\item{select_acronyms}{Character vector of functional groups which shall be read in.
 Names have to match the ones used in the *.prm file. Check column "Code" in
 "functionalGroups.csv" for clarification.}
 

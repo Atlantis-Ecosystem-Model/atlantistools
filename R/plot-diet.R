@@ -1,6 +1,6 @@
 #' Plot contribution of diet contents for each functional group.
 #'
-#' Visualise diet proportions form predator and prey perspective. The upper panel
+#' Visualize diet proportions form predator and prey perspective. The upper panel
 #' plot shows the predator perspective while the lower panel plot shows the prey perspective
 #' for a given group. Please note that this function only works with models
 #' based on the trunk code. Bec_dev models should use \code{\link{plot_diet_bec_dev}} to get an indication

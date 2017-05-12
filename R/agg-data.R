@@ -1,6 +1,6 @@
 #' Aggregate data using dplyr functionality.
 #'
-#' This function is a 'wrapper' for the group_by and summarise procedure
+#' This function is a 'wrapper' for the group_by and summarize procedure
 #' used in dplyr to aggregate dataframes.
 #'
 #' @param data Dataframe the aggregation is applied to.

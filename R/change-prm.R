@@ -1,11 +1,11 @@
-#' Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.
+#' Change biological parameterfile to simplify automated ATLANTIS calibrations.
 #'
 #' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
 #' @inheritParams extract_prm
 #' @inheritParams load_dietmatrix
 #' @inheritParams change_prm_cohort
-#' @param select_acronyms Character vector of funtional groups which shall be read in.
+#' @param select_acronyms Character vector of functional groups which shall be read in.
 #' Names have to match the ones used in the *.prm file. Check column "Code" in
 #' "functionalGroups.csv" for clarification.
 #' @param roc Vector of multiplication factors which shall be applied to the old set of parameters.

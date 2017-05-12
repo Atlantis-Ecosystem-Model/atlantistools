@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot-spatial-ts.R
 \name{plot_spatial_ts}
 \alias{plot_spatial_ts}
-\title{Visualise the spatial distribution per species and stanza combination.}
+\title{Visualize the spatial distribution per species and stanza combination.}
 \usage{
 plot_spatial_ts(bio_spatial, bgm_as_df, vol, select_species = NULL,
   ncol = 7, polygon_overview = 0.2)
@@ -33,7 +33,7 @@ upper right corner of the plot. Default is \code{0.2}.}
 grob of 3 ggplot2 plots.
 }
 \description{
-Visualise the spatial distribution per species and stanza combination.
+Visualize the spatial distribution per species and stanza combination.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")

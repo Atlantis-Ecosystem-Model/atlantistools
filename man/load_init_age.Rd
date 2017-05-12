@@ -27,12 +27,12 @@ The filename usually contains \code{init} and ends in \code{.nc}.}
 \item{fgs}{Character string giving the connection to the functional groups file.
 The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
-\item{select_variable}{Character value spefifying which variable to load.
+\item{select_variable}{Character value specifying which variable to load.
 For \code{load_init_age} this can be "Nums", "ResN", "StructN",
 For \code{load_init_nonage} please select "N" (default)
 For \code{load_init_physics} simply pass the names of the physical variables.}
 
-\item{select_groups}{Character vector of funtional groups which shall be read in.
+\item{select_groups}{Character vector of functional groups which shall be read in.
 Names have to match the ones used in the ncdf file. Check column "Name" in
 "functionalGroups.csv" for clarification. Default is \code{NULL} resulting in all available groups.}
 

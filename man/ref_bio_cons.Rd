@@ -13,7 +13,7 @@ The names match with the column 'LongName' in the functionalGroups.csv file.}
 time based on the settings in the 'run.prm' file.}
 \item{prey}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
-\item{atoutput}{Obersavtion column storing the actual output value.
+\item{atoutput}{Obseravtion column storing the actual output value.
 Consumed biomass in tonnes.}
 }}
 \usage{

@@ -7,7 +7,7 @@
 #' @inheritParams load_dietmatrix
 #' @param pred Vector of predator acronyms to check. If \code{NULL} (default) all age based
 #' predators are selected.
-#' @param set_avail Numeric value. All present availabilities can be set to a spefiic value.
+#' @param set_avail Numeric value. All present availabilities can be set to a specific value.
 #' Default value is \code{NULL} which results in no changes to the present availability matrix.
 #' @param df Dataframe to pass to \code{plot_sc_init()}. df should be generated with
 #' sc_init or read in from *.rda (also generated with sc_init()).

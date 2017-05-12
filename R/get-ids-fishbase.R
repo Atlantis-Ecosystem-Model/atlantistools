@@ -1,6 +1,6 @@
 #' Extract fishbase IDs using the package "rfishbase" to generate species specific fishbase URLs
 #'
-#' This function extracts fishbase IDs using the database provided by the "rifishbase" package.
+#' This function extracts fishbase IDs using the database provided by the \code{rfishbase} package.
 #' @inheritParams get_growth_fishbase
 #' @return named vector with species names and fishbase IDs.
 #'

@@ -1,4 +1,4 @@
-#' Calculate spatiallly explicit biomass (in [t]) for each group and ageclass per timestep.
+#' Calculate spatially explicit biomass (in [t]) for each group and ageclass per timestep.
 #'
 #' Calculate spatially explicit biomass time series for each group and ageclass within
 #' our model. Data is read in from 'output[...].nc'. Biomass for age-based groups is calculated

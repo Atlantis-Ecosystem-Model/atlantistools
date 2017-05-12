@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot-species.R
 \name{plot_species}
 \alias{plot_species}
-\title{Create species specific overvie plot.}
+\title{Create species specific overview plot.}
 \usage{
 plot_species(data_pre, species)
 }

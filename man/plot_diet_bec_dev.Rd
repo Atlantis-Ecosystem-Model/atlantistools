@@ -24,10 +24,10 @@ colors are used in the plots. Default is \code{15}.}
 List of ggplot2 objects.
 }
 \description{
-Visualise diet proportions form predator and prey perspective. The upper panel
+Visualize diet proportions form predator and prey perspective. The upper panel
 plot shows the predator perspective while the lower panel plot shows the prey perspective
 for a given group. Please note that this function uses the SpecPredMort.txt file
-to visualise feeding interactions and therefore is only an indication of the realised true
+to visualize feeding interactions and therefore is only an indication of the realized true
 diet within the model. Please use \code{plot_diet} instead.
 }
 \examples{

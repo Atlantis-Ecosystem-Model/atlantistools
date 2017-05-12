@@ -2,7 +2,7 @@
 % Please edit documentation in R/change-avail.R
 \name{change_avail}
 \alias{change_avail}
-\title{Change the availability matrix to simpliyfy automated ATLANTIS calibrations.}
+\title{Change the availability matrix to simplify automated ATLANTIS calibrations.}
 \usage{
 change_avail(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL,
   roc, relative = TRUE, consecutive = FALSE)

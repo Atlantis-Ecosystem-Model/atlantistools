@@ -1,4 +1,4 @@
-#' Change the availability matrix to simpliyfy automated ATLANTIS calibrations.
+#' Change the availability matrix to simplify automated ATLANTIS calibrations.
 #'
 #' Change the availability of predator XXX on specific preygroups.
 #'

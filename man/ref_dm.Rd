@@ -12,7 +12,7 @@ The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{agecl}{Ageclass given as integer from 1 to NumCohorts.}
 \item{prey}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
-\item{atoutput}{Obersavtion column storing the actual output value.
+\item{atoutput}{Obseravtion column storing the actual output value.
 Diet contribution in percentage.}
 }}
 \usage{

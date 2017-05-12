@@ -9,7 +9,7 @@
 #' @return Dataframe with species, country, locality, linf and k.
 #'
 #' @details Before the actual extraction takes place fishbase IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
-#' The IDs are needed to generate the urls lateron.
+#' The IDs are needed to generate the urls later on.
 #' @examples
 #' \dontrun{
 #' # For some reason the examples break with appveyor.

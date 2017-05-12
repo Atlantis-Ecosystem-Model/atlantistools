@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot-consumed-biomass.R
 \name{plot_consumed_biomass}
 \alias{plot_consumed_biomass}
-\title{Circle diagram to visualise the consumed biomass for the whole system.}
+\title{Circle diagram to visualize the consumed biomass for the whole system.}
 \usage{
 plot_consumed_biomass(bio_consumed, select_time = NULL, show = 0.95)
 }
@@ -12,7 +12,7 @@ for each timestep and polygon. Dataframe with columns 'pred', 'agecl', 'polygon'
 Consumed biomass in [t] is stored in column 'atoutput'. Should be generated with
 \code{link{calculate_consumed_biomass}}.}
 
-\item{select_time}{Numeric value to control the simulation time in years to visualise.
+\item{select_time}{Numeric value to control the simulation time in years to visualize.
 By default the start of the simulation is shown. Default is \code{NULL}.}
 
 \item{show}{Numeric value between 0 - 1 to control the amount of links shown. Default is \code{0.95}.
@@ -23,7 +23,7 @@ are grouped together as 'Rest'.}
 plot
 }
 \description{
-Circle diagram to visualise the consumed biomass for the whole system.
+Circle diagram to visualize the consumed biomass for the whole system.
 }
 \examples{
 plot_consumed_biomass(ref_bio_cons)

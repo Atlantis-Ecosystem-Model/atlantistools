@@ -26,7 +26,7 @@ Can be created with \code{get_boundary}.}
 \item{pred}{Vector of predator acronyms to check. If \code{NULL} (default) all age based
 predators are selected.}
 
-\item{set_avail}{Numeric value. All present availabilities can be set to a spefiic value.
+\item{set_avail}{Numeric value. All present availabilities can be set to a specific value.
 Default value is \code{NULL} which results in no changes to the present availability matrix.}
 
 \item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}

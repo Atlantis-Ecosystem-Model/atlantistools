@@ -11,7 +11,7 @@
 #' \item{code}{Flag from the biological parameter file.}
 #' \item{prey}{Name of the functional groups given as character string.
 #' The names match with the column 'LongName' in the functionalGroups.csv file.}
-#' \item{avail}{Obersavtion column storing the actual output value.
+#' \item{avail}{Obseravtion column storing the actual output value.
 #' Availability ranging from 0 to 1.}
 #' \item{prey_id}{Preyid index based on the functional groups file.}
 #' }
@@ -28,7 +28,7 @@
 #' \item{agecl}{Ageclass given as integer from 1 to NumCohorts.}
 #' \item{prey}{Name of the functional groups given as character string.
 #' The names match with the column 'LongName' in the functionalGroups.csv file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Diet contribution in percentage.}
 #' }
 "ref_dm"
@@ -43,7 +43,7 @@
 #' \item{polygon}{Boxid starting from 0 to numboxes - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Consumption in mg N m-3 d-1.}
 #' }
 "ref_eat"
@@ -58,7 +58,7 @@
 #' \item{polygon}{Boxid starting from 0 to numboxes - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Grazing in mg N m-3 d-1.}
 #' }
 "ref_grazing"
@@ -73,7 +73,7 @@
 #' \item{polygon}{Boxid starting from 0 to numboxes - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Growth in mg N d-1.}
 #' }
 "ref_growth"
@@ -88,7 +88,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Nitrogen in mg N m-3.}
 #' }
 "ref_n"
@@ -104,7 +104,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Numbers.}
 #' }
 "ref_nums"
@@ -118,7 +118,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' units are salt = PSU; NO3, NH3 = mg N m-3; Temp = degrees Celcius; Chl_a, Denitrifiction = ?}
 #' }
 "ref_physics"
@@ -134,7 +134,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Reserve weight in mg N.}
 #' }
 "ref_resn"
@@ -150,7 +150,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Structural weight in mg N.}
 #' }
 "ref_structn"
@@ -164,7 +164,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' volume in m^3 dz in m}
 #' }
 "ref_vol_dz"
@@ -178,7 +178,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Volume in m^3}
 #' }
 "ref_vol"
@@ -205,12 +205,12 @@
 #' time based on the settings in the 'run.prm' file.}
 #' \item{prey}{Name of the functional groups given as character string.
 #' The names match with the column 'LongName' in the functionalGroups.csv file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Consumed biomass in tonnes.}
 #' }
 "ref_bio_cons"
 
-#' Sparial biomass.
+#' Spatial biomass.
 #'
 #' @format
 #' \describe{
@@ -221,7 +221,7 @@
 #' \item{layer}{Layerid starting from 0 to numlayers - 1.}
 #' \item{time}{Simulation time in years. Modeltimestep was converted to actual
 #' time based on the settings in the 'run.prm' file.}
-#' \item{atoutput}{Obersavtion column storing the actual output value.
+#' \item{atoutput}{Obseravtion column storing the actual output value.
 #' Biomass in tonnes.}
 #' }
 "ref_bio_sp"

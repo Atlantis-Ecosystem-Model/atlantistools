@@ -1,4 +1,4 @@
-#' Flip layers for visualisation.
+#' Flip layers for visualization.
 #'
 #' Within Atlantis the water column id 0 is the water column closest to the sediment.
 #' In order to simplify graphical interpretation of vertical plots this order

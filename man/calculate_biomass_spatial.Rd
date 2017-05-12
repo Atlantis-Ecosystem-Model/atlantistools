@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate-biomass-spatial.R
 \name{calculate_biomass_spatial}
 \alias{calculate_biomass_spatial}
-\title{Calculate spatiallly explicit biomass (in [t]) for each group and ageclass per timestep.}
+\title{Calculate spatially explicit biomass (in [t]) for each group and ageclass per timestep.}
 \usage{
 calculate_biomass_spatial(nums, sn, rn, n, vol_dz, bio_conv, bps)
 }
