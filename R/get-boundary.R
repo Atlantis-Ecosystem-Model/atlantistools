@@ -28,8 +28,7 @@ get_boundary <- function(boxinfo) {
   for (ii in seq(dim(facepoints)[1])) {
     # Check how many points of a given box (ii) have points that are also
     # listed in the boundary box points
-    temp <- which(sapply(facepoints[ii, ],
-                         function(x) x %in% vertices))
+    temp <- which(sapply(facepoints[ii, ], function(x) x %in% vertices))
     # Check that the box has more than one point in the boundary conditions
     # because some boxes can have just one point and not be a boundary box
     temp <- ifelse(length(temp) == 2, ii - 1, NA)

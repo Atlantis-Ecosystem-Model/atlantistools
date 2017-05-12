@@ -9,10 +9,16 @@ warnings_are_errors: true
 
 sudo: required
 
+addons:
+  apt:
+    sources:
+      - debian-sid
+
 apt_packages:
 - libudunits2-dev
 - libnetcdf-dev
 - libproj-dev
+- libfreetype6-dev
 
 r_binary_packages:
 - proj4

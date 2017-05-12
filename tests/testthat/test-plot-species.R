@@ -8,6 +8,6 @@ p <- plot_line(preprocess$biomass)
 # p <- p + ggplot2::theme(strip.text.x = ggplot2::element_blank())
 # p <- p + ggplot2::theme(axis.text.y = ggplot2::element_text(angle = 90, hjust = 0.5))
 
-# test_that("check visually", {
-#   vdiffr::expect_doppelganger("line plot", p)
-# })
+test_that("check visually", {
+  vdiffr::expect_doppelganger("line plot preprocess$biomass", p)
+})

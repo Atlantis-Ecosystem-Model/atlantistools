@@ -46,3 +46,11 @@ file_ending <- function(filename, ending = "nc") {
   file_ending <- strsplit(filename, "\\.")[[1]][length(strsplit(filename, "\\.")[[1]])]
   if (file_ending != ending) stop(paste("The file", filename, "does not end in", ending))
 }
+
+
+release_questions <- function() {
+  c(
+    "Have you compressed the vignettes with tools::compactPDF(gs_quality = 'ebook')",
+    "Have you updated the version number"
+  )
+}

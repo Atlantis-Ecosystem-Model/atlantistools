@@ -3,6 +3,14 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.4.2
+
+## Bug fixes
+* Minor bugfixes associated with R CMD check NOTE.
+    * Reduced file size of pre-build vignettes with `tools::compactPDF(gs_quality = 'ebook')`.
+    * Moved `rfishbase` to `Suggests` in DESCRIPTION.
+    * Started to add visual tests using `vdiffr`.
+
 # atlantistools 0.4.1
 ## New features
 * `get_growth_fishbase` Extract Van Bertalannfy growth parameters (k, linf, t0) from http:://fishbase.se.
