@@ -1,7 +1,7 @@
 Package: atlantistools
 Type: Package
 Title: Process and Visualise Output from Atlantis Models
-Version: 0.4.1.9000
+Version: 0.4.2
 Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
 Description: Atlantis is an end-to-end marine ecosystem modelling framework. It was originally developed in Australia by E.A. Fulton, A.D.M. Smith and D.C. Smith (2007) and has since been adopted in many marine ecosystems around the world (<http://atlantis.cmar.csiro.au/www/en/atlantis.html>). The output of an Atlantis simulation is stored in various file formats like .netcdf and .txt and different output structures are used for the output variables like e.g. productivity or biomass. This package is used to convert the different output types to a unified format according to the "tidy-data" approach by H. Wickham (2014) <DOI:10.18637/jss.v059.i10>. Additionally, ecological metrics like for example spatial overlap of predator and prey or consumption can be calculated and visualised with this package. Due to the unified data structure it is very easy to share model output with each other and perform model comparisons.
 URL: https://github.com/alketh/atlantistools
