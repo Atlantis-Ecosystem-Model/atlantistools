@@ -10,3 +10,4 @@ This is a minor update to the previous version which fixed R CMD check warnings 
 There were no ERRORs, WARNINGs or NOTEs. 
 
 ## Downstream dependencies
+There are no downstream dependencies.
