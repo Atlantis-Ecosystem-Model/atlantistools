@@ -26,7 +26,7 @@ be printed \code{TRUE} or not \code{FALSE}.}
 \item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
-A \code{data.frame} in long format with the following coumn names:
+A \code{data.frame} in long format with the following column names:
   time, pred, habitat, prey and atoutput (i.e., variable).
 }
 \description{

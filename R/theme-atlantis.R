@@ -1,6 +1,6 @@
-#' Customised theme used in all plots.
+#' Customized theme used in all plots.
 #'
-#' This function is a customised theme for ggplot2 plots. It's applied
+#' This function is a customized theme for ggplot2 plots. It's applied
 #' by default to all plots created within \code{atlantistools}.
 #' @param large Integer giving the size of the font for the main parts of the plot.
 #' Default is \code{22}.

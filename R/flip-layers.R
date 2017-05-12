@@ -1,8 +1,14 @@
-#' flip layers for visualisation
+#' Flip layers for visualisation.
+#'
+#' Within Atlantis the water column id 0 is the water column closest to the sediment.
+#' In order to simplify graphical interpretation of vertical plots this order
+#' is reversed. The surface layer is 1 by default. The sediment layer id is equal
+#' to the number of total layers. Please note that this is only used for graphical
+#' display.
 #'
 #' @param data dataframe with columns polygon and layer. layer id is based on
 #' atlantis output (0 = layer closest to the sediment)
-#' @return dataframe with fliped layerids. 1 = surface.
+#' @return dataframe with flipped layerids. 1 = surface.
 #' @export
 #'
 #' @examples

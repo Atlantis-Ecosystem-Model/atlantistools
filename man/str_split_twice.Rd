@@ -13,7 +13,7 @@ str_split_twice(char, min_only = TRUE)
 all numeric values (\code{FALSE}) should be returned. Default is \code{TRUE}.}
 }
 \value{
-numeric values forund in the passed string.
+numeric values inside \code{char} string.
 }
 \description{
 The function splits any character string at each tab and space and returns

@@ -10,7 +10,7 @@
 #'
 #' @family load functions
 #' @export
-#' @return A \code{data.frame} in long format with the following coumn names:
+#' @return A \code{data.frame} in long format with the following column names:
 #'   time, pred, habitat, prey and atoutput (i.e., variable).
 #'
 #' @examples

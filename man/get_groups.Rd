@@ -36,12 +36,12 @@ character strings of group names or acronym names.
 }
 \details{
 Currently, the following character strings can be created
-- get_groups extracts the column "Name"
-- get_age_groups extracts the column "Name". Selects groups with 10 ageclasses.
-- get_acronym extracts the column "Code"
-- get_age_acronym extracts the column "Code". Selects groups with 10 ageclasses.
-- get_nonage_acronym extracts the columns "Code". Only groups with ageclasses different from 10 are selected.
-- get_fish_acronyms ectracts the column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+- get_groups: Extract column "Name"
+- get_age_groups: Extract column "Name". Selects groups with 10 ageclasses.
+- get_acronym: Extract column "Code"
+- get_age_acronym: Extract column "Code". Selects groups with 10 ageclasses.
+- get_nonage_acronym: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
+- get_fish_acronyms: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")

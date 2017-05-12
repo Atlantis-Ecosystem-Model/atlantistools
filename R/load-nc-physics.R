@@ -10,7 +10,7 @@
 #' aggregated (\code{TRUE}) or not (\code{FALSE}). Default is \code{FALSE}.
 #' @family load functions
 #' @export
-#' @return A \code{data.frame} in long format with the following coumn names:
+#' @return A \code{data.frame} in long format with the following column names:
 #'   variable, time, polygon, layer, and atoutput (i.e., variable).
 
 

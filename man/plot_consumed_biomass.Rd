@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot-consumed-biomass.R
 \name{plot_consumed_biomass}
 \alias{plot_consumed_biomass}
-\title{Circle diagramm to visualise the consumed biomass for the whole system.}
+\title{Circle diagram to visualise the consumed biomass for the whole system.}
 \usage{
 plot_consumed_biomass(bio_consumed, select_time = NULL, show = 0.95)
 }
@@ -23,7 +23,7 @@ are grouped together as 'Rest'.}
 plot
 }
 \description{
-Circle diagramm to visualise the consumed biomass for the whole system.
+Circle diagram to visualise the consumed biomass for the whole system.
 }
 \examples{
 plot_consumed_biomass(ref_bio_cons)

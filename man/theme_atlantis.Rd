@@ -2,7 +2,7 @@
 % Please edit documentation in R/theme-atlantis.R
 \name{theme_atlantis}
 \alias{theme_atlantis}
-\title{Customised theme used in all plots.}
+\title{Customized theme used in all plots.}
 \usage{
 theme_atlantis(large = 22, medium = 18, small = 14, scale_font = 1,
   rot_xaxis_text = FALSE, rot_strips_y = TRUE)
@@ -26,7 +26,7 @@ rotated by 45 degree. Default is \code{FALSE}.}
 rotated by 90 degree. Default is \code{TRUE}.}
 }
 \description{
-This function is a customised theme for ggplot2 plots. It's applied
+This function is a customized theme for ggplot2 plots. It's applied
 by default to all plots created within \code{atlantistools}.
 }
 \examples{

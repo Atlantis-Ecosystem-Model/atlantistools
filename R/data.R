@@ -230,7 +230,7 @@
 
 #' fishbase_data
 #'
-#' A table of all the the species found in FishBase, including taxonomic classification.
+#' A table of all the the species found in Fihsbase, including taxonomic classification.
 #'
 #' @format A data frame with 33104 rows and 12 variables:
 #' \describe{

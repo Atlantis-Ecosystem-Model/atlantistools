@@ -2,7 +2,7 @@
 % Please edit documentation in R/flip-layers.R
 \name{flip_layers}
 \alias{flip_layers}
-\title{flip layers for visualisation}
+\title{Flip layers for visualisation.}
 \usage{
 flip_layers(data)
 }
@@ -11,10 +11,14 @@ flip_layers(data)
 atlantis output (0 = layer closest to the sediment)}
 }
 \value{
-dataframe with fliped layerids. 1 = surface.
+dataframe with flipped layerids. 1 = surface.
 }
 \description{
-flip layers for visualisation
+Within Atlantis the water column id 0 is the water column closest to the sediment.
+In order to simplify graphical interpretation of vertical plots this order
+is reversed. The surface layer is 1 by default. The sediment layer id is equal
+to the number of total layers. Please note that this is only used for graphical
+display.
 }
 \examples{
 data <- rbind(expand.grid(species = "sp1", polygon = 0, layer = 0:7),

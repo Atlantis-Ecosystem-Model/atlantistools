@@ -26,6 +26,6 @@
 fishbase_data
 }
 \description{
-A table of all the the species found in FishBase, including taxonomic classification.
+A table of all the the species found in Fihsbase, including taxonomic classification.
 }
 \keyword{datasets}

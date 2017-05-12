@@ -1,4 +1,4 @@
-#' Circle diagramm to visualise the consumed biomass for the whole system.
+#' Circle diagram to visualise the consumed biomass for the whole system.
 #'
 #' @param bio_consumed Consumed biomass of prey groups by predatorgroup and agecl in tonnes
 #' for each timestep and polygon. Dataframe with columns 'pred', 'agecl', 'polygon', 'time', 'prey'.

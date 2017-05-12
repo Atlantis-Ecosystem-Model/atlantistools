@@ -4,7 +4,7 @@
 #' are stored as "Eat_" non age based groups as "Grazing_". Units are mg N m^-3 d^-1.
 #' Factors are species, time, box and agecl (if present). We will refer to species as
 #' pred from here on to indicate the predator perspective.
-#' Diet constribution data is extracted from DietCheck.txt. Currently this only works
+#' Diet contribution data is extracted from DietCheck.txt. Currently this only works
 #' for models based on the trunk code. Units are % diet contribution. Factors are pred, time, agecl, prey.
 #' The consumed biomass is calculated as follows:
 #' - Calculate consumed biomass as Eat (or Grazing) * boxvolume per time, pred, agecl, box.

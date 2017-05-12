@@ -20,7 +20,7 @@ ggplot2 object of class grob
 This plotting routine is based on Raphael's (Ifremer) plotting routine
 used during model calibration. Currently 6 plots are created by default:
 - Biomass over time
-- Biomass over time per ageS
+- Biomass over time per age
 - StructN over time per age
 - ResN over time per age
 - Condition over time per age

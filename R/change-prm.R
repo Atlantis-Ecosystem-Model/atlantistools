@@ -1,6 +1,5 @@
 #' Change biological parameterfile to simpliyfy automated ATLANTIS calibrations.
 #'
-#'
 #' This function is used to help automate the calibration routine for ATLANTIS models.
 #'
 #' @inheritParams extract_prm

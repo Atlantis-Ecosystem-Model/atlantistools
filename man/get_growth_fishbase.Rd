@@ -20,7 +20,7 @@ Dataframe with species, country, locality, linf and k.
 This function extracts values for Linf, k  and t0 from http:://www.fishbase.se
 }
 \details{
-Before the actual extraction takes place fishbaseh IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
+Before the actual extraction takes place fishbase IDs for every species are extracted using \code{\link{get_ids_fishbase}}.
 The IDs are needed to generate the urls lateron.
 }
 \examples{

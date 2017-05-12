@@ -20,7 +20,7 @@ Tidy dataframe.
 \code{sep_col} is split into multiple columns given by \code{into}.
 If column ageclass is present and values start with 0 one is added
 to align with agestructure in other functions. Columns without any informations
- (\code{length(unique()) == 1}) are droppped. If the first time step only
+ (\code{length(unique()) == 1}) are dropped. If the first time step only
  has zeros as values remove these values. remove zeros overall!
 }
 \examples{

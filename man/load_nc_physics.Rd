@@ -27,7 +27,7 @@ aggregated (\code{TRUE}) or not (\code{FALSE}). Default is \code{FALSE}.}
 data shall be printed or not. Default is \code{FALSE}.}
 }
 \value{
-A \code{data.frame} in long format with the following coumn names:
+A \code{data.frame} in long format with the following column names:
   variable, time, polygon, layer, and atoutput (i.e., variable).
 }
 \description{
