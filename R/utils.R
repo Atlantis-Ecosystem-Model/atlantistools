@@ -51,6 +51,7 @@ file_ending <- function(filename, ending = "nc") {
 release_questions <- function() {
   c(
     "Have you compressed the vignettes with tools::compactPDF(gs_quality = 'ebook')",
-    "Have you updated the version number"
+    "Have you updated the version number",
+    "Have you used 'args = --no-build-vignettes' in devtools::release()?"
   )
 }
