@@ -52,6 +52,7 @@ release_questions <- function() {
   c(
     "Have you compressed the vignettes with tools::compactPDF(gs_quality = 'ebook')",
     "Have you updated the version number",
-    "Have you used 'args = --no-build-vignettes' in devtools::release()?"
+    "Have you used 'args = --no-build-vignettes' in devtools::release()?",
+    "Have you updated the vignette index from the local package installation?"
   )
 }
