@@ -9,7 +9,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{package-demo}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\usepackage[utf8]{inputenc}
 ---
 
 ```{r}
