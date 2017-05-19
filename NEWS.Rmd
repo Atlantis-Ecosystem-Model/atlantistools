@@ -3,6 +3,12 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.4.2.9000
+## New features
+## Documentation improvements
+## Minor improvements
+## Bug fixes
+
 # atlantistools 0.4.2
 
 ## Bug fixes
