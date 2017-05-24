@@ -33,6 +33,8 @@
 #'
 #' test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
 #' str(test)
+#'
+#' test <- load_nc_physics(nc, select_physics = "nominal_dz", prm_run, bboxes)
 
 load_nc_physics <- function(nc,
                             select_physics,
@@ -42,7 +44,7 @@ load_nc_physics <- function(nc,
                             warn_zeros = FALSE){
   if (is.null(select_physics)) stop("No physical variables selected.")
   supported_variables <- c("salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a", "hdsource", "hdsink",
-                           "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz")
+                           "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz", "nominal_dz")
 
   wrong_input <- select_physics[which(!is.element(select_physics, supported_variables))]
 
@@ -112,11 +114,20 @@ load_nc_physics <- function(nc,
   # Actual data extraction is performed!
   for (i in seq_along(physic_output)) {# for loop over physical variables
     if (i == 1) result <- list()
-    for (j in 1:n_timesteps) {# loop over timesteps
-      if (j == 1) values <- array(dim = c(length(layers), n_timesteps))
-      values[, j] <- physic_output[[i]][,, j][which(layerid == 1)]
+    if (select_physics[i] != "nominal_dz") {
+      for (j in 1:n_timesteps) {# loop over timesteps
+        if (j == 1) values <- array(dim = c(length(layers), n_timesteps))
+        values[, j] <- physic_output[[i]][,, j][which(layerid == 1)]
+      }
+      result[[i]] <- as.vector(values)
+    } else {
+      # WARNING: layer ordering is reversed... It's the same as in init_nc.
+      # nomial_dz is only present once therefore we need to repeat it by the number
+      # of timesteps to match with the other outputs.
+      fix_layerid <- apply(layerid[-nrow(layerid), ], MARGIN = 2, rev)
+      fix_layerid <- rbind(fix_layerid, layerid[nrow(layerid), ])
+      result[[i]] <- rep(physic_output[[i]][fix_layerid == 1], times = n_timesteps)
     }
-    result[[i]] <- as.vector(values)
   }
 
   # Order of the data in value column = "atoutput".
