@@ -14,7 +14,7 @@ geometry: margin = 0.5cm
 vignette: >
   %\VignetteIndexEntry{model-comparison}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\usepackage[utf8]{inputenc}
 ---
 
 \newpage
