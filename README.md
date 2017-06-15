@@ -37,3 +37,26 @@ You can customise the build in vignettes to automate the simulate model - check 
 4.  model-comparison.Rmd
 
 In order to use the vignettes please make sure to use the latest version of RStudio (<https://www.rstudio.com/products/RStudio/>). In addition you need to install pandoc (<http://pandoc.org/installing.html>) and LaTex (I recommend MikTex, <http://miktex.org/download>) on your system. Depending on the LaTex package compendium you selected you might need to install the following additional LaTex packages to create pdfs: url, fancyvrb, framed and titling. You should be prompted in doing so when you try to create your first pdf.
+
+The vignettes can be used one after another. In most cases you need to preprocess the output of your atlantis simulation first with *model-preprocess.Rmd*. You should save the output as an intermediate R-object to save time during model calibration. Afterwards you can knit the calibration vignettes to produce the summary pdf files.
+
+``` r
+library("knitr")
+library("rmarkdown")
+
+preprocessed <- T
+
+if (preprocessed) {
+  load("preprocess-north-sea.rda", verbose = T)
+} else {
+  render(input = "z:/R_codes/model-preprocess.Rmd", 
+         output_file = "model-preprocess.html")
+  save(result, file = "preprocess-north-sea.rda")
+}
+
+render(input = "z:/R_codes/model-calibration.Rmd", 
+       output_file = "model-calibration-ns.pdf")
+
+render(input = "z:/R_codes/model-calibration-species.Rmd", 
+       output_file = "model-calibration-ns-species.pdf")
+```
