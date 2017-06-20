@@ -17,6 +17,8 @@
 #' df <- get_ref_fishbase(growth_fishbase)
 #' }
 
+# Modify this. Should be able to extraxt any reference information from fishbase. E.g. growth and diet!
+
 get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
   # extract unique reference and species combinations
   clean_ref <- dplyr::select_(growth_fishbase, .dots = c("species", "main_ref", "data_ref"))
