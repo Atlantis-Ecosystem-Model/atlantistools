@@ -55,6 +55,7 @@ get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
   # Extract additional information from references
   clean_ref$year <- as.integer(purrr::map_chr(purrr::map_if(clean_ref$ref, ~!is.na(.), str_split_twice), 1))
   clean_ref$author <- stringr::str_sub(clean_ref$ref, end = stringr::str_locate(string = clean_ref$ref, pattern = as.character(clean_ref$year))[, 1] - 3)
+  clean_ref$title <- stringr::str_sub(clean_ref$ref, start = stringr::str_locate(string = clean_ref$ref, pattern = paste(clean_ref$author, clean_ref$year, sep = ", "))[, 2] + 3)
 
   return(clean_ref)
 }
