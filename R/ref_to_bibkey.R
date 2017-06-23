@@ -1,8 +1,13 @@
-# Convert reference information to bib-tex-key
-# @param ref_df dataframe with columns author, year, title
-# in case title is missing match is performed based on author and year only.
+#' Convert reference to bib-tex-key.
+#'
+#' @param ref_df dataframe with columns author, year, title
+#' in case title is missing match is performed based on author and year only.
+#' @param bib character string giving the name of the *.bib file.
+#' @export
+
 # ref_df <- left_join(linfk_ref, refs_find) %>%
 #   select(ref, author, year, title)
+
 ref_to_bibkey <- function(ref_df, bib = "gns-input-data.bib") {
   ref_bib <- bib_to_df(bib = bib)
 
