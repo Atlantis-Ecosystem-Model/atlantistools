@@ -3,30 +3,33 @@
 #' @param ref_df dataframe with columns author, year, title
 #' in case title is missing match is performed based on author and year only.
 #' @param bib character string giving the name of the *.bib file.
+#' @return Character vector.
 #' @export
 
-# ref_df <- left_join(linfk_ref, refs_find) %>%
-#   select(ref, author, year, title)
+# load("z:/R_codes/gns-data-input/data/refs_find.rda", verbose = TRUE)
+# ref_df <- refs_find[1:10, 3:5]
+# bib <- "z:/R_codes/gns-data-input/gns-input-data.bib"
 
-ref_to_bibkey <- function(ref_df, bib = "gns-input-data.bib") {
+ref_to_bibkey <- function(ref_df, bib) {
   ref_bib <- bib_to_df(bib = bib)
 
-  # single_ref <- ref_df[91, ]
+  # single_ref <- ref_df[1, ]
   single_bibtex <- function(single_ref, ref_bib) {
     # Match by year
-    bibkey <- filter(ref_bib, year == single_ref$year)
+    bibkey <- dplyr::filter_(ref_bib, ~year == single_ref$year)
     if (nrow(bibkey) > 0) {
       # Match by title
       bibkey <- bibkey[purrr::map_lgl(bibkey$author, ~sum(stringr::str_detect(pattern = ., string = single_ref$author), na.rm = T) > 0), ]
       if (nrow(bibkey) > 0 & !is.na(single_ref$title)) {
         # Only use data with matching title.
-        words <- str_split(bibkey$title, pattern = " ")
+        words <- stringr::str_split(bibkey$title, pattern = " ")
         # remove punctuation marks and such
-        words <- map(words, str_replace_all, pattern = "[\\,\\.\\:\\[\\]]", replacement = "")
-        counts <- map(words, ~stringr::str_detect(string = single_ref$title, coll(., ignore_case = T)))
-        matches <- map_dbl(counts, ~sum(.)/length(.))
+        words <- purrr::map(words, stringr::str_replace_all, pattern = "[\\,\\.\\:\\[\\]]", replacement = "")
+        counts <- purrr::map(words, ~stringr::str_detect(string = single_ref$title, stringr::coll(., ignore_case = T)))
+        matches <- purrr::map_dbl(counts, ~sum(.)/length(.))
         max_match <- which(max(matches) == matches)
 
+        # Extract bibkey in case more than 80% of words match.
         if (length(max_match) == 1 && matches[max_match] > 0.8) return(bibkey$bibkey[max_match])
       } else {
         # Return unique-bibkey in case no title is present but year and author yield one specicif bibkey
@@ -36,14 +39,14 @@ ref_to_bibkey <- function(ref_df, bib = "gns-input-data.bib") {
     return(NA)
   }
 
-  map_chr(1:nrow(ref_df), ~single_bibtex(single_ref = ref_df[., ], ref_bib = ref_bib))
+  purrr::map_chr(1:nrow(ref_df), ~single_bibtex(single_ref = ref_df[., ], ref_bib = ref_bib))
 }
 
 # Convert bib file to tidy dataframe!
 # bib2df does use incorrect enconding in readLines call
 # Author names are cleaned.
 # This might not work in case different bib encondings are used.
-bib_to_df <- function(bib = "gns-input-data.bib") {
+bib_to_df <- function(bib) {
   bib_df <- readLines(bib, encoding = "UTF-8")
   block_ids <- grep(pattern = "@", x = bib_df)
   single_entries <- vector(mode = "list", length = length(block_ids))
@@ -94,10 +97,10 @@ bib_to_df <- function(bib = "gns-input-data.bib") {
     return(out)
   }
 
-  result <- tibble(bibkey = purrr::map_chr(single_entries, get_bibkey),
-                   author = purrr::map(single_entries, get_authors),
-                   year = purrr::map_int(single_entries, get_year),
-                   title = purrr::map_chr(single_entries, get_title))
+  result <- tibble::tibble(bibkey = purrr::map_chr(single_entries, get_bibkey),
+                           author = purrr::map(single_entries, get_authors),
+                           year   = purrr::map_int(single_entries, get_year),
+                           title  = purrr::map_chr(single_entries, get_title))
 
   return(result)
 }
