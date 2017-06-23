@@ -53,6 +53,8 @@ bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
 
 test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
 str(test)
+
+test <- load_nc_physics(nc, select_physics = "nominal_dz", prm_run, bboxes)
 }
 \seealso{
 Other load functions: \code{\link{load_box}},
