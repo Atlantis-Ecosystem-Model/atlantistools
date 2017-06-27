@@ -47,8 +47,8 @@ get_diet_fishbase <- function(fish, mirror = "se") {
     purrr::set_names(., df_names)
 
   # Add reference information. Do not extract duplicated references.
-  ref_df <- get_ref_fishbase(ref_id = unique(diet_df$ref_id), mirror = mirror)
-  diet_df <- dplyr::left_join(diet_df, ref_df, by = "ref_id")
+  # ref_df <- get_ref_fishbase(ref_id = unique(diet_df$ref_id), mirror = mirror)
+  # diet_df <- dplyr::left_join(diet_df, ref_df, by = "ref_id")
 
   # Add species without diet-info
   if (any(!ids)) {
