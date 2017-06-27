@@ -13,9 +13,7 @@
 #' diet <- get_diet_fishbase(fish)
 #'
 #' fish <- c("Gadus morhua", "Merlangius merlangus", "Ammodytes marinus")
-
-#' df <- get_growth_fishbase(fish)
-#' head(df)
+#' diet <- get_diet_fishbase(fish)
 #' }
 
 get_diet_fishbase <- function(fish, mirror = "se") {
