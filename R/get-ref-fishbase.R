@@ -9,7 +9,6 @@
 #'
 #' @examples
 #' \dontrun{
-#' fish <- c("Gadus morhua", "Merlangius merlangus")
 #' df <- get_growth_fishbase("Scyliorhinus canicula")
 #'
 #' df$data_ref[df$data_ref == df$main_ref] <- NA
@@ -21,22 +20,15 @@
 # Modify this. Should be able to extraxt any reference information from fishbase. E.g. growth and diet!
 
 get_ref_fishbase <- function(ref_id, mirror = "se") {
-  # extract unique reference and species combinations
-  clean_ref <- dplyr::select_(growth_fishbase, .dots = c("species", "main_ref", "data_ref"))
-
-  # remove duplicated data_ref entries
-  clean_ref$data_ref[clean_ref$data_ref == clean_ref$main_ref] <- NA
-  clean_ref <- tidyr::gather_(data = clean_ref, key_col = "ref_type", value_col = "ref_id", gather_cols = c("main_ref", "data_ref"), na.rm = TRUE)
-
   # calculate perc ref entry and remove duplicates!
   # Complete NA entries (NA in every column) are removed at this point.
   # Thus there is no need to add NA handling to the function.
-  clean_ref$perc <- 1
-  clean_ref <- agg_data(clean_ref, col = "perc", groups = c("species", "ref_type", "ref_id"), out = "n", fun = sum) %>%
-    agg_perc(., col = "n", groups = "species", out = "perc")
+  # clean_ref$perc <- 1
+  # clean_ref <- agg_data(clean_ref, col = "perc", groups = c("species", "ref_type", "ref_id"), out = "n", fun = sum) %>%
+  #   agg_perc(., col = "n", groups = "species", out = "perc")
 
   # Extract data from fishbase.org
-  ref <- purrr::map_chr(clean_ref$ref_id, ~paste0("http://www.fishbase.", mirror, "/References/FBRefSummary.php?ID=", .)) %>%
+  ref <- purrr::map_chr(ref_id, ~paste0("http://www.fishbase.", mirror, "/References/FBRefSummary.php?ID=", .)) %>%
     purrr::map(., xml2::read_html) %>%
     purrr::map(., rvest::html_table)
 
@@ -46,12 +38,8 @@ get_ref_fishbase <- function(ref_id, mirror = "se") {
   ref[!good_links] <- NA
   ref <- purrr::flatten_chr(ref)
 
-  # Add references to datatable.
-  if (length(ref) == nrow(clean_ref)) {
-    clean_ref$ref <- ref
-  } else {
-    stop("Some reference IDs are wrong.") # Pretty sure this does never happen...
-  }
+  # Create datatable.
+  clean_ref <- tibble::tibble(ref_id, ref)
 
   # Extract additional information from references
   clean_ref$year <- as.integer(purrr::map_chr(purrr::map_if(clean_ref$ref, ~!is.na(.), str_split_twice), 1))
