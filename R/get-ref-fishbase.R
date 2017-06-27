@@ -3,23 +3,24 @@
 #'
 #' Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
 #' @inheritParams get_growth_fishbase
-#' @param growth_fishbase Dataframe generated with \link{get_growth_fishbase}.
+#' @param ref_id vector of reference ids.
 #' @return Dataframe
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
-#' growth_fishbase <- get_growth_fishbase(fish)
-#' get_ref_fishbase(growth_fishbase)
+#' df <- get_growth_fishbase("Scyliorhinus canicula")
 #'
-#' growth_fishbase <- get_growth_fishbase("Scyliorhinus canicula")
-#' df <- get_ref_fishbase(growth_fishbase)
+#' df$data_ref[df$data_ref == df$main_ref] <- NA
+#' df <- tidyr::gather_(data = df, key_col = "ref_type", value_col = "ref_id", gather_cols = c("main_ref", "data_ref"), na.rm = TRUE)
+#' ref_id <- unique(df$ref_id)
+#' get_ref_fishbase(ref_id)
 #' }
 
 # Modify this. Should be able to extraxt any reference information from fishbase. E.g. growth and diet!
 
-get_ref_fishbase <- function(growth_fishbase, mirror = "se") {
+get_ref_fishbase <- function(ref_id, mirror = "se") {
   # extract unique reference and species combinations
   clean_ref <- dplyr::select_(growth_fishbase, .dots = c("species", "main_ref", "data_ref"))
 
