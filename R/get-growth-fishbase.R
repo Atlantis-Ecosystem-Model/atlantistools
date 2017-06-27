@@ -72,7 +72,7 @@ get_growth_fishbase <- function(fish, mirror = "se"){
     result$xxx <- NULL
     result[result == ""] <- NA
 
-    # find reference urls.
+    # find reference ids.
     ref_urls <- purrr::map(fishbase, ~rvest::html_nodes(., "a")) %>%
       purrr::map(., ~rvest::html_attr(., "href")) %>%
       purrr::map(., ~.[stringr::str_detect(., pattern = "FishPopGrowthSummary")])
@@ -81,8 +81,7 @@ get_growth_fishbase <- function(fish, mirror = "se"){
     count <- split(result, result$species) %>%
       purrr::map_int(., nrow)
     if (all(count == purrr::map_int(ref_urls, length))) {
-      result$ref_url <- unlist(ref_urls)
-      ref_ids <- purrr::map(result$ref_url, url_to_refid)
+      ref_ids <- purrr::map(unlist(ref_urls), url_to_refid)
       result$main_ref <- purrr::map_int(ref_ids, 1)
       result$data_ref <- purrr::map_int(ref_ids, 2)
     } else {
