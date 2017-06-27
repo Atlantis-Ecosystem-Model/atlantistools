@@ -59,7 +59,7 @@ get_diet_fishbase <- function(fish, mirror = "se") {
   }
 
   # leave function in case no information is present for any species
-  if (all(is.na(diet_df$ref))) {
+  if (all(is.na(diet_df$ref_id))) {
     stop("None of the species have information about diets Add additional species.")
   } else {
     return(diet_df)
