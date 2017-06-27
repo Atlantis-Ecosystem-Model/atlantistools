@@ -10,6 +10,10 @@
 #' \dontrun{
 #' # For some reason the examples break with appveyor.
 #' fish <- c("Gadus morhua", "Merlangius merlangus", "Maurolicus muelleri")
+#' diet <- get_diet_fishbase(fish)
+#'
+#' fish <- c("Gadus morhua", "Merlangius merlangus", "Ammodytes marinus")
+
 #' df <- get_growth_fishbase(fish)
 #' head(df)
 #' }
@@ -34,29 +38,28 @@ get_diet_fishbase <- function(fish, mirror = "se") {
 
   # Extract data table from fishbase!
   ids <- !is.na(diet_urls)
-  for (i in seq_along(ids))
   result <- purrr::map_if(diet_urls, ids, ~xml2::read_html(paste0("http://www.fishbase.", mirror, .))) %>%
     purrr::map_if(., ids, rvest::html_table) %>%
-    purrr::map(., ~unique(.[[1]][, c("Country", "Locality", "Ref.")]))
+    purrr::map_if(., ids, ~unique(.[[1]][, c("Country", "Locality", "Ref.")]))
 
-  # First remove Species without Growth information!
-  pos_missing <- purrr::map(fishbase, rvest::html_text) %>%
-    purrr::map_lgl(., ~grepl("The system found no growth information for the requested specie.", .)) %>%
-    which(.)
+  # Add species names
+  df_names <- c("country", "locality", "ref", "species")
+  diet_df <- purrr::map2_df(.x = result[ids], .y = fish[ids], ~tibble::add_column(.x, rep(.y, times = nrow(.x)))) %>%
+    tibble::as_tibble(.) %>%
+    purrr::set_names(., df_names)
+
+  # Add species without diet-info
+  if (any(!ids)) {
+    nas <- tibble::as_tibble(do.call(rbind, purrr::map(fish[!ids], ~c(rbind(rep(NA, length(df_names) - 1)), .)))) %>%
+      purrr::set_names(., df_names)
+
+    diet_df <- dplyr::bind_rows(diet_df, nas)
+  }
 
   # leave function in case no information is present for any species
-  if (length(pos_missing) == length(ids)) {
-    stop("None of the species have information about growth. Add additional species.")
+  if (all(is.na(diet_df$ref))) {
+    stop("None of the species have information about diets Add additional species.")
   } else {
-    if (length(pos_missing) >= 1) {
-      missing_species <- sort(names(ids)[pos_missing])
-      warning(paste("No growth information available for", length(pos_missing), "species:\n"), paste(missing_species, collapse = "\n"))
-      ids <- ids[-pos_missing]
-      fishbase <- fishbase[-pos_missing]
-    }
-
-    # Extract data table from fishbase!
-    result <- purrr::map(fishbase, rvest::html_table) %>%
-      purrr::map(., 3)
+    return(diet_df)
   }
 }
