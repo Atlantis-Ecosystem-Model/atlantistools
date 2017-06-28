@@ -2,7 +2,7 @@ context("test extraction of data from fishbase.")
 
 df1 <- get_growth_fishbase("Scyliorhinus canicula")
 
-test_that("test extraction for sprat", {
+test_that("test extraction for Small-spotted catshark", {
   expect_equal(dim(df1), c(4, 17))
   expect_equivalent(df1$linf[3], 87.4)
   expect_equivalent(df1$k[2], 0.15)
