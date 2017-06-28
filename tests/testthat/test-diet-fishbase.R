@@ -16,7 +16,7 @@ df2 <- get_diet_fishbase(c("Gadus morhua", "Merlangius merlangus", "Ammodytes ma
 
 test_that("test extraction for different inputs", {
   expect_equal(dim(df1), c(49, 4))
-  expect_equal(sum(is.na(df2$ref)), 1)
+  expect_equal(sum(is.na(df2$ref_id)), 1)
   # Not working
   # expect_warning(get_diet_fishbase(fish = "xxx yyy"), " The following species are not part of the fishbase dataframe")
 })
