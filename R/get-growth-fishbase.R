@@ -80,12 +80,13 @@ get_growth_fishbase <- function(fish, mirror = "se"){
     # check if result and urls match. Rearrange due to alphabetical ordering in df.
     count <- split(result, result$species) %>%
       purrr::map_int(., nrow)
+    count <- count[match(unique(result$species), names(count))]
     if (all(count == purrr::map_int(ref_urls, length))) {
       ref_ids <- purrr::map(unlist(ref_urls), url_to_refid)
       result$main_ref <- purrr::map_int(ref_ids, 1)
       result$data_ref <- purrr::map_int(ref_ids, 2)
     } else {
-      warning("ref_urls and final table do not match.")
+      stop("ref_urls and final table do not match.")
     }
 
     # Add missing species
