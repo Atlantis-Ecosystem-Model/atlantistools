@@ -21,11 +21,13 @@ Extract bibliographic information for growth parameters (linf, k, t0) from www.f
 }
 \examples{
 \dontrun{
-fish <- c("Gadus morhua", "Merlangius merlangus")
 df <- get_growth_fishbase("Scyliorhinus canicula")
 
 df$data_ref[df$data_ref == df$main_ref] <- NA
-df <- tidyr::gather_(data = df, key_col = "ref_type", value_col = "ref_id", gather_cols = c("main_ref", "data_ref"), na.rm = TRUE)
+df <- tidyr::gather_(data = df,
+                     key_col = "ref_type",
+                     value_col = "ref_id",
+                     gather_cols = c("main_ref", "data_ref"), na.rm = TRUE)
 ref_id <- unique(df$ref_id)
 get_ref_fishbase(ref_id)
 }
