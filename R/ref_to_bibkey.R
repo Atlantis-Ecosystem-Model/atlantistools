@@ -48,6 +48,11 @@ ref_to_bibkey <- function(ref_df, bib) {
 # This might not work in case different bib encondings are used.
 bib_to_df <- function(bib) {
   bib_df <- readLines(bib, encoding = "UTF-8")
+
+  # Cleanup jabref-meta data
+  jab_meta <- min(grep(pattern = "jabref-meta", x = bib_df))
+  if (length(jab_meta) > 0) bib_df <- bib_df[-(jab_meta:length(bib_df))]
+
   block_ids <- grep(pattern = "\\@", x = bib_df)
   single_entries <- vector(mode = "list", length = length(block_ids))
   for (i in 1:(length(single_entries) - 1)) {
@@ -70,6 +75,7 @@ bib_to_df <- function(bib) {
     stringr::str_split_fixed(string = out, pattern = "\\}", n = 2)[, 1]
   }
 
+  # chr <- single_entries[[462]]
   get_authors <- function(chr) {
     authors <- bib_to_chr(chr = chr, pattern = "author")
     authors <- stringr::str_split(authors, pattern = " and ")
