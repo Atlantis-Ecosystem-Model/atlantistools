@@ -60,7 +60,7 @@ bib_to_df <- function(bib) {
 
   # chr <- single_entries[[11]]
   get_bibkey <- function(chr) {
-    out <- chr[grep(pattern = "@", x = chr)]
+    out <- chr[grep(pattern = "\\@", x = chr)]
     stringr::str_sub(string = out, start = stringr::str_locate(string = out, pattern = "\\{")[1] + 1, end = stringr::str_length(out) - 1)
   }
 
