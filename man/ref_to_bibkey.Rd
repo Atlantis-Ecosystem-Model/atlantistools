@@ -10,7 +10,7 @@ ref_to_bibkey(ref_df, bib)
 \item{ref_df}{dataframe with columns author, year, title
 in case title is missing match is performed based on author and year only.}
 
-\item{bib}{character string giving the name of the *.bib file.}
+\item{bib}{character string giving the name of the .bib file.}
 }
 \value{
 Character vector.
