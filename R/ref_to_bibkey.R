@@ -48,7 +48,7 @@ ref_to_bibkey <- function(ref_df, bib) {
 # This might not work in case different bib encondings are used.
 bib_to_df <- function(bib) {
   bib_df <- readLines(bib, encoding = "UTF-8")
-  block_ids <- grep(pattern = "@", x = bib_df)
+  block_ids <- grep(pattern = "\\@", x = bib_df)
   single_entries <- vector(mode = "list", length = length(block_ids))
   for (i in 1:(length(single_entries) - 1)) {
     single_entries[[i]] <- bib_df[block_ids[i]:(block_ids[i + 1] - 1)]
