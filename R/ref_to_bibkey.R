@@ -93,7 +93,8 @@ bib_to_df <- function(bib) {
     # Replace curly braces
     out <- stringr::str_replace_all(string = out, pattern = "\\{", replacement = "")
     out <- stringr::str_replace_all(string = out, pattern = "\\}", replacement = "")
-    out <- stringr::str_replace_all(string = out, pattern = "\\’", replacement = "\\'")
+    # native encodnig based on stringi::stri_enc_mark \"\\\\â€™\"
+    # out <- stringr::str_replace_all(string = out, pattern = "\\’", replacement = "\\'")
     return(out)
   }
 
