@@ -13,7 +13,7 @@
 #' @examples
 #' \dontrun{
 #' # For some reason the examples break with appveyor.
-#' fish <- c("Gadus morhua", "Merlangius merlangus")
+#' fish <- c("Gadus morhua", "Squalus acanthias")
 #' df <- get_maturity_fishbase(fish)
 #' head(df)
 #' }
