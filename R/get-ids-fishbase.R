@@ -20,7 +20,7 @@ get_ids_fishbase <- function(fish){
   return(res)
 }
 
-get_fc_fishbase <- function(fish){
+get_fcs_fishbase <- function(fish){
   pos <- get_info_fishbase(fish = fish)
   res <- atlantistools::fishbase_data$FamCode[pos]
   names(res) <- names(pos)
