@@ -13,6 +13,22 @@
 #' @export
 
 get_ids_fishbase <- function(fish){
+  pos <- get_info_fishbase(fish = fish)
+  res <- atlantistools::fishbase_data$SpecCode[pos]
+  names(res) <- names(pos)
+
+  return(res)
+}
+
+get_fc_fishbase <- function(fish){
+  pos <- get_info_fishbase(fish = fish)
+  res <- atlantistools::fishbase_data$FamCode[pos]
+  names(res) <- names(pos)
+
+  return(res)
+}
+
+get_info_fishbase <- function(fish) {
   # Check if every fishname is composed of genus and species!
   if (any(vapply(stringr::str_split(fish, pattern = " "), length, FUN.VALUE = integer(1)) < 2)) stop("Fishnames not complete.")
 
@@ -30,7 +46,6 @@ get_ids_fishbase <- function(fish){
   }
 
   pos <- purrr::map_int(pos, which)
-  pos <- atlantistools::fishbase_data$SpecCode[pos]
   names(pos) <- fish
 
   return(pos)
