@@ -13,7 +13,7 @@
 ref_to_bibkey <- function(ref_df, bib) {
   ref_bib <- bib_to_df(bib = bib)
 
-  # single_ref <- ref_df[1, ]
+  # single_ref <- ref_df[4, ]
   single_bibtex <- function(single_ref, ref_bib) {
     # Match by year
     bibkey <- dplyr::filter_(ref_bib, ~year == single_ref$year)
