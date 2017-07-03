@@ -1,7 +1,7 @@
-#' Extract growth parameters from http:://www.fishbase.se.
+#' Extract maturity parameters from http:://www.fishbase.se.
 #'
 #'
-#' This function extracts values for Linf, k  and t0 from http:://www.fishbase.se
+#' This function extracts values for maturity from http:://www.fishbase.se
 #' @param fish Vector of fish species with genus and species information.
 #' @param mirror Character string defining the url mirror to use. Defaults to \code{se}.
 #' In case data extraction is slow use a different mirror. Try to avoid frequently used mirrors
@@ -14,38 +14,29 @@
 #' \dontrun{
 #' # For some reason the examples break with appveyor.
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
-#' df <- get_growth_fishbase(fish)
+#' df <- get_maturity_fishbase(fish)
 #' head(df)
-#'
-#' df <- get_growth_fishbase(fish, mirror = "de")
-#' head(df)
-#'
-#' fish <- c("Sprattus sprattus")
-#' df <- get_growth_fishbase(fish)
-#' head(df)
-
-#' # Only use for debugging purposes.
-#' fish <- read.csv("Z:/my_data_alex/fish_species_names_from_ibts.csv", stringsAsFactors = FALSE)[, 1]
-#' url <- get_growth_fishbase(fish)
-#' url <- urls$ref_url
 #' }
 
 #' @export
 
-get_growth_fishbase <- function(fish, mirror = "se"){
+get_maturity_fishbase <- function(fish, mirror = "se"){
   ids <- get_ids_fishbase(fish)
+  fcs <- get_fcs_fishbase(fish)
 
   # Split up Names in species and genus part to generate URLs
   ge_sp <- split_species(names(ids))
 
-  urls <- paste0("http://fishbase.", mirror, "/Reproduction/MaturityList.php?ID", ids, "&GenusName=", ge_sp$ge, "&SpeciesName=", ge_sp$sp, "&fc=13")
+  urls <- paste0("http://fishbase.", mirror, "/Reproduction/MaturityList.php?ID=", ids, "&GenusName=", ge_sp$ge, "&SpeciesName=", ge_sp$sp, "&fc=", fcs)
 
   fishbase <- purrr::map(urls, xml2::read_html)
 
-  # First remove Species without Growth information!
-  pos_missing <- purrr::map(fishbase, rvest::html_text) %>%
-    purrr::map_lgl(., ~grepl("Insert text here", .)) %>%
-    which(.)
+  # Extract data table from fishbase!
+  result <- purrr::map(fishbase, rvest::html_table) %>%
+    purrr::map(., 2)
+
+  # Remove Species without maturity information!
+  pos_missing <- which(purrr::map_int(result, nrow) == 0)
 
   # leave function in case no information is present for any species
   if (length(pos_missing) == length(ids)) {
@@ -53,73 +44,70 @@ get_growth_fishbase <- function(fish, mirror = "se"){
   } else {
     if (length(pos_missing) >= 1) {
       missing_species <- sort(names(ids)[pos_missing])
-      warning(paste("No growth information available for", length(pos_missing), "species:\n"), paste(missing_species, collapse = "\n"))
+      warning(paste("No maturity information available for", length(pos_missing), "species:\n"), paste(missing_species, collapse = "\n"))
       ids <- ids[-pos_missing]
       fishbase <- fishbase[-pos_missing]
+      result <- result[-pos_missing]
     }
-
-    # Extract data table from fishbase!
-    result <- purrr::map(fishbase, rvest::html_table) %>%
-      purrr::map(., 3)
 
     # add names to dataframes
     result <- purrr::map2(.x = result, .y = names(ids), ~tibble::add_column(.x, rep(.y, times = nrow(.x)))) %>%
       do.call(rbind, args = .) %>% # rbind is necessary due to different col-classes in 'Sex' = 'chr' and 'logical'
-      purrr::set_names(., c("xxx", "linf", "length_type", "k", "to", "sex", "m", "temp", "lm", "a",
-                            "country", "locality", "questionable", "captive", "species"))
+      purrr::set_names(., c("zzz", "lm", "lmin", "xxx", "lmax", "agemin", "yyy", "agemax", "agem", "sex", "country", "locality", "species"))
 
     # Cleanup
     result$xxx <- NULL
+    result$yyy <- NULL
+    result$zzz <- NULL
     result[result == ""] <- NA
+    result$lm <- purrr::map_dbl(stringr::str_split(string = result$lm, pattern = "[ TL SL]"), ~as.numeric(.[1]))
 
     # find reference ids.
     ref_urls <- purrr::map(fishbase, ~rvest::html_nodes(., "a")) %>%
       purrr::map(., ~rvest::html_attr(., "href")) %>%
-      purrr::map(., ~.[stringr::str_detect(., pattern = "FishPopGrowthSummary")])
+      purrr::map(., ~.[stringr::str_detect(., pattern = "FishMaturitySummary")])
 
-    # check if result and urls match. Rearrange due to alphabetical ordering in df.
-    count <- split(result, result$species) %>%
-      purrr::map_int(., nrow)
-    count <- count[match(unique(result$species), names(count))]
-    if (all(count == purrr::map_int(ref_urls, length))) {
-      ref_ids <- purrr::map(unlist(ref_urls), url_to_refid)
-      result$main_ref <- purrr::map_int(ref_ids, 1)
-      result$data_ref <- purrr::map_int(ref_ids, 2)
+    if (sum(purrr::map_int(ref_urls, length)) != length(unlist(ref_urls))) {
+      stop("Please contact package devs.")
     } else {
-      stop("ref_urls and final table do not match.")
+      ref_urls <- purrr::flatten_chr(ref_urls)
     }
 
-    # Add missing species
-    if (length(pos_missing) >= 1) {
-      add_missing <- result[1:length(missing_species), ]
-      add_missing[,] <- NA
-      add_missing$species <- missing_species
-      result <- dplyr::bind_rows(result, add_missing)
+    # Helper function to extract all reference ids.
+    # Based on the available data there are three types of references:
+    # Main Ref., Age Ref., Length Ref.
+    # ref_urls <- ref_urls[1:25]
+    get_ref_id <- function(ref_urls, mirror) {
+      urls <- paste0("http://fishbase.", mirror, ref_urls)
+
+      # Create a list of reference urls. Each listentry has either 3 or 0 elements
+      ref_id <- purrr::map(urls, xml2::read_html) %>%
+        purrr::map(., ~rvest::html_nodes(., "a")) %>%
+        purrr::map(., ~rvest::html_attr(., "href")) %>%
+        purrr::map(., ~.[stringr::str_detect(., pattern = "references")])
+
+      # Helper function to extract ref_ids from urls.
+      triple_string_to_id <- function(chr) {
+        if (length(chr) == 0) {
+          rep(NA, 3)
+        } else {
+          ids <- stringr::str_extract_all(chr, pattern = "[0-9]")
+          as.numeric(purrr::map_chr(ids, paste, collapse = ""))
+        }
+      }
+
+      ref_ids <- tibble::as_tibble(do.call(rbind, purrr::map(ref_id, triple_string_to_id)))
+      ref_ids <- purrr::set_names(ref_ids, c("main_ref", "age_ref", "length_ref"))
+      return(ref_ids)
     }
+
+    ref <- get_ref_id(ref_urls = ref_urls, mirror = mirror)
+    result <- dplyr::bind_cols(result, ref)
 
     return(result)
   }
 }
 
-# url <- result$ref_url[1]
-url_to_refid <- function(url, mirror = "se") {
-  # extract links from html
-  links <- xml2::read_html(paste0("http://www.fishbase.", mirror, "/", url)) %>%
-    rvest::html_text(.)
 
-  # this is a bit ugly but it works like a charm.
-  p1 <- stringr::str_split_fixed(links, pattern = "Main Ref. :", n = 2)[, 2]
-  p2 <- stringr::str_split_fixed(p1, pattern = "Data Ref. :", n = 2)
-  p3 <- stringr::str_split_fixed(p2[, 2], pattern = "Data Type :", n = 2)
-
-  # combine main and data ref strings
-  refs <- c(p2[, 1], p3[, 1])
-
-  # extract numeric values
-  ref_id <- purrr::map_chr(refs, ~paste0(unlist(stringr::str_extract_all(string = ., pattern = "[0-9]")), collapse = ""))
-  ref_id <- suppressWarnings(as.integer(ref_id))
-
-  return(ref_id)
-}
 
 
