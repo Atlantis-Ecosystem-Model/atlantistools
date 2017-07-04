@@ -40,7 +40,7 @@ get_maturity_fishbase <- function(fish, mirror = "se"){
 
   # leave function in case no information is present for any species
   if (length(pos_missing) == length(ids)) {
-    stop("None of the species have information about growth. Add additional species.")
+    stop("None of the species have information about maturity Add additional species.")
   } else {
     if (length(pos_missing) >= 1) {
       missing_species <- sort(names(ids)[pos_missing])
