@@ -92,6 +92,7 @@ get_maturity_fishbase <- function(fish, mirror = "se"){
           rep(NA, 3)
         } else {
           ids <- stringr::str_extract_all(chr, pattern = "[0-9]")
+          # this is somewhat hacked. 0 element entries become NAs (intended).
           as.numeric(purrr::map_chr(ids, paste, collapse = ""))
         }
       }
