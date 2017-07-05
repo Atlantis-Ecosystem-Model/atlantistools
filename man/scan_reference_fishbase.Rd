@@ -4,12 +4,16 @@
 \alias{scan_reference_fishbase}
 \title{Scan list of references for character string for fish species}
 \usage{
-scan_reference_fishbase(fish, chr)
+scan_reference_fishbase(fish, chr, mirror = "se")
 }
 \arguments{
 \item{fish}{Vector of fish species with genus and species information.}
 
 \item{chr}{Character string to search.}
+
+\item{mirror}{Character string defining the url mirror to use. Defaults to \code{se}.
+In case data extraction is slow use a different mirror. Try to avoid frequently used mirrors
+like \code{uk} or \code{com}.}
 }
 \value{
 Dataframe of potentially relevant references.

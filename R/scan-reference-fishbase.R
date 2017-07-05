@@ -13,7 +13,7 @@
 #' df <- scan_reference_fishbase(fish, chr = "xxx")
 #' }
 
-scan_reference_fishbase <- function(fish, chr) {
+scan_reference_fishbase <- function(fish, chr, mirror = "se") {
   ids <- get_ids_fishbase(fish)
 
   # Split up Names in species and genus part to generate URLs
