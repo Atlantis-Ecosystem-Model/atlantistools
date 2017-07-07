@@ -11,6 +11,7 @@
 #' fish <- c("Gadus morhua", "Merlangius merlangus")
 #' df <- scan_reference_fishbase(fish, chr = "diet")
 #' df <- scan_reference_fishbase(fish, chr = "xxx")
+#' df <- scan_reference_fishbase(fish, chr = "feed")
 #' }
 
 scan_reference_fishbase <- function(fish, chr, mirror = "se") {

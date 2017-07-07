@@ -27,5 +27,6 @@ Scan list of references for character string for fish species
 fish <- c("Gadus morhua", "Merlangius merlangus")
 df <- scan_reference_fishbase(fish, chr = "diet")
 df <- scan_reference_fishbase(fish, chr = "xxx")
+df <- scan_reference_fishbase(fish, chr = "feed")
 }
 }
