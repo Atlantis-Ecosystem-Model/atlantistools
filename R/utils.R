@@ -61,31 +61,34 @@ release_questions <- function() {
 }
 
 
-dir <- "C:/Users/alexanderke/Dropbox/Atlantis_SoS_Files_Alex"
-setwd(dir)
-nomeNc <- "output/out_newfleet9"
-
-nc_gen <- paste(nomeNc,".nc",sep="")
-nc_prod <- paste(nomeNc,"PROD.nc",sep="")
-dietcheck <- paste(nomeNc,"DietCheck.txt",sep="")
-yoy <- paste(nomeNc,"YOY.txt",sep="")
-ssb <- paste(nomeNc,"SSB.txt",sep="")
-specmort <- paste(nomeNc,"SpecificMort.txt",sep="")
-predspecmort <-paste(nomeNc,"SpecificPredMort.txt",sep="")
-version_flag <- 1
-
-prm_run <- "Sic_harvest_newfleet9.prm"
-prm_biol <- "Sic_biol_newfleet9.prm"
-fgs <- "newFGHorMigr.csv"
-bgm <- "geometry.bgm"
-init <- "inSic26042017.nc"
-
-bboxes <- get_boundary(boxinfo = load_box(bgm))
-bps <- load_bps(fgs, init)
-bio_conv <- get_conv_mgnbiot(prm_biol)
-
-groups <- get_groups(fgs)
-groups_age <- get_age_groups(fgs)
-
-load_nc(nc = nc_gen, bps = bps, select_groups = groups_age[1:5], select_variable = "ResN", fgs = fgs, prm_run = prm_run, bboxes = bboxes)
-
+# dir <- "C:/Users/alexanderke/Dropbox/Atlantis_SoS_Files_Alex"
+# setwd(dir)
+# nomeNc <- "output/out_newfleet9"
+#
+# nc_gen <- paste(nomeNc,".nc",sep="")
+# nc_prod <- paste(nomeNc,"PROD.nc",sep="")
+# dietcheck <- paste(nomeNc,"DietCheck.txt",sep="")
+# yoy <- paste(nomeNc,"YOY.txt",sep="")
+# ssb <- paste(nomeNc,"SSB.txt",sep="")
+# specmort <- paste(nomeNc,"SpecificMort.txt",sep="")
+# predspecmort <-paste(nomeNc,"SpecificPredMort.txt",sep="")
+# version_flag <- 1
+#
+# prm_run <- "Sic_run_fishing_F_gape100_65yr.prm"
+# prm_biol <- "Sic_biol_newfleet9.prm"
+# fgs <- "newFGHorMigr.csv"
+# bgm <- "geometry.bgm"
+# init <- "inSic26042017.nc"
+#
+# bboxes <- get_boundary(boxinfo = load_box(bgm))
+# bps <- load_bps(fgs, init)
+# bio_conv <- get_conv_mgnbiot(prm_biol)
+#
+# groups <- get_groups(fgs)
+# groups_age <- get_age_groups(fgs)
+#
+# load_nc(nc = nc_gen, bps = bps, select_groups = groups_age[1:5], select_variable = "ResN", fgs = fgs, prm_run = prm_run, bboxes = bboxes)
+#
+# nc = nc_gen
+# select_groups = groups_age[1:5]
+# select_variable = "ResN"
