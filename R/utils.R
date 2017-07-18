@@ -75,7 +75,7 @@ release_questions <- function() {
 # version_flag <- 1
 #
 # prm_run <- "Sic_run_fishing_F_gape100_65yr.prm"
-# prm_biol <- "Sic_biol_newfleet9.prm"
+# prm_biol <- "Sic_biol_newfleet21.prm"
 # fgs <- "newFGHorMigr.csv"
 # bgm <- "geometry.bgm"
 # init <- "inSic26042017.nc"
@@ -92,3 +92,5 @@ release_questions <- function() {
 # nc = nc_gen
 # select_groups = groups_age[1:5]
 # select_variable = "ResN"
+#
+# agemat <- prm_to_df(prm_biol,  fgs, group = get_age_acronyms(fgs), "age_mat")
