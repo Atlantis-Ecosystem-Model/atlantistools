@@ -131,6 +131,7 @@ load_nc <- function(nc, fgs, bps, select_groups,
   if (length(search_clean) == 0) return(0)
 
   at_data <- list()
+  # At some point should update this with https://github.com/gaborcsardi/progress
   # Initialise progress par!
   # if (report) pb <- txtProgressBar(min = 0, max = length(search_clean), style = 3)
   if (report) pb <- dplyr::progress_estimated(length(search_clean))
