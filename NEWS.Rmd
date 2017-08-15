@@ -3,11 +3,15 @@ title: "NEWS"
 output: html_document
 ---
 
-# atlantistools 0.4.2.9000
-## New features
-## Documentation improvements
-## Minor improvements
+# atlantistools 0.4.3
 ## Bug fixes
+* Minor bugfixes associated with R CMD check NOTE.
+    * Reduced file size of `inst\extdata\setas-model-new-trunk`.
+
+## New features
+* `get_maturity_fishbase` Extract maturity parameters (length and age based) from fishbase.
+* `scan_reference_fishbase` Scan reference list from fishbase for a particular species for 
+a species character string, e.g. "diet" or "feeding".
 
 # atlantistools 0.4.2
 
