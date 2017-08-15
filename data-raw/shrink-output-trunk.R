@@ -1,8 +1,22 @@
+# Skript to shrink atlantis output to fix R CMD Check NOTES
+
+# Run model according to README.txt settings.
+# Convert output ncs to cdfs
+# Run this script
+# Remove duplicated line 1213 in "outputSETAS.cdf"
+# Remove duplicated line 296 in "outputSETASPROD.cdf"
+# Re-Convert the cdfs in "new" folder to nc files
+# Copy file in "new" folder to atlantistools directory
+# Copy the remaining output files listed in README.txt
+
 library("atlantistools")
+
 file_fgs <- "SETasGroupsDem_NoCep.csv"
 file_init <- "INIT_VMPA_Jan2015"
-file_gen <- "outputSETAS"
-file_prod <- "outputSETASPROD"
+file_gen <- "outputTrunk/outputSETAS"
+file_prod <- "outputTrunk/outputSETASPROD"
+
+setwd("c:/ATLANTIS_Stuff/Atlantis_models/SETas_model_New_Trunk/")
 
 # utility functions -------------------------------------------------------------------------------
 find_flags <- function(chars) {
@@ -25,7 +39,7 @@ find_block <- function(chars, var) {
     block <- c(block, (block[length(block)] + 1):(length(chars) - 1))
   } else {
     next_var <- flags[which(flags == var) + 1]
-    
+
     ids <- lapply(c(var, next_var), grep, x = chars, ignore.case = FALSE)
     if (any(sapply(ids, length) != 2)) stop(paste(var, "found multiple times."))
     ids_min <- c(ids[[1]][1], ids[[1]][length(ids[[1]])])
@@ -43,9 +57,9 @@ fgs$Index <- 1:nrow(fgs)
 write.csv(fgs, file = file.path("new", file_fgs), quote = FALSE, row.names = FALSE)
 
 # initial conditions file -------------------------------------------------------------------------
-vars <- paste0(" ", c("porosity", "topk", "sedbiodepth", "seddetdepth", "sedoxdepth", "sedbiodens", "sedirrigenh", 
-                      "sedturbenh", "erosion_rate", "reef", "flat", "canyon", "soft", "eddy", "water", "DON", 
-                      "MicroNut", "Stress", "DiagNGain", "DiagNLoss", "DiagNFlux", "Light_Adaptn_MB", 
+vars <- paste0(" ", c("porosity", "topk", "sedbiodepth", "seddetdepth", "sedoxdepth", "sedbiodens", "sedirrigenh",
+                      "sedturbenh", "erosion_rate", "reef", "flat", "canyon", "soft", "eddy", "water", "DON",
+                      "MicroNut", "Stress", "DiagNGain", "DiagNLoss", "DiagNFlux", "Light_Adaptn_MB",
                       "Light_Adaptn_PL", "Light_Adaptn_DF", "Light_Adaptn_PS", "t", "Light", "Oxygen", "Si", "Det_Si"))
 
 chars <- readLines(paste0(file_init, ".cdf"))
@@ -54,7 +68,7 @@ flags <- find_flags(chars)
 ff <- load_fgs(fgs = file.path("new", file_fgs))
 
 keep_vars <- c(
-  paste0(" ", c(sort(as.vector(outer(as.vector(outer(ff$Name[ff$NumCohorts == 10], 1:10, FUN = paste0)), 
+  paste0(" ", c(sort(as.vector(outer(as.vector(outer(ff$Name[ff$NumCohorts == 10], 1:10, FUN = paste0)),
                        c("Nums", "ResN", "StructN"), FUN = paste, sep = "_"))),
                 sort(paste(ff$Name[ff$NumCohorts != 2], "N", sep = "_")),
                 sort(as.vector(outer(paste(ff$Name[ff$NumCohorts == 2], "N", sep = "_"), 1:2, FUN = paste0))))),
@@ -78,10 +92,10 @@ length(ids) == length(unique(ids))
 
 gl_at <- grep(chars, pattern = "global attributes")
 
-new_init <- c(chars[1:8], 
-              chars[sort(c(unlist(ids), gl_at:(gl_at + 9)))], 
+new_init <- c(chars[1:8],
+              chars[sort(c(unlist(ids), gl_at:(gl_at + 9)))],
               chars[length(chars)])
-              
+
 writeLines(new_init, con = file.path("new", paste0(paste0(file_init, ".cdf"))))
 
 # general output file -----------------------------------------------------------------------------
@@ -93,11 +107,11 @@ length(ids) == length(unique(ids))
 
 gl_at <- grep(chars, pattern = "global attributes")
 
-new_init <- c(chars[1:8], 
-              chars[sort(c(unlist(ids), gl_at:(gl_at + 11)))], 
+new_init <- c(chars[1:8],
+              chars[sort(c(unlist(ids), gl_at:(gl_at + 11)))],
               chars[length(chars)])
 
-writeLines(new_init, con = file.path("new", paste0(paste0(file_gen, ".cdf"))))
+writeLines(new_init, con = file.path("new", paste0(paste0(basename(file_gen), ".cdf"))))
 
 # productivity output file ------------------------------------------------------------------------
 chars <- readLines(paste0(file_prod, ".cdf"))
@@ -107,10 +121,10 @@ flags <- find_flags(chars)
 ff <- load_fgs(fgs = file.path("new", file_fgs))
 
 keep_vars <- c(
-  paste0(" ", c(sort(as.vector(outer(as.vector(outer(ff$Name[ff$NumCohorts == 10], 1:10, FUN = paste0)), 
+  paste0(" ", c(sort(as.vector(outer(as.vector(outer(ff$Name[ff$NumCohorts == 10], 1:10, FUN = paste0)),
                                      c("Growth", "Eat"), FUN = paste, sep = "_"))),
                 sort(paste0(ff$Name[ff$NumCohorts != 10 & ff$IsPredator != 0], "Prodn")),
-                sort(paste0(ff$Name[ff$NumCohorts != 10 & ff$IsPredator != 0], "Grazing")), 
+                sort(paste0(ff$Name[ff$NumCohorts != 10 & ff$IsPredator != 0], "Grazing")),
                 c("dz", "volume", "numlayers"))))
 
 
@@ -120,9 +134,9 @@ length(ids) == length(unique(ids))
 
 gl_at <- grep(chars, pattern = "global attributes")
 
-new_init <- c(chars[1:8], 
-              chars[sort(c(unlist(ids), gl_at:(gl_at + 11)))], 
+new_init <- c(chars[1:8],
+              chars[sort(c(unlist(ids), gl_at:(gl_at + 11)))],
               chars[length(chars)])
 
-writeLines(new_init, con = file.path("new", paste0(paste0(file_prod, ".cdf"))))
+writeLines(new_init, con = file.path("new", paste0(paste0(basename(file_prod), ".cdf"))))
 
