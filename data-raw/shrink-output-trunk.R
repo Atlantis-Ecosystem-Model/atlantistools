@@ -66,9 +66,10 @@ chars <- readLines(paste0(file_init, ".cdf"))
 flags <- find_flags(chars)
 
 ff <- load_fgs(fgs = file.path("new", file_fgs))
+coh_groups <- ff$Name[ff$NumCohorts == 10]
 
 keep_vars <- c(
-  paste0(" ", c(sort(as.vector(outer(as.vector(outer(ff$Name[ff$NumCohorts == 10], 1:10, FUN = paste0)),
+  paste0(" ", c(sort(as.vector(outer(as.vector(outer(coh_groups, 1:10, FUN = paste0)),
                        c("Nums", "ResN", "StructN"), FUN = paste, sep = "_"))),
                 sort(paste(ff$Name[ff$NumCohorts != 2], "N", sep = "_")),
                 sort(as.vector(outer(paste(ff$Name[ff$NumCohorts == 2], "N", sep = "_"), 1:2, FUN = paste0))))),
@@ -96,6 +97,25 @@ new_init <- c(chars[1:8],
               chars[sort(c(unlist(ids), gl_at:(gl_at + 9)))],
               chars[length(chars)])
 
+# Replace fill values
+update_vars <- keep_vars[unlist(purrr::map(c("ResN", "StructN"), ~which(grepl(pattern = .x,  x = keep_vars))))]
+fill <- paste0(stringr::str_sub(update_vars, start = 2), ":_FillValue")
+
+ids <- purrr::map_int(fill, grep, x = new_init)
+
+filler <- as.numeric(stringr::str_replace(stringr::str_split_fixed(new_init[ids], pattern = " = ", n = 2)[, 2], pattern = " ;", replacement = ""))
+
+for (i in seq_along(update_vars)) {
+  wuwu <- paste0(update_vars[i], " =")
+  id <- grep(pattern = wuwu, x = new_init)
+  singleline <- paste0(" ", paste(rep(filler[i], times = 7), collapse = ", "))
+
+  new_init[id + 1:10] <- paste0(singleline, ",")
+  new_init[id + 11] <- paste0(singleline, ";")
+}
+
+new_init <- new_init[-ids]
+
 writeLines(new_init, con = file.path("new", paste0(paste0(file_init, ".cdf"))))
 
 # general output file -----------------------------------------------------------------------------
@@ -121,7 +141,7 @@ flags <- find_flags(chars)
 ff <- load_fgs(fgs = file.path("new", file_fgs))
 
 keep_vars <- c(
-  paste0(" ", c(sort(as.vector(outer(as.vector(outer(ff$Name[ff$NumCohorts == 10], 1:10, FUN = paste0)),
+  paste0(" ", c(sort(as.vector(outer(as.vector(outer(coh_groups, 1:10, FUN = paste0)),
                                      c("Growth", "Eat"), FUN = paste, sep = "_"))),
                 sort(paste0(ff$Name[ff$NumCohorts != 10 & ff$IsPredator != 0], "Prodn")),
                 sort(paste0(ff$Name[ff$NumCohorts != 10 & ff$IsPredator != 0], "Grazing")),

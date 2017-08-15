@@ -9,4 +9,4 @@ fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 bboxes <- get_boundary(load_box(bgm = file.path(d, "VMPA_setas.bgm")))
 
 # Cannot be run due to NAs in init file for growth
-# data1 <- sc_init(init, prm_biol, fgs, bboxes)
+data1 <- sc_init(init, prm_biol, fgs, bboxes)
