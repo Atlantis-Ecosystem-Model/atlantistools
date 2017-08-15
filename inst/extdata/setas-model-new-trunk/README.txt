@@ -21,11 +21,11 @@ SETasFisheries.csv
 # Settings in "VMPA_setas_run_fishing_F_Trunk.prm"
 flagdietcheck 1        # Periodically list realised diet matchups (tuning diagnostic)
 dt         	12 hour     # 12 hour time step
-tstop       1825 day     # Stop time after the given period 15000 5000
+tstop       1095 day     # Stop time after the given period 15000 5000
 toutstart  	0 day       # Output start time
-toutinc    	73 day     # Write output with this periodicity
-toutfinc   	73 day     # Write fisheries output with this periodicity
-tsumout    	73 day      # Write stock state summary with this periodicity
+toutinc    	365 day     # Write output with this periodicity
+toutfinc   	365 day     # Write fisheries output with this periodicity
+tsumout    	365 day      # Write stock state summary with this periodicity
 
 # Settings in "SETasGroupsDem_NoCep.csv"
 # The following groups are turned on during the model run.
@@ -63,4 +63,6 @@ outputSETASPROD.nc
 outputSETASDietCheck.txt
 outputSETASSSB.txt
 outputSETASYOY.txt
+outputSETASSpecificPredMort.txt
+outputSETASSpecificMort.txt
 # Unnecessary information in the netcdf files was removed to reducde file size.
