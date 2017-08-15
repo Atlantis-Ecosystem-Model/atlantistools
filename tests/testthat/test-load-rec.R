@@ -10,7 +10,7 @@ ssb_raw <- read.csv(file.path(d, "outputSETASSSB.txt"), sep = " ")
 ssb_raw <- sum(sapply(ssb_raw[, 2:3], function(x) sum(unique(x))))
 
 test_that("test output numbers", {
-  expect_equal(dim(test), c(12, 4))
+  expect_equal(dim(test), c(8, 4))
   expect_equal(names(test), c("species", "time", "ssb", "rec"))
   expect_true(abs(sum(test$ssb)/ssb_raw - 1) < 0.001)
 })

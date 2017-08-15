@@ -31,10 +31,10 @@ data <- de %>%
   dplyr::summarise(out = unique(atoutput))
 
 test_that("test output numbers", {
-  expect_equal(dim(data), c(20, 3))
+  expect_equal(dim(data), c(0, 3)) # Weights are not present in init-file (Bec used fill defaults)
   # expect_equal(data$out[data$species == "Cod" & data$agecl == 7], 61272.89)
   # expect_equal(unique(df$atoutput[df$species == "Herring" & df$agecl == 9]), 718.66)
-  expect_equal(dim(dm), c(20, 4))
+  expect_equal(dim(dm), c(0, 4)) # Weights are not present in init-file (Bec used fill defaults)
 
 })
 
