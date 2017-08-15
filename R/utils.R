@@ -50,13 +50,15 @@ file_ending <- function(filename, ending = "nc") {
 
 release_questions <- function() {
   c(
-    "Have you compressed the vignettes with tools::compactPDF(gs_quality = 'ebook')",
+    # "Have you compressed the vignettes with tools::compactPDF(gs_quality = 'ebook')",
     "Have you updated the version number",
-    "Have you used 'args = --no-build-vignettes' in devtools::release()?",
+    # "Have you used 'args = --no-build-vignettes' in devtools::release()?",
     "Have you updated the vignette index from the local package installation?",
     "Have you used 'args = '--compact-vignettes=both'' in devtools::release()",
     "Are the vignettes updated",
-    "Have you checked the vignette size after devtools::build(args = '--compact-vignettes=both')"
+    "Have you checked the vignette size after devtools::build(args = '--compact-vignettes=both')",
+    "Have you updated cran-comments.md?",
+    "Have you run devtools::build_win() to check with win-builder?"
   )
 }
 
