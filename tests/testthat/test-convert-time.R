@@ -15,7 +15,7 @@ test_that("test convert_time", {
   expect_error(convert_time(prm_run = prm_run, col = "this is silly..."), "Col is not numeric")
   expect_error(convert_time(prm_run = prm_run, col = rando$time), "Values are corrput")
   expect_equal(convert_time(prm_run = prm_run, col = 365*(0:4)), 0:4)
-  expect_equal(convert_time(prm_run = prm_run, col = 0:4), seq(0, by = 0.2, length.out = 5))
+  expect_equal(convert_time(prm_run = prm_run, col = 0:4), 0:4)
 
 })
 
