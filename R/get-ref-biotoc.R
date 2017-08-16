@@ -43,11 +43,29 @@ get_ref_biotic <- function(taxon) {
       headings <- headings[headings != "Note"]
 
       # Split the text into subsections
-      bio <- tibble::tibble()
       biology <- readLines(url)
       biol_start <- grep(pattern = "General Biology Additional Information", biology)
       biol_end   <- grep(pattern = "Biology References", biology)
-      biology <- biology[biol_start:(biol_end - 1)]
+      biology <- biology[biol_start:(biol_end - 5)]
+
+      col2 <- vector(mode = "character", length = length(headings))
+      for (i in seq_along(headings)) {
+        if (i == 1) { # first headings is first entry in biology
+          sec_start <- 1
+          sec_end   <- grep(pattern = paste0("<b>", headings[i + 1], "</b>"), x = biology) - 1
+        }
+        if (i < length(headings) & i != 1) {
+          sec_start <- grep(pattern = paste0("<b>", headings[i], "</b>"), x = biology) + 1
+          sec_end   <- grep(pattern = paste0("<b>", headings[i + 1], "</b>"), x = biology) - 1
+        }
+        if (i == length(headings)) {
+          sec_start <- grep(pattern = paste0("<b>", headings[i], "</b>"), x = biology) + 1
+          sec_end   <- length(biology)
+        }
+        col2[i] <- paste(biology[sec_start:sec_end], collapse = " ")
+      }
+
+      bio <- tibble::tibble(headings, col2)
     }
   }
   # Read information from Biotic
