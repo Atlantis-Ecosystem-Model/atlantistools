@@ -43,11 +43,6 @@ get_ref_biotic <- function(taxon) {
       headings <- headings[headings != "Note"]
 
       # Split the text into subsections
-      biology <- rvest::html_text(ref_raw)
-      biol_start <- stringr::str_locate(biology, "General Biology Additional Information")[1, 2]
-      biol_end   <- stringr::str_locate(biology, "Biology References")[1, 1]
-      biology <- stringr::str_sub(biology, start = biol_start + 1, end = biol_end - 1)
-
       bio <- tibble::tibble()
       biology <- readLines(url)
       biol_start <- grep(pattern = "General Biology Additional Information", biology)
