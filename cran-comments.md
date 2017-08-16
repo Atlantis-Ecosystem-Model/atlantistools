@@ -6,7 +6,11 @@ This is a minor update to the previous version which fixed R CMD check notes reg
 * Windows Server 2012 R2 x64 build 9600 (on AppVeyor), R Under development
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTEs. 
+There were no ERRORs, WARNINGs. There was 1 NOTE.
+
+Maintainer: 'Alexander Keth <alexander.keth@uni-hamburg.de>'
+
+This is my second submission as a maintainer.
 
 ## Downstream dependencies
 There are no downstream dependencies.
