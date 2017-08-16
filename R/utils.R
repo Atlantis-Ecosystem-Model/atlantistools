@@ -58,7 +58,7 @@ release_questions <- function() {
     "Are the vignettes updated",
     "Have you checked the vignette size after devtools::build(args = '--compact-vignettes=both')",
     "Have you updated cran-comments.md?",
-    "Have you run devtools::build_win() to check with win-builder?"
+    "Have you run devtools::build_win(args = '--compact-vignettes=both') to check with win-builder?"
   )
 }
 
