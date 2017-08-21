@@ -11,9 +11,11 @@ test_that("Test output of dataframes", {
 
   expect_equal(dim(df2), c(8, 3))
   # NOTE: there is a spelling mistake in the refs Scott-Fordsman & Depledge, 1993 vs Scott-Fordsmand & Depledge, 1993
+  # Tried to fix this with agrep (Approximate String Matching), however not that easy due to string pattern matches
+  # e.g. "Crothers", 1967 & "Crothers, 1968"
   # NOTE: ref in diet text but not listed (Rangley & Thomas, 1987)
-  # NOTE: there is a spelling mistake in the refs Sanchez-Salazar et al. 1987 vs Sanchez-Salazar et al., 1987
-  expect_equal(purrr::map_int(df2$ref, length), c(4, 13, 7, 6, 2, 2, 5, 4))
+  # NOTE: ref in Parasites text but not listed (Thompson, 1985)
+  expect_equal(purrr::map_int(df2$ref, length), c(4, 13, 7, 6, 2, 2, 4, 4))
   expect_equal(df2$cat, c("Taxonomy", "Biology", "Distribution", "Reproduction", "General", "Growth", "Diet", "Parasites"))
 
 })
