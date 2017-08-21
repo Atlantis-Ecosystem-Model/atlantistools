@@ -11,7 +11,7 @@
 #' \dontrun{
 #' taxon <- "Cancer pagurus"
 #' taxon <- "Carcinus maenas"
-#' taxon <- "Gadus morhua"
+#' taxon <- "xxx yyy"
 
 #' df <- get_ref_biotic(taxon)
 #' }
@@ -35,7 +35,7 @@ get_ref_biotic <- function(taxon) {
 
     # Leave function in case no information is present
     if (all(dim(ref_df) == c(1, 1))) {
-      res <- tibble(taxon = taxon, cat = NA, ref = NA)
+      res <- tibble::tibble(species = taxon, cat = NA, ref = NA)
     } else {
       # Data is replicated in columns >= 3
       ref_df <- ref_df[, 1:2]
