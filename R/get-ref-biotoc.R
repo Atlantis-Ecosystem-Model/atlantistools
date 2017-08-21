@@ -10,6 +10,9 @@
 #' @examples
 #' \dontrun{
 #' taxon <- "Cancer pagurus"
+#' taxon <- "Carcinus maenas"
+#' taxon <- "Gadus morhua"
+
 #' df <- get_ref_biotic(taxon)
 #' }
 
@@ -28,30 +31,39 @@ get_ref_biotic <- function(taxon) {
     ref_raw <- xml2::read_html(url)
 
     # Extract reference by category
-    ref_df <- rvest::html_table(ref_raw, fill = TRUE)[[1]][, 1:2]
-    ref_df <- ref_df[grepl(ref_df[, 1], pattern = "References"), ]
-    names(ref_df) <- c("cat", "ref")
-    ref_df$cat <- stringr::str_replace_all(ref_df$cat, pattern = " References", replacement = "")
+    ref_df <- rvest::html_table(ref_raw, fill = TRUE)[[1]]
 
-    # Get the urls to the reference metadata (author, year, title)
-    ref_urls <- rvest::html_nodes(ref_raw, "a") %>%
-      rvest::html_attr(., "href")
-    ref_urls <- ref_urls[grepl(ref_urls, pattern = "references")]
+    # Leave function in case no information is present
+    if (all(dim(ref_df) == c(1, 1))) {
+      res <- tibble(taxon = taxon, cat = NA, ref = NA)
+    } else {
+      # Data is replicated in columns >= 3
+      ref_df <- ref_df[, 1:2]
+      ref_df <- ref_df[grepl(ref_df[, 1], pattern = "References"), ]
+      names(ref_df) <- c("cat", "ref")
+      ref_df$cat <- stringr::str_replace_all(ref_df$cat, pattern = " References", replacement = "")
 
-    # Convert reference string to vector of references.
-    ref_df$ref <- purrr::map(ref_df$ref, refstr_to_ref)
+      # Get the urls to the reference metadata (author, year, title)
+      ref_urls <- rvest::html_nodes(ref_raw, "a") %>%
+        rvest::html_attr(., "href")
+      ref_urls <- ref_urls[grepl(ref_urls, pattern = "references")]
 
-    # Extract text of General Biology Additional Information paragraph sorted by heading
-    bio <- bio_txt(ref_raw = ref_raw, url = url)
+      # Convert reference string to vector of references.
+      ref_df$ref <- purrr::map(ref_df$ref, refstr_to_ref)
 
-    # Assign references found within the bio text and update ref_df
-    refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
-    ref_ids <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
-    ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
+      # Extract text of General Biology Additional Information paragraph sorted by heading
+      bio <- bio_txt(ref_raw = ref_raw, url = url)
 
-    # Create output tibble
-    res <- dplyr::bind_rows(ref_df, ref_bio)
-    res$taxon <- taxon
+      # Assign references found within the bio text and update ref_df
+      refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
+      ref_ids <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
+      ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
+
+      # Create output tibble
+      res <- dplyr::bind_rows(ref_df, ref_bio)
+      res$species <- taxon
+      res <- dplyr::select_(res, .dots = c("species", "cat", "ref"))
+    }
     return(res)
   }
 
