@@ -102,9 +102,14 @@ bio_txt <- function(ref_raw, url) {
     col2[i] <- paste(biology[sec_start:sec_end], collapse = " ")
   }
 
-  # Remove html italic code to make reference tags searchable.
+  # Remove html italic code and paranthesis to make reference tags searchable.
+  # Code is pretty ugly and hacky.... Nonetheless, it is much easier to find references
+  # this way due to non-consistent citing techniques within the text. E.g. Kuris et al., (2002) suggested
+  # vs. (Kuris et al., 2002)
   col2 <- stringr::str_replace_all(col2, pattern = "<i>", replacement = "")
   col2 <- stringr::str_replace_all(col2, pattern = "</i>", replacement = "")
+  col2 <- stringr::str_replace_all(col2, pattern = "\\(", replacement = "")
+  col2 <- stringr::str_replace_all(col2, pattern = "\\)", replacement = "")
 
   bio <- tibble::tibble(headings, col2)
   return(bio)
