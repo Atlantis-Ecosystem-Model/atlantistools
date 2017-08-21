@@ -139,6 +139,12 @@ refstr_to_ref <- function(refstr) {
       nchr <- nchr - 1
       str <- stringr::str_sub(str, start = 2)
     }
+    # Insert comma between author and year if missing!
+    if (!grepl(pattern = ",", x = str)) {
+      num_pos <- stringr::str_locate_all(str, pattern = "[0-9]")[[1]][1]
+      str <- paste(stringr::str_sub(str, end = num_pos - 2), stringr::str_sub(str, start = num_pos), sep = ", ")
+    }
+
     return(str)
   }
   purrr::map_chr(res, clean_string)
