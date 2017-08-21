@@ -10,9 +10,11 @@
 #' @examples
 #' \dontrun{
 #' taxon <- c("Cancer pagurus", "Carcinus maenas")
+#' df <- get_ref_biotic(taxon)
 #' }
 
 get_ref_biotic <- function(taxon) {
+  # Write function for a single taxon.
   single_taxon <- function(taxon) {
     # Split taxon to form url
     if (grepl(pattern = " ", taxon)) {
@@ -29,26 +31,37 @@ get_ref_biotic <- function(taxon) {
     ref_df <- rvest::html_table(ref_raw, fill = TRUE)[[1]][, 1:2]
     ref_df <- ref_df[grepl(ref_df[, 1], pattern = "References"), ]
     names(ref_df) <- c("cat", "ref")
+    ref_df$cat <- stringr::str_replace_all(ref_df$cat, pattern = " References", replacement = "")
 
     # Get the urls to the reference metadata (author, year, title)
     ref_urls <- rvest::html_nodes(ref_raw, "a") %>%
       rvest::html_attr(., "href")
     ref_urls <- ref_urls[grepl(ref_urls, pattern = "references")]
 
-    # wewe <- rvest::html_text(ref_raw)
-
-
-
-
+    # Convert reference string to vector of references.
     ref_df$ref <- purrr::map(ref_df$ref, refstr_to_ref)
 
+    # Extract text of General Biology Additional Information paragraph sorted by heading
+    bio <- bio_txt(ref_raw = ref_raw, url = url)
+
+    # Assign references found within the bio text and update ref_df
+    refs_bio <- ref_df$ref[ref_df$cat == "Biology References"][[1]]
+    ref_ids <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
+    ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
+
+    # Create output tibble
+    res <- dplyr::bind_rows(ref_df, ref_bio)
+    res$taxon <- taxon
+    return(res)
   }
-  # Read information from Biotic
+
+  # Apply to all taxons
+  purrr::map_df(taxon, single_taxon)
 }
 
 
-# Extract biology reference by heading
-bio_ref <- function(ref_raw, url) {
+# Extract biology text by heading
+bio_txt <- function(ref_raw, url) {
   # Get the section headings of "General Biology Additional Information"
   headings <- rvest::html_nodes(ref_raw, "b") %>%
     rvest::html_text(.)
@@ -76,6 +89,10 @@ bio_ref <- function(ref_raw, url) {
     }
     col2[i] <- paste(biology[sec_start:sec_end], collapse = " ")
   }
+
+  # Remove html italic code to make reference tags searchable.
+  col2 <- stringr::str_replace_all(col2, pattern = "<i>", replacement = "")
+  col2 <- stringr::str_replace_all(col2, pattern = "</i>", replacement = "")
 
   bio <- tibble::tibble(headings, col2)
   return(bio)
