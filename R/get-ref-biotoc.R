@@ -54,7 +54,7 @@ get_ref_biotic <- function(taxon) {
       # Extract text of General Biology Additional Information paragraph sorted by heading
       bio <- bio_txt(ref_raw = ref_raw, url = url)
 
-      # Assign references found within the bio text and update ref_df
+      # Assign references found within the bio text and update ref_df.
       refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
       ref_ids <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
       ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
@@ -126,12 +126,18 @@ refstr_to_ref <- function(refstr) {
     if (i == length(res))          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
   }
 
-  # Remove trailing non integer entries from string
+  # Remove trailing non integer and leading non character entries from string
   clean_string <- function(str) {
     nchr <- stringr::str_length(str)
+    #  Remove trailing non integer entries from string
     while (!grepl(pattern = "[0-9]", x = stringr::str_sub(str, start = nchr, end = nchr))) {
       nchr <- nchr - 1
       str <- stringr::str_sub(str, end = nchr)
+    }
+    # Remove leading non character entries from string
+    while (!grepl(pattern = "[a-z|A-Z]", x = stringr::str_sub(str, start = 1, end = 1))) {
+      nchr <- nchr - 1
+      str <- stringr::str_sub(str, start = 2)
     }
     return(str)
   }
