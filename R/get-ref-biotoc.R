@@ -121,16 +121,19 @@ refstr_to_ref <- function(refstr) {
   # Therefore we should be able to split the reference at the end of each
   # year entry.
   num_pos <- stringr::str_locate_all(refstr, pattern = "[0-9]")[[1]][, 1]
-  num_pos <- num_pos[diff(num_pos) != 1]
+  lags <- diff(num_pos)
+  if (all(lags == 1)) { # Only one reference present!
+    res <- refstr
+  } else {
 
-  # Iteravtively split the string into substrings
-  res <- vector(mode = "character", length = length(num_pos) + 1)
-  for (i in seq_along(res)) {
-    if (i == 1)                    res[i] <- stringr::str_sub(refstr, end = num_pos[1])
-    if (i < length(res) & i != 1)  res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3, end = num_pos[i])
-    if (i == length(res))          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
+    # Iteravtively split the string into substrings
+    res <- vector(mode = "character", length = length(num_pos) + 1)
+    for (i in seq_along(res)) {
+      if (i == 1)                    res[i] <- stringr::str_sub(refstr, end = num_pos[1])
+      if (i < length(res) & i != 1)  res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3, end = num_pos[i])
+      if (i == length(res))          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
+    }
   }
-
   # Remove trailing non integer and leading non character entries from string
   clean_string <- function(str) {
     nchr <- stringr::str_length(str)
