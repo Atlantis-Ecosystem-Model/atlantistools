@@ -3,6 +3,8 @@ context("test reference extraction from BIOTIC.")
 # Let's test 3 different function calls
 df1 <- get_ref_biotic("Cancer pagurus")
 df2 <- get_ref_biotic("Carcinus maenas")
+df3 <- get_ref_biotic(c("Cancer pagurus", "Carcinus maenas"))
+df4 <- get_ref_biotic(c("Cancer pagurus", "xxx yyy"))
 
 test_that("Test output of dataframes", {
   expect_equal(dim(df1), c(6, 3))
@@ -18,6 +20,19 @@ test_that("Test output of dataframes", {
   expect_equal(purrr::map_int(df2$ref, length), c(4, 13, 7, 6, 2, 2, 4, 4))
   expect_equal(df2$cat, c("Taxonomy", "Biology", "Distribution", "Reproduction", "General", "Growth", "Diet", "Parasites"))
 
+  expect_equal(dim(df3), c(14, 3))
 })
 
+test <- "author, 2000"
 
+test_that("Test refstr_to_ref helper function", {
+  expect_equal(refstr_to_ref("ax, 2000, ay, 2001, az, 2002"), c("ax, 2000", "ay, 2001", "az, 2002"))
+  # Add in comma
+  expect_equal(refstr_to_ref("author 2000"), test)
+  # Remove trailing non integers
+  expect_equal(refstr_to_ref("author, 2000 strings"), test)
+  # Remove leading non characters
+  expect_equal(refstr_to_ref("   author, 2000"), test)
+  # All together
+  expect_equal(refstr_to_ref("   author 2000 strings"), test)
+})
