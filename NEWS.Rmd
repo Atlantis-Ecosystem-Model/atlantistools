@@ -3,6 +3,13 @@ title: "NEWS"
 output: html_document
 ---
 
+# atlantistools 0.4.3.9000
+## New features
+## Documentation improvements
+## Minor improvements
+## Bug fixes
+
+
 # atlantistools 0.4.3
 ## Bug fixes
 * Minor bugfixes associated with R CMD check NOTE.
