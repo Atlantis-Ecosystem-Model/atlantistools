@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' taxon <- c("Cancer pagurus", "Carcinus maenas")
+#' taxon <- "Cancer pagurus"
 #' df <- get_ref_biotic(taxon)
 #' }
 
@@ -45,7 +45,7 @@ get_ref_biotic <- function(taxon) {
     bio <- bio_txt(ref_raw = ref_raw, url = url)
 
     # Assign references found within the bio text and update ref_df
-    refs_bio <- ref_df$ref[ref_df$cat == "Biology References"][[1]]
+    refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
     ref_ids <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
     ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
 
