@@ -4,10 +4,13 @@
 \alias{get_ref_biotic}
 \title{Extract bibliographic info from www.marlin.ac.uk/biotic.}
 \usage{
-get_ref_biotic(taxon)
+get_ref_biotic(taxon, test = FALSE)
 }
 \arguments{
 \item{taxon}{Character vector of taxon names to search.}
+
+\item{test}{Logical set to \code{TRUE} in case you need to run package development tests. Defaults
+to \code{FALSE}.}
 }
 \value{
 Dataframe
