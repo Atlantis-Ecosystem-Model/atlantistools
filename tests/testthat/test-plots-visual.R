@@ -2,6 +2,7 @@ context("plots-visual")
 
 # Add plots for visual testing here
 p1 <- plot_line(preprocess$biomass)
+p2 <- function() plot_consumed_biomass(ref_bio_cons)
 
 # General roadmap from INDperform: How to implement a visual test
 # 1. Add new refernce with (svg-file is created in tests/ffigs/subfolder)
@@ -22,5 +23,5 @@ p1 <- plot_line(preprocess$biomass)
 
 test_that("check visually", {
   vdiffr::expect_doppelganger("line plot preprocess$biomass", p1)
-  vdiffr::expect_doppelganger("plot consumed biomass ref_bio_cons", plot_consumed_biomass(ref_bio_cons))
+  vdiffr::expect_doppelganger("plot consumed biomass ref_bio_cons", p2)
 })
