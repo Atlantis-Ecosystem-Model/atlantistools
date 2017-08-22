@@ -8,7 +8,7 @@ df1 <- get_maturity_fishbase("Callionymus lyra")
 df2 <- get_maturity_fishbase(c("Callionymus lyra", "Squalus acanthias"))
 
 # Multiple species call not available
-df3 <- get_maturity_fishbase(c("Callionymus lyra", "Callionymus maculatus"))
+df3 <- suppressMessages(suppressWarnings(get_maturity_fishbase(c("Callionymus lyra", "Callionymus maculatus"))))
 
 test_that("Test values for Callionymus lyra", {
   # Some of these are really specific
@@ -30,7 +30,7 @@ test_that("Test values for Squalus acanthias", {
 
 test_that("Test ERROR/WARNING handling", {
   expect_true(all.equal(df1, df3))
-  expect_warning(get_maturity_fishbase(c("Callionymus lyra", "Callionymus maculatus")),
+  expect_warning(suppressMessages(get_maturity_fishbase(c("Callionymus lyra", "Callionymus maculatus"))),
                  "No maturity information available for 1 species")
   expect_error(get_maturity_fishbase("Callionymus maculatus"),
                "None of the species have information about maturity")

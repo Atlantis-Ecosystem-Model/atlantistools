@@ -44,7 +44,8 @@ get_maturity_fishbase <- function(fish, mirror = "se"){
   } else {
     if (length(pos_missing) >= 1) {
       missing_species <- sort(names(ids)[pos_missing])
-      warning(paste("No maturity information available for", length(pos_missing), "species:\n"), paste(missing_species, collapse = "\n"))
+      warning(paste("No maturity information available for", length(pos_missing), "species"))
+      message(paste("Missing species:\n", paste(missing_species, collapse = "\n")))
       ids <- ids[-pos_missing]
       fishbase <- fishbase[-pos_missing]
       result <- result[-pos_missing]
