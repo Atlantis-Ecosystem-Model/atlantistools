@@ -1,7 +1,5 @@
 context("plots-visual")
 
-library("gridExtra")
-
 # Code used to create plots
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
 specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
@@ -14,8 +12,12 @@ plots <- plots[[4]]
 # Add plots for visual testing here
 p1 <- plot_line(preprocess$biomass)
 p2 <- function() plot_consumed_biomass(ref_bio_cons)
-p3 <- function() grid.arrange(plots$grobs[[2]])
-p4 <- function() grid.arrange(plots$grobs[[3]])
+p3 <- function() gridExtra::grid.arrange(plots$grobs[[2]])
+p4 <- function() gridExtra::grid.arrange(plots$grobs[[3]])
+
+# Does it work with any call to gridExtra functions?
+dummy <- gridExtra::arrangeGrob(grobs = list(p1, p1),  heights = grid::unit(c(0.5, 0.5), units = "npc"))
+p5 <- function() gridExtra::grid.arrange(dummy)
 
 # General roadmap from INDperform: How to implement a visual test
 # 1. Add new refernce with (svg-file is created in tests/ffigs/subfolder)
@@ -39,4 +41,5 @@ test_that("check visually", {
   vdiffr::expect_doppelganger("plot consumed biomass ref_bio_cons", p2)
   vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort upper", p3)
   vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort lower", p4)
+  vdiffr::expect_doppelganger("line plot preprocess$biomass twice", p5)
 })
