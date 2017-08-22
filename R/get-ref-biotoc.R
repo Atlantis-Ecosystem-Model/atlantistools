@@ -57,7 +57,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       ref_df$ref <- purrr::map(ref_df$ref, refstr_to_ref)
 
       # Extract text of General Biology Additional Information paragraph sorted by heading
-      bio <- bio_txt(ref_raw = ref_raw, url = url)
+      bio <- bio_txt(ref_raw = ref_raw, url = url, test = test)
 
       # Assign references found within the bio text and update ref_df.
       refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
