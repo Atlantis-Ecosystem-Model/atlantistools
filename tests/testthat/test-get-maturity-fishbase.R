@@ -19,12 +19,13 @@ test_that("Test values for Callionymus lyra", {
 })
 
 test_that("Test values for Squalus acanthias", {
-  # Some of these are really specific
+  # Some of these are really specific.
+  # Remember to add one index due to Callionymus lyra having 1 row.
   expect_true(all(dim(df2) == c(22, 13)))
-  expect_equal(df2$main_ref[7], 6871)
-  expect_equal(df2$length_ref[14], 9725)
-  expect_equal(df2$lm[4], NA)
-  expect_equal(df2$lm[8], 58)
+  expect_equal(df2$main_ref[8], 6871)
+  expect_equal(df2$length_ref[15], 9725)
+  expect_equal(df2$lm[5], NA)
+  expect_equal(df2$lm[9], 58)
 })
 
 test_that("Test ERROR/WARNING handling", {
