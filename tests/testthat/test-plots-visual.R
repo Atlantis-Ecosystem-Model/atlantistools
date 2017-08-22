@@ -3,18 +3,22 @@ context("plot-species")
 # Add plots for visual testing here
 p1 <- plot_line(preprocess$biomass)
 
-# General roadmap from INDperform
-# How to implement test after the function is written:
-# 1. Define result and test if function call is identical
-# 2. Use different input objects (e.g. with NAs, without NAs, with Zeros, differemt object types (vector vs. array))
-# 3. Test the object structure of the output with typeof or class
-# 4. Test column classes in a tibble/dataframe of the returned object.
-# 5. Test every warning() and stop() command with expect_warning(), expect_error().
-
-# p <- p + ggplot2::theme(legend.position = "none")
-# p <- p + ggplot2::theme(axis.title.x = ggplot2::element_blank())
-# p <- p + ggplot2::theme(strip.text.x = ggplot2::element_blank())
-# p <- p + ggplot2::theme(axis.text.y = ggplot2::element_text(angle = 90, hjust = 0.5))
+# General roadmap from INDperform: How to implement a visual test
+# 1. Add new refernce with (svg-file is created in tests/ffigs/subfolder)
+#    vdiffr::validate_cases()
+#
+# 2. Check tests with
+#    vdiffr::validate_cases()
+#    vdiffr::validate_cases(cases = vdiffr::collect_cases(filter = "file"))
+#       N = New visual case
+#       X = Failed doppelganger
+#       o = Convincing doppelganger
+#
+# 3. Use the shiny app to identify problems with
+#    vdiffr::manage_cases(filter = "plot_diagnostics")
+#       Toggle: Left-klick to switc between new & old version
+#       Slide: Left-klick + move to identify specific differences
+#       Diff: Black = match, white = no match
 
 test_that("check visually", {
   vdiffr::expect_doppelganger("line plot preprocess$biomass", p1)
