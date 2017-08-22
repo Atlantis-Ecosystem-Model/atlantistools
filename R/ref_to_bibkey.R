@@ -46,12 +46,16 @@ ref_to_bibkey <- function(ref_df, bib) {
 # bib2df does use incorrect enconding in readLines call
 # Author names are cleaned.
 # This might not work in case different bib encondings are used.
+# "inst/extdata/ref_bib.bib"
 bib_to_df <- function(bib) {
   bib_df <- readLines(bib, encoding = "UTF-8")
 
   # Cleanup jabref-meta data
-  jab_meta <- min(grep(pattern = "jabref-meta", x = bib_df))
-  if (length(jab_meta) > 0) bib_df <- bib_df[-(jab_meta:length(bib_df))]
+  jab_meta <- grep(pattern = "jabref-meta", x = bib_df)
+  if (length(jab_meta) > 0) {
+    jab_meta <- jab_meta[min(jab_meta)]
+    bib_df <- bib_df[-(jab_meta:length(bib_df))]
+  }
 
   block_ids <- grep(pattern = "\\@", x = bib_df)
   single_entries <- vector(mode = "list", length = length(block_ids))
