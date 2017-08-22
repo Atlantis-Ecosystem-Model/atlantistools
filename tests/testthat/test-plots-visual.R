@@ -1,4 +1,4 @@
-context("plot-species")
+context("plots-visual")
 
 # Add plots for visual testing here
 p1 <- plot_line(preprocess$biomass)
@@ -9,13 +9,13 @@ p1 <- plot_line(preprocess$biomass)
 #
 # 2. Check tests with
 #    vdiffr::validate_cases()
-#    vdiffr::validate_cases(cases = vdiffr::collect_cases(filter = "file"))
+#    vdiffr::validate_cases(cases = vdiffr::collect_cases(filter = "plots-visual"))
 #       N = New visual case
 #       X = Failed doppelganger
 #       o = Convincing doppelganger
 #
 # 3. Use the shiny app to identify problems with
-#    vdiffr::manage_cases(filter = "plot_diagnostics")
+#    vdiffr::manage_cases(filter = "plots-visual")
 #       Toggle: Left-klick to switc between new & old version
 #       Slide: Left-klick + move to identify specific differences
 #       Diff: Black = match, white = no match
