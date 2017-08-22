@@ -34,7 +34,7 @@ get_ref_biotic <- function(taxon) {
     ref_df <- rvest::html_table(ref_raw, fill = TRUE)[[1]]
 
     # Leave function in case no information is present
-    if (all(dim(ref_df) == c(1, 1))) {
+    if (all(dim(ref_df) == 1)) {
       res <- tibble::tibble(species = taxon, cat = NA, ref = NA)
     } else {
       # Data is replicated in columns >= 3
@@ -125,8 +125,8 @@ refstr_to_ref <- function(refstr) {
   if (all(lags == 1)) { # Only one reference present!
     res <- refstr
   } else {
-
     # Iteravtively split the string into substrings
+    num_pos <- num_pos[lags != 1]
     res <- vector(mode = "character", length = length(num_pos) + 1)
     for (i in seq_along(res)) {
       if (i == 1)                    res[i] <- stringr::str_sub(refstr, end = num_pos[1])
