@@ -29,7 +29,7 @@ test_that("Test values for Squalus acanthias", {
 })
 
 test_that("Test ERROR/WARNING handling", {
-  expect_ture(all.equal(df1, df3))
+  expect_true(all.equal(df1, df3))
   expect_warning(get_maturity_fishbase(c("Callionymus lyra", "Callionymus maculatus")),
                  "No maturity information available for 1 species")
   expect_error(get_maturity_fishbase("Callionymus maculatus"),
