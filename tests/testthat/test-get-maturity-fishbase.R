@@ -1,7 +1,5 @@
 context("Extract maturity parameters from fishbase")
 
-# BIOTIC seems to bit quite unstable. Tests may fail due to connection timeouts.
-# try to add xml2::read_html(curl::curl(url, handle = curl::new_handle("useragent" = "Mozilla/5.0")))
 # Test different function calls (Some are only here to run code)
 # Single species call
 df1 <- get_maturity_fishbase("Callionymus lyra")
