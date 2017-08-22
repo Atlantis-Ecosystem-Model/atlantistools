@@ -1,9 +1,7 @@
-#' Extract bibliographic info from www.fishbase.org.
+#' Extract bibliographic info from www.marlin.ac.uk/biotic.
 #'
-#'
-#' Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
-#' @inheritParams get_growth_fishbase
-#' @param ref_id vector of reference ids.
+#' Extract bibliographic information for growth, diets, distribution for invertebrate species.
+#' @param taxon Character vector of taxon names to search.
 #' @return Dataframe
 #' @export
 #'

@@ -2,18 +2,18 @@
 % Please edit documentation in R/get-ref-biotoc.R
 \name{get_ref_biotic}
 \alias{get_ref_biotic}
-\title{Extract bibliographic info from www.fishbase.org.}
+\title{Extract bibliographic info from www.marlin.ac.uk/biotic.}
 \usage{
 get_ref_biotic(taxon)
 }
 \arguments{
-\item{ref_id}{vector of reference ids.}
+\item{taxon}{Character vector of taxon names to search.}
 }
 \value{
 Dataframe
 }
 \description{
-Extract bibliographic information for growth parameters (linf, k, t0) from www.fishbase.org
+Extract bibliographic information for growth, diets, distribution for invertebrate species.
 }
 \examples{
 \dontrun{
