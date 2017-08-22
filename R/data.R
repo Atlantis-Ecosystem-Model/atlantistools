@@ -249,3 +249,17 @@
 #' }
 #' @source \url{http://www.fishbase.org/} rfishbase::fishbase
 "fishbase_data"
+
+
+#' Reference dataframe
+#'
+#' Year, author and title from 3 random publications
+#'
+#' @format A data frame with 3 rows and 3 variables:
+#' \describe{
+#'   \item{\code{year}}{double. Publication year.}
+#'   \item{\code{author}}{character. Authors of the publication.}
+#'   \item{\code{title}}{character. Title of the publication.}
+#' }
+"ref_lit"
+
