@@ -9,7 +9,7 @@ context("test reference extraction from BIOTIC.")
 df1 <- get_ref_biotic("Cancer pagurus", test = TRUE)
 # df3 <- get_ref_biotic(c("Cancer pagurus", "Carcinus maenas"))
 # df4 <- get_ref_biotic(c("Cancer pagurus", "xxx yyy"))
-# df5 <- get_ref_biotic("xxx yyy")
+df5 <- get_ref_biotic("xxx yyy")
 
 test_that("Test output of dataframes", {
   expect_equal(dim(df1), c(6, 3))
