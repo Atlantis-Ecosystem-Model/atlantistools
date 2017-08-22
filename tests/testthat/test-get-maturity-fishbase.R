@@ -24,7 +24,7 @@ test_that("Test values for Squalus acanthias", {
   expect_true(all(dim(df2) == c(22, 13)))
   expect_equal(df2$main_ref[8], 6871)
   expect_equal(df2$length_ref[15], 9725)
-  expect_equal(df2$lm[5], NA)
+  expect_true(is.na(df2$lm[5]))
   expect_equal(df2$lm[9], 58)
 })
 
