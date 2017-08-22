@@ -7,7 +7,15 @@ ref_lit <- tibble::tribble(
    1951,  "Chang, H.-W.",                                    "Age and growth of Callionymus lyra L. J. Mar. Biol. Asoc. U.K. 30(2):281-296."
 )
 
-devtools::use_data(ref_lit, overwrite = TRUE)
+# Read in BIOTIC data to enable tests (Most of the time the website does not work thus interactive testing become a hassle.)
+url <- paste0(stringr::str_split("Cancer pagurus", pattern = " ")[[1]], collapse = "%20")
+url <- paste0("http://www.marlin.ac.uk/biotic/browse.php?sp=x&spn=", url)
+cancer_pagurus_biotic_xml2 <- xml2::read_html(url)
+cancer_pagurus_biotic_base <- readLines(url)
+
+devtools::use_data(ref_lit, cancer_pagurus_biotic_xml2, cancer_pagurus_biotic_base, overwrite = TRUE)
 
 rm(list = ls())
+
+
 
