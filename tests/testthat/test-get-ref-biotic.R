@@ -4,15 +4,17 @@ context("test reference extraction from BIOTIC.")
 # BIOTIC seems to bit quite unstable. Tests may fail due to connection timeouts.
 # try to add xml2::read_html(curl::curl(url, handle = curl::new_handle("useragent" = "Mozilla/5.0")))
 # df1 <- get_ref_biotic("Cancer pagurus")
-# df2 <- get_ref_biotic("Carcinus maenas")
+
+# Use hard copy of biotic html content to simplify testing.
+df1 <- get_ref_biotic("Cancer pagurus", test = TRUE)
 # df3 <- get_ref_biotic(c("Cancer pagurus", "Carcinus maenas"))
 # df4 <- get_ref_biotic(c("Cancer pagurus", "xxx yyy"))
-df5 <- get_ref_biotic("xxx yyy")
+# df5 <- get_ref_biotic("xxx yyy")
 
 test_that("Test output of dataframes", {
-  # expect_equal(dim(df1), c(6, 3))
-  # expect_equal(purrr::map_int(df1$ref, length), c(2, 11, 3, 7, 5, 4))
-  # expect_equal(df1$cat, c("Taxonomy", "Biology", "Distribution", "Reproduction", "Feeding", "Growth"))
+  expect_equal(dim(df1), c(6, 3))
+  expect_equal(purrr::map_int(df1$ref, length), c(2, 11, 3, 7, 5, 4))
+  expect_equal(df1$cat, c("Taxonomy", "Biology", "Distribution", "Reproduction", "Feeding", "Growth"))
   #
   # expect_equal(dim(df2), c(8, 3))
   # # NOTE: there is a spelling mistake in the refs Scott-Fordsman & Depledge, 1993 vs Scott-Fordsmand & Depledge, 1993

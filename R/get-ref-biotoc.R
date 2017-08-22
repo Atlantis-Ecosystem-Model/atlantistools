@@ -2,6 +2,8 @@
 #'
 #' Extract bibliographic information for growth, diets, distribution for invertebrate species.
 #' @param taxon Character vector of taxon names to search.
+#' @param test Logical set to \code{TRUE} in case you need to run package development tests. Defaults
+#' to \code{FALSE}.
 #' @return Dataframe
 #' @export
 #'
@@ -14,9 +16,9 @@
 #' df <- get_ref_biotic(taxon)
 #' }
 
-get_ref_biotic <- function(taxon) {
+get_ref_biotic <- function(taxon, test = FALSE) {
   # Write function for a single taxon.
-  single_taxon <- function(taxon) {
+  single_taxon <- function(taxon, test) {
     # Split taxon to form url
     if (grepl(pattern = " ", taxon)) {
       url <- paste0(stringr::str_split(taxon, pattern = " ")[[1]], collapse = "%20")
@@ -26,7 +28,12 @@ get_ref_biotic <- function(taxon) {
     url <- paste0("http://www.marlin.ac.uk/biotic/browse.php?sp=x&spn=", url)
 
     # Read in the url as raw html.
-    ref_raw <- xml2::read_html(url)
+    if (!test) {
+      ref_raw <- xml2::read_html(url)
+    } else {
+      # This is a bit messy but does it's job.
+      ref_raw <- xml2::read_html(system.file("extdata/biotic-cancer-pagurus.html", package = "atlantistools"))
+    }
 
     # Extract reference by category
     ref_df <- rvest::html_table(ref_raw, fill = TRUE)[[1]]
@@ -66,19 +73,24 @@ get_ref_biotic <- function(taxon) {
   }
 
   # Apply to all taxons
-  purrr::map_df(taxon, single_taxon)
+  purrr::map_df(taxon, single_taxon, test = test)
 }
 
 
 # Extract biology text by heading
-bio_txt <- function(ref_raw, url) {
+bio_txt <- function(ref_raw, url, test = FALSE) {
   # Get the section headings of "General Biology Additional Information"
   headings <- rvest::html_nodes(ref_raw, "b") %>%
     rvest::html_text(.)
   headings <- headings[headings != "Note"]
 
   # Split the text into subsections
-  biology <- readLines(url)
+  if (!test) {
+    biology <- readLines(url)
+  } else {
+    # very sloppy...
+    biology <- readLines(system.file("extdata/biotic-cancer-pagurus.html", package = "atlantistools"))
+  }
   biol_start <- grep(pattern = "General Biology Additional Information", biology)
   biol_end   <- grep(pattern = "Biology References", biology)
   biology <- biology[biol_start:(biol_end - 5)]
