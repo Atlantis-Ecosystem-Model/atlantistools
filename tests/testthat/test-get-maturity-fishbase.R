@@ -13,18 +13,18 @@ df3 <- get_maturity_fishbase(c("Callionymus lyra", "Callionymus maculatus"))
 test_that("Test values for Callionymus lyra", {
   # Some of these are really specific
   expect_true(all(dim(df1) == c(1, 13)))
-  expect_equal(df1$lm == 17.4)
-  expect_equal(df1$species == "Callionymus lyra")
-  expect_equal(df1$main_ref == 796)
+  expect_equal(df1$lm, 17.4)
+  expect_equal(df1$species, "Callionymus lyra")
+  expect_equal(df1$main_ref, 796)
 })
 
 test_that("Test values for Squalus acanthias", {
   # Some of these are really specific
   expect_true(all(dim(df2) == c(22, 13)))
-  expect_equal(df2$main_ref[7] == 6871)
-  expect_equal(df2$length_ref[14] == 9725)
-  expect_equal(df2$lm[4] == NA)
-  expect_equal(df2$lm[8] == 58)
+  expect_equal(df2$main_ref[7], 6871)
+  expect_equal(df2$length_ref[14], 9725)
+  expect_equal(df2$lm[4], NA)
+  expect_equal(df2$lm[8], 58)
 })
 
 test_that("Test ERROR/WARNING handling", {
