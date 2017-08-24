@@ -19,6 +19,8 @@ p4 <- function() gridExtra::grid.arrange(plots$grobs[[3]])
 dummy <- gridExtra::arrangeGrob(grobs = list(p1, p1),  heights = grid::unit(c(0.5, 0.5), units = "npc"))
 p5 <- function() gridExtra::grid.arrange(dummy)
 
+p6 <- plot_bar(preprocess$nums_age, fill = "agecl", wrap = "species")
+
 # General roadmap from INDperform: How to implement a visual test
 # 1. Add new refernce with (svg-file is created in tests/ffigs/subfolder)
 #    vdiffr::validate_cases()
@@ -43,4 +45,5 @@ test_that("check visually", {
   # vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort upper", p3)
   # vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort lower", p4)
   # vdiffr::expect_doppelganger("line plot preprocess$biomass twice", p5)
+  vdiffr::expect_doppelganger("plot bar preprocess$nums_age", p6)
 })
