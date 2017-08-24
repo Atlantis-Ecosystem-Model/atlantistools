@@ -93,4 +93,5 @@ plot <- plot_line(df_plot, col = "model")
 # check new functionality of yexpand
 p <- plot_line(preprocess$structn_age, col = "agecl", yexpand = T)
 
-
+# plot_consumed_biomass (For some reason codecov does not include this in visual tests.)
+plot_consumed_biomass(ref_bio_cons)
