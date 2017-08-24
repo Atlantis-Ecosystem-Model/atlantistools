@@ -34,6 +34,10 @@ scan_reference_fishbase <- function(fish, chr, mirror = "se") {
     do.call(rbind, args = .) %>% # rbind is necessary due to different col-classes in 'Sex' = 'chr' and 'logical'
     purrr::set_names(., c("ref_id", "ref", "year", "named_used", "page", "species"))
 
+  # Convert column types
+  result <- dplyr::mutate_(result, .dots = stats::setNames(list(~as.integer(ref_id)), "ref_id"))
+  result <- dplyr::mutate_(result, .dots = stats::setNames(list(~as.integer(year)), "year"))
+
   # Find chr string in the refernce
   pos <- grep(pattern = chr, x = result$ref)
   if (length(pos) > 0) {
