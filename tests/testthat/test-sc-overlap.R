@@ -31,3 +31,31 @@ test_that("test schoener calculations", {
   expect_equal(schoener(predgrp = "cod", ageclass = 1, biomass = df_bio3, avail = df_avail)[[2]]$si, 0.5)
 })
 
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
+fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
+
+dietmatrix <- load_dietmatrix(prm_biol, fgs, convert_names = TRUE)
+agemat <- prm_to_df(prm_biol = prm_biol, fgs = fgs,
+                    group = get_age_acronyms(fgs = fgs),
+                    parameter = "age_mat")
+
+sp_overlap <- calculate_spatial_overlap(biomass_spatial = ref_bio_sp,
+                                        dietmatrix = dietmatrix,
+                                        agemat = agemat)
+
+# Unnest nested list to simplify test calculations
+sp_list <- purrr::flatten(sp_overlap)
+
+test_that("test spatial overlap calculations", {
+  expect_equal(length(sp_overlap), 22)
+  # each list entry itself is a list with a entries (species-specific overlap and overall overlap)
+  expect_true(all(purrr::map_int(sp_overlap, length) == 2))
+  # All df entries >= 0 and <= 1 (thus probabilities)
+  expect_equal(length(sp_list), 44)
+  expect_true(all(purrr::map_lgl(sp_list, ~all(.$si >= 0))))
+  expect_true(all(purrr::map_lgl(sp_list, ~all(.$si <= 1))))
+  expect_true(all(purrr::map_lgl(sp_list, ~all(class(.) == c("tbl_df", "tbl", "data.frame")))))
+})
+
+
