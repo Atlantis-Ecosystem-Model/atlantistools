@@ -82,14 +82,23 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       } else {
         ref_bio <- tibble::tibble(cat = bio$headings, ref = rep(NA, times = length(bio$headings)))
       }
+
+      # Create output tibble
+      dummy <- dplyr::bind_rows(ref_df, ref_bio)
+      # Fix NULLs in ref
+      nulls <- purrr::map_lgl(dummy$ref, is.null)
+      dummy$ref[nulls] <- NA
+
+      res <- tibble::as.tibble(cbind(rep(dummy$cat, times = purrr::map_int(dummy$ref, length)),
+                                     purrr::flatten_chr(dummy$ref)))
+      res$species <- taxon
+      res <- purrr::set_names(res, nm = c("cat", "ref", "species"))
+      res <- dplyr::select_(res, .dots = c("species", "cat", "ref"))
+
+      # Add in function to combine ref_urls and ref
+      ref_url_df <- add_ref_url(refs = res$ref, ref_urls = ref_urls)
+      res <- left_join(res, ref_url_df, by = "ref")
     }
-    # Create output tibble
-    res <- dplyr::bind_rows(ref_df, ref_bio)
-    res$species <- taxon
-    res <- dplyr::select_(res, .dots = c("species", "cat", "ref"))
-    # Fix NULLs in ref
-    nulls <- purrr::map_lgl(res$ref, is.null)
-    res$ref[nulls] <- NA
 
     return(res)
   }
@@ -212,3 +221,57 @@ refstr_to_ref <- function(refstr) {
     purrr::map_chr(res, clean_string)
   }
 }
+
+# refs <- res$ref
+# ref_urls <- ref_urls
+add_ref_url <- function(refs, ref_urls) {
+  # Clean refs
+  refs_clean <- unique(refs)
+  refs_clean <- refs_clean[!is.na(refs_clean)]
+
+  if (length(refs_clean) >= 1) {
+    # Extract numeric values and combine to year
+    years <- stringr::str_extract_all(string = refs_clean, pattern = "[0-9]")
+    years <- as.integer(purrr::map_chr(years, paste, collapse = ""))
+
+    # Extract the authors and split them based on "," and "&"
+    authors <- stringr::str_split_fixed(string = refs_clean, pattern = as.character(years), n = 2)[, 1]
+    double_split <- function(chr) {
+      res <- stringr::str_split(string = chr, pattern = ",")[[1]]
+      res <- stringr::str_split(string = res, pattern = " & ")
+      res <- unlist(res)
+
+      # Cleanup
+      result <- res[res != " "]
+      result <- stringr::str_replace(result, pattern = " et al.", replacement = "")
+      return(result)
+    }
+    authors <- purrr::map(authors, double_split)
+
+    find_refurl <- function(author, year, ref_urls) {
+      # all authors present?
+      author_id <- purrr::map(author, ~grepl(pattern = ., x = ref_urls))
+      author_id <- do.call(rbind, author_id)
+      author_id <- apply(X = author_id, MARGIN = 2, FUN = all)
+
+      # Find the year in ref_urls
+      year_id <- grepl(pattern = year, x = ref_urls)
+
+      # Extract the ref_urls which matches both, year and author
+      final_id <- author_id & year_id
+      if (sum(final_id) == 1) {
+        ref_urls[final_id]
+      } else {
+        NA
+      }
+    }
+
+    ref_url <- purrr::map2_chr(authors, years, find_refurl, ref_urls = ref_urls)
+    ref <- refs_clean
+    res <- tibble::tibble(ref, ref_url)
+  } else {
+    res <- tibble::tibble(ref = NA, ref_url = NA)
+  }
+  return(res)
+}
+
