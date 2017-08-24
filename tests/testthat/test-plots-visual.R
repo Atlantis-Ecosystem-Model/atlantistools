@@ -14,6 +14,15 @@ ex_bio <- preprocess$biomass
 ex_bio$atoutput <- ex_bio$atoutput * runif(n = nrow(ex_bio), 0, 1)
 ex_bio$model <- "test"
 
+dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+fgs <- file.path(dir, "SETasGroupsDem_NoCep.csv")
+init <- file.path(dir, "INIT_VMPA_Jan2015.nc")
+prm_biol <- file.path(dir, "VMPA_setas_biol_fishing_Trunk.prm")
+bboxes <- get_boundary(load_box(bgm = file.path(dir, "VMPA_setas.bgm")))
+no_avail <- FALSE
+save_to_disc <- FALSE
+data1 <- sc_init(init = init, prm_biol = prm_biol, fgs = fgs, bboxes = bboxes)
+
 # Add plots for visual testing here
 p1 <- plot_line(preprocess$biomass)
 p2 <- function() plot_consumed_biomass(ref_bio_cons)
@@ -29,6 +38,7 @@ p7 <- plot_rec(preprocess$ssb_rec, ex_data)
 p8 <- plot_spatial_overlap(sp_overlap[11:20])
 p9 <- plot_line(preprocess$biomass[preprocess$biomass$species == "Carrion3", ])
 p9 <- plot_add_range(p9, ex_bio[ex_bio$species == "Carrion3", ])
+p10 <- plot_sc_init(df = data1, seq(0.5, 10, by = 1), seq(0.5, 10, by = 1))
 
 # General roadmap from INDperform: How to implement a visual test
 # 1. Add new refernce with (svg-file is created in tests/ffigs/subfolder)
@@ -64,4 +74,6 @@ test_that("check visually", {
 
   # For some reason gem_rug results in rerendering...
   # vdiffr::expect_doppelganger("plot_add_range(p1, ex_bio)", p9)
+
+  vdiffr::expect_doppelganger("plot_sc_init(df = data1, mult_mum, mult_c)", p10)
 })
