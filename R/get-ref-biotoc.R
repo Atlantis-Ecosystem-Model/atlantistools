@@ -13,7 +13,8 @@
 #' taxon <- "Carcinus maenas"
 #' taxon <- "xxx yyy"
 #' taxon <- "Liocarcinus depurator"
-
+#' taxon <- "Asterias rubens"
+#'
 #' df <- get_ref_biotic(taxon)
 #' }
 
@@ -62,6 +63,8 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
       # Assign references found within the bio text and update ref_df.
       refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
+      # Well this is kinda getting ANNOYING! I will simply hardcode this for now...
+      refs_bio <- refs_bio[refs_bio != "b), Nichols & Barker, 1984"]
       # Replace commas and double space entries in reference (THIS IS SO STUPID!!!!!!!)
       refs_bio_fix <- stringr::str_replace_all(refs_bio, pattern = ",", replacement = "")
       refs_bio_fix <- stringr::str_replace_all(refs_bio_fix, pattern = "  ", replacement = " ")

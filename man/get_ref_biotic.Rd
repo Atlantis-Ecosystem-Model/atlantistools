@@ -23,6 +23,9 @@ Extract bibliographic information for growth, diets, distribution for invertebra
 taxon <- "Cancer pagurus"
 taxon <- "Carcinus maenas"
 taxon <- "xxx yyy"
+taxon <- "Liocarcinus depurator"
+taxon <- "Asterias rubens"
+
 df <- get_ref_biotic(taxon)
 }
 }
