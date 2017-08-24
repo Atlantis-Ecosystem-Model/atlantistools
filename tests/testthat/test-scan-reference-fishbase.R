@@ -7,5 +7,6 @@ test_that("Test with cod and heteroplasmy as search tag", {
   expect_equal(ncol(out), 6)
   expect_equal(out$ref_id, 46582)
   expect_equal(out$year, 1992)
+  expect_warning(scan_reference_fishbase("Squalus acanthias", chr = "game of thrones"), "game of thrones not found")
 })
 
