@@ -16,6 +16,7 @@
 #' taxon <- "Asterias rubens"
 #' taxon <- "Henricia oculata"
 #' taxon <- "Ensis ensis"
+#' taxon <- "Ampelisca spinipes"
 #'
 #' df <- get_ref_biotic(taxon)
 #' }
@@ -56,6 +57,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       ref_urls <- rvest::html_nodes(ref_raw, "a") %>%
         rvest::html_attr(., "href")
       ref_urls <- ref_urls[grepl(ref_urls, pattern = "references")]
+      ref_urls <- unique(ref_urls)
 
       # Convert reference string to vector of references.
       ref_df$ref <- purrr::map(ref_df$ref, refstr_to_ref)
@@ -164,8 +166,9 @@ bio_txt <- function(url, test = FALSE) {
 
 # Extract reference information from a reference-string in ref_df$ref.
 refstr_to_ref <- function(refstr) {
-  # Some species have no reference summaries (E.g. Ensis ensis)
-  if (refstr == "") {
+  # Some species have no reference summaries (E.g. Ensis ensis) or only unpublished ones e.g.
+  # no integers present inside the reference string.
+  if (refstr == "" | !stringr::str_detect(refstr, pattern = "[0-9]")) {
     NA
   } else {
     # Each reference does end with a number indicating the publication year.
