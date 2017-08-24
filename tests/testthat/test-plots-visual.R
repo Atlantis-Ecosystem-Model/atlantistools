@@ -26,7 +26,7 @@ p5 <- function() gridExtra::grid.arrange(dummy)
 
 p6 <- plot_bar(preprocess$nums_age, fill = "agecl", wrap = "species")
 p7 <- plot_rec(preprocess$ssb_rec, ex_data)
-p8 <- plot_spatial_overlap(sp_overlap)
+p8 <- plot_spatial_overlap(sp_overlap[11:20])
 p9 <- plot_add_range(p1, ex_bio)
 
 # General roadmap from INDperform: How to implement a visual test
@@ -45,6 +45,10 @@ p9 <- plot_add_range(p1, ex_bio)
 #       Toggle: Left-klick to switc between new & old version
 #       Slide: Left-klick + move to identify specific differences
 #       Diff: Black = match, white = no match
+#
+# 4. Collect orphaned cases from time to time and remove reference plots
+#    which aren't used anymore.
+#    vdiffr::collect_orphaned_cases(cases = vdiffr::collect_cases(filter = "plots-visual"))
 
 test_that("check visually", {
   vdiffr::expect_doppelganger("line plot preprocess$biomass", p1)
