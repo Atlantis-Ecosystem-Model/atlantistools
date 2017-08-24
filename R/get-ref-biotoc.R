@@ -14,6 +14,8 @@
 #' taxon <- "xxx yyy"
 #' taxon <- "Liocarcinus depurator"
 #' taxon <- "Asterias rubens"
+#' taxon <- "Henricia oculata"
+#' taxon <- "Ensis ensis"
 #'
 #' df <- get_ref_biotic(taxon)
 #' }
@@ -31,7 +33,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
     # Read in the url as raw html.
     if (!test) {
-      ref_raw <- xml2::read_html(url)
+      ref_raw <- xml2::read_html(curl::curl(url, handle = curl::new_handle("useragent" = "Mozilla/5.0")), timeout = 10000)
     } else {
       # This is a bit messy but does it's job.
       ref_raw <- xml2::read_html(system.file("extdata/biotic-cancer-pagurus.html", package = "atlantistools"))
@@ -63,23 +65,30 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
       # Assign references found within the bio text and update ref_df.
       refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
-      # Well this is kinda getting ANNOYING! I will simply hardcode this for now...
-      refs_bio <- refs_bio[refs_bio != "b), Nichols & Barker, 1984"]
-      # Replace commas and double space entries in reference (THIS IS SO STUPID!!!!!!!)
-      refs_bio_fix <- stringr::str_replace_all(refs_bio, pattern = ",", replacement = "")
-      refs_bio_fix <- stringr::str_replace_all(refs_bio_fix, pattern = "  ", replacement = " ")
+      if (!any(is.na(refs_bio))) {
+        # Well this is kinda getting ANNOYING! I will simply hardcode this for now...
+        refs_bio <- refs_bio[refs_bio != "b), Nichols & Barker, 1984"]
+        # Replace commas and double space entries in reference (THIS IS SO STUPID!!!!!!!)
+        refs_bio_fix <- stringr::str_replace_all(refs_bio, pattern = ",", replacement = "")
+        refs_bio_fix <- stringr::str_replace_all(refs_bio_fix, pattern = "  ", replacement = " ")
 
-      ref_ids1 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
-      ref_ids2 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio_fix))
-      ref_ids <- purrr::map2(ref_ids1, ref_ids2, ~.x | .y)
+        ref_ids1 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
+        ref_ids2 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio_fix))
+        ref_ids <- purrr::map2(ref_ids1, ref_ids2, ~.x | .y)
 
-      ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
-
-      # Create output tibble
-      res <- dplyr::bind_rows(ref_df, ref_bio)
-      res$species <- taxon
-      res <- dplyr::select_(res, .dots = c("species", "cat", "ref"))
+        ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
+      } else {
+        ref_bio <- tibble::tibble(cat = bio$headings, ref = rep(NA, times = length(bio$headings)))
+      }
     }
+    # Create output tibble
+    res <- dplyr::bind_rows(ref_df, ref_bio)
+    res$species <- taxon
+    res <- dplyr::select_(res, .dots = c("species", "cat", "ref"))
+    # Fix NULLs in ref
+    nulls <- purrr::map_lgl(res$ref, is.null)
+    res$ref[nulls] <- NA
+
     return(res)
   }
 
@@ -155,43 +164,48 @@ bio_txt <- function(url, test = FALSE) {
 
 # Extract reference information from a reference-string in ref_df$ref.
 refstr_to_ref <- function(refstr) {
-  # Each reference does end with a number indicating the publication year.
-  # Therefore we should be able to split the reference at the end of each
-  # year entry.
-  num_pos <- stringr::str_locate_all(refstr, pattern = "[0-9]")[[1]][, 1]
-  lags <- diff(num_pos)
-  if (all(lags == 1)) { # Only one reference present!
-    res <- refstr
+  # Some species have no reference summaries (E.g. Ensis ensis)
+  if (refstr == "") {
+    NA
   } else {
-    # Iteravtively split the string into substrings
-    num_pos <- num_pos[lags != 1]
-    res <- vector(mode = "character", length = length(num_pos) + 1)
-    for (i in seq_along(res)) {
-      if (i == 1)                    res[i] <- stringr::str_sub(refstr, end = num_pos[1])
-      if (i < length(res) & i != 1)  res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3, end = num_pos[i])
-      if (i == length(res))          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
+    # Each reference does end with a number indicating the publication year.
+    # Therefore we should be able to split the reference at the end of each
+    # year entry.
+    num_pos <- stringr::str_locate_all(refstr, pattern = "[0-9]")[[1]][, 1]
+    lags <- diff(num_pos)
+    if (all(lags == 1)) { # Only one reference present!
+      res <- refstr
+    } else {
+      # Iteravtively split the string into substrings
+      num_pos <- num_pos[lags != 1]
+      res <- vector(mode = "character", length = length(num_pos) + 1)
+      for (i in seq_along(res)) {
+        if (i == 1)                    res[i] <- stringr::str_sub(refstr, end = num_pos[1])
+        if (i < length(res) & i != 1)  res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3, end = num_pos[i])
+        if (i == length(res))          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
+      }
     }
-  }
-  # Remove trailing non integer and leading non character entries from string
-  clean_string <- function(str) {
-    nchr <- stringr::str_length(str)
-    #  Remove trailing non integer entries from string
-    while (!grepl(pattern = "[0-9]", x = stringr::str_sub(str, start = nchr, end = nchr))) {
-      nchr <- nchr - 1
-      str <- stringr::str_sub(str, end = nchr)
-    }
-    # Remove leading non character entries from string
-    while (!grepl(pattern = "[a-z|A-Z]", x = stringr::str_sub(str, start = 1, end = 1))) {
-      nchr <- nchr - 1
-      str <- stringr::str_sub(str, start = 2)
-    }
-    # Insert comma between author and year if missing!
-    if (!grepl(pattern = ",", x = str)) {
-      num_pos <- stringr::str_locate_all(str, pattern = "[0-9]")[[1]][1]
-      str <- paste(stringr::str_sub(str, end = num_pos - 2), stringr::str_sub(str, start = num_pos), sep = ", ")
-    }
+    # Remove trailing non integer and leading non character entries from string
+    clean_string <- function(str) {
+      nchr <- stringr::str_length(str)
+      #  Remove trailing non integer entries from string
+      while (!grepl(pattern = "[0-9]", x = stringr::str_sub(str, start = nchr, end = nchr))) {
+        nchr <- nchr - 1
+        str <- stringr::str_sub(str, end = nchr)
+      }
+      # Remove leading non character entries from string
+      while (!grepl(pattern = "[a-z|A-Z]", x = stringr::str_sub(str, start = 1, end = 1))) {
+        nchr <- nchr - 1
+        str <- stringr::str_sub(str, start = 2)
+      }
+      # Insert comma between author and year if missing!
+      if (!grepl(pattern = ",", x = str)) {
+        num_pos <- stringr::str_locate_all(str, pattern = "[0-9]")[[1]][1]
+        str <- paste(stringr::str_sub(str, end = num_pos - 2), stringr::str_sub(str, start = num_pos), sep = ", ")
+      }
 
-    return(str)
+      return(str)
+    }
+    purrr::map_chr(res, clean_string)
   }
-  purrr::map_chr(res, clean_string)
 }
