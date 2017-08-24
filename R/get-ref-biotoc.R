@@ -45,7 +45,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
     # Leave function in case no information is present
     if (all(dim(ref_df) == 1)) {
-      res <- tibble::tibble_(list(species = ~taxon, cat = NA, ref_tag = NA, ref_url = NA))
+      res <- tibble::tibble(species = taxon, cat = NA, ref = NA)
     } else {
       # Data is replicated in columns >= 3
       ref_df <- ref_df[, 1:2]
@@ -57,6 +57,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       ref_urls <- rvest::html_nodes(ref_raw, "a") %>%
         rvest::html_attr(., "href")
       ref_urls <- ref_urls[grepl(ref_urls, pattern = "references")]
+      ref_urls <- unique(ref_urls)
 
       # Convert reference string to vector of references.
       ref_df$ref <- purrr::map(ref_df$ref, refstr_to_ref)
@@ -81,28 +82,15 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       } else {
         ref_bio <- tibble::tibble(cat = bio$headings, ref = rep(NA, times = length(bio$headings)))
       }
-      # Create tidy output tibble. Would have been easier to do this earlier.
-      # However all helper functions are based on the "messy" data... Could change this
-      # at some point if I have any spare time... So probably in like 5 years :D
-      # WOW, this is sooooooo ugly...
-      # dummy <- dplyr::bind_rows(ref_df, ref_bio)
-      ref_df_tidy <- tibble::as.tibble(cbind(rep(ref_df$cat, times = purrr::map_int(ref_df$ref, length)),
-                                                            purrr::flatten_chr(ref_df$ref), ref_urls, taxon))
-      ref_df_tidy <- purrr::set_names(ref_df_tidy, nm = c("cat", "ref_tag", "ref_url", "species"))
-      ref_bio_tidy <- tibble::as.tibble(cbind(rep(ref_bio$cat, times = purrr::map_int(ref_bio$ref, length)),
-                                              purrr::flatten_chr(ref_bio$ref)))
-      ref_bio_tidy <- purrr::set_names(ref_bio_tidy, nm = c("cat", "ref_tag"))
-
-      # Add reference urls to ref_bio_tidy
-      ref_bio_tidy <- dplyr::inner_join(ref_bio_tidy, dplyr::select_(ref_df_tidy, .dots = c("ref_tag", "ref_url", "species")))
-      ref_bio_tidy <- unique(ref_bio_tidy)
-
-      res <- dplyr::bind_rows(ref_df_tidy, ref_bio_tidy)
-      res <- dplyr::select_(res, .dots = c("species", "cat", "ref_tag", "ref_url"))
-      # Fix NULLs in ref
-      nulls <- purrr::map_lgl(res$ref_tag, is.null)
-      res$ref_tag[nulls] <- NA
     }
+    # Create output tibble
+    res <- dplyr::bind_rows(ref_df, ref_bio)
+    res$species <- taxon
+    res <- dplyr::select_(res, .dots = c("species", "cat", "ref"))
+    # Fix NULLs in ref
+    nulls <- purrr::map_lgl(res$ref, is.null)
+    res$ref[nulls] <- NA
+
     return(res)
   }
 
