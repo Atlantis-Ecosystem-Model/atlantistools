@@ -12,6 +12,7 @@
 #' taxon <- "Cancer pagurus"
 #' taxon <- "Carcinus maenas"
 #' taxon <- "xxx yyy"
+#' taxon <- "Liocarcinus depurator"
 
 #' df <- get_ref_biotic(taxon)
 #' }
@@ -57,11 +58,18 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       ref_df$ref <- purrr::map(ref_df$ref, refstr_to_ref)
 
       # Extract text of General Biology Additional Information paragraph sorted by heading
-      bio <- bio_txt(ref_raw = ref_raw, url = url, test = test)
+      bio <- bio_txt(url = url, test = test)
 
       # Assign references found within the bio text and update ref_df.
       refs_bio <- ref_df$ref[ref_df$cat == "Biology"][[1]]
-      ref_ids <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
+      # Replace commas and double space entries in reference (THIS IS SO STUPID!!!!!!!)
+      refs_bio_fix <- stringr::str_replace_all(refs_bio, pattern = ",", replacement = "")
+      refs_bio_fix <- stringr::str_replace_all(refs_bio_fix, pattern = "  ", replacement = " ")
+
+      ref_ids1 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
+      ref_ids2 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio_fix))
+      ref_ids <- purrr::map2(ref_ids1, ref_ids2, ~.x | .y)
+
       ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
 
       # Create output tibble
@@ -78,12 +86,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
 
 # Extract biology text by heading
-bio_txt <- function(ref_raw, url, test = FALSE) {
-  # Get the section headings of "General Biology Additional Information"
-  headings <- rvest::html_nodes(ref_raw, "b") %>%
-    rvest::html_text(.)
-  headings <- headings[headings != "Note"]
-
+bio_txt <- function(url, test = FALSE) {
   # Split the text into subsections
   if (!test) {
     biology <- readLines(url)
@@ -95,6 +98,16 @@ bio_txt <- function(ref_raw, url, test = FALSE) {
   biol_end   <- grep(pattern = "Biology References", biology)
   biology <- biology[biol_start:(biol_end - 5)]
 
+  # Get the section headings of "General Biology Additional Information"
+  get_headings <- function(chr) {
+    headings_start <- stringr::str_locate_all(pattern = "<b>", chr)[[1]][, 2] + 1
+    headings_end <- stringr::str_locate_all(pattern = "</b>", chr)[[1]][, 1] - 1
+
+    # Select headings from string
+    stringr::str_sub(string = chr, start = headings_start, end = headings_end)
+  }
+  headings <- get_headings(paste(biology, collapse = ""))
+
   col2 <- vector(mode = "character", length = length(headings))
   for (i in seq_along(headings)) {
     if (i == 1) { # first headings is first entry in biology
@@ -102,7 +115,7 @@ bio_txt <- function(ref_raw, url, test = FALSE) {
       sec_end   <- grep(pattern = paste0("<b>", headings[i + 1], "</b>"), x = biology) - 1
     }
     if (i < length(headings) & i != 1) {
-      sec_start <- grep(pattern = paste0("<b>", headings[i], "</b>"), x = biology) + 1
+      sec_start <- grep(pattern = paste0("<b>", headings[i], "</b>"), x = biology)
       sec_end   <- grep(pattern = paste0("<b>", headings[i + 1], "</b>"), x = biology) - 1
     }
     if (i == length(headings)) {
@@ -120,6 +133,17 @@ bio_txt <- function(ref_raw, url, test = FALSE) {
   col2 <- stringr::str_replace_all(col2, pattern = "</i>", replacement = "")
   col2 <- stringr::str_replace_all(col2, pattern = "\\(", replacement = "")
   col2 <- stringr::str_replace_all(col2, pattern = "\\)", replacement = "")
+
+  # Cleanup headings
+  cleanup <- function(chr) {
+    while (grepl(pattern = " ", x = stringr::str_sub(chr, start = stringr::str_length(chr), end = stringr::str_length(chr)))) {
+      chr <- stringr::str_sub(chr, end = stringr::str_length(chr) - 1)
+    }
+    return(chr)
+  }
+
+  headings <- purrr::map_chr(headings, cleanup)
+  headings <- stringr::str_replace_all(headings, pattern = ":", replacement = "")
 
   bio <- tibble::tibble(headings, col2)
   return(bio)
