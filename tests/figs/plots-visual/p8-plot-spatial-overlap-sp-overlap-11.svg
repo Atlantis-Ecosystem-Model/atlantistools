@@ -79,5 +79,5 @@
 <polyline points='38.35,63.61 41.09,63.61 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' clip-path='url(#cpMHw3MjB8NTc2fDA=)' />
 <g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='358.84' y='570.40' style='font-size: 11.00px; font-family: Liberation Sans;' textLength='20.78px' lengthAdjust='spacingAndGlyphs'>time</text></g>
 <g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text transform='translate(13.04,297.40) rotate(-90)' style='font-size: 11.00px; font-family: Liberation Sans;' textLength='7.94px' lengthAdjust='spacingAndGlyphs'>si</text></g>
-<g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='41.09' y='14.42' style='font-size: 13.20px; font-family: Liberation Sans;' textLength='245.72px' lengthAdjust='spacingAndGlyphs'>p8 plot_spatial_overlap(sp_overlap[11:20])</text></g>
+<g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='41.09' y='14.42' style='font-size: 13.20px; font-family: Liberation Sans;' textLength='227.65px' lengthAdjust='spacingAndGlyphs'>p8 plot_spatial_overlap(sp_overlap[11])</text></g>
 </svg>
