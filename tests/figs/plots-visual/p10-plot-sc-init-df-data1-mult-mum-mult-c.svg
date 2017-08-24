@@ -612,5 +612,5 @@
 <line x1='469.14' y1='541.79' x2='469.14' y2='538.33' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpMHw3MjB8NTc2fDA=)' />
 <line x1='494.38' y1='541.79' x2='494.38' y2='538.33' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpMHw3MjB8NTc2fDA=)' />
 <line x1='519.63' y1='541.79' x2='519.63' y2='538.33' style='stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;' clip-path='url(#cpMHw3MjB8NTc2fDA=)' />
-<g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='65.83' y='17.29' style='font-size: 21.12px; font-family: Liberation Sans;' textLength='396.25px' lengthAdjust='spacingAndGlyphs'>plot_sc_init(df = data1, mult_mum, mult_c)</text></g>
+<g clip-path='url(#cpMHw3MjB8NTc2fDA=)'><text x='65.83' y='17.29' style='font-size: 21.12px; font-family: Liberation Sans;' textLength='437.12px' lengthAdjust='spacingAndGlyphs'>p10 plot_sc_init(df = data1, mult_mum, mult_c)</text></g>
 </svg>

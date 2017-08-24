@@ -35,7 +35,7 @@ p5 <- function() gridExtra::grid.arrange(dummy)
 
 p6 <- plot_bar(preprocess$nums_age, fill = "agecl", wrap = "species")
 p7 <- plot_rec(preprocess$ssb_rec, ex_data)
-p8 <- plot_spatial_overlap(sp_overlap[11:20])
+p8 <- plot_spatial_overlap(sp_overlap[11])
 p9 <- plot_line(preprocess$biomass[preprocess$biomass$species == "Carrion3", ])
 p9 <- plot_add_range(p9, ex_bio[ex_bio$species == "Carrion3", ])
 p10 <- plot_sc_init(df = data1, seq(0.5, 10, by = 1), seq(0.5, 10, by = 1))
@@ -62,18 +62,18 @@ p10 <- plot_sc_init(df = data1, seq(0.5, 10, by = 1), seq(0.5, 10, by = 1))
 #    vdiffr::collect_orphaned_cases(cases = vdiffr::collect_cases(filter = "plots-visual"))
 
 test_that("check visually", {
-  vdiffr::expect_doppelganger("plot_line(preprocess$biomass)", p1)
-  vdiffr::expect_doppelganger("plot_consumed_biomass(ref_bio_cons)", p2)
+  vdiffr::expect_doppelganger("p1 plot_line(preprocess$biomass)", p1)
+  vdiffr::expect_doppelganger("p2 plot_consumed_biomass(ref_bio_cons)", p2)
   # Not working due to arrangeGrob call
   # vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort upper", p3)
   # vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort lower", p4)
   # vdiffr::expect_doppelganger("line plot preprocess$biomass twice", p5)
-  vdiffr::expect_doppelganger("plot_bar(preprocess$nums_age)", p6)
-  vdiffr::expect_doppelganger("plot_rec(preprocess$ssb_rec, ex_data)", p7)
-  vdiffr::expect_doppelganger("plot_spatial_overlap(sp_overlap[11:20])", p8)
+  vdiffr::expect_doppelganger("p6 plot_bar(preprocess$nums_age)", p6)
+  vdiffr::expect_doppelganger("p7 plot_rec(preprocess$ssb_rec, ex_data)", p7)
+  vdiffr::expect_doppelganger("p8 plot_spatial_overlap(sp_overlap[11])", p8)
 
   # For some reason gem_rug results in rerendering...
   # vdiffr::expect_doppelganger("plot_add_range(p1, ex_bio)", p9)
 
-  vdiffr::expect_doppelganger("plot_sc_init(df = data1, mult_mum, mult_c)", p10)
+  vdiffr::expect_doppelganger("p10 plot_sc_init(df = data1, mult_mum, mult_c)", p10)
 })
