@@ -52,15 +52,15 @@ p9 <- plot_add_range(p9, ex_bio[ex_bio$species == "Carrion3", ])
 #    vdiffr::collect_orphaned_cases(cases = vdiffr::collect_cases(filter = "plots-visual"))
 
 test_that("check visually", {
-  vdiffr::expect_doppelganger("line plot preprocess$biomass", p1)
-  vdiffr::expect_doppelganger("plot consumed biomass ref_bio_cons", p2)
+  vdiffr::expect_doppelganger("plot_line(preprocess$biomass)", p1)
+  vdiffr::expect_doppelganger("plot_consumed_biomass(ref_bio_cons)", p2)
   # Not working due to arrangeGrob call
   # vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort upper", p3)
   # vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort lower", p4)
   # vdiffr::expect_doppelganger("line plot preprocess$biomass twice", p5)
-  vdiffr::expect_doppelganger("plot bar preprocess$nums_age", p6)
-  vdiffr::expect_doppelganger("plot rec preprocess$ssb_rec ex_data", p7)
-  vdiffr::expect_doppelganger("plot spatial overlap sp_overlap", p8)
+  vdiffr::expect_doppelganger("plot_bar(preprocess$nums_age)", p6)
+  vdiffr::expect_doppelganger("plot_rec(preprocess$ssb_rec, ex_data)", p7)
+  vdiffr::expect_doppelganger("plot_spatial_overlap(sp_overlap[11:20])", p8)
 
   # For some reason gem_rug results in rerendering...
   # vdiffr::expect_doppelganger("plot_add_range(p1, ex_bio)", p9)
