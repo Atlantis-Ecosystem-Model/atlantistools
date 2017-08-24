@@ -133,6 +133,7 @@ bio_txt <- function(url, test = FALSE) {
   col2 <- stringr::str_replace_all(col2, pattern = "</i>", replacement = "")
   col2 <- stringr::str_replace_all(col2, pattern = "\\(", replacement = "")
   col2 <- stringr::str_replace_all(col2, pattern = "\\)", replacement = "")
+  col2 <- stringr::str_replace_all(col2, pattern = "&#243;", replacement = "ó")
 
   # Cleanup headings
   cleanup <- function(chr) {
