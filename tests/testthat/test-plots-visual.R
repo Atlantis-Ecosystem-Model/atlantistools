@@ -8,6 +8,7 @@ fgs <- file.path(d, "SETasGroups.csv")
 df <- load_spec_mort(specmort, prm_run, fgs, version_flag = 1)
 plots <- plot_diet_bec_dev(df, wrap_col = "agecl")
 plots <- plots[[4]]
+ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
 
 # Add plots for visual testing here
 p1 <- plot_line(preprocess$biomass)
@@ -20,6 +21,7 @@ dummy <- gridExtra::arrangeGrob(grobs = list(p1, p1),  heights = grid::unit(c(0.
 p5 <- function() gridExtra::grid.arrange(dummy)
 
 p6 <- plot_bar(preprocess$nums_age, fill = "agecl", wrap = "species")
+p7 <- plot_rec(preprocess$ssb_rec, ex_data)
 
 # General roadmap from INDperform: How to implement a visual test
 # 1. Add new refernce with (svg-file is created in tests/ffigs/subfolder)
@@ -46,4 +48,5 @@ test_that("check visually", {
   # vdiffr::expect_doppelganger("plot diet bec dev outputSETASSpecificPredMort lower", p4)
   # vdiffr::expect_doppelganger("line plot preprocess$biomass twice", p5)
   vdiffr::expect_doppelganger("plot bar preprocess$nums_age", p6)
+  vdiffr::expect_doppelganger("plot rec preprocess$ssb_rec ex_data", p7)
 })
