@@ -97,7 +97,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
       # Add in function to combine ref_urls and ref
       ref_url_df <- add_ref_url(refs = res$ref, ref_urls = ref_urls)
-      res <- left_join(res, ref_url_df, by = "ref")
+      res <- dplyr::left_join(res, ref_url_df, by = "ref")
     }
 
     return(res)
@@ -156,7 +156,8 @@ bio_txt <- function(url, test = FALSE) {
   col2 <- stringr::str_replace_all(col2, pattern = "</i>", replacement = "")
   col2 <- stringr::str_replace_all(col2, pattern = "\\(", replacement = "")
   col2 <- stringr::str_replace_all(col2, pattern = "\\)", replacement = "")
-  col2 <- stringr::str_replace_all(col2, pattern = "&#243;", replacement = "ó")
+  # non-ASCII character
+  # col2 <- stringr::str_replace_all(col2, pattern = "&#243;", replacement = "ó")
 
   # Cleanup headings
   cleanup <- function(chr) {
