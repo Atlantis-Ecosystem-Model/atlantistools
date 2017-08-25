@@ -92,19 +92,23 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       res <- tibble::as.tibble(cbind(rep(dummy$cat, times = purrr::map_int(dummy$ref, length)),
                                      purrr::flatten_chr(dummy$ref)))
       res$species <- taxon
-      res <- purrr::set_names(res, nm = c("cat", "ref", "species"))
-      res <- dplyr::select_(res, .dots = c("species", "cat", "ref"))
+      res <- purrr::set_names(res, nm = c("cat", "ref_tag", "species"))
 
       # Add in function to combine ref_urls and ref
-      ref_url_df <- add_ref_url(refs = res$ref, ref_urls = ref_urls)
-      res <- dplyr::left_join(res, ref_url_df, by = "ref")
+      ref_url_df <- add_ref_url(refs = res$ref_tag, ref_urls = ref_urls)
+      res <- merge(res, ref_url_df)
+      res <- dplyr::select_(res, .dots = c("species", "cat", "ref_tag", "ref_url"))
     }
 
     return(res)
   }
 
   # Apply to all taxons
-  purrr::map_df(taxon, single_taxon, test = test)
+  result <- purrr::map_df(taxon, single_taxon, test = test)
+
+  # Add in reference metadata!
+  refmeta <- meta_refurl(refurl = unique(result$ref_url))
+  dplyr::left_join(result, refmeta, by = "ref_url")
 }
 
 
@@ -237,17 +241,6 @@ add_ref_url <- function(refs, ref_urls) {
 
     # Extract the authors and split them based on "," and "&"
     authors <- stringr::str_split_fixed(string = refs_clean, pattern = as.character(years), n = 2)[, 1]
-    double_split <- function(chr) {
-      res <- stringr::str_split(string = chr, pattern = ",")[[1]]
-      res <- stringr::str_split(string = res, pattern = " & ")
-      res <- unlist(res)
-
-      # Cleanup
-      result <- res[res != " "]
-      result <- stringr::str_replace(result, pattern = "et al.", replacement = "")
-      result <- stringr::str_replace_all(result, pattern = " ", replacement = "")
-      return(result)
-    }
     authors <- purrr::map(authors, double_split)
 
     find_refurl <- function(author, year, ref_urls) {
@@ -269,11 +262,57 @@ add_ref_url <- function(refs, ref_urls) {
     }
 
     ref_url <- purrr::map2_chr(authors, years, find_refurl, ref_urls = ref_urls)
-    ref <- refs_clean
-    res <- tibble::tibble(ref, ref_url)
+    ref_tag <- refs_clean
+    res <- tibble::tibble(ref_tag, ref_url)
   } else {
-    res <- tibble::tibble(ref = NA, ref_url = NA)
+    res <- tibble::tibble(ref_tag = NA, ref_url = NA)
   }
   return(res)
 }
 
+# taxon <- "Cancer pagurus"
+# df <- get_ref_biotic(taxon)
+# refurl <- result$ref_url[1:10]
+meta_refurl <- function(refurl) {
+  txt <- purrr::map(refurl, ~xml2::read_html(paste0("http://www.marlin.ac.uk/biotic/", .))) %>%
+    purrr::map(., ~rvest::html_nodes(., "div")) %>%
+    purrr::map(., rvest::html_text) %>%
+    purrr::map_chr(., 5) # Reference text is stored at pos 5.
+
+  # Find the position of the year (e.g. 1st 4 integers.)
+  year_pos <- stringr::str_locate_all(txt, pattern = "[0-9]") %>%
+    purrr::map(., ~.[, 1]) %>%  # start == end, thus we only need the 1st column
+    purrr::map(., ~.[1:4]) # year == first 4 numeric entries!
+
+  # Use the year position to get the remaining infos.
+  year <- as.integer(purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, start = .y[1], end = .y[4])))
+  author <- purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, end = .y[1] - 1))
+  title <- purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, start = .y[4] + 4))
+
+  fix_authors <- function(chr) {
+    fix <- stringr::str_replace_all(chr, pattern = "\\.", replacement = "") %>%
+      purrr::map(., double_split)
+
+    # Remove strings with length <= 2 and editors.
+    remove_these <- purrr::map(fix, ~stringr::str_length(.) <= 2 | grepl(pattern = "\\(ed\\)", x = .))
+    purrr::map2(fix, remove_these, ~.x[!.y])
+  }
+
+  # Create outputtibble
+  res <- tibble::tibble(refurl, txt, year, fix_authors(author), title)
+  res <- purrr::set_names(res, nm = c("ref_url", "ref", "year", "author", "title"))
+  return(res)
+}
+
+# wuwu <- meta_refurl(df$ref_url)
+double_split <- function(chr) {
+  res <- stringr::str_split(string = chr, pattern = ",")[[1]]
+  res <- stringr::str_split(string = res, pattern = " & ")
+  res <- unlist(res)
+
+  # Cleanup
+  result <- stringr::str_replace(res, pattern = "et al.", replacement = "")
+  result <- stringr::str_replace_all(result, pattern = " ", replacement = "")
+  result <- result[result != ""]
+  return(result)
+}
