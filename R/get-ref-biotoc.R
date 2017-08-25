@@ -45,7 +45,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
     # Leave function in case no information is present
     if (all(dim(ref_df) == 1)) {
-      res <- tibble::tibble(species = taxon, cat = NA, ref = NA)
+      res <- tibble::tibble(species = taxon, cat = NA, ref_tag = NA, ref_url = NA)
     } else {
       # Data is replicated in columns >= 3
       ref_df <- ref_df[, 1:2]
@@ -106,8 +106,13 @@ get_ref_biotic <- function(taxon, test = FALSE) {
   # Apply to all taxons
   result <- purrr::map_df(taxon, single_taxon, test = test)
 
-  # Add in reference metadata!
-  refmeta <- meta_refurl(refurl = unique(result$ref_url))
+  # Add in reference metadata! Make sure to remove NAs from urls.
+  pass_url <- unique(result$ref_url[!is.na(result$ref_url)])
+  if (length(pass_url) == 0) {
+    refmeta <- tibble::tibble(ref_url = NA, ref = NA, year = NA, author = NA, title = NA)
+  } else {
+    refmeta <- meta_refurl(refurl = pass_url)
+  }
   dplyr::left_join(result, refmeta, by = "ref_url")
 }
 
@@ -242,6 +247,9 @@ add_ref_url <- function(refs, ref_urls) {
     # Extract the authors and split them based on "," and "&"
     authors <- stringr::str_split_fixed(string = refs_clean, pattern = as.character(years), n = 2)[, 1]
     authors <- purrr::map(authors, double_split)
+    # Handcode some stupid exceptions
+    authors[authors == "KleinBreteler"] <- list(c("Klein", "Breteler"))
+    authors[authors == "Meerenvander"] <- "Meeren"
 
     find_refurl <- function(author, year, ref_urls) {
       # all authors present?
