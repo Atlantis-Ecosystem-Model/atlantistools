@@ -12,27 +12,27 @@ License: GPL-3
 LazyData: true
 RoxygenNote: 6.0.1
 Suggests:
-  testthat,
   knitr,
+  rfishbase,
   rmarkdown,
-  vdiffr,
-  rfishbase
+  testthat,
+  vdiffr
 Imports:
-  dplyr,
-  magrittr,
-  RNetCDF,
-  stringr,
-  lazyeval,
-  tidyr,
-  ggplot2,
-  proj4,
-  gridExtra,
-  scales,
   circlize,
-  RColorBrewer,
+  curl,
+  dplyr,
+  ggplot2,
+  gridExtra,
+  lazyeval,
+  magrittr,
+  proj4,
   purrr,
+  RColorBrewer,
+  RNetCDF,
   rvest,
-  xml2,
+  scales,
+  stringr,
   tibble,
-  curl
+  tidyr,
+  xml2
 VignetteBuilder: knitr
