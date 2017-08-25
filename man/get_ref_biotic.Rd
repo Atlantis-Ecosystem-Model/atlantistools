@@ -25,6 +25,11 @@ taxon <- "Carcinus maenas"
 taxon <- "xxx yyy"
 taxon <- "Liocarcinus depurator"
 taxon <- "Asterias rubens"
+taxon <- "Henricia oculata"
+taxon <- "Ensis ensis"
+taxon <- "Ampelisca spinipes"
+taxon <- "Tubularia indivisa"
+taxon <- "Ophelia borealis"
 
 df <- get_ref_biotic(taxon)
 }
