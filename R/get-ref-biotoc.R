@@ -244,7 +244,8 @@ add_ref_url <- function(refs, ref_urls) {
 
       # Cleanup
       result <- res[res != " "]
-      result <- stringr::str_replace(result, pattern = " et al.", replacement = "")
+      result <- stringr::str_replace(result, pattern = "et al.", replacement = "")
+      result <- stringr::str_replace_all(result, pattern = " ", replacement = "")
       return(result)
     }
     authors <- purrr::map(authors, double_split)
