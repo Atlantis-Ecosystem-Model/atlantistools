@@ -15,7 +15,7 @@ cats <- c("Taxonomy", "Biology", "Distribution", "Reproduction", "Feeding", "Gro
 
 test_that("Test output of dataframes", {
   expect_equal(nrow(df1), sum(c(2, 11, 3, 7, 5, 4)))
-  expect_equal(ncol(df1), 4)
+  expect_equal(ncol(df1), 9)
   expect_true(all(df1$cat %in% cats))
   #
   # expect_equal(dim(df2), c(8, 3))
@@ -54,7 +54,7 @@ d5 <- add_ref_url(refs = c("ax 2001", "ay 2003"), ref_urls = c("www.this.is.a.re
 d6 <- add_ref_url(refs = "ax 2001", ref_urls = c("www.this.is.a.ref.ax+2001", "www.another.url.ax+2001"))
 
 test_that("Test add_ref_url helper function", {
-  expect_equal(d1$ref, "ax 2001")
+  expect_equal(d1$ref_tag, "ax 2001")
   expect_equal(d1$ref_url, "www.this.is.a.ref.ax+2001")
   expect_equal(dim(d2), c(2, 2))
   expect_equal(d3$ref_url, "www.this.is.a.ref.ax+2001")
