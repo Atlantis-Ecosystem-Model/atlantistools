@@ -17,6 +17,8 @@
 #' taxon <- "Henricia oculata"
 #' taxon <- "Ensis ensis"
 #' taxon <- "Ampelisca spinipes"
+#' taxon <- "Tubularia indivisa"
+#' taxon <- "Ophelia borealis"
 #'
 #' df <- get_ref_biotic(taxon)
 #' }
@@ -206,6 +208,11 @@ refstr_to_ref <- function(refstr) {
         if (i < length(res) & i != 1)  res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3, end = num_pos[i])
         if (i == length(res))          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
       }
+      # Remove numeric only strings (happens when year is given as 1871-1872 entry)
+      # Its a bit hacky but does the rick
+      num_only <- !is.na(suppressWarnings(as.numeric(res)))
+      if (sum(num_only) > 0) res <- res[!num_only]
+
     }
     # Remove trailing non integer and leading non character entries from string
     clean_string <- function(str) {
@@ -247,13 +254,16 @@ add_ref_url <- function(refs, ref_urls) {
     # Extract the authors and split them based on "," and "&"
     authors <- stringr::str_split_fixed(string = refs_clean, pattern = as.character(years), n = 2)[, 1]
     authors <- purrr::map(authors, double_split)
+
     # Handcode some stupid exceptions
     authors[authors == "KleinBreteler"] <- list(c("Klein", "Breteler"))
     authors[authors == "Meerenvander"] <- "Meeren"
+    authors[which(purrr::map_int(authors, ~sum(. %in% c("b)", "Nichols", "Barker"))) == 3)] <- list(c("Nichols", "Barker", "b"))
+    authors[which(purrr::map_int(authors, ~sum(. %in% c("Jangoux", "vanImpe"))) == 2)] <- list(c("Jangoux", "Impe"))
 
     find_refurl <- function(author, year, ref_urls) {
       # all authors present?
-      author_id <- purrr::map(author, ~grepl(pattern = ., x = ref_urls))
+      author_id <- purrr::map(author, ~grepl(pattern = ., x = ref_urls, ignore.case = FALSE))
       author_id <- do.call(rbind, author_id)
       author_id <- apply(X = author_id, MARGIN = 2, FUN = all)
 
@@ -281,11 +291,17 @@ add_ref_url <- function(refs, ref_urls) {
 # taxon <- "Cancer pagurus"
 # df <- get_ref_biotic(taxon)
 # refurl <- result$ref_url[1:10]
+# refurl <- ref_urls
 meta_refurl <- function(refurl) {
   txt <- purrr::map(refurl, ~xml2::read_html(paste0("http://www.marlin.ac.uk/biotic/", .))) %>%
     purrr::map(., ~rvest::html_nodes(., "div")) %>%
-    purrr::map(., rvest::html_text) %>%
-    purrr::map_chr(., 5) # Reference text is stored at pos 5.
+    purrr::map(., rvest::html_text)
+
+  # Remove broken reference links
+  ids <- purrr::map_int(txt, length) == 6
+  txt <- purrr::map_if(txt, ids, 5)
+  txt[!ids] <- NA
+  txt <- purrr::flatten_chr(txt)
 
   # Find the position of the year (e.g. 1st 4 integers.)
   year_pos <- stringr::str_locate_all(txt, pattern = "[0-9]") %>%
@@ -295,7 +311,7 @@ meta_refurl <- function(refurl) {
   # Use the year position to get the remaining infos.
   year <- as.integer(purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, start = .y[1], end = .y[4])))
   author <- purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, end = .y[1] - 1))
-  title <- purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, start = .y[4] + 4))
+  title <- purrr::map2_chr(txt, year_pos, ~stringr::str_sub(string = .x, start = .y[4] + 4))
 
   fix_authors <- function(chr) {
     fix <- stringr::str_replace_all(chr, pattern = "\\.", replacement = "") %>%
@@ -307,8 +323,8 @@ meta_refurl <- function(refurl) {
   }
 
   # Create outputtibble
-  res <- tibble::tibble(refurl, txt, year, fix_authors(author), title)
-  res <- purrr::set_names(res, nm = c("ref_url", "ref", "year", "author", "title"))
+  res <- tibble::tibble(refurl, txt, year, fix_authors(author), title, !ids)
+  res <- purrr::set_names(res, nm = c("ref_url", "ref", "year", "author", "title", "broken"))
   return(res)
 }
 
