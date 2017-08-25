@@ -44,3 +44,19 @@ test_that("Test refstr_to_ref helper function", {
   # All together
   expect_equal(refstr_to_ref("   author 2000 strings"), test)
 })
+
+
+d1 <- add_ref_url(refs = "ax 2001", ref_urls = "www.this.is.a.ref.ax+2001")
+d2 <- add_ref_url(refs = c("ax 2001", "ay 2003"), ref_urls = c("www.this.is.a.ref.ax+2001", "www.another.url.ay+2003"))
+d3 <- add_ref_url(refs = "ax et al. 2001", ref_urls = "www.this.is.a.ref.ax+2001")
+d4 <- add_ref_url(refs = "ax     et al. 2001", ref_urls = "www.this.is.a.ref.ax+2001")
+d5 <- add_ref_url(refs = c("ax 2001", "ay 2003"), ref_urls = c("www.this.is.a.ref.ay+2001", "www.another.url.ay+2004"))
+
+test_that("Test add_ref_url helper function", {
+  expect_equal(d1$ref, "ax 2001")
+  expect_equal(d1$ref_url, "www.this.is.a.ref.ax+2001")
+  expect_equal(dim(d2), c(2, 2))
+  expect_equal(d3$ref_url, "www.this.is.a.ref.ax+2001")
+  expect_equal(d4$ref_url, "www.this.is.a.ref.ax+2001")
+  expect_true(all(is.na(d5$ref_url)))
+})
