@@ -51,6 +51,7 @@ d2 <- add_ref_url(refs = c("ax 2001", "ay 2003"), ref_urls = c("www.this.is.a.re
 d3 <- add_ref_url(refs = "ax et al. 2001", ref_urls = "www.this.is.a.ref.ax+2001")
 d4 <- add_ref_url(refs = "ax     et al. 2001", ref_urls = "www.this.is.a.ref.ax+2001")
 d5 <- add_ref_url(refs = c("ax 2001", "ay 2003"), ref_urls = c("www.this.is.a.ref.ay+2001", "www.another.url.ay+2004"))
+d6 <- add_ref_url(refs = "ax 2001", ref_urls = c("www.this.is.a.ref.ax+2001", "www.another.url.ax+2001"))
 
 test_that("Test add_ref_url helper function", {
   expect_equal(d1$ref, "ax 2001")
@@ -59,4 +60,5 @@ test_that("Test add_ref_url helper function", {
   expect_equal(d3$ref_url, "www.this.is.a.ref.ax+2001")
   expect_equal(d4$ref_url, "www.this.is.a.ref.ax+2001")
   expect_true(all(is.na(d5$ref_url)))
+  expect_true(is.na(d6$ref_url))
 })
