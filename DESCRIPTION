@@ -33,5 +33,6 @@ Imports:
   purrr,
   rvest,
   xml2,
-  tibble
+  tibble,
+  curl
 VignetteBuilder: knitr
