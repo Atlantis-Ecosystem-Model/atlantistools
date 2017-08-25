@@ -111,7 +111,7 @@ get_ref_biotic <- function(taxon, test = FALSE) {
   # Add in reference metadata! Make sure to remove NAs from urls.
   pass_url <- unique(result$ref_url[!is.na(result$ref_url)])
   if (length(pass_url) == 0) {
-    refmeta <- tibble::tibble(ref_url = NA, ref = NA, year = NA, author = NA, title = NA)
+    refmeta <- tibble::tibble(ref_id = NA, ref_url = NA, ref = NA, year = NA, author = NA, title = NA)
   } else {
     refmeta <- meta_refurl(refurl = pass_url)
   }
@@ -293,8 +293,17 @@ add_ref_url <- function(refs, ref_urls) {
 # refurl <- result$ref_url[1:10]
 # refurl <- ref_urls
 meta_refurl <- function(refurl) {
-  txt <- purrr::map(refurl, ~xml2::read_html(paste0("http://www.marlin.ac.uk/biotic/", .))) %>%
-    purrr::map(., ~rvest::html_nodes(., "div")) %>%
+  txt_raw <- purrr::map(refurl, ~xml2::read_html(paste0("http://www.marlin.ac.uk/biotic/", .)))
+
+  # Extract biotic reference id. Read raw text, scan for "BIOTIC References" and extract integers
+  # from next 5 character entries (thus only numbers <10000 are allowed.)
+  refid <- purrr::map_chr(txt_raw, rvest::html_text)
+  refid_pos <- stringr::str_locate(string = refid, pattern = "BIOTIC References")[, 2]
+  refid <- stringr::str_replace_all(stringr::str_sub(refid, start = refid_pos + 1, end = refid_pos + 5), pattern = "[a-z|A-Z]", replacement = "")
+  refid <- as.integer(refid)
+
+  # Extract reference text
+  txt <- purrr::map(txt_raw, ~rvest::html_nodes(., "div")) %>%
     purrr::map(., rvest::html_text)
 
   # Remove broken reference links
@@ -323,8 +332,8 @@ meta_refurl <- function(refurl) {
   }
 
   # Create outputtibble
-  res <- tibble::tibble(refurl, txt, year, fix_authors(author), title, !ids)
-  res <- purrr::set_names(res, nm = c("ref_url", "ref", "year", "author", "title", "broken"))
+  res <- tibble::tibble(refid, refurl, txt, year, fix_authors(author), title, !ids)
+  res <- purrr::set_names(res, nm = c("ref_id", "ref_url", "ref", "year", "author", "title", "broken"))
   return(res)
 }
 
