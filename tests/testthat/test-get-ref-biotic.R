@@ -15,7 +15,7 @@ cats <- c("Taxonomy", "Biology", "Distribution", "Reproduction", "Feeding", "Gro
 
 test_that("Test output of dataframes", {
   expect_equal(nrow(df1), sum(c(2, 11, 3, 7, 5, 4)))
-  expect_equal(ncol(df1), 9)
+  expect_equal(ncol(df1), 10)
   expect_true(all(df1$cat %in% cats))
   #
   # expect_equal(dim(df2), c(8, 3))
