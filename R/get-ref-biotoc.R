@@ -299,7 +299,7 @@ meta_refurl <- function(refurl) {
   # from next 5 character entries (thus only numbers <10000 are allowed.)
   refid <- purrr::map_chr(txt_raw, rvest::html_text)
   refid_pos <- stringr::str_locate(string = refid, pattern = "BIOTIC References")[, 2]
-  refid <- stringr::str_replace_all(stringr::str_sub(refid, start = refid_pos + 1, end = refid_pos + 5), pattern = "[a-z|A-Z]", replacement = "")
+  refid <- stringr::str_replace_all(stringr::str_sub(refid, start = refid_pos + 1, end = refid_pos + 4), pattern = "[a-z|A-Z]", replacement = "")
   refid <- as.integer(refid)
 
   # Extract reference text
