@@ -37,7 +37,7 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
   # read in diet information
   diet <- utils::read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
 
-  #Check if multiple stocks are available per functional group for trunk branch!
+  #Check if multiple stocks are available per functional group for trunk branch! 
   if (version_flag == 2) {
     if (all(diet$Stock) == 0) {
       diet$Stock <- NULL
@@ -47,10 +47,13 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
 
     diet$Cohort <- diet$Cohort + 1 # Cohorts start with 0 in DietCheck.txt!
   }
-
-  prey_col_start <- 4 #bjs remove magic number below
-
-
+  
+  # Column Updated was added to trunk code.
+  if (version_flag == 2 & "Updated" %in% names(diet)) {
+    prey_col_start <- 5 #bjs remove magic number below
+  } else {
+    prey_col_start <- 4 #bjs remove magic number below
+  }
 
   # remove entries without any diet-information!
   empty_rows <- rowSums(x = diet[, prey_col_start:ncol(diet)]) == 0
@@ -88,9 +91,9 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
 
   if (version_flag == 2) {
     names(diet_long)[names(diet_long) == "Cohort"] <- "agecl" #bjs cohort -> colnames(diet)[3]
-    # Column Updated was added to runk code.
+    # Column Updated was added to trunk code.
     if ("Updated" %in% names(diet_long)) {
-      diet_long <- diet_long[-which(diet_long$prey == "Updated"), ]
+      diet_long <- diet_long[, names(diet_long) != "Updated" ]
     }
   }
 
@@ -101,7 +104,7 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
 
   # Convert species codes to longnames!
   if (convert_names) {
-    diet_long <- dplyr::mutate_at(diet_long, .cols = c("pred", "prey"), .funs = convert_factor,
+    diet_long <- dplyr::mutate_at(diet_long, .vars = c("pred", "prey"), .funs = convert_factor,
                                   data_fgs = load_fgs(fgs = fgs))
   }
 
