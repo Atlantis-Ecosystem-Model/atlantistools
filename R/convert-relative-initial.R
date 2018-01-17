@@ -23,10 +23,10 @@ convert_relative_initial <- function(data, col = "atoutput") {
     dplyr::mutate_(.dots = stats::setNames(list(lazyeval::interp(~var / atoutput_ref, var = as.name(col))), col))
 
   # Replace division by 0 with 0!
-  result$atoutput[result$atoutput_ref == 0] <- 0
+  result[result$atoutput_ref == 0, col] <- 0
 
   # Remove NAs. Some groups have missing values at first time step (carrion)
-  result <- result[!is.na(result$atoutput), ]
+  result <- result[!is.na(result[, col]), ]
 
   result$atoutput_ref <- NULL
 
