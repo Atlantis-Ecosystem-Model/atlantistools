@@ -8,3 +8,6 @@ NEWS\.Rmd
 ^appveyor\.yml$
 ^cran-comments\.md$
 ^revdep$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
