@@ -4,8 +4,7 @@
 \alias{plot_diet}
 \title{Plot contribution of diet contents for each functional group.}
 \usage{
-plot_diet(bio_consumed, species = NULL, wrap_col = "agecl",
-  combine_thresh = 7)
+plot_diet(bio_consumed, species = NULL, wrap_col = "agecl", combine_thresh = 7)
 }
 \arguments{
 \item{bio_consumed}{Consumed biomass of prey groups by predatorgroup and agecl in tonnes
@@ -48,8 +47,12 @@ plot <- plot_diet(ref_bio_cons, species = "Small planktivorous fish", wrap_col =
 gridExtra::grid.arrange(plot[[1]])
 }
 \seealso{
-Other plot functions: \code{\link{plot_bar}},
-  \code{\link{plot_boxes}},
-  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_line}},
-  \code{\link{plot_rec}}, \code{\link{plot_species}}
+Other plot functions: 
+\code{\link{plot_bar}()},
+\code{\link{plot_boxes}()},
+\code{\link{plot_diet_bec_dev}()},
+\code{\link{plot_line}()},
+\code{\link{plot_rec}()},
+\code{\link{plot_species}()}
 }
+\concept{plot functions}

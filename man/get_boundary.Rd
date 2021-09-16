@@ -24,12 +24,17 @@ get_boundary(boxinfo = boxes)
 \seealso{
 \code{\link{load_box}}
 
-Other get functions: \code{\link{get_colpal}},
-  \code{\link{get_conv_mgnbiot}}, \code{\link{get_groups}}
+Other get functions: 
+\code{\link{get_colpal}()},
+\code{\link{get_conv_mgnbiot}()},
+\code{\link{get_groups}()}
 
-Other get functions: \code{\link{get_colpal}},
-  \code{\link{get_conv_mgnbiot}}, \code{\link{get_groups}}
+Other get functions: 
+\code{\link{get_colpal}()},
+\code{\link{get_conv_mgnbiot}()},
+\code{\link{get_groups}()}
 }
 \author{
 Kelli Faye Johnson
 }
+\concept{get functions}

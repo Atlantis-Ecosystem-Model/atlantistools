@@ -4,7 +4,8 @@
 \name{ref_dietmatrix}
 \alias{ref_dietmatrix}
 \title{Dietmatrix.}
-\format{\describe{
+\format{
+\describe{
 \item{pred}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{pred_stanza}{Predator stanza. 1 = juvenile; 2 = adult.}
@@ -15,7 +16,8 @@ The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{avail}{Obseravtion column storing the actual output value.
 Availability ranging from 0 to 1.}
 \item{prey_id}{Preyid index based on the functional groups file.}
-}}
+}
+}
 \usage{
 ref_dietmatrix
 }

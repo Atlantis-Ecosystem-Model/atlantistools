@@ -4,8 +4,14 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(dietcheck, fgs, prm_run, convert_names = FALSE,
-  report = FALSE, version_flag = 2)
+load_dietcheck(
+  dietcheck,
+  fgs,
+  prm_run,
+  convert_names = FALSE,
+  report = FALSE,
+  version_flag = 2
+)
 }
 \arguments{
 \item{dietcheck}{Character string giving the connection of the dietcheck file.
@@ -51,10 +57,17 @@ diet <- load_dietcheck(dietcheck, fgs, prm_run)
 head(diet, n = 10)
 }
 \seealso{
-Other load functions: \code{\link{load_box}},
-  \code{\link{load_bps}}, \code{\link{load_fgs}},
-  \code{\link{load_init_age}}, \code{\link{load_init}},
-  \code{\link{load_nc_physics}}, \code{\link{load_nc}},
-  \code{\link{load_rec}}, \code{\link{load_spec_mort}},
-  \code{\link{load_txt}}
+Other load functions: 
+\code{\link{load_box}()},
+\code{\link{load_bps}()},
+\code{\link{load_fgs}()},
+\code{\link{load_init_age}()},
+\code{\link{load_init}()},
+\code{\link{load_mort}()},
+\code{\link{load_nc_physics}()},
+\code{\link{load_nc}()},
+\code{\link{load_rec}()},
+\code{\link{load_spec_mort}()},
+\code{\link{load_txt}()}
 }
+\concept{load functions}

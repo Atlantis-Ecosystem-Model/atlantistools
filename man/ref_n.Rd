@@ -4,7 +4,8 @@
 \name{ref_n}
 \alias{ref_n}
 \title{Nitrogen.}
-\format{\describe{
+\format{
+\describe{
 \item{species}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{polygon}{Boxid starting from 0 to numboxes - 1.}
@@ -13,7 +14,8 @@ The names match with the column 'LongName' in the functionalGroups.csv file.}
 time based on the settings in the 'run.prm' file.}
 \item{atoutput}{Obseravtion column storing the actual output value.
 Nitrogen in mg N m-3.}
-}}
+}
+}
 \usage{
 ref_n
 }

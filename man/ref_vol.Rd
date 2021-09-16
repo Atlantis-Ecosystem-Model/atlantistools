@@ -4,7 +4,8 @@
 \name{ref_vol}
 \alias{ref_vol}
 \title{Volume.}
-\format{\describe{
+\format{
+\describe{
 \item{variable}{Name of the physical variable: "volume".}
 \item{polygon}{Boxid starting from 0 to numboxes - 1.}
 \item{layer}{Layerid starting from 0 to numlayers - 1.}
@@ -12,7 +13,8 @@
 time based on the settings in the 'run.prm' file.}
 \item{atoutput}{Obseravtion column storing the actual output value.
 Volume in m^3}
-}}
+}
+}
 \usage{
 ref_vol
 }

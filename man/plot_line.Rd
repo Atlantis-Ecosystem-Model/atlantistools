@@ -4,8 +4,15 @@
 \alias{plot_line}
 \title{Function to plot time series of atlantis ncdf output.}
 \usage{
-plot_line(data, x = "time", y = "atoutput", wrap = "species",
-  col = NULL, ncol = 7, yexpand = FALSE)
+plot_line(
+  data,
+  x = "time",
+  y = "atoutput",
+  wrap = "species",
+  col = NULL,
+  ncol = 7,
+  yexpand = FALSE
+)
 }
 \arguments{
 \item{data}{Dataframe to be plotted.}
@@ -51,18 +58,18 @@ comp$model <- factor(comp$model, levels = lev_ord)
 plot_line(comp, col = "model")
 
 \dontrun{
-# Use \\code{\\link{convert_relative_initial}} and \\code{\\link{plot_add_box}}
-# with \\code{\\link{plot_line}}. Use \\code{\\link{convert_relative_initial}} to
+# Use \code{\link{convert_relative_initial}} and \code{\link{plot_add_box}}
+# with \code{\link{plot_line}}. Use \code{\link{convert_relative_initial}} to
 # generate a relative time series first.
 df <- convert_relative_initial(preprocess$structn_age)
 
-# Create the base plot with \\code{\\link{plot_line}}.
+# Create the base plot with \code{\link{plot_line}}.
 plot <- plot_line(df, col = "agecl")
 
 # Add lower and upper range.
 plot_add_box(plot)
 
-# Create spatial timeseries plots in conjuction with \\code{\\link{custom_grid}}.
+# Create spatial timeseries plots in conjuction with \code{\link{custom_grid}}.
 plot <- plot_line(preprocess$physics, wrap = NULL)
 custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
@@ -71,8 +78,12 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 }
 }
 \seealso{
-Other plot functions: \code{\link{plot_bar}},
-  \code{\link{plot_boxes}},
-  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_diet}},
-  \code{\link{plot_rec}}, \code{\link{plot_species}}
+Other plot functions: 
+\code{\link{plot_bar}()},
+\code{\link{plot_boxes}()},
+\code{\link{plot_diet_bec_dev}()},
+\code{\link{plot_diet}()},
+\code{\link{plot_rec}()},
+\code{\link{plot_species}()}
 }
+\concept{plot functions}

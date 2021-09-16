@@ -32,8 +32,12 @@ plot <- plot_species(preprocess, species = "Shallow piscivorous fish")
 gridExtra::grid.arrange(plot)
 }
 \seealso{
-Other plot functions: \code{\link{plot_bar}},
-  \code{\link{plot_boxes}},
-  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_diet}},
-  \code{\link{plot_line}}, \code{\link{plot_rec}}
+Other plot functions: 
+\code{\link{plot_bar}()},
+\code{\link{plot_boxes}()},
+\code{\link{plot_diet_bec_dev}()},
+\code{\link{plot_diet}()},
+\code{\link{plot_line}()},
+\code{\link{plot_rec}()}
 }
+\concept{plot functions}

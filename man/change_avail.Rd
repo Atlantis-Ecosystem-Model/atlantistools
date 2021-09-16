@@ -4,8 +4,15 @@
 \alias{change_avail}
 \title{Change the availability matrix to simplify automated ATLANTIS calibrations.}
 \usage{
-change_avail(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL,
-  roc, relative = TRUE, consecutive = FALSE)
+change_avail(
+  dietmatrix,
+  pred = NULL,
+  pred_stanza = NULL,
+  prey = NULL,
+  roc,
+  relative = TRUE,
+  consecutive = FALSE
+)
 }
 \arguments{
 \item{dietmatrix}{Dataframe in 'long' format containing information about availabilities

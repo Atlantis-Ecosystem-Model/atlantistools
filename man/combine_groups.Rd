@@ -4,8 +4,12 @@
 \alias{combine_groups}
 \title{Combine values from different groups if specific groups only have a low contribution to the overall value.}
 \usage{
-combine_groups(data, group_col, groups = names(data)[!is.element(names(data),
-  c("atoutput", "time", group_col))], combine_thresh = 15)
+combine_groups(
+  data,
+  group_col,
+  groups = names(data)[!is.element(names(data), c("atoutput", "time", group_col))],
+  combine_thresh = 15
+)
 }
 \arguments{
 \item{data}{Dataframe whose groups shall be combined.}
@@ -27,5 +31,7 @@ df <- combine_groups(ref_dm, group_col = "prey")
 df <- combine_groups(ref_dm, group_col = "prey", combine_thresh = 2)
 }
 \seealso{
-Other combine functions: \code{\link{combine_runs}}
+Other combine functions: 
+\code{\link{combine_runs}()}
 }
+\concept{combine functions}

@@ -28,8 +28,12 @@ plot_boxes(bgm_data)
 plot_boxes(bgm_data, color_boxes = FALSE)
 }
 \seealso{
-Other plot functions: \code{\link{plot_bar}},
-  \code{\link{plot_diet_bec_dev}}, \code{\link{plot_diet}},
-  \code{\link{plot_line}}, \code{\link{plot_rec}},
-  \code{\link{plot_species}}
+Other plot functions: 
+\code{\link{plot_bar}()},
+\code{\link{plot_diet_bec_dev}()},
+\code{\link{plot_diet}()},
+\code{\link{plot_line}()},
+\code{\link{plot_rec}()},
+\code{\link{plot_species}()}
 }
+\concept{plot functions}

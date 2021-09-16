@@ -51,6 +51,9 @@ get_age_groups(fgs)
 get_nonage_acronyms(fgs)
 }
 \seealso{
-Other get functions: \code{\link{get_boundary}},
-  \code{\link{get_colpal}}, \code{\link{get_conv_mgnbiot}}
+Other get functions: 
+\code{\link{get_boundary}()},
+\code{\link{get_colpal}()},
+\code{\link{get_conv_mgnbiot}()}
 }
+\concept{get functions}

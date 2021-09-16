@@ -4,11 +4,13 @@
 \name{ref_agemat}
 \alias{ref_agemat}
 \title{agemat.}
-\format{\describe{
+\format{
+\describe{
 \item{species}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{age_mat}{First mature age class.}
-}}
+}
+}
 \usage{
 ref_agemat
 }

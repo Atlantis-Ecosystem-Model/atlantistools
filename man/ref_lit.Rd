@@ -4,12 +4,14 @@
 \name{ref_lit}
 \alias{ref_lit}
 \title{Reference dataframe}
-\format{A data frame with 3 rows and 3 variables:
+\format{
+A data frame with 3 rows and 3 variables:
 \describe{
   \item{\code{year}}{double. Publication year.}
   \item{\code{author}}{character. Authors of the publication.}
   \item{\code{title}}{character. Title of the publication.}
-}}
+}
+}
 \usage{
 ref_lit
 }

@@ -5,8 +5,13 @@
 \alias{write_diet}
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
-load_dietmatrix(prm_biol, fgs, transform = TRUE, convert_names = FALSE,
-  version_flag = 2)
+load_dietmatrix(
+  prm_biol,
+  fgs,
+  transform = TRUE,
+  convert_names = FALSE,
+  version_flag = 2
+)
 
 write_diet(dietmatrix, prm_biol, save_to_disc = TRUE)
 }

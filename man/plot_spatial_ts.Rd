@@ -4,8 +4,14 @@
 \alias{plot_spatial_ts}
 \title{Visualize the spatial distribution per species and stanza combination.}
 \usage{
-plot_spatial_ts(bio_spatial, bgm_as_df, vol, select_species = NULL,
-  ncol = 7, polygon_overview = 0.2)
+plot_spatial_ts(
+  bio_spatial,
+  bgm_as_df,
+  vol,
+  select_species = NULL,
+  ncol = 7,
+  polygon_overview = 0.2
+)
 }
 \arguments{
 \item{bio_spatial}{Biomass per group and stanza in tonnes for each timestep,
@@ -43,10 +49,10 @@ vol <- agg_data(ref_vol, groups = c("time", "polygon"), fun = sum, out = "volume
 
 # Spatial distribution in Atlantis is based on adu- and juv stanzas.
 # Therefore, we need to aggregate the age-based biomass to
-# stanzas with \\code{\\link{combine_ages}}.
+# stanzas with \code{\link{combine_ages}}.
 bio_spatial <- combine_ages(ref_bio_sp, grp_col = "species", agemat = ref_agemat)
 
-# Apply \\code{\\link{plot_spatial_ts}}
+# Apply \code{\link{plot_spatial_ts}}
 grobs <- plot_spatial_ts(bio_spatial, bgm_as_df, vol)
 gridExtra::grid.arrange(grobs[[1]])
 gridExtra::grid.arrange(grobs[[7]])

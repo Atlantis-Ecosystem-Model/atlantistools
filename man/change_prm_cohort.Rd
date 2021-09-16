@@ -4,8 +4,14 @@
 \alias{change_prm_cohort}
 \title{Change biological parameterfile for parameters which expect multiple values.}
 \usage{
-change_prm_cohort(prm_biol, select_acronyms, roc, parameter, relative = TRUE,
-  save_to_disc = TRUE)
+change_prm_cohort(
+  prm_biol,
+  select_acronyms,
+  roc,
+  parameter,
+  relative = TRUE,
+  save_to_disc = TRUE
+)
 }
 \arguments{
 \item{prm_biol}{Character string giving the connection to the biological parameterfile.
