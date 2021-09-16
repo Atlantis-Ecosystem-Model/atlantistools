@@ -17,11 +17,14 @@ The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 The filename usually contains \code{Groups} and does end in \code{.csv}.}
 }
 \value{
-Dataframe with information about ssb in tonnes and recruits in
-thousands.
+Dataframe with information about sources of mortality (M, F).
 }
 \description{
-Load mortality information from outputMort.txt
+Loads Mort.txt file and partitions mortality based on fishing (F) and other mortality (M)
+Note: As the Atlantis manual states "This file is currenlty only useful for looking
+at \strong{relative M vs F values} for a species, as it does not give accurate mortalities".
+Also if a species is set as isImpacted in the \emph{functional_group.csv}, it will have some F value
+even if it is not explicity targeted by fishing.
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")

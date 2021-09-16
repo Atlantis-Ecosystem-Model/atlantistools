@@ -2,8 +2,8 @@
 #'
 #' Loads Mort.txt file and partitions mortality based on fishing (F) and other mortality (M)
 #' Note: As the Atlantis manual states "This file is currenlty only useful for looking
-#' at *relative M vs F values* for a species, as it does not give accurate mortalities".
-#' Also if a species is set as isImpacted in the **functional_group.csv**, it will have some F value
+#' at \strong{relative M vs F values} for a species, as it does not give accurate mortalities".
+#' Also if a species is set as isImpacted in the \emph{functional_group.csv}, it will have some F value
 #' even if it is not explicity targeted by fishing.
 #'
 #' @inheritParams load_nc
