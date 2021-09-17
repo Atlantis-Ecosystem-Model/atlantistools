@@ -3,3 +3,6 @@
 .RData
 inst/doc
 tests/testthat/Rplots.pdf
+
+# folders
+docs
