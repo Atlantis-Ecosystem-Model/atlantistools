@@ -2,13 +2,13 @@
 % Please edit documentation in R/load-spec-mort.R
 \name{load_spec_mort}
 \alias{load_spec_mort}
-\title{Load mortality information from outputSpecificPredMort.txt}
+\title{Load mortality information from specificMort.txt}
 \usage{
-load_spec_mort(specmort, prm_run, fgs, convert_names = FALSE, version_flag = 2)
+load_spec_mort(mortFile, prm_run, fgs, convert_names = FALSE)
 }
 \arguments{
-\item{specmort}{Character string giving the connection of the specific mortality file.
-The filename usually contains \code{SpecificPredMort} and ends in \code{.txt}".}
+\item{mortFile}{Character string giving the path to the specificMort.txt file.
+The filename usually contains \code{SpecificMort} and ends in \code{.txt}".}
 
 \item{prm_run}{Character string giving the connection of the run parameterfile.
 The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
@@ -18,27 +18,25 @@ The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
-
-\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
-Dataframe with information about ssb in tonnes and recruits in
-thousands.
+Data frame with information about sources of mortality (M1, M2, F).
 }
 \description{
-Load mortality information from outputSpecificPredMort.txt
+Reads in the specificMort.txt file. Three values of instantaneous mortality for each functional group,
+age group, and stock. Predation (M2), other natural mortality (M1), Fishing (F)
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+specmort <- file.path(d, "outputSETASSpecificMort.txt")
 prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
 fgs <- file.path(d, "SETasGroups.csv")
 
-df <- load_spec_mort(specmort, prm_run, fgs, version_flag = 1)
+df <- load_spec_mort(specmort, prm_run, fgs)
 head(df)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+specmort <- file.path(d, "outputSETASSpecificMort.txt")
 prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
 fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 
@@ -57,6 +55,7 @@ Other load functions:
 \code{\link{load_nc_physics}()},
 \code{\link{load_nc}()},
 \code{\link{load_rec}()},
+\code{\link{load_spec_pred_mort}()},
 \code{\link{load_txt}()}
 }
 \concept{load functions}
