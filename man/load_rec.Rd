@@ -43,6 +43,7 @@ Other load functions:
 \code{\link{load_nc_physics}()},
 \code{\link{load_nc}()},
 \code{\link{load_spec_mort}()},
+\code{\link{load_spec_pred_mort}()},
 \code{\link{load_txt}()}
 }
 \concept{load functions}

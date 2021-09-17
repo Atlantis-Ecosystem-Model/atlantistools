@@ -11,7 +11,7 @@
 #' @inheritParams load_dietmatrix
 #' @param mortFile Character string giving the path to the Mort.txt file.
 #' The filename usually contains \code{Mort} and ends in \code{.txt}".
-#' @return Dataframe with information about sources of mortality (M, F).
+#' @return Data frame with information about sources of mortality (M, F).
 #' @export
 #' @family load functions
 #'
@@ -33,7 +33,7 @@
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_mort <- function(mortFile, prm_run, fgs) {
+load_mort <- function(mortFile, prm_run, fgs,convert_names= F) {
 
   mort <- load_txt(file = mortFile, id_col = c("Time"))
 
@@ -46,6 +46,14 @@ load_mort <- function(mortFile, prm_run, fgs) {
   # First time step only has 0s as entry!
   # ***This will cause a potentially unnoticed bug when this issue in the output file gets fixed
   mort <- mort[mort$time != 0, ]
+
+  # Convert species codes to longnames!
+  if (convert_names) {
+    data_fgs <- load_fgs(fgs=fgs)
+    mort <- mort %>%
+      dplyr::left_join(.,data_fgs[,c("Code","LongName")], by = c("code"="Code")) %>%
+      dplyr::rename(species = LongName)
+  }
 
   # Convert time
   mort$time <- convert_time(prm_run = prm_run, col = mort$time)

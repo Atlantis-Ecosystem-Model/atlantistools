@@ -4,7 +4,7 @@
 \alias{load_mort}
 \title{Load mortality information from outputMort.txt}
 \usage{
-load_mort(mortFile, prm_run, fgs)
+load_mort(mortFile, prm_run, fgs, convert_names = F)
 }
 \arguments{
 \item{mortFile}{Character string giving the path to the Mort.txt file.
@@ -15,9 +15,12 @@ The filename usually contains \code{run_fishing} and ends in \code{.prm}".}
 
 \item{fgs}{Character string giving the connection to the functional groups file.
 The filename usually contains \code{Groups} and does end in \code{.csv}.}
+
+\item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
+or not (default = \code{FALSE}).}
 }
 \value{
-Dataframe with information about sources of mortality (M, F).
+Data frame with information about sources of mortality (M, F).
 }
 \description{
 Loads Mort.txt file and partitions mortality based on fishing (F) and other mortality (M)
@@ -55,6 +58,7 @@ Other load functions:
 \code{\link{load_nc}()},
 \code{\link{load_rec}()},
 \code{\link{load_spec_mort}()},
+\code{\link{load_spec_pred_mort}()},
 \code{\link{load_txt}()}
 }
 \concept{load functions}

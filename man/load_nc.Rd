@@ -91,6 +91,7 @@ Other load functions:
 \code{\link{load_nc_physics}()},
 \code{\link{load_rec}()},
 \code{\link{load_spec_mort}()},
+\code{\link{load_spec_pred_mort}()},
 \code{\link{load_txt}()}
 }
 \author{
