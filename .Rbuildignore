@@ -11,3 +11,4 @@ NEWS\.Rmd
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^\.github$

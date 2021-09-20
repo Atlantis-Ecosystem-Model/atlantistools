@@ -121,4 +121,4 @@ reference:
   - agg_data
   - agg_perc
   - agg_data
-  - %>%
+  - "%>%"
