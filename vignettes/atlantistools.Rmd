@@ -1,0 +1,26 @@
+---
+title: "atlantistools"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{atlantistools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(atlantistools)
+```
+
+The original `atlantistools` was created and maintained by Alexander Keth. However development was ceased on January, 2018.
+
+This repo is forked from the original. It will be further developed here
+
+
+
