@@ -12,6 +12,9 @@
 #' @param mortFile Character string giving the path to the Mort.txt file.
 #' The filename usually contains \code{Mort} and ends in \code{.txt}".
 #' @return Data frame with information about sources of mortality (M, F).
+#'
+#' @importFrom rlang .data
+#'
 #' @export
 #' @family load functions
 #'
@@ -39,7 +42,7 @@ load_mort <- function(mortFile, prm_run, fgs,convert_names= F) {
 
   # separate species code.mortalityType into two columns
   mort <- mort %>%
-    tidyr::separate(code,into = c("code","source"),sep = "\\.") %>%
+    tidyr::separate(.data$code,into = c("code","source"),sep = "\\.") %>%
     tibble::as_tibble()
 
 
@@ -52,7 +55,7 @@ load_mort <- function(mortFile, prm_run, fgs,convert_names= F) {
     data_fgs <- load_fgs(fgs=fgs)
     mort <- mort %>%
       dplyr::left_join(.,data_fgs[,c("Code","LongName")], by = c("code"="Code")) %>%
-      dplyr::rename(species = LongName)
+      dplyr::rename(species = .data$LongName)
   }
 
   # Convert time

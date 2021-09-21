@@ -36,6 +36,7 @@ Imports:
   purrr,
   RColorBrewer,
   RNetCDF,
+  rlang,
   rvest,
   scales,
   stringi,

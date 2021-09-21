@@ -25,7 +25,6 @@ init <- file.path(d, "INIT_VMPA_Jan2015.nc")
 
 load_init(init, vars = "Planktiv_S_Fish1_Nums")
 load_init(init, vars = c("Planktiv_S_Fish2_ResN", "Planktiv_S_Fish3_ResN"))
-load_init(init, vars = "Megazoobenthos_N")
 
 \dontrun{
 dir <- "C:/Users/siebo/Documents/Atlantis/BalticAtlantis/run_files_73days_Nej"
