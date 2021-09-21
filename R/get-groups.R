@@ -14,6 +14,8 @@
 #' - get_age_acronym: Extract column "Code". Selects groups with 10 ageclasses.
 #' - get_nonage_acronym: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
 #' - get_fish_acronyms: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+#' - get_cohorts: Extracts column "Code" based on Cohort size
+#' - get_fished: Extracts column "Code" based on if species is fished
 
 #' @family get functions
 #' @return Character string.
@@ -78,6 +80,23 @@ get_fish_acronyms <- function(fgs){
   } else {
     result <- fgs_df$Code[fgs_df[, is.element(names(fgs_df), supported_columns)] %in% c("FISH", "SHARK")]
   }
+  return(result)
+}
+
+
+#' @export
+#' @rdname get_groups
+get_cohorts <- function(fgs,numCohorts = 10){
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df$Code[fgs_df$NumCohorts == numCohorts]
+  return(result)
+}
+
+#' @export
+#' @rdname get_groups
+get_fished <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df$Code[fgs_df$isFished == 1]
   return(result)
 }
 

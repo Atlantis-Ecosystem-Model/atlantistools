@@ -7,6 +7,8 @@
 \alias{get_age_acronyms}
 \alias{get_nonage_acronyms}
 \alias{get_fish_acronyms}
+\alias{get_cohorts}
+\alias{get_fished}
 \title{Collection of similar functions which get specific
 columns from the Atlantis \code{functionalGroups.csv}}
 \usage{
@@ -21,6 +23,10 @@ get_age_acronyms(fgs)
 get_nonage_acronyms(fgs)
 
 get_fish_acronyms(fgs)
+
+get_cohorts(fgs, numCohorts = 10)
+
+get_fished(fgs)
 }
 \arguments{
 \item{fgs}{Character string giving the connection to the functional groups file.
@@ -42,6 +48,8 @@ Currently, the following character strings can be created
 - get_age_acronym: Extract column "Code". Selects groups with 10 ageclasses.
 - get_nonage_acronym: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
 - get_fish_acronyms: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+- get_cohorts: Extracts column "Code" based on Cohort size
+- get_fished: Extracts column "Code" based on if species is fished
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
