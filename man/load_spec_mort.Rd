@@ -4,7 +4,7 @@
 \alias{load_spec_mort}
 \title{Load mortality information from specificMort.txt}
 \usage{
-load_spec_mort(mortFile, prm_run, fgs, convert_names = FALSE)
+load_spec_mort(mortFile, prm_run, fgs, convert_names = FALSE, removeZeros = T)
 }
 \arguments{
 \item{mortFile}{Character string giving the path to the specificMort.txt file.
@@ -18,6 +18,8 @@ The filename usually contains \code{Groups} and does end in \code{.csv}.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
+
+\item{removeZeros}{Boolean. Remove all zeros from output. (Default = T)}
 }
 \value{
 Data frame with information about sources of mortality (M1, M2, F).

@@ -4,7 +4,7 @@
 \alias{preprocess_txt}
 \title{Preprocess dataframes loaded in with \code{load_txt()}}
 \usage{
-preprocess_txt(df_txt, sep_col = "code", into)
+preprocess_txt(df_txt, sep_col = "code", into, removeZeros = TRUE)
 }
 \arguments{
 \item{df_txt}{Dataframe read in with \code{load_txt()}.}
@@ -12,6 +12,8 @@ preprocess_txt(df_txt, sep_col = "code", into)
 \item{sep_col}{Column to separate into multiple columns. Default is \code{"code"}.}
 
 \item{into}{Character vector given the columns to split sep_col in.}
+
+\item{removeZeros}{Boolean. Remove all zeros. (Default = T)}
 }
 \value{
 Tidy dataframe.

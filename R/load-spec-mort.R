@@ -8,6 +8,8 @@
 #' @inheritParams load_dietmatrix
 #' @param mortFile Character string giving the path to the specificMort.txt file.
 #' The filename usually contains \code{SpecificMort} and ends in \code{.txt}".
+#' @param removeZeros Boolean. Remove all zeros from output. (Default = T)
+#'
 #' @return Data frame with information about sources of mortality (M1, M2, F).
 #'
 #' @importFrom rlang .data
@@ -33,10 +35,10 @@
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_spec_mort <- function(mortFile, prm_run, fgs, convert_names = FALSE) {
+load_spec_mort <- function(mortFile, prm_run, fgs, convert_names = FALSE, removeZeros = T) {
 
   df <- load_txt(file = mortFile)
-  mort <- preprocess_txt(df_txt = df, into = c("code", "agecl", "empty_col", "mort")) %>%
+  mort <- preprocess_txt(df_txt = df, into = c("code", "agecl", "empty_col", "mort"),removeZeros=removeZeros) %>%
     tibble::as_tibble()
 
   # Convert species codes to longnames!
