@@ -11,7 +11,8 @@ plot_line(
   wrap = "species",
   col = NULL,
   ncol = 7,
-  yexpand = FALSE
+  yexpand = FALSE,
+  ylim = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plot_line(
 \item{ncol}{Number of columns in multipanel plot. Default is \code{7}.}
 
 \item{yexpand}{Expands the y axis so it always includes 0. Default is \code{FALSE}.}
+
+\item{ylim}{Numeric vector. lower and upper limits of yaxis, eg c(0,1)}
 }
 \value{
 ggplot2 object
