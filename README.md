@@ -4,6 +4,7 @@ atlantistools
 =============
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/atlantistools)](https://cran.r-project.org/package=atlantistools)
+[![R-CMD-check](https://github.com/andybeet/atlantistools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/andybeet/atlantistools/actions/workflows/R-CMD-check.yaml)
 [![gh-pages](https://github.com/andybeet/atlantistools/actions/workflows/pkgdown.yml/badge.svg)](https://github.com/andybeet/atlantistools/actions/workflows/pkgdown.yml)
 
 `atlantistools` is a data processing and visualisation tool for R, which
