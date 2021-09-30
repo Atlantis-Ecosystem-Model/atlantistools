@@ -34,6 +34,8 @@ get_turnedon_acronyms(fgs)
 \arguments{
 \item{fgs}{Character string giving the connection to the functional groups file.
 The filename usually contains \code{Groups} and does end in \code{.csv}.}
+
+\item{numCohorts}{integer. Number of cohorts by which to filter (Default = 10)}
 }
 \value{
 Character string.

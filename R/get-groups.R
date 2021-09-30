@@ -95,7 +95,11 @@ get_fish_acronyms <- function(fgs){
 }
 
 
+#'
+#' @param numCohorts integer. Number of cohorts by which to filter (Default = 10)
 #' @export
+#'
+#'
 #' @rdname get_groups
 get_cohorts_acronyms <- function(fgs,numCohorts = 10){
   fgs_df <- load_fgs(fgs = fgs)
@@ -118,11 +122,4 @@ get_turnedon_acronyms <- function(fgs){
   result <- fgs_df$Code[fgs_df$IsTurnedOn == 1]
   return(result)
 }
-
-
-# dir <- "z:/R_codes/Thiebaut/"
-# fgs <- "CEP_Groups_onespawn.csv"
-# get_age_groups(dir, fgs)
-# get_age_acronyms(dir, fgs)
-
 
