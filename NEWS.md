@@ -13,8 +13,8 @@
 ## Minor improvements
 
 * `load_spec_pred_mort`renamed from `load_spec_mort`. Reads in mortality output from SpecificPredMort.txt
-* `preprocess_txt`. Added argument `removeZeros = T`. User can now select to not remove zeros from output
-* `plot_line`. Added argument `ylim` argument to specify min and max values 
+* `preprocess_txt`. Added argument `removeZeros = T`. User can select not to remove zeros from output
+* `plot_line`. Added argument, `ylim` to specify min and max values 
 
 
 # atlantistools 0.4.3
