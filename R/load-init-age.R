@@ -30,9 +30,6 @@
 #'               select_groups = "Planktiv_S_Fish")
 #'
 #' load_init_age(init = init, fgs = fgs, bboxes = bboxes, select_variable = "ResN")
-#' load_init_nonage(init = init, fgs = fgs, bboxes = bboxes, bps = bps,
-#'    select_groups = "Megazoobenthos")
-#' load_init_nonage(init = init, fgs = fgs, bboxes = bboxes, bps = bps)
 #' load_init_stanza(init = init, fgs = fgs, bboxes = bboxes)
 #' load_init_weight(init = init, fgs = fgs, bboxes = bboxes)
 
