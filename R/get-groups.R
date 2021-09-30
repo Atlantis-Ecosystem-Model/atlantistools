@@ -19,13 +19,13 @@
 #'
 #' \code{get_nonage_acronyms}: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
 #'
-#' \code{get_fish_acronymss}: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+#' \code{get_fish_acronyms}: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
 #'
-#' \code{get_cohorts}: Extracts column "Code" based on Cohort size
+#' \code{get_cohorts_acronyms}: Extracts column "Code" based on Cohort size
 #'
-#' \code{get_fished}: Extracts column "Code" based on if species is fished
+#' \code{get_fished_acronyms}: Extracts column "Code" based on whether a species is fished in the model (IsFished == 1)
 #'
-#' \code{get_turnedon_acronyms}: Extracts column "Code" based on if species is turned on in the model
+#' \code{get_turnedon_acronyms}: Extracts column "Code" based on whether species are turned on in the model (IsTurnedOn == 1)
 #'
 
 #' @family get functions
@@ -97,7 +97,7 @@ get_fish_acronyms <- function(fgs){
 
 #' @export
 #' @rdname get_groups
-get_cohorts <- function(fgs,numCohorts = 10){
+get_cohorts_acronyms <- function(fgs,numCohorts = 10){
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Code[fgs_df$NumCohorts == numCohorts]
   return(result)
@@ -105,7 +105,7 @@ get_cohorts <- function(fgs,numCohorts = 10){
 
 #' @export
 #' @rdname get_groups
-get_fished <- function(fgs){
+get_fished_acronyms <- function(fgs){
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Code[fgs_df$isFished == 1]
   return(result)

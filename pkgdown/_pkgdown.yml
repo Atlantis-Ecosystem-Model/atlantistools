@@ -2,7 +2,7 @@ url: https://andybeet.github.io/atlantistools/
 
 reference:
 - title: "Loading Functions"
-  desc: "Functions that load in atlantis output"
+  desc: "Functions that load in and process atlantis output "
 - contents:
   - load_box
   - load_bps
@@ -22,11 +22,21 @@ reference:
   - load_nc_physics
   - load_rec
   - load_txt
-- title: "Get parameter values"
+  - preprocess_txt
+  - preprocess
+  - calculate_biomass_spatial
+  - calculate_consumed_biomass
+  - calculate_spatial_overlap
+- title: "Get/manipulate parameter values"
   desc: "Functions that pull parameter values from parameter files"
 - contents:
   - extract_prm
   - extract_prm_cohort
+  - scan_prm
+  - prm_to_df
+  - prm_to_df_ages
+  - change_prm
+  - change_avail
 - title: "Get functions"
   desc: "Functions that pull other atlantis information"
 - contents:
@@ -42,6 +52,9 @@ reference:
   - get_age_acronyms
   - get_nonage_acronyms
   - get_fish_acronyms
+  - get_cohorts_acronyms
+  - get_fished_acronyms
+  - get_turnedon_acronyms
 - title: "Fishbase/online data"
   desc: "Functions that pull information from fishbase and other online sources"
 - contents:
@@ -53,6 +66,45 @@ reference:
   - get_ref_biotic
   - get_ref_fishbase
   - scan_reference_fishbase
+- title: "Plotting"
+  desc: "Plotting functions to output"
+- contents:
+  - theme_atlantis
+  - flip_layers
+  - custom_grid
+  - plot_add_box
+  - plot_add_polygon_overview
+  - plot_add_range
+  - plot_bar
+  - plot_boxes
+  - plot_consumed_biomass
+  - plot_diet
+  - plot_diet_bec_dev
+  - plot_line
+  - plot_rec
+  - plot_spatial_box
+  - plot_spatial_overlap
+  - plot_spatial_ts
+  - plot_species
+  - plot_sc_init
+- title: "Miscellaneous"
+  desc: "Other functions"
+- contents:
+  - str_split_twice
+  - convert_time
+  - convert_relative_initial
+  - convert_factor
+  - convert_bgm
+  - combine_runs
+  - combine_groups
+  - combine_ages
+  - check_growth
+  - check_df_names
+  - change_prm_cohort
+  - agg_data
+  - agg_perc
+  - agg_data
+  - "%>%"
 - title: "Ref functions"
   desc: "???"
 - contents:
@@ -73,52 +125,3 @@ reference:
   - ref_to_bibkey
   - ref_vol
   - ref_vol_dz
-- title: "Plotting"
-  desc: "Plotting functions to output"
-- contents:
-  - flip_layers
-  - custom_grid
-  - plot_add_box
-  - plot_add_polygon_overview
-  - plot_add_range
-  - plot_bar
-  - plot_boxes
-  - plot_consumed_biomass
-  - plot_diet
-  - plot_diet_bec_dev
-  - plot_line
-  - plot_rec
-  - plot_spatial_box
-  - plot_spatial_overlap
-  - plot_spatial_ts
-  - plot_species
-  - plot_sc_init
-- title: "Miscellaneous"
-  desc: "Other function"
-- contents:
-  - theme_atlantis
-  - str_split_twice
-  - scan_prm
-  - prm_to_df
-  - prm_to_df_ages
-  - preprocess_txt
-  - preprocess
-  - convert_time
-  - convert_relative_initial
-  - convert_factor
-  - convert_bgm
-  - combine_runs
-  - combine_groups
-  - combine_ages
-  - check_growth
-  - check_df_names
-  - change_prm_cohort
-  - change_prm
-  - change_avail
-  - calculate_biomass_spatial
-  - calculate_consumed_biomass
-  - calculate_spatial_overlap
-  - agg_data
-  - agg_perc
-  - agg_data
-  - "%>%"
