@@ -1,21 +1,12 @@
 ---
 title: "model-calibration-species"
 author: "Alexander Keth"
-date: '`r Sys.Date()`'
-output: 
-  pdf_document:
-    toc: true
-    number_sections: true
-    fig_width: 10
-    fig_height: 13
-    fig_caption: true
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{model-calibration-species}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
-
-\newpage
 
 NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
 due to the fact that the dummy setas file have a simulation time of 5 years.
@@ -42,7 +33,6 @@ result <- preprocess
 species <- c("Shallow piscivorous fish", "Small planktivorous fish")
 ```
 
-\newpage
 
 # Overview species 
 

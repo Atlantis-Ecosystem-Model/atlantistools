@@ -1,23 +1,13 @@
 ---
 title: "model-calibration"
 author: "Alexander Keth"
-date: '`r Sys.Date()`'
-output: 
-  pdf_document:
-    toc: true
-    number_sections: true
-    fig_width: 25
-    fig_height: 6
-    fig_caption: true
-classoption: landscape
-geometry: margin = 0.5cm
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{model-calibration}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
 
-\newpage
 
 NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
 due to the fact that the dummy setas file have a running time of 5 years.
@@ -58,7 +48,6 @@ ex_bio <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
 bgm <- file.path(d, "VMPA_setas.bgm")
 ```
 
-\newpage
 
 # Whole system plots!
 ## Overall biomass
@@ -68,7 +57,6 @@ plot <- plot_bar(df_bio)
 update_labels(plot, labels = gen_labels)
 ```
 
-\newpage
 
 ## Biomass timeseries
 ```{r}
@@ -76,7 +64,6 @@ plot <- plot_line(result$biomass)
 update_labels(plot, labels = gen_labels)
 ```
 
-\newpage
 
 ## Biomass@age timeseries
 ```{r}
@@ -84,7 +71,6 @@ plot <- plot_line(result$biomass_age, col = "agecl")
 update_labels(p = plot, labels = c(gen_labels, list(colour = "Ageclass")))
 ```
 
-\newpage
 
 ## Number timeseries
 ```{r, fig.height = fig_height2}
@@ -92,7 +78,6 @@ plot <- plot_line(result$nums)
 update_labels(p = plot, labels = list(x = "Time [years]", y = "Numbers"))
 ```
 
-\newpage
 
 ## Number@age timeseries
 ```{r, fig.height = fig_height2}
@@ -100,7 +85,6 @@ plot <- plot_line(result$nums_age, col = "agecl")
 update_labels(p = plot, labels = list(x = "Time [years]", y = "Numbers", colour = "Ageclass"))
 ```
 
-\newpage
 
 ## SSB & Recruitment
 
@@ -108,7 +92,6 @@ update_labels(p = plot, labels = list(x = "Time [years]", y = "Numbers", colour 
 plot_rec(result$ssb_rec, ex_data = ex_rec_ssb)
 ```
 
-\newpage
 
 ## Biomass benchmark
 ```{r}
@@ -126,7 +109,6 @@ plot <- plot_line(comp, col = "model")
 update_labels(plot, gen_labels)
 ```
 
-\newpage
 
 ## Biomass benchmark 2
 ```{r}
@@ -134,7 +116,7 @@ plot <- plot_line(result$biomass) %>% update_labels(labels = gen_labels)
 plot_add_range(plot, ex_bio)
 ```
 
-\newpage
+
 
 ## Physics
 ```{r, fig.width = 30, fig.height = 12}
@@ -142,7 +124,6 @@ plot <- plot_line(result$physics, wrap = NULL)
 custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 ```
 
-\newpage
 
 # Physics
 ```{r, results = 'asis', fig.width = 30, fig.height = 12}
@@ -161,7 +142,6 @@ for (i in seq_along(plots)) {
 }
 ```
 
-\newpage
 
 ## Fluxes 1
 ```{r, fig.width = 30, fig.height = 12}
@@ -170,7 +150,6 @@ plot <- flip_layers(result$flux) %>%
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
 
-\newpage
 
 ## Fluxes 2
 ```{r, fig.width = 30, fig.height = 12}
@@ -178,8 +157,6 @@ plot <- flip_layers(result$sink) %>%
   plot_line(wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
-
-\newpage
 
 ## Relative change of water column height compared to nominal_dz
 ```{r}
@@ -193,7 +170,6 @@ update_labels(plot, list(x = "Time [years]", y = expression(dz/nominal_dz)))
 ```
 
 
-\newpage
 
 # Calibration plots
 ## Structural nitrogen
@@ -204,7 +180,6 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(SN/SN[init])
 plot_add_box(plot)
 ```
 
-\newpage
 
 ## Reserve nitrogen
 ```{r, fig.height = fig_height2}
@@ -214,7 +189,6 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(RN/RN[init])
 plot_add_box(plot)
 ```
 
-\newpage
 
 ## Biomass per ageclass
 ```{r, fig.height = fig_height2}
@@ -224,7 +198,6 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(Biomass/Biom
 plot_add_box(plot)
 ```
 
-\newpage
 
 ## Eat per ageclass
 ```{r, fig.height = fig_height2}
@@ -234,7 +207,6 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(Cons./Cons.[
 plot_add_box(plot)
 ```
 
-\newpage
 
 ## Growth per ageclass
 ```{r, fig.height = fig_height2}
@@ -244,16 +216,12 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(Growth/Growt
 plot_add_box(plot)
 ```
 
-\newpage
 
 ## Growth in relation to initial conditions
 ```{r}
 plot <- plot_line(result$growth_rel_init, y = "gr_rel", col = "agecl")
 update_labels(plot, list(y = expression((Growth - Growth[req])/Growth[req])))
 ```
-
-
-\newpage
 
 ## Numbers
 ```{r, fig.height = fig_height2}
@@ -263,7 +231,6 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(Numbers/Numb
 plot_add_box(plot)
 ```
 
-\newpage
 
 ## Biomass
 ```{r}
@@ -273,7 +240,6 @@ plot <- update_labels(plot, list(x = "Time [years]", y = expression(Biomass/Biom
 plot_add_box(plot)
 ```
 
-\newpage
 
 # Distribution plots
 ## Numbers @ age
@@ -283,7 +249,6 @@ plot <- plot_bar(df, fill = "agecl", wrap = "species")
 update_labels(plot, labels = list(x = "Time [years]", y = "Numbers [%]"))
 ```
 
-\newpage
 
 ## Biomass @ age
 ```{r, fig.height = fig_height2}
@@ -292,7 +257,6 @@ plot <- plot_bar(df, fill = "agecl", wrap = "species")
 update_labels(plot, labels = list(x = "Time [years]", y = "Biomass [%]"))
 ```
 
-\newpage
 
 # Diet Plots
 
@@ -305,7 +269,6 @@ for (i in seq_along(plots)) {
 }
 ```
 
-\newpage
 
 # Spatial Plots 1
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}
@@ -317,7 +280,6 @@ for (i in seq_along(plots)) {
 }
 ```
 
-\newpage
 
 # Spatial Plots 2
 ```{r, echo=FALSE, results = 'asis', fig.width = 14, fig.height = 9}

@@ -1,11 +1,7 @@
 ---
 title: "package-demo"
 author: "Alexander Keth"
-date: "`r Sys.Date()`"
-output: 
-  rmarkdown::html_vignette:
-    fig_width: 7
-    fig_height: 5
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{package-demo}
   %\VignetteEngine{knitr::rmarkdown}
@@ -330,7 +326,7 @@ weights for a specific fish. In our case `Small planktivorous fish` (Code = `FPS
 change the existing valu by multiplication with a factor or set a new absolut value. In our case
 we increase the existing value by a factor of 2.
 
-```{r}
+```{r ch1}
 new_prm <-  change_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), 
                        select_acronyms = "FPS", 
                        roc = 2, 
@@ -342,14 +338,14 @@ You can use `extract_prm` to check the format of the resulting *.prm. However, I
 thoroughly so you would normally set `save_to_disc` to `TRUE` to overwrite your existing
 parameter file with the newly generated one Please make sure to backup your original files beforehand.
 
-```{r}
+```{r ch2}
 extract_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), variables = "KWRR_FPS")
 extract_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), variables = "KWSR_FPS")
 ```
 
 You can also pass a vector of groups to change the parameter for multiple functional groups with a single call to `change_prm`.
 
-```{r}
+```{r ch3}
 new_prm <-  change_prm(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), 
                        select_acronyms = c("FPL", "FPO", "FPS", "FVD", "FVV", "FVS", "FVB", "FVT", "FVO"), 
                        roc = runif(n = 9, min = 2, max = 5), 
@@ -364,7 +360,7 @@ In case you want to change the parameter values for cohort structured groups wit
 (E.g. Clearance rate and mum for fish groups) please use `change_prm_cohrt`. Please note that the function only
 works with parameters whose values are stored in the next row following the flag in the *.prm file.
 
-```{r}
+```{r ch4}
 new_prm <-  change_prm_cohort(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"), 
                               select_acronyms = c("FPL", "FPO"), 
                               roc = matrix(rep(2, times = 20), nrow = 2, ncol = 10), 
