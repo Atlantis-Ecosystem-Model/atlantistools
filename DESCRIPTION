@@ -1,7 +1,7 @@
 Package: atlantistools
 Type: Package
 Title: Process and Visualise Output from Atlantis Models
-Version: 0.4.3.9000
+Version: 0.5.0
 Authors@R: 
   c(person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("cre")),
     person("Andy", "Beet", email = "andrew.beet@noaa.gov", role = c("aut")))
@@ -13,7 +13,7 @@ Depends:
 License: GPL-3
 LazyData: true
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests:
   knitr,
   rfishbase,
