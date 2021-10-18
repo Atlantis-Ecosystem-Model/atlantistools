@@ -18,9 +18,8 @@ knitr::opts_chunk$set(
 library(atlantistools)
 ```
 
-The original `atlantistools` was created and maintained by Alexander Keth. However development was ceased on January, 2018.
+`atlantistools` was created by [Alexander Keth](https://github.com/alketh). In October 2021 `altantistools` was transferred to the atlantis group at [CSIRO](https://github.com/Atlantis-Ecosystem-Model) for continued development
 
-This repo is forked from the original. It will be further developed here
 
 
 
