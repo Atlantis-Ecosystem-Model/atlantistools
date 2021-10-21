@@ -5,7 +5,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{model-calibration-species}
   %\VignetteEngine{knitr::rmarkdown}
-  %\usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
 NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
