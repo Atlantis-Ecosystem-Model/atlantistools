@@ -26,3 +26,4 @@ check_growth(preprocess$structn_age)
 check_growth(preprocess$resn_age)
 check_growth(preprocess$resn_age, yearly = TRUE)
 }
+\concept{check functions}

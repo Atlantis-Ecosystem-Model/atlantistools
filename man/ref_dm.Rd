@@ -4,7 +4,8 @@
 \name{ref_dm}
 \alias{ref_dm}
 \title{Dietcheck.}
-\format{\describe{
+\format{
+\describe{
 \item{time}{Simulation time in years. Modeltimestep was converted to actual
 time based on the settings in the 'run.prm' file.}
 \item{pred}{Name of the functional groups given as character string.
@@ -14,7 +15,8 @@ The names match with the column 'LongName' in the functionalGroups.csv file.}
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{atoutput}{Obseravtion column storing the actual output value.
 Diet contribution in percentage.}
-}}
+}
+}
 \usage{
 ref_dm
 }

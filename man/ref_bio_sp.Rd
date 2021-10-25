@@ -4,7 +4,8 @@
 \name{ref_bio_sp}
 \alias{ref_bio_sp}
 \title{Spatial biomass.}
-\format{\describe{
+\format{
+\describe{
 \item{species}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{agecl}{Ageclass given as integer from 1 to NumCohorts.}
@@ -14,7 +15,8 @@ The names match with the column 'LongName' in the functionalGroups.csv file.}
 time based on the settings in the 'run.prm' file.}
 \item{atoutput}{Obseravtion column storing the actual output value.
 Biomass in tonnes.}
-}}
+}
+}
 \usage{
 ref_bio_sp
 }

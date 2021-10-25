@@ -7,6 +7,9 @@
 \alias{get_age_acronyms}
 \alias{get_nonage_acronyms}
 \alias{get_fish_acronyms}
+\alias{get_cohorts_acronyms}
+\alias{get_fished_acronyms}
+\alias{get_turnedon_acronyms}
 \title{Collection of similar functions which get specific
 columns from the Atlantis \code{functionalGroups.csv}}
 \usage{
@@ -21,10 +24,18 @@ get_age_acronyms(fgs)
 get_nonage_acronyms(fgs)
 
 get_fish_acronyms(fgs)
+
+get_cohorts_acronyms(fgs, numCohorts = 10)
+
+get_fished_acronyms(fgs)
+
+get_turnedon_acronyms(fgs)
 }
 \arguments{
 \item{fgs}{Character string giving the connection to the functional groups file.
 The filename usually contains \code{Groups} and does end in \code{.csv}.}
+
+\item{numCohorts}{integer. Number of cohorts by which to filter (Default = 10)}
 }
 \value{
 Character string.
@@ -36,12 +47,24 @@ character strings of group names or acronym names.
 }
 \details{
 Currently, the following character strings can be created
-- get_groups: Extract column "Name"
-- get_age_groups: Extract column "Name". Selects groups with 10 ageclasses.
-- get_acronym: Extract column "Code"
-- get_age_acronym: Extract column "Code". Selects groups with 10 ageclasses.
-- get_nonage_acronym: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
-- get_fish_acronyms: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+
+\code{get_groups}: Extract column "Name"
+
+\code{get_age_groups}: Extract column "Name". Selects groups with 10 ageclasses.
+
+\code{get_acronyms}: Extract column "Code"
+
+\code{get_age_acronyms}: Extract column "Code". Selects groups with 10 ageclasses.
+
+\code{get_nonage_acronyms}: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
+
+\code{get_fish_acronyms}: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+
+\code{get_cohorts_acronyms}: Extracts column "Code" based on Cohort size
+
+\code{get_fished_acronyms}: Extracts column "Code" based on whether a species is fished in the model (IsFished == 1)
+
+\code{get_turnedon_acronyms}: Extracts column "Code" based on whether species are turned on in the model (IsTurnedOn == 1)
 }
 \examples{
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
@@ -51,6 +74,9 @@ get_age_groups(fgs)
 get_nonage_acronyms(fgs)
 }
 \seealso{
-Other get functions: \code{\link{get_boundary}},
-  \code{\link{get_colpal}}, \code{\link{get_conv_mgnbiot}}
+Other get functions: 
+\code{\link{get_boundary}()},
+\code{\link{get_colpal}()},
+\code{\link{get_conv_mgnbiot}()}
 }
+\concept{get functions}

@@ -1,0 +1,127 @@
+url: https://andybeet.github.io/atlantistools/
+
+reference:
+- title: "Loading Functions"
+  desc: "Functions that load in and process atlantis output "
+- contents:
+  - load_box
+  - load_bps
+  - load_dietcheck
+  - load_dietmatrix
+  - load_fgs
+  - load_init
+  - load_init_age
+  - load_init_nonage
+  - load_init_stanza
+  - load_init_physics
+  - load_init_weight
+  - load_mort
+  - load_spec_mort
+  - load_spec_pred_mort
+  - load_nc
+  - load_nc_physics
+  - load_rec
+  - load_txt
+  - preprocess_txt
+  - preprocess
+  - calculate_biomass_spatial
+  - calculate_consumed_biomass
+  - calculate_spatial_overlap
+- title: "Get/manipulate parameter values"
+  desc: "Functions that pull parameter values from parameter files"
+- contents:
+  - extract_prm
+  - extract_prm_cohort
+  - scan_prm
+  - prm_to_df
+  - prm_to_df_ages
+  - change_prm
+  - change_avail
+- title: "Get functions"
+  desc: "Functions that pull other atlantis information"
+- contents:
+  - get_boundary
+  - get_colpal
+  - get_conv_mgnbiot
+- title: "Get functional group info"
+  desc: "Functions that pull information from the functionaGroups.csv file"
+- contents:
+  - get_groups
+  - get_age_groups
+  - get_acronyms
+  - get_age_acronyms
+  - get_nonage_acronyms
+  - get_fish_acronyms
+  - get_cohorts_acronyms
+  - get_fished_acronyms
+  - get_turnedon_acronyms
+- title: "Fishbase/online data"
+  desc: "Functions that pull information from fishbase and other online sources"
+- contents:
+  - fishbase_data
+  - get_diet_fishbase
+  - get_ids_fishbase
+  - get_growth_fishbase
+  - get_maturity_fishbase
+  - get_ref_biotic
+  - get_ref_fishbase
+  - scan_reference_fishbase
+- title: "Plotting"
+  desc: "Plotting functions to output"
+- contents:
+  - theme_atlantis
+  - flip_layers
+  - custom_grid
+  - plot_add_box
+  - plot_add_polygon_overview
+  - plot_add_range
+  - plot_bar
+  - plot_boxes
+  - plot_consumed_biomass
+  - plot_diet
+  - plot_diet_bec_dev
+  - plot_line
+  - plot_rec
+  - plot_spatial_box
+  - plot_spatial_overlap
+  - plot_spatial_ts
+  - plot_species
+  - plot_sc_init
+- title: "Miscellaneous"
+  desc: "Other functions"
+- contents:
+  - str_split_twice
+  - convert_time
+  - convert_relative_initial
+  - convert_factor
+  - convert_bgm
+  - combine_runs
+  - combine_groups
+  - combine_ages
+  - check_growth
+  - check_df_names
+  - change_prm_cohort
+  - agg_data
+  - agg_perc
+  - agg_data
+  - "%>%"
+- title: "Ref functions"
+  desc: "???"
+- contents:
+  - ref_agemat
+  - ref_bio_cons
+  - ref_bio_sp
+  - ref_dietmatrix
+  - ref_dm
+  - ref_eat
+  - ref_grazing
+  - ref_growth
+  - ref_lit
+  - ref_n
+  - ref_nums
+  - ref_physics
+  - ref_resn
+  - ref_structn
+  - ref_to_bibkey
+  - ref_vol
+  - ref_vol_dz

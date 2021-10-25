@@ -27,5 +27,7 @@ names(test[[1]])
 head(test[[1]])
 }
 \seealso{
-Other combine functions: \code{\link{combine_groups}}
+Other combine functions: 
+\code{\link{combine_groups}()}
 }
+\concept{combine functions}

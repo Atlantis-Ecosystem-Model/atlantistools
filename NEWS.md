@@ -1,13 +1,20 @@
----
-title: "NEWS"
-output: html_document
----
 
-# atlantistools 0.4.3.9000
+# atlantistools 0.5.0
+
 ## New features
-## Documentation improvements
+
+* New `get` function to extract information from `functionalGroups.csv`
+  * `get_cohorts_acronyms`. Extract Codes of species with specified number of cohorts
+  * `get_fished_acronyms`. Extract Codes of species for which IsFished = 1
+  * `get_turnedon_acronyms`. Extract Codes of species for which IsTurneOn = 1
+* `load_mort` Reads in output from Mort.txt file
+* `load_spec_mort`. Reads in mortality output from SpecificMort.txt
+
 ## Minor improvements
-## Bug fixes
+
+* `load_spec_pred_mort`renamed from `load_spec_mort`. Reads in mortality output from SpecificPredMort.txt
+* `preprocess_txt`. Added argument `removeZeros = T`. User can select not to remove zeros from output
+* `plot_line`. Added argument, `ylim` to specify min and max values 
 
 
 # atlantistools 0.4.3

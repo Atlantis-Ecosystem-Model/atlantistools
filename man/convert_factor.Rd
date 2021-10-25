@@ -20,6 +20,8 @@ Column of a dataframe in factor format.
 This function is used to match the labels of the plots!
 }
 \seealso{
-Other convert functions: \code{\link{convert_bgm}},
-  \code{\link{convert_time}}
+Other convert functions: 
+\code{\link{convert_bgm}()},
+\code{\link{convert_time}()}
 }
+\concept{convert functions}

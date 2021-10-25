@@ -17,14 +17,7 @@
 #'
 #' load_init(init, vars = "Planktiv_S_Fish1_Nums")
 #' load_init(init, vars = c("Planktiv_S_Fish2_ResN", "Planktiv_S_Fish3_ResN"))
-#' load_init(init, vars = "Megazoobenthos_N")
 #'
-#' \dontrun{
-#' dir <- "C:/Users/siebo/Documents/Atlantis/BalticAtlantis/run_files_73days_Nej"
-#' init <- file.path(dir, "new_init_Baltic_05Dec2015_v2.nc")
-#' vars <- "Sprat1_ResN"
-#' load_init(init = init, vars = vars)
-#' }
 
 load_init <- function(init, vars) {
   # dummy
@@ -60,7 +53,7 @@ load_init <- function(init, vars) {
 
   # Only Box data!
   convert1d <- function(vec, n_boxes) {
-    if (!(is.array(vec) & length(vec) == n_boxes)) {
+    if (!(is.vector(vec) & length(vec) == n_boxes)) {
       stop("Wrong data format. Variable is not stored as 1d vector in initial file.")
     }
     data.frame(atoutput = as.vector(vec),
@@ -71,7 +64,9 @@ load_init <- function(init, vars) {
 
   # Check cases and apply formulas!
   if (all(at_dim == 2)) df_list <- lapply(at_data, convert2d, layerid, n_boxes)
-  if (all(at_dim == 1)) df_list <- lapply(at_data, convert1d, n_boxes)
+#  if (all(at_dim == 1)) df_list <- lapply(at_data, convert1d, n_boxes)
+  # vectors are dimensionless in R. Would be nice if dim returned a 1!
+  if (all(at_dim == 0)) df_list <- lapply(at_data, convert1d, n_boxes)
   if (length(unique(at_dim)) > 1) stop("Vars are stored in different dimensions. Please, either pick only 2d or 1d data.")
 
   # Data extracted for every variable?

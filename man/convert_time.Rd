@@ -20,6 +20,8 @@ Numeric vector with the time in years.
 Convert timestep to actual time!
 }
 \seealso{
-Other convert functions: \code{\link{convert_bgm}},
-  \code{\link{convert_factor}}
+Other convert functions: 
+\code{\link{convert_bgm}()},
+\code{\link{convert_factor}()}
 }
+\concept{convert functions}

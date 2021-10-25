@@ -8,12 +8,25 @@
 #' @inheritParams load_fgs
 #'
 #' @details Currently, the following character strings can be created
-#' - get_groups: Extract column "Name"
-#' - get_age_groups: Extract column "Name". Selects groups with 10 ageclasses.
-#' - get_acronym: Extract column "Code"
-#' - get_age_acronym: Extract column "Code". Selects groups with 10 ageclasses.
-#' - get_nonage_acronym: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
-#' - get_fish_acronyms: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+#'
+#' \code{get_groups}: Extract column "Name"
+#'
+#' \code{get_age_groups}: Extract column "Name". Selects groups with 10 ageclasses.
+#'
+#' \code{get_acronyms}: Extract column "Code"
+#'
+#' \code{get_age_acronyms}: Extract column "Code". Selects groups with 10 ageclasses.
+#'
+#' \code{get_nonage_acronyms}: Extracts columns "Code". Only groups with ageclasses different from 10 are selected.
+#'
+#' \code{get_fish_acronyms}: Extract column "Code". Only groups with InvertType equal to "FISH" or "SHARK" are selected.
+#'
+#' \code{get_cohorts_acronyms}: Extracts column "Code" based on Cohort size
+#'
+#' \code{get_fished_acronyms}: Extracts column "Code" based on whether a species is fished in the model (IsFished == 1)
+#'
+#' \code{get_turnedon_acronyms}: Extracts column "Code" based on whether species are turned on in the model (IsTurnedOn == 1)
+#'
 
 #' @family get functions
 #' @return Character string.
@@ -82,9 +95,31 @@ get_fish_acronyms <- function(fgs){
 }
 
 
-# dir <- "z:/R_codes/Thiebaut/"
-# fgs <- "CEP_Groups_onespawn.csv"
-# get_age_groups(dir, fgs)
-# get_age_acronyms(dir, fgs)
+#'
+#' @param numCohorts integer. Number of cohorts by which to filter (Default = 10)
+#' @export
+#'
+#'
+#' @rdname get_groups
+get_cohorts_acronyms <- function(fgs,numCohorts = 10){
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df$Code[fgs_df$NumCohorts == numCohorts]
+  return(result)
+}
 
+#' @export
+#' @rdname get_groups
+get_fished_acronyms <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df$Code[fgs_df$isFished == 1]
+  return(result)
+}
+
+#' @export
+#' @rdname get_groups
+get_turnedon_acronyms <- function(fgs){
+  fgs_df <- load_fgs(fgs = fgs)
+  result <- fgs_df$Code[fgs_df$IsTurnedOn == 1]
+  return(result)
+}
 

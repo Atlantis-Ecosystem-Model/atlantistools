@@ -4,7 +4,8 @@
 \name{ref_vol_dz}
 \alias{ref_vol_dz}
 \title{Volume and dz.}
-\format{\describe{
+\format{
+\describe{
 \item{variable}{Name of the physical variable: "volume" and "dz".}
 \item{polygon}{Boxid starting from 0 to numboxes - 1.}
 \item{layer}{Layerid starting from 0 to numlayers - 1.}
@@ -12,7 +13,8 @@
 time based on the settings in the 'run.prm' file.}
 \item{atoutput}{Obseravtion column storing the actual output value.
 volume in m^3 dz in m}
-}}
+}
+}
 \usage{
 ref_vol_dz
 }

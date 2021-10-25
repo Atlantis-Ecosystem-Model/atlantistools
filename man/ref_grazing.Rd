@@ -4,7 +4,8 @@
 \name{ref_grazing}
 \alias{ref_grazing}
 \title{Grazing.}
-\format{\describe{
+\format{
+\describe{
 \item{species}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{agecl}{Ageclass given as integer from 1 to NumCohorts.}
@@ -13,7 +14,8 @@ The names match with the column 'LongName' in the functionalGroups.csv file.}
 time based on the settings in the 'run.prm' file.}
 \item{atoutput}{Obseravtion column storing the actual output value.
 Grazing in mg N m-3 d-1.}
-}}
+}
+}
 \usage{
 ref_grazing
 }

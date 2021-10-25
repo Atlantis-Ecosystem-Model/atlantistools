@@ -1,23 +1,12 @@
 ---
 title: "model-comparison"
 author: "Alexander Keth"
-date: '`r Sys.Date()`'
-output: 
-  pdf_document:
-    toc: true
-    number_sections: true
-    fig_width: 25
-    fig_height: 6
-    fig_caption: true
-classoption: landscape
-geometry: margin = 0.5cm
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{model-comparison}
   %\VignetteEngine{knitr::rmarkdown}
-  %\usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
-
-\newpage
 
 NOTE: This vigentte is optimised for longer simulation runs. Therefore the output is not as pleasant
 due to the fact that the dummy setas file have a running time of 5 years.
@@ -62,7 +51,6 @@ store_data <- list(result,
 result <- combine_runs(outs = store_data, runs = c("run1", "run2", "run3"))
 ```
 
-\newpage
 
 # Whole system biomass
 ```{r, fig.width = 14, fig.height = 8}
@@ -71,14 +59,12 @@ plot <- plot_line(sum_bio, wrap = NULL, col = "run")
 update_labels(plot, gen_labels)
 ```
 
-\newpage
 
 # Biomass timeseries
 ```{r}
 plot_line(result$biomass, col = "run", ncol = 4) %>% update_labels(gen_labels)
 ```
 
-\newpage
 
 # Relative biomass timeseries
 ```{r}
@@ -87,8 +73,6 @@ plot <- plot_line(df, col = "run", ncol = 4)
 plot <- plot_add_box(plot)
 update_labels(plot, labels = list(x = "Time [year]", y = expression(Biomass/Biomass[initial])))
 ```
-
-\newpage
 
 # Physics
 ```{r, fig.width = 30, fig.height = 12}

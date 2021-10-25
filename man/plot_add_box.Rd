@@ -18,10 +18,10 @@ ggplot2 plot.
 Low level plotting function to add sudo confidence range to calibration plots.
 }
 \examples{
-# Make sure to use a relative timeseries generated with \\code{\\link{convert_relative_initial}}.
+# Make sure to use a relative timeseries generated with \code{\link{convert_relative_initial}}.
 df <- convert_relative_initial(preprocess$structn_age)
 
-# Create the plot with \\code{\\link{plot_line}}.
+# Create the plot with \code{\link{plot_line}}.
 plot <- plot_line(df, col = "agecl")
 
 # Add lower and upper range.
@@ -31,5 +31,7 @@ plot_add_box(plot)
 plot_add_box(plot, range = c(0.8, 0.4))
 }
 \seealso{
-Other low-level-plot functions: \code{\link{plot_add_range}}
+Other low-level-plot functions: 
+\code{\link{plot_add_range}()}
 }
+\concept{low-level-plot functions}

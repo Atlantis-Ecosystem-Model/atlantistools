@@ -5,8 +5,15 @@
 \alias{plot_sc_init}
 \title{Sanity check initial conditions file}
 \usage{
-sc_init(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL,
-  version_flag = 2)
+sc_init(
+  init,
+  prm_biol,
+  fgs,
+  bboxes,
+  pred = NULL,
+  set_avail = NULL,
+  version_flag = 2
+)
 
 plot_sc_init(df, mult_mum, mult_c, pred = NULL)
 }

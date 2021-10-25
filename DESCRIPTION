@@ -1,16 +1,19 @@
 Package: atlantistools
 Type: Package
 Title: Process and Visualise Output from Atlantis Models
-Version: 0.4.3.9000
-Authors@R: person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut", "cre"))
+Version: 0.5.0
+Authors@R: 
+  c(person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut")),
+    person("Andy", "Beet", email = "andrew.beet@noaa.gov", role = c("cre")))
 Description: Atlantis is an end-to-end marine ecosystem modelling framework. It was originally developed in Australia by E.A. Fulton, A.D.M. Smith and D.C. Smith (2007) and has since been adopted in many marine ecosystems around the world (<http://atlantis.cmar.csiro.au>). The output of an Atlantis simulation is stored in various file formats like .netcdf and .txt and different output structures are used for the output variables like e.g. productivity or biomass. This package is used to convert the different output types to a unified format according to the "tidy-data" approach by H. Wickham (2014) <DOI:10.18637/jss.v059.i10>. Additionally, ecological metrics like for example spatial overlap of predator and prey or consumption can be calculated and visualised with this package. Due to the unified data structure it is very easy to share model output with each other and perform model comparisons.
-URL: https://github.com/alketh/atlantistools
-BugReports: https://github.com/alketh/atlantistools/issues
+URL: https://github.com/Atlantis-Ecosystem-Model/atlantistools
+BugReports: https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues
 Depends:
     R (>= 3.2.3)
 License: GPL-3
 LazyData: true
-RoxygenNote: 6.0.1
+Encoding: UTF-8
+RoxygenNote: 7.1.2
 Suggests:
   knitr,
   rfishbase,
@@ -20,8 +23,12 @@ Suggests:
 Imports:
   circlize,
   curl,
+  devtools,
   dplyr,
   ggplot2,
+  graphics,
+  grDevices,
+  grid,
   gridExtra,
   lazyeval,
   magrittr,
@@ -29,8 +36,10 @@ Imports:
   purrr,
   RColorBrewer,
   RNetCDF,
+  rlang,
   rvest,
   scales,
+  stringi,
   stringr,
   tibble,
   tidyr,

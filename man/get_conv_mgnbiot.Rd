@@ -25,6 +25,9 @@ prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
 get_conv_mgnbiot(prm_biol)
 }
 \seealso{
-Other get functions: \code{\link{get_boundary}},
-  \code{\link{get_colpal}}, \code{\link{get_groups}}
+Other get functions: 
+\code{\link{get_boundary}()},
+\code{\link{get_colpal}()},
+\code{\link{get_groups}()}
 }
+\concept{get functions}

@@ -7,6 +7,8 @@
 #' @param col Column to use as colour. Default is \code{NULL}.
 #' @param ncol Number of columns in multipanel plot. Default is \code{7}.
 #' @param yexpand Expands the y axis so it always includes 0. Default is \code{FALSE}.
+#' @param ylim Numeric vector. lower and upper limits of yaxis, eg c(0,1)
+#'
 #' @return ggplot2 object
 #' @export
 #' @family plot functions
@@ -53,7 +55,7 @@
 #' custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 #' }
 
-plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7, yexpand = FALSE) {
+plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7, yexpand = FALSE, ylim =  NULL) {
   plot <- custom_map(data = data, x = x, y = y) +
     ggplot2::geom_line() +
     theme_atlantis()
@@ -74,6 +76,11 @@ plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = 
   if (yexpand == TRUE){
     plot <- plot + ggplot2::expand_limits(y = 0)
   }
+
+  if(!is.null(ylim)) {
+    plot <- plot + ggplot2::ylim(ylim[1],ylim[2])
+  }
+
   return(plot)
 }
 

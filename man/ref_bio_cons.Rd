@@ -4,7 +4,8 @@
 \name{ref_bio_cons}
 \alias{ref_bio_cons}
 \title{Consumed biomass.}
-\format{\describe{
+\format{
+\describe{
 \item{pred}{Name of the functional groups given as character string.
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{agecl}{Ageclass given as integer from 1 to NumCohorts.}
@@ -15,7 +16,8 @@ time based on the settings in the 'run.prm' file.}
 The names match with the column 'LongName' in the functionalGroups.csv file.}
 \item{atoutput}{Obseravtion column storing the actual output value.
 Consumed biomass in tonnes.}
-}}
+}
+}
 \usage{
 ref_bio_cons
 }

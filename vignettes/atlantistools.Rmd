@@ -1,0 +1,25 @@
+---
+title: "atlantistools"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{atlantistools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(atlantistools)
+```
+
+`atlantistools` was created by [Alexander Keth](https://github.com/alketh). In October 2021 `altantistools` was transferred to the atlantis group at [CSIRO](https://github.com/Atlantis-Ecosystem-Model) for continued development
+
+
+
+

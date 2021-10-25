@@ -21,6 +21,8 @@ bgm <- convert_bgm(bgm)
 head(bgm)
 }
 \seealso{
-Other convert functions: \code{\link{convert_factor}},
-  \code{\link{convert_time}}
+Other convert functions: 
+\code{\link{convert_factor}()},
+\code{\link{convert_time}()}
 }
+\concept{convert functions}

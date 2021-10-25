@@ -1,26 +1,33 @@
-#' Load mortality information from outputSpecificPredMort.txt
+#' Load mortality information from specificMort.txt
+#'
+#' Reads in the specificMort.txt file. Three values of instantaneous mortality for each functional group,
+#' age group, and stock. Predation (M2), other natural mortality (M1), Fishing (F)
 #'
 #' @inheritParams load_nc
 #' @inheritParams load_fgs
 #' @inheritParams load_dietmatrix
-#' @param specmort Character string giving the connection of the specific mortality file.
-#' The filename usually contains \code{SpecificPredMort} and ends in \code{.txt}".
-#' @return Dataframe with information about ssb in tonnes and recruits in
-#' thousands.
+#' @param mortFile Character string giving the path to the specificMort.txt file.
+#' The filename usually contains \code{SpecificMort} and ends in \code{.txt}".
+#' @param removeZeros Boolean. Remove all zeros from output. (Default = T)
+#'
+#' @return Data frame with information about sources of mortality (M1, M2, F).
+#'
+#' @importFrom rlang .data
+#'
 #' @export
 #' @family load functions
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+#' specmort <- file.path(d, "outputSETASSpecificMort.txt")
 #' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
 #' fgs <- file.path(d, "SETasGroups.csv")
 #'
-#' df <- load_spec_mort(specmort, prm_run, fgs, version_flag = 1)
+#' df <- load_spec_mort(specmort, prm_run, fgs)
 #' head(df)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-#' specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
+#' specmort <- file.path(d, "outputSETASSpecificMort.txt")
 #' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
 #' fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 #'
@@ -28,65 +35,26 @@
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_spec_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, version_flag = 2) {
-  if (version_flag == 1) {
-    mort <- load_txt(file = specmort)
-    mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "stock", "pred", "mort"), convert = TRUE)
-    # check uniqueness of column notsure and mort
-    if (any(sapply(mort[, c("stock", "mort")], function(x) length(unique(x))) != 1)) {
-      stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
-    }
-  } else if (version_flag == 2) {
-    mort <- load_txt(file = specmort, id_col = c("Time", "Group", "Cohort", "Stock"))
-    mort <- dplyr::rename_(mort, pred = ~group, agecl = ~cohort, prey = ~code)
-    if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
-      stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
-    }
-  }
-  mort$agecl <- mort$agecl + 1
+load_spec_mort <- function(mortFile, prm_run, fgs, convert_names = FALSE, removeZeros = T) {
 
-  # Remove unnecessary columns
-  mort <- mort[, !is.element(names(mort), c("stock", "mort"))]
-
-  # First time step appears twice and only has 0s as entry!
-  # ***This will cause a potentially unnoticed bug when this issue in the output file gets fixed
-  mort <- mort[mort$time != 0, ]
-
-  # Check number of empty entries per predator!
-  # BJS: is this needed? it doesnt appear to be used anywhere
-  nr_prey <- length(unique(mort$prey))
-  count_zero <- mort %>%
-    dplyr::group_by_(~time, ~pred, ~agecl) %>%
-    dplyr::summarise_(count_zero = ~sum(atoutput == 0) / nr_prey) %>%
-    dplyr::filter(count_zero == 1)
-
-  # Remove zeros
-  mort <- mort[mort$atoutput != 0, ]
+  df <- load_txt(file = mortFile)
+  mort <- preprocess_txt(df_txt = df, into = c("code", "agecl", "empty_col", "mort"),removeZeros=removeZeros) %>%
+    tibble::as_tibble()
 
   # Convert species codes to longnames!
   if (convert_names) {
-    mort <- dplyr::mutate_at(mort, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = load_fgs(fgs = fgs))
+    data_fgs <- load_fgs(fgs=fgs)
+    mort <- mort %>%
+      dplyr::left_join(.,data_fgs[,c("Code","LongName")], by = c("code"="Code")) %>%
+      dplyr::rename(species = .data$LongName)
   }
 
   # Convert time
   mort$time <- convert_time(prm_run = prm_run, col = mort$time)
 
-  # For some weird reason putput rows with exact yearly output are duplicated...
-  # ***This will cause a potentially unnoticed bug when this issue in the output file gets fixed
-  mort <- agg_data(data = mort, groups = c("time", "pred", "agecl", "prey"), fun = mean)
-
   return(mort)
 }
 
-
-# ggplot2::ggplot(subset(mort, pred == "COD" & prey == "COD"), ggplot2::aes(x = factor(time), y = atoutput, fill = stanza)) +
-#   ggplot2::geom_boxplot(position = "dodge") +
-#   # ggplot2::geom_point()
-#   ggplot2::facet_wrap(~prey, scale = "free")
-#
-# dir <- "z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
-# specmort = "outputNorthSeaSpecificPredMort.txt"
-# prm_biol = "NorthSea_biol_fishing.prm"
 
 
 

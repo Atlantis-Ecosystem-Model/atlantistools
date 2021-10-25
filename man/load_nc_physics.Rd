@@ -4,8 +4,14 @@
 \alias{load_nc_physics}
 \title{Load Atlantis outputfiles (netcdf)}
 \usage{
-load_nc_physics(nc, select_physics, prm_run, bboxes, aggregate_layers = FALSE,
-  warn_zeros = FALSE)
+load_nc_physics(
+  nc,
+  select_physics,
+  prm_run,
+  bboxes,
+  aggregate_layers = FALSE,
+  warn_zeros = FALSE
+)
 }
 \arguments{
 \item{nc}{Character string giving the connection of the netcdf file to read in.
@@ -57,11 +63,19 @@ str(test)
 test <- load_nc_physics(nc, select_physics = "nominal_dz", prm_run, bboxes)
 }
 \seealso{
-Other load functions: \code{\link{load_box}},
-  \code{\link{load_bps}}, \code{\link{load_dietcheck}},
-  \code{\link{load_fgs}}, \code{\link{load_init_age}},
-  \code{\link{load_init}}, \code{\link{load_nc}},
-  \code{\link{load_rec}}, \code{\link{load_spec_mort}},
-  \code{\link{load_txt}}
+Other load functions: 
+\code{\link{load_box}()},
+\code{\link{load_bps}()},
+\code{\link{load_dietcheck}()},
+\code{\link{load_fgs}()},
+\code{\link{load_init_age}()},
+\code{\link{load_init}()},
+\code{\link{load_mort}()},
+\code{\link{load_nc}()},
+\code{\link{load_rec}()},
+\code{\link{load_spec_mort}()},
+\code{\link{load_spec_pred_mort}()},
+\code{\link{load_txt}()}
 }
+\concept{load functions}
 \keyword{gen}

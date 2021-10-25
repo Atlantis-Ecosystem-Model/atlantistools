@@ -25,23 +25,24 @@ init <- file.path(d, "INIT_VMPA_Jan2015.nc")
 
 load_init(init, vars = "Planktiv_S_Fish1_Nums")
 load_init(init, vars = c("Planktiv_S_Fish2_ResN", "Planktiv_S_Fish3_ResN"))
-load_init(init, vars = "Megazoobenthos_N")
 
-\dontrun{
-dir <- "C:/Users/siebo/Documents/Atlantis/BalticAtlantis/run_files_73days_Nej"
-init <- file.path(dir, "new_init_Baltic_05Dec2015_v2.nc")
-vars <- "Sprat1_ResN"
-load_init(init = init, vars = vars)
-}
 }
 \seealso{
-Other load functions: \code{\link{load_box}},
-  \code{\link{load_bps}}, \code{\link{load_dietcheck}},
-  \code{\link{load_fgs}}, \code{\link{load_init_age}},
-  \code{\link{load_nc_physics}}, \code{\link{load_nc}},
-  \code{\link{load_rec}}, \code{\link{load_spec_mort}},
-  \code{\link{load_txt}}
+Other load functions: 
+\code{\link{load_box}()},
+\code{\link{load_bps}()},
+\code{\link{load_dietcheck}()},
+\code{\link{load_fgs}()},
+\code{\link{load_init_age}()},
+\code{\link{load_mort}()},
+\code{\link{load_nc_physics}()},
+\code{\link{load_nc}()},
+\code{\link{load_rec}()},
+\code{\link{load_spec_mort}()},
+\code{\link{load_spec_pred_mort}()},
+\code{\link{load_txt}()}
 }
 \author{
 Alexander Keth
 }
+\concept{load functions}

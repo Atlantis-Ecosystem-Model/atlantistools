@@ -10,11 +10,22 @@
 \usage{
 load_init_age(init, fgs, select_variable, select_groups = NULL, bboxes)
 
-load_init_nonage(init, fgs, select_variable = "N", select_groups = NULL,
-  bboxes, bps)
+load_init_nonage(
+  init,
+  fgs,
+  select_variable = "N",
+  select_groups = NULL,
+  bboxes,
+  bps
+)
 
-load_init_stanza(init, fgs, select_variable = "N", select_groups = NULL,
-  bboxes)
+load_init_stanza(
+  init,
+  fgs,
+  select_variable = "N",
+  select_groups = NULL,
+  bboxes
+)
 
 load_init_physics(init, select_variable, bboxes)
 
@@ -64,20 +75,25 @@ load_init_age(init = init, fgs = fgs, bboxes = bboxes,
               select_groups = "Planktiv_S_Fish")
 
 load_init_age(init = init, fgs = fgs, bboxes = bboxes, select_variable = "ResN")
-load_init_nonage(init = init, fgs = fgs, bboxes = bboxes, bps = bps,
-   select_groups = "Megazoobenthos")
-load_init_nonage(init = init, fgs = fgs, bboxes = bboxes, bps = bps)
 load_init_stanza(init = init, fgs = fgs, bboxes = bboxes)
 load_init_weight(init = init, fgs = fgs, bboxes = bboxes)
 }
 \seealso{
-Other load functions: \code{\link{load_box}},
-  \code{\link{load_bps}}, \code{\link{load_dietcheck}},
-  \code{\link{load_fgs}}, \code{\link{load_init}},
-  \code{\link{load_nc_physics}}, \code{\link{load_nc}},
-  \code{\link{load_rec}}, \code{\link{load_spec_mort}},
-  \code{\link{load_txt}}
+Other load functions: 
+\code{\link{load_box}()},
+\code{\link{load_bps}()},
+\code{\link{load_dietcheck}()},
+\code{\link{load_fgs}()},
+\code{\link{load_init}()},
+\code{\link{load_mort}()},
+\code{\link{load_nc_physics}()},
+\code{\link{load_nc}()},
+\code{\link{load_rec}()},
+\code{\link{load_spec_mort}()},
+\code{\link{load_spec_pred_mort}()},
+\code{\link{load_txt}()}
 }
 \author{
 Alexander Keth
 }
+\concept{load functions}

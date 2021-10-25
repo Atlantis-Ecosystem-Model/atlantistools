@@ -9,6 +9,7 @@
 #' @param df_txt Dataframe read in with \code{load_txt()}.
 #' @param sep_col Column to separate into multiple columns. Default is \code{"code"}.
 #' @param into Character vector given the columns to split sep_col in.
+#' @param removeZeros Boolean. Remove all zeros. (Default = T)
 #' @return Tidy dataframe.
 #' @export
 #'
@@ -22,7 +23,7 @@
 #' df <- preprocess_txt(df_txt = df, into = c("species", "agecl", "empty_col", "mort"))
 #' head(df)
 
-preprocess_txt <- function(df_txt, sep_col = "code", into) {
+preprocess_txt <- function(df_txt, sep_col = "code", into, removeZeros = TRUE) {
   df_txt <- tidyr::separate_(df_txt, col = sep_col, into = into, convert = TRUE)
   # df_txt$agecl <- df_txt$agecl + 1
 
@@ -52,7 +53,9 @@ preprocess_txt <- function(df_txt, sep_col = "code", into) {
   }
 
   # Remove zeros
-  df_txt <- df_txt[df_txt$atoutput != 0, ]
+  if(removeZeros) {
+    df_txt <- df_txt[df_txt$atoutput != 0, ]
+  }
 
   return(df_txt)
 }

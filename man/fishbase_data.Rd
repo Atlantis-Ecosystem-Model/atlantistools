@@ -4,7 +4,8 @@
 \name{fishbase_data}
 \alias{fishbase_data}
 \title{fishbase_data}
-\format{A data frame with 33104 rows and 12 variables:
+\format{
+A data frame with 33104 rows and 12 variables:
 \describe{
   \item{\code{SpecCode}}{integer. Species code.}
   \item{\code{Genus}}{character.}
@@ -18,7 +19,8 @@
   \item{\code{Family}}{character.}
   \item{\code{Order}}{character.}
   \item{\code{Class}}{character.}
-}}
+}
+}
 \source{
 \url{http://www.fishbase.org/} rfishbase::fishbase
 }

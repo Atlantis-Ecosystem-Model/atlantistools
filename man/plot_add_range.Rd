@@ -25,12 +25,14 @@ ex_data <- preprocess$biomass
 ex_data$atoutput <- ex_data$atoutput * runif(n = nrow(ex_data), 0, 1)
 ex_data$model <- "test"
 
-# Create the timeseries with \\code{\\link{plot_line}}
+# Create the timeseries with \code{\link{plot_line}}
 plot <- plot_line(preprocess$biomass)
 
-# Add the external data as geom_rug with \\code{\\link{plot_add_range}}
+# Add the external data as geom_rug with \code{\link{plot_add_range}}
 plot_add_range(plot, ex_data)
 }
 \seealso{
-Other low-level-plot functions: \code{\link{plot_add_box}}
+Other low-level-plot functions: 
+\code{\link{plot_add_box}()}
 }
+\concept{low-level-plot functions}

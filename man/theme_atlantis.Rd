@@ -4,8 +4,14 @@
 \alias{theme_atlantis}
 \title{Customized theme used in all plots.}
 \usage{
-theme_atlantis(large = 22, medium = 18, small = 14, scale_font = 1,
-  rot_xaxis_text = FALSE, rot_strips_y = TRUE)
+theme_atlantis(
+  large = 22,
+  medium = 18,
+  small = 14,
+  scale_font = 1,
+  rot_xaxis_text = FALSE,
+  rot_strips_y = TRUE
+)
 }
 \arguments{
 \item{large}{Integer giving the size of the font for the main parts of the plot.
@@ -35,3 +41,4 @@ ggplot2::ggplot(data = nums_agg, ggplot2::aes(x = time, y = atoutput)) +
    ggplot2::facet_wrap(~species) +
    theme_atlantis()}
 }
+\concept{theme functions}
