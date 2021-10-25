@@ -16,6 +16,9 @@
 * `preprocess_txt`. Added argument `removeZeros = T`. User can select not to remove zeros from output
 * `plot_line`. Added argument, `ylim` to specify min and max values 
 
+## Bug fixes
+* `load-init` Variables that have data at box level only (no layer data) can now be read from the nc file. 
+
 
 # atlantistools 0.4.3
 ## Bug fixes
