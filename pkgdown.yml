@@ -1,0 +1,15 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  atlantistools: atlantistools.html
+  model-calibration-species: model-calibration-species.html
+  model-calibration: model-calibration.html
+  model-comparison: model-comparison.html
+  model-preprocess: model-preprocess.html
+  package-demo: package-demo.html
+last_built: 2021-10-25T02:33Z
+urls:
+  reference: https://andybeet.github.io/atlantistools//reference
+  article: https://andybeet.github.io/atlantistools//articles
+
