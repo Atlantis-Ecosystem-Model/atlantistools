@@ -70,7 +70,7 @@ plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, 
   # Step1: Calculate summary tables
   # - biomass timeseries per box
   ts_bio <- agg_data(bio_spatial, groups = c("time", "species", "species_stanza", "polygon"), fun = sum) %>%
-    dplyr::left_join(vol) %>%
+    dplyr::left_join(vol,by = c("time", "polygon")) %>%
     dplyr::mutate_(.dots = stats::setNames(list(~atoutput / volume), "density"))
 
   plot_ts_species <- function(data, ncol) {
