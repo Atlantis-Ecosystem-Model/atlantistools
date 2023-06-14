@@ -54,7 +54,7 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
 
   # Create dataframe with all polygon + layer combinations.
   full_grid <- expand.grid(polygon = unique(bgm_as_df$polygon), layer = min(bio_spatial$layer):max(bio_spatial$layer))
-  full_grid <- dplyr::left_join(full_grid, bgm_as_df)
+  full_grid <- dplyr::left_join(full_grid, bgm_as_df, by = "polygon")
 
   # Filter by species if select_species not NULL!
   # Warning: Will change input parameter which makes it harder to debug...
@@ -77,13 +77,16 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
     bgrd <- merge(full_grid, unique(dplyr::select_(data, .dots = c("time"))))
     p_title <- paste("Species:", unique(data$species), "with stanza:", unique(data$species_stanza))
 
+    cf <- ggplot2::coord_equal()
+    cf$default <- T
+
     data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
     plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~atoutput, group = ~factor(polygon))) +
       ggplot2::geom_polygon(colour = "black") +
       ggplot2::facet_grid(layer ~ time) +
       ggplot2::scale_fill_gradient("biomass distribution", low = "red", high = "green") +
       ggplot2::guides(fill = ggplot2::guide_colorbar(barwidth = 20)) +
-      ggplot2::coord_equal() +
+      cf +
       theme_atlantis() +
       ggplot2::labs(title = p_title)
 
