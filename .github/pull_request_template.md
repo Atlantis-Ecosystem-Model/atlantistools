@@ -11,7 +11,7 @@ fixes #
 
 ### Types of changes
 
-What types of changes does your code introduce? Put an `x` in the boxes that apply
+What types of changes does your code introduce? Put an `x` in the boxes that apply. This will inform version updates
 
 - [ ] Bugfix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
