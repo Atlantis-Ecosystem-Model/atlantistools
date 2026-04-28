@@ -20,10 +20,12 @@
 
 get_boundary <- function(boxinfo) {
   new <- vector()
-#   boxes <- sapply(boxinfo$boxes, "[[", "vert")
+  #   boxes <- sapply(boxinfo$boxes, "[[", "vert")
   iface <- sapply(boxinfo$boxes, "[[", "iface")
-  facepoints <- do.call("rbind",lapply(lapply(boxinfo$faces, "[", , 1:2),
-                                       apply, 2, paste, collapse = "_"))
+  facepoints <- do.call(
+    "rbind",
+    lapply(lapply(boxinfo$faces, "[", , 1:2), apply, 2, paste, collapse = "_")
+  )
   vertices <- apply(boxinfo$bnd_vert, 1, paste, collapse = "_")
   for (ii in seq(dim(facepoints)[1])) {
     # Check how many points of a given box (ii) have points that are also

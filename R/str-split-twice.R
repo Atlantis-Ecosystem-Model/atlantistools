@@ -15,7 +15,7 @@
 
 # Split any character string multiple times and retrun the first (min_only = T)
 # or all (min_only = F) numeric values found.
-str_split_twice <- function(char, min_only = TRUE){
+str_split_twice <- function(char, min_only = TRUE) {
   patterns <- c(" ", "\t", ",", "\n", "\r")
   if (all(!stringr::str_detect(string = char, pattern = patterns))) {
     stop("Neither space nor tab present.")
@@ -24,8 +24,12 @@ str_split_twice <- function(char, min_only = TRUE){
     char <- unlist(stringr::str_split(string = char, pattern = patterns[i]))
   }
   char <- suppressWarnings(as.numeric(char))
-  if (all(is.na(char))) stop("No numeric value present.")
+  if (all(is.na(char))) {
+    stop("No numeric value present.")
+  }
   char <- char[!is.na(char)]
-  if (min_only) char <- char[1]
+  if (min_only) {
+    char <- char[1]
+  }
   return(char)
 }

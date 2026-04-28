@@ -32,7 +32,9 @@ combine_runs <- function(outs, runs) {
 
   # Combine the dataframes from different runs
   dim_outs <- unique(sapply(outs_run, length))
-  if (length(dim_outs) != 1) stop("Different number of dataframes in *.Rda files.")
+  if (length(dim_outs) != 1) {
+    stop("Different number of dataframes in *.Rda files.")
+  }
   result <- list()
   for (i in 1:dim_outs) {
     # Combine the i-th dataframe from each upper level list entry!
@@ -42,5 +44,3 @@ combine_runs <- function(outs, runs) {
   names(result) <- names(outs_run[[1]])
   return(result)
 }
-
-

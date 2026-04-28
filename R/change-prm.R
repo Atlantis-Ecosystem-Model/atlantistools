@@ -26,9 +26,18 @@
 #'                       parameter = "KWRR",
 #'                       save_to_disc = FALSE)
 
-change_prm <- function(prm_biol, select_acronyms, roc, parameter,
-                       relative = TRUE, save_to_disc = TRUE, version_flag = 2) {
-  if (length(parameter) != 1) stop("Please suply only one parameter per function call.")
+change_prm <- function(
+  prm_biol,
+  select_acronyms,
+  roc,
+  parameter,
+  relative = TRUE,
+  save_to_disc = TRUE,
+  version_flag = 2
+) {
+  if (length(parameter) != 1) {
+    stop("Please suply only one parameter per function call.")
+  }
 
   if (length(select_acronyms) != length(roc)) {
     stop("Length of select_acronyms and roc does not match.")
@@ -56,7 +65,10 @@ change_prm <- function(prm_biol, select_acronyms, roc, parameter,
     }
 
     # Update value. Some pesky expectations have to be added here.
-    if (is.element(parameter, c("mum", "C", "mQ", "mL", "jmL", "jmQ")) & version_flag == 1) {
+    if (
+      is.element(parameter, c("mum", "C", "mQ", "mL", "jmL", "jmQ")) &
+        version_flag == 1
+    ) {
       prm_biol[pos] <- paste(paste0(flag, "_T15"), new_value, sep = "\t")
     } else {
       prm_biol[pos] <- paste(flag, new_value, sep = "\t")
@@ -66,7 +78,13 @@ change_prm <- function(prm_biol, select_acronyms, roc, parameter,
 
   for (i in seq_along(select_acronyms)) {
     if (!(roc[i] == 1 & relative)) {
-      prm_biol_new <- update_prm_species(prm_biol = prm_biol_new, acronym = select_acronyms[i], roc = roc[i], parameter = parameter, relative = relative)
+      prm_biol_new <- update_prm_species(
+        prm_biol = prm_biol_new,
+        acronym = select_acronyms[i],
+        roc = roc[i],
+        parameter = parameter,
+        relative = relative
+      )
     }
   }
 

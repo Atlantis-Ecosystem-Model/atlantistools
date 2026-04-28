@@ -23,11 +23,26 @@ load_box <- function(bgm) {
   }
 
   data <- readLines(bgm)
-  proj <- gsub("projection[[:space:]]+", "", grep("projection", data, value = TRUE))
-  nbox <- as.numeric(gsub("nbox|[[:space:]]", "", grep("nbox", data, value = TRUE)))
-  nface <- as.numeric(gsub("nface|[[:space:]]", "", grep("nface", data, value = TRUE)))
-  maxwcbotz <- as.numeric(gsub("maxwcbotz|[[:space:]]", "",
-                               grep("maxwcbotz", data, value = TRUE)))
+  proj <- gsub(
+    "projection[[:space:]]+",
+    "",
+    grep("projection", data, value = TRUE)
+  )
+  nbox <- as.numeric(gsub(
+    "nbox|[[:space:]]",
+    "",
+    grep("nbox", data, value = TRUE)
+  ))
+  nface <- as.numeric(gsub(
+    "nface|[[:space:]]",
+    "",
+    grep("nface", data, value = TRUE)
+  ))
+  maxwcbotz <- as.numeric(gsub(
+    "maxwcbotz|[[:space:]]",
+    "",
+    grep("maxwcbotz", data, value = TRUE)
+  ))
 
   bnd_vert <- grep("bnd_vert", data, value = TRUE)
   bnd_vert <- gsub("bnd_vert[[:space:]]+", "", bnd_vert)
@@ -50,8 +65,10 @@ load_box <- function(bgm) {
       return(gsrout)
     }
 
-    out$label <- strsplit(grep("\\.label", info, value = TRUE),
-                          "[[:space:]]+")[[1]][2]
+    out$label <- strsplit(
+      grep("\\.label", info, value = TRUE),
+      "[[:space:]]+"
+    )[[1]][2]
     out$inside <- gsr(info, "inside")
     out$nconn <- gsr(info, "\\.nconn")
     out$iface <- gsr(info, "\\.iface")
@@ -79,7 +96,13 @@ load_box <- function(bgm) {
   faces <- lapply(0:(nface - 1), get_face, data = data)
   names(faces) <- 0:(nface - 1)
 
-  invisible(list("projection" = proj, "nbox" = nbox, "nface" = nface,
-                 "maxwcbotz" = maxwcbotz, "bnd_vert" = bnd_vert, "boxes" = boxes,
-                 "faces" = faces))
+  invisible(list(
+    "projection" = proj,
+    "nbox" = nbox,
+    "nface" = nface,
+    "maxwcbotz" = maxwcbotz,
+    "bnd_vert" = bnd_vert,
+    "boxes" = boxes,
+    "faces" = faces
+  ))
 }

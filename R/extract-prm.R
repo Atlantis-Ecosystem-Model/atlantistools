@@ -28,9 +28,19 @@ extract_prm <- function(prm_biol, variables) {
   # Read in parameter file!
   prm_biol_new <- readLines(con = prm_biol, warn = FALSE)
 
-  pos <- vapply(variables, scan_prm, FUN.VALUE = integer(1), chars = prm_biol_new)
+  pos <- vapply(
+    variables,
+    scan_prm,
+    FUN.VALUE = integer(1),
+    chars = prm_biol_new
+  )
   result <- prm_biol_new[pos]
-  result <- vapply(result, str_split_twice, FUN.VALUE = numeric(1), USE.NAMES = FALSE)
+  result <- vapply(
+    result,
+    str_split_twice,
+    FUN.VALUE = numeric(1),
+    USE.NAMES = FALSE
+  )
   return(result)
 }
 
@@ -45,7 +55,9 @@ extract_prm_cohort <- function(prm_biol, variables) {
   slice <- function(prm, variable) {
     pos <- scan_prm(chars = prm, variable = variable)
     pos <- pos + 1
-    while (substr(prm[pos], 1, 1) == "#") pos <- pos + 1
+    while (substr(prm[pos], 1, 1) == "#") {
+      pos <- pos + 1
+    }
 
     # Keep all numeric values
     value <- str_split_twice(char = prm[pos], min_only = FALSE)
@@ -58,7 +70,7 @@ extract_prm_cohort <- function(prm_biol, variables) {
   #   values <- do.call(rbind, values)
   #   rownames(values) <- variables
   # } else {
-    names(values) <- variables
+  names(values) <- variables
   # }
   return(values)
 }

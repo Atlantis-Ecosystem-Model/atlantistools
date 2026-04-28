@@ -18,10 +18,9 @@ check_df_names <- function(data, expect, optional = NULL) {
   wrong_names <- df_names[!is.element(df_names, expect)]
 
   if (length(wrong_names) >= 1) {
-    stop(paste("Wrong column names in data:", paste(wrong_names, collapse = " & ")))
+    stop(paste(
+      "Wrong column names in data:",
+      paste(wrong_names, collapse = " & ")
+    ))
   }
 }
-
-
-
-

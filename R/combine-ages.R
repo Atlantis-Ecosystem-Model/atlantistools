@@ -26,11 +26,15 @@ combine_ages <- function(data, grp_col, agemat, value_col = "atoutput") {
   # Check input dataframe structure.
   cols <- c(grp_col, value_col, "agecl")
   missing <- cols[!cols %in% names(data)]
-  if (length(missing) > 0) stop(paste0("Columnname '", missing, "' missing in data."))
+  if (length(missing) > 0) {
+    stop(paste0("Columnname '", missing, "' missing in data."))
+  }
 
   # Combine data with agemat!
   agegrps <- unique(data[!is.na(data$agecl) & data$agecl > 2, grp_col])
-  if (any(!agegrps %in% agemat$species)) stop("Agegroups in data not present in agemat.")
+  if (any(!agegrps %in% agemat$species)) {
+    stop("Agegroups in data not present in agemat.")
+  }
   names(agemat)[names(agemat) == "species"] <- grp_col # in case grp_col is not 'species'
 
   data_stanza <- dplyr::left_join(data, agemat)
@@ -40,8 +44,17 @@ combine_ages <- function(data, grp_col, agemat, value_col = "atoutput") {
   data_stanza$stanza[is.na(data_stanza$stanza)] <- 1 # Not sure if this is correct!
 
   result <- data_stanza %>%
-    agg_data(col = value_col, groups = names(.)[!names(.) %in% c(value_col, "agecl")], out = value_col, fun = sum)
-  names(result)[names(result) == "stanza"] <- paste(grp_col, "stanza", sep = "_")
+    agg_data(
+      col = value_col,
+      groups = names(.)[!names(.) %in% c(value_col, "agecl")],
+      out = value_col,
+      fun = sum
+    )
+  names(result)[names(result) == "stanza"] <- paste(
+    grp_col,
+    "stanza",
+    sep = "_"
+  )
   result$age_mat <- NULL
 
   return(result)

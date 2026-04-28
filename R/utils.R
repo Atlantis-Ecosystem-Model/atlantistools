@@ -30,7 +30,9 @@
 multisplit <- function(df, groups) {
   for (i in seq_along(groups)) {
     # first split results in a list of dataframes!
-    if (i == 1) result <- split(df, df[, groups[i]])
+    if (i == 1) {
+      result <- split(df, df[, groups[i]])
+    }
     # sucessive splits work with a list of dataframes.
     if (i > 1) {
       result <- purrr::map(result, function(x) split(x, x[, groups[i]]))
@@ -43,8 +45,13 @@ multisplit <- function(df, groups) {
 
 # This function is not used anymore.
 file_ending <- function(filename, ending = "nc") {
-  file_ending <- strsplit(filename, "\\.")[[1]][length(strsplit(filename, "\\.")[[1]])]
-  if (file_ending != ending) stop(paste("The file", filename, "does not end in", ending))
+  file_ending <- strsplit(filename, "\\.")[[1]][length(strsplit(
+    filename,
+    "\\."
+  )[[1]])]
+  if (file_ending != ending) {
+    stop(paste("The file", filename, "does not end in", ending))
+  }
 }
 
 
@@ -58,7 +65,6 @@ release_questions <- function() {
     "Have you run devtools::build_win(args = '--compact-vignettes=both') to check with win-builder?"
   )
 }
-
 
 # dir <- "C:/Users/alexanderke/Dropbox/Atlantis_SoS_Files_Alex"
 # setwd(dir)

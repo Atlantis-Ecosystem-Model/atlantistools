@@ -11,7 +11,9 @@
 # stock state date is given in days, nc-data is given in timesteps!
 
 convert_time <- function(prm_run, col) {
-  if (!is.numeric(col)) stop("Col is not numeric. No time transformation applied.")
+  if (!is.numeric(col)) {
+    stop("Col is not numeric. No time transformation applied.")
+  }
 
   # Check if time is composed of a complete sequence of integers!
   # In this case there is no stockstate data! Remove zero!
@@ -33,8 +35,11 @@ convert_time <- function(prm_run, col) {
     # In addition also remove the last entry as it may neither be an end of the year value
     # nor a multiple of the stock-state timestep!
     ts <- sort(unique(col), decreasing = TRUE)[-1]
-    if (tsumout != 365) ts <- ts[ts %% 365 != 0]
-    if (all(ts %% tsumout == 0)) { # True stock state data!
+    if (tsumout != 365) {
+      ts <- ts[ts %% 365 != 0]
+    }
+    if (all(ts %% tsumout == 0)) {
+      # True stock state data!
 
       # Convert time in days to time in years
       data <- col / 365

@@ -32,28 +32,53 @@
 
 #' @export
 
-get_growth_fishbase <- function(fish, mirror = "se"){
+get_growth_fishbase <- function(fish, mirror = "se") {
   ids <- get_ids_fishbase(fish)
 
   # Split up Names in species and genus part to generate URLs
   ge_sp <- split_species(names(ids))
 
-  urls <- paste0("http://fishbase.", mirror, "/PopDyn/PopGrowthList.php?ID=", ids, "&GenusName=", ge_sp$ge, "&SpeciesName=", ge_sp$sp, "&fc=183")
+  urls <- paste0(
+    "http://fishbase.",
+    mirror,
+    "/PopDyn/PopGrowthList.php?ID=",
+    ids,
+    "&GenusName=",
+    ge_sp$ge,
+    "&SpeciesName=",
+    ge_sp$sp,
+    "&fc=183"
+  )
 
   fishbase <- purrr::map(urls, xml2::read_html)
 
   # First remove Species without Growth information!
   pos_missing <- purrr::map(fishbase, rvest::html_text) %>%
-    purrr::map_lgl(., ~grepl("The system found no growth information for the requested specie.", .)) %>%
+    purrr::map_lgl(
+      .,
+      ~ grepl(
+        "The system found no growth information for the requested specie.",
+        .
+      )
+    ) %>%
     which(.)
 
   # leave function in case no information is present for any species
   if (length(pos_missing) == length(ids)) {
-    stop("None of the species have information about growth. Add additional species.")
+    stop(
+      "None of the species have information about growth. Add additional species."
+    )
   } else {
     if (length(pos_missing) >= 1) {
       missing_species <- sort(names(ids)[pos_missing])
-      warning(paste("No growth information available for", length(pos_missing), "species:\n"), paste(missing_species, collapse = "\n"))
+      warning(
+        paste(
+          "No growth information available for",
+          length(pos_missing),
+          "species:\n"
+        ),
+        paste(missing_species, collapse = "\n")
+      )
       ids <- ids[-pos_missing]
       fishbase <- fishbase[-pos_missing]
     }
@@ -63,19 +88,44 @@ get_growth_fishbase <- function(fish, mirror = "se"){
       purrr::map(., 3)
 
     # add names to dataframes
-    result <- purrr::map2(.x = result, .y = names(ids), ~tibble::add_column(.x, rep(.y, times = nrow(.x)))) %>%
+    result <- purrr::map2(
+      .x = result,
+      .y = names(ids),
+      ~ tibble::add_column(.x, rep(.y, times = nrow(.x)))
+    ) %>%
       do.call(rbind, args = .) %>% # rbind is necessary due to different col-classes in 'Sex' = 'chr' and 'logical'
-      purrr::set_names(., c("xxx", "linf", "length_type", "k", "to", "sex", "m", "temp", "lm", "a",
-                            "country", "locality", "questionable", "captive", "species"))
+      purrr::set_names(
+        .,
+        c(
+          "xxx",
+          "linf",
+          "length_type",
+          "k",
+          "to",
+          "sex",
+          "m",
+          "temp",
+          "lm",
+          "a",
+          "country",
+          "locality",
+          "questionable",
+          "captive",
+          "species"
+        )
+      )
 
     # Cleanup
     result$xxx <- NULL
     result[result == ""] <- NA
 
     # find reference ids.
-    ref_urls <- purrr::map(fishbase, ~rvest::html_nodes(., "a")) %>%
-      purrr::map(., ~rvest::html_attr(., "href")) %>%
-      purrr::map(., ~.[stringr::str_detect(., pattern = "FishPopGrowthSummary")])
+    ref_urls <- purrr::map(fishbase, ~ rvest::html_nodes(., "a")) %>%
+      purrr::map(., ~ rvest::html_attr(., "href")) %>%
+      purrr::map(
+        .,
+        ~ .[stringr::str_detect(., pattern = "FishPopGrowthSummary")]
+      )
 
     # check if result and urls match. Rearrange due to alphabetical ordering in df.
     count <- split(result, result$species) %>%
@@ -116,10 +166,14 @@ url_to_refid <- function(url, mirror = "se") {
   refs <- c(p2[, 1], p3[, 1])
 
   # extract numeric values
-  ref_id <- purrr::map_chr(refs, ~paste0(unlist(stringr::str_extract_all(string = ., pattern = "[0-9]")), collapse = ""))
+  ref_id <- purrr::map_chr(
+    refs,
+    ~ paste0(
+      unlist(stringr::str_extract_all(string = ., pattern = "[0-9]")),
+      collapse = ""
+    )
+  )
   ref_id <- suppressWarnings(as.integer(ref_id))
 
   return(ref_id)
 }
-
-

@@ -23,8 +23,14 @@ plot_add_polygon_overview <- function(plot, bgm_as_df, polygon_overview = 0.2) {
   bl <- plot_boxes(data = bgm_as_df)
 
   # Combine plots!
-  g2 <- gridExtra::arrangeGrob(bl, ncol = 1,
-                               heights = grid::unit(c(polygon_overview, 1 - polygon_overview), units = "npc"))
+  g2 <- gridExtra::arrangeGrob(
+    bl,
+    ncol = 1,
+    heights = grid::unit(
+      c(polygon_overview, 1 - polygon_overview),
+      units = "npc"
+    )
+  )
 
   if (ggplot2::is.ggplot(plot)) {
     grobs <- list(gridExtra::arrangeGrob(plot), g2)
@@ -32,8 +38,14 @@ plot_add_polygon_overview <- function(plot, bgm_as_df, polygon_overview = 0.2) {
     grobs <- list(plot, g2)
   }
 
-  final_grob <- gridExtra::arrangeGrob(grobs = grobs, ncol = 2,
-                                         widths = grid::unit(c(1 - polygon_overview, polygon_overview), units = "npc"))
+  final_grob <- gridExtra::arrangeGrob(
+    grobs = grobs,
+    ncol = 2,
+    widths = grid::unit(
+      c(1 - polygon_overview, polygon_overview),
+      units = "npc"
+    )
+  )
 
   return(final_grob)
 }
