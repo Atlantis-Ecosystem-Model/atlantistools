@@ -33,12 +33,22 @@
 #' load_init_stanza(init = init, fgs = fgs, bboxes = bboxes)
 #' load_init_weight(init = init, fgs = fgs, bboxes = bboxes)
 
-load_init_age <- function(init, fgs, select_variable, select_groups = NULL, bboxes) {
+load_init_age <- function(
+  init,
+  fgs,
+  select_variable,
+  select_groups = NULL,
+  bboxes
+) {
   # Consrtuct vars to search for!
   fgs_data <- load_fgs(fgs = fgs)
   age_groups <- get_age_groups(fgs = fgs)
-  if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a fully age-structured group.")
-  if (is.null(select_groups)) select_groups <- age_groups
+  if (any(!is.element(select_groups, age_groups))) {
+    stop("Selected group is not a fully age-structured group.")
+  }
+  if (is.null(select_groups)) {
+    select_groups <- age_groups
+  }
 
   num_cohorts <- fgs_data$NumCohorts[is.element(fgs_data$Name, select_groups)]
   ages <- lapply(num_cohorts, seq, from = 1, by = 1)
@@ -54,7 +64,9 @@ load_init_age <- function(init, fgs, select_variable, select_groups = NULL, bbox
   # Add columns!
   for (i in seq_along(select_groups)) {
     for (j in 1:length(ages[[i]])) {
-      if (i == 1 & j == 1) k <- 1
+      if (i == 1 & j == 1) {
+        k <- 1
+      }
       df_list[[k]]$species <- select_groups[i]
       df_list[[k]]$agecl <- ages[[i]][j]
       k <- k + 1
@@ -65,7 +77,7 @@ load_init_age <- function(init, fgs, select_variable, select_groups = NULL, bbox
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~!is.na(layer))
+  result <- dplyr::filter_(result, ~ !is.na(layer))
   result$species <- convert_factor(data_fgs = fgs_data, col = result$species)
 
   return(result)
@@ -73,7 +85,14 @@ load_init_age <- function(init, fgs, select_variable, select_groups = NULL, bbox
 
 #' @export
 #' @rdname load_init_age
-load_init_nonage <- function(init, fgs, select_variable = "N", select_groups = NULL, bboxes, bps) {
+load_init_nonage <- function(
+  init,
+  fgs,
+  select_variable = "N",
+  select_groups = NULL,
+  bboxes,
+  bps
+) {
   # NOTE: Age based inverts are stored in a different way.... Name_Ncohort instead of NameCohort_Var
   # Consrtuct vars to search for!
   if (is.null(select_groups)) {
@@ -85,7 +104,10 @@ load_init_nonage <- function(init, fgs, select_variable = "N", select_groups = N
 
   # Extract data for non biomasspools!
   if (length(select_groups) >= 1) {
-    df_list <- load_init(init = init, vars = paste(select_groups, select_variable, sep = "_"))
+    df_list <- load_init(
+      init = init,
+      vars = paste(select_groups, select_variable, sep = "_")
+    )
     # Add columns!
     for (i in seq_along(select_groups)) {
       df_list[[i]]$species <- select_groups[i]
@@ -97,8 +119,11 @@ load_init_nonage <- function(init, fgs, select_variable = "N", select_groups = N
   if (length(select_bps)) {
     read_nc <- RNetCDF::open.nc(con = init)
     on.exit(RNetCDF::close.nc(read_nc))
-    n_layers    <- RNetCDF::dim.inq.nc(read_nc, 2)$length
-    df_list <- load_init(init = init, vars = paste(select_bps, select_variable, sep = "_"))
+    n_layers <- RNetCDF::dim.inq.nc(read_nc, 2)$length
+    df_list <- load_init(
+      init = init,
+      vars = paste(select_bps, select_variable, sep = "_")
+    )
     # Add columns!
     for (i in seq_along(select_bps)) {
       df_list[[i]]$species <- select_bps[i]
@@ -107,22 +132,37 @@ load_init_nonage <- function(init, fgs, select_variable = "N", select_groups = N
     df2$layer <- n_layers - 1
   }
 
-  if (length(select_groups) >= 1 & length(select_bps) >= 1)  result <- rbind(df1, df2)
-  if (length(select_groups) >= 1 & !length(select_bps) >= 1) result <- df1
-  if (!length(select_groups) >= 1 & length(select_bps) >= 1) result <- df2
+  if (length(select_groups) >= 1 & length(select_bps) >= 1) {
+    result <- rbind(df1, df2)
+  }
+  if (length(select_groups) >= 1 & !length(select_bps) >= 1) {
+    result <- df1
+  }
+  if (!length(select_groups) >= 1 & length(select_bps) >= 1) {
+    result <- df2
+  }
 
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~!is.na(layer))
-  result$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = result$species)
+  result <- dplyr::filter_(result, ~ !is.na(layer))
+  result$species <- convert_factor(
+    data_fgs = load_fgs(fgs = fgs),
+    col = result$species
+  )
 
   return(result)
 }
 
 #' @export
 #' @rdname load_init_age
-load_init_stanza <- function(init, fgs, select_variable = "N", select_groups = NULL, bboxes) {
+load_init_stanza <- function(
+  init,
+  fgs,
+  select_variable = "N",
+  select_groups = NULL,
+  bboxes
+) {
   # Consrtuct vars to search for!
   fgs_data <- load_fgs(fgs = fgs)
   fgs_data <- fgs_data[fgs_data$NumCohorts == 2, ]
@@ -130,8 +170,12 @@ load_init_stanza <- function(init, fgs, select_variable = "N", select_groups = N
 
   ages <- 1:2
 
-  if (any(!is.element(select_groups, age_groups))) stop("Selected group is not a stanza group.")
-  if (is.null(select_groups)) select_groups <- age_groups
+  if (any(!is.element(select_groups, age_groups))) {
+    stop("Selected group is not a stanza group.")
+  }
+  if (is.null(select_groups)) {
+    select_groups <- age_groups
+  }
 
   vars <- NULL
   for (i in seq_along(select_groups)) {
@@ -144,7 +188,9 @@ load_init_stanza <- function(init, fgs, select_variable = "N", select_groups = N
   # Add columns!
   for (i in seq_along(select_groups)) {
     for (j in 1:length(ages)) {
-      if (i == 1 & j == 1) k <- 1
+      if (i == 1 & j == 1) {
+        k <- 1
+      }
       df_list[[k]]$species <- select_groups[i]
       df_list[[k]]$agecl <- ages[j]
       k <- k + 1
@@ -155,7 +201,7 @@ load_init_stanza <- function(init, fgs, select_variable = "N", select_groups = N
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~!is.na(layer))
+  result <- dplyr::filter_(result, ~ !is.na(layer))
   result$species <- convert_factor(data_fgs = fgs_data, col = result$species)
 
   return(result)
@@ -176,7 +222,7 @@ load_init_physics <- function(init, select_variable, bboxes) {
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~!is.na(layer))
+  result <- dplyr::filter_(result, ~ !is.na(layer))
 
   return(result)
 }
@@ -184,13 +230,23 @@ load_init_physics <- function(init, select_variable, bboxes) {
 #' @export
 #' @rdname load_init_age
 load_init_weight <- function(init, fgs, bboxes) {
-  rn <- load_init_age(init = init, fgs = fgs, select_variable = "ResN", bboxes = bboxes) %>%
-    dplyr::filter_(~!is.na(atoutput)) %>%
+  rn <- load_init_age(
+    init = init,
+    fgs = fgs,
+    select_variable = "ResN",
+    bboxes = bboxes
+  ) %>%
+    dplyr::filter_(~ !is.na(atoutput)) %>%
     dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
     dplyr::rename_(.dots = c("rn" = "atoutput")) %>%
     unique()
-  sn <- load_init_age(init = init, fgs = fgs, select_variable = "StructN", bboxes = bboxes) %>%
-    dplyr::filter_(~!is.na(atoutput)) %>%
+  sn <- load_init_age(
+    init = init,
+    fgs = fgs,
+    select_variable = "StructN",
+    bboxes = bboxes
+  ) %>%
+    dplyr::filter_(~ !is.na(atoutput)) %>%
     dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
     dplyr::rename_(.dots = c("sn" = "atoutput")) %>%
     unique()
@@ -198,9 +254,3 @@ load_init_weight <- function(init, fgs, bboxes) {
     dplyr::select_(.dots = c("species", "agecl", "sn", "rn"))
   return(df)
 }
-
-
-
-
-
-

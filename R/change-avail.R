@@ -54,27 +54,36 @@
 #' dm2[apply(apply(dm2[, 5:ncol(dm2)], MARGIN = 2,
 #' function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
 
-change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NULL, roc, relative = TRUE, consecutive = FALSE) {
+change_avail <- function(
+  dietmatrix,
+  pred = NULL,
+  pred_stanza = NULL,
+  prey = NULL,
+  roc,
+  relative = TRUE,
+  consecutive = FALSE
+) {
   # Set variables in case no predators are selected! Need to update!
   dm <- dietmatrix
   prey_ordered <- unique(dm$prey[order(dm$prey_id)])
-
 
   # No predator selectd --> select all
   if (is.null(pred)) {
     # pred <- ff$Code[ff$isPredator == 1]
     pred <- unique(dm$pred)
-    if (length(pred_stanza) == 1) { # and one pred_stanza selected --> set constant for all predators
+    if (length(pred_stanza) == 1) {
+      # and one pred_stanza selected --> set constant for all predators
       pred_stanza <- rep(pred_stanza, times = length(pred))
     }
-    if (is.null(pred_stanza)) { # and no pred_stanza selected --> select all!
+    if (is.null(pred_stanza)) {
+      # and no pred_stanza selected --> select all!
       pred_stanza <- rep(c(1, 2), each = length(pred))
       pred <- rep(pred, times = 2)
     }
   }
 
   # Predator selectd but no pred_stanza?
-  if (!is.null(pred) & is.null(pred_stanza)){
+  if (!is.null(pred) & is.null(pred_stanza)) {
     pred_stanza <- rep(c(1, 2), times = length(pred))
     pred <- rep(pred, each = 2)
   }
@@ -84,23 +93,39 @@ change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NUL
     dummy <- vector(mode = "list", length = length(pred))
     dummy2 <- dummy
     for (i in seq_along(dummy)) {
-      if (!is.null(prey)) dummy[[i]] <- prey
+      if (!is.null(prey)) {
+        dummy[[i]] <- prey
+      }
       if (!is.null(roc)) dummy2[[i]] <- roc
     }
     prey <- dummy
     roc <- dummy2
   }
 
-  if (length(pred) != length(pred_stanza)) stop("Parameters pred and pred_stanza do not match.")
-  if (length(prey) != length(roc)) stop("Parameters roc and prey do not match.")
-  if (length(pred) != length(prey)) stop("Parameters pred and prey do not match.")
+  if (length(pred) != length(pred_stanza)) {
+    stop("Parameters pred and pred_stanza do not match.")
+  }
+  if (length(prey) != length(roc)) {
+    stop("Parameters roc and prey do not match.")
+  }
+  if (length(pred) != length(prey)) {
+    stop("Parameters pred and prey do not match.")
+  }
 
   # Create dataframe of rocs!
   roc_df <- vector(mode = "list", length = length(pred))
   for (i in seq_along(pred)) {
-    if (is.null(prey[[i]])) prey[[i]] <- unique(dm$prey)
+    if (is.null(prey[[i]])) {
+      prey[[i]] <- unique(dm$prey)
+    }
     # if (length(roc[[i]]) == 1)
-    roc_df[[i]] <- data.frame(pred[i], pred_stanza[i], prey[[i]], roc[[i]], stringsAsFactors = FALSE)
+    roc_df[[i]] <- data.frame(
+      pred[i],
+      pred_stanza[i],
+      prey[[i]],
+      roc[[i]],
+      stringsAsFactors = FALSE
+    )
   }
   roc_df <- do.call(rbind, roc_df)
   names(roc_df) <- c("pred", "pred_stanza", "prey", "roc")
@@ -115,7 +140,10 @@ change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NUL
   dm$roc <- NULL
   id <- dm$avail > 0.9
   if (sum(id) >= 1) {
-    warning(paste(sum(id), "availabilities were > 0.9 after the calculations. Changed to 0.9."))
+    warning(paste(
+      sum(id),
+      "availabilities were > 0.9 after the calculations. Changed to 0.9."
+    ))
     dm$avail[id] <- 0.9
   }
 
@@ -123,9 +151,11 @@ change_avail <- function(dietmatrix, pred = NULL, pred_stanza = NULL, prey = NUL
   if (!consecutive) {
     dm$prey_id <- NULL
     dm <- tidyr::spread_(dm, key_col = "prey", value_col = "avail")
-    dm <- dplyr::select_(dm, .dots = c(names(dm)[1:4], prey_ordered, "DLsed", "DRsed", "DCsed"))
+    dm <- dplyr::select_(
+      dm,
+      .dots = c(names(dm)[1:4], prey_ordered, "DLsed", "DRsed", "DCsed")
+    )
   }
 
   invisible(dm)
 }
-

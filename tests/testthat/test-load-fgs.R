@@ -15,8 +15,9 @@ test_that("test file dimensions", {
 
 
 test_that("test acronym extractions", {
-  expect_equal(get_nonage_acronyms(file), c("CEP", "BML", "PL", "DL", "DR", "DC"))
+  expect_equal(
+    get_nonage_acronyms(file),
+    c("CEP", "BML", "PL", "DL", "DR", "DC")
+  )
   expect_equal(get_fish_acronyms(file), c("FPS", "FVS"))
 })
-
-

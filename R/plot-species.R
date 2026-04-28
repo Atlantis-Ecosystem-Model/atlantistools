@@ -34,9 +34,19 @@ plot_species <- function(data_pre, species) {
 
   # Main function code -----------------------------------------------------------------------------
   # Extract dfs from the list of preprocessed dataframes and perform some simple transformations!
-  dfs <- list(data_pre$biomass, data_pre$biomass_age, data_pre$resn_age, data_pre$structn_age, data_pre$nums_age)
+  dfs <- list(
+    data_pre$biomass,
+    data_pre$biomass_age,
+    data_pre$resn_age,
+    data_pre$structn_age,
+    data_pre$nums_age
+  )
   dfs <- lapply(dfs, select_species, species = species)
-  condition <- dplyr::inner_join(dfs[[3]], dfs[[4]], by = names(dfs[[4]])[!names(dfs[[4]]) %in% "atoutput"])
+  condition <- dplyr::inner_join(
+    dfs[[3]],
+    dfs[[4]],
+    by = names(dfs[[4]])[!names(dfs[[4]]) %in% "atoutput"]
+  )
   condition$atoutput <- condition$atoutput.x / condition$atoutput.y
   condition$atoutput.x <- NULL
   condition$atoutput.y <- NULL
@@ -48,9 +58,14 @@ plot_species <- function(data_pre, species) {
   plots <- c(list(plot1), plot2)
 
   # Update y axis labels!
-  labels <- c("Biomass[t]", "Biomass [t]",
-              "Reserve nitrogen [mgN]", "Structural nitrogen [mgN]",
-              "Numbers", "Condition (optimal = 2.65)")
+  labels <- c(
+    "Biomass[t]",
+    "Biomass [t]",
+    "Reserve nitrogen [mgN]",
+    "Structural nitrogen [mgN]",
+    "Numbers",
+    "Condition (optimal = 2.65)"
+  )
   # Could be done with Maps(), however I dont know how to pass a assignment as parameter.
   for (i in seq_along(plots)) {
     plots[[i]] <- ggplot2::update_labels(plots[[i]], list(y = labels[i]))
@@ -65,13 +80,13 @@ plot_species <- function(data_pre, species) {
   plots <- lapply(plots, function(x) gridExtra::arrangeGrob(change_theme(x)))
   grob <- gridExtra::arrangeGrob(
     grobs = c(list(header), plots, list(legend)),
-    layout_matrix = matrix(c(rep(1, 2), 2:(length(plots) + 1), rep(length(plots) + 2, 2)), nrow = length(plots) / 2 + 2, byrow = T),
-    heights = grid::unit(c(0.05, rep(0.3, 3), 0.05), units = "npc"))
+    layout_matrix = matrix(
+      c(rep(1, 2), 2:(length(plots) + 1), rep(length(plots) + 2, 2)),
+      nrow = length(plots) / 2 + 2,
+      byrow = T
+    ),
+    heights = grid::unit(c(0.05, rep(0.3, 3), 0.05), units = "npc")
+  )
 
   return(grob)
 }
-
-
-
-
-

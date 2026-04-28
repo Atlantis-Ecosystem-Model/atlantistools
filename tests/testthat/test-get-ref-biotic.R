@@ -11,7 +11,14 @@ df1 <- get_ref_biotic("Cancer pagurus", test = TRUE)
 # df4 <- get_ref_biotic(c("Cancer pagurus", "xxx yyy"))
 # df5 <- get_ref_biotic("xxx yyy")
 
-cats <- c("Taxonomy", "Biology", "Distribution", "Reproduction", "Feeding", "Growth")
+cats <- c(
+  "Taxonomy",
+  "Biology",
+  "Distribution",
+  "Reproduction",
+  "Feeding",
+  "Growth"
+)
 
 test_that("Test output of dataframes", {
   expect_equal(nrow(df1), sum(c(2, 11, 3, 7, 5, 4)))
@@ -34,7 +41,10 @@ test_that("Test output of dataframes", {
 test <- "author, 2000"
 
 test_that("Test refstr_to_ref helper function", {
-  expect_equal(refstr_to_ref("ax, 2000, ay, 2001, az, 2002"), c("ax, 2000", "ay, 2001", "az, 2002"))
+  expect_equal(
+    refstr_to_ref("ax, 2000, ay, 2001, az, 2002"),
+    c("ax, 2000", "ay, 2001", "az, 2002")
+  )
   # Add in comma
   expect_equal(refstr_to_ref("author 2000"), test)
   # Remove trailing non integers
@@ -47,11 +57,26 @@ test_that("Test refstr_to_ref helper function", {
 
 
 d1 <- add_ref_url(refs = "ax 2001", ref_urls = "www.this.is.a.ref.ax+2001")
-d2 <- add_ref_url(refs = c("ax 2001", "ay 2003"), ref_urls = c("www.this.is.a.ref.ax+2001", "www.another.url.ay+2003"))
-d3 <- add_ref_url(refs = "ax et al. 2001", ref_urls = "www.this.is.a.ref.ax+2001")
-d4 <- add_ref_url(refs = "ax     et al. 2001", ref_urls = "www.this.is.a.ref.ax+2001")
-d5 <- add_ref_url(refs = c("ax 2001", "ay 2003"), ref_urls = c("www.this.is.a.ref.ay+2001", "www.another.url.ay+2004"))
-d6 <- add_ref_url(refs = "ax 2001", ref_urls = c("www.this.is.a.ref.ax+2001", "www.another.url.ax+2001"))
+d2 <- add_ref_url(
+  refs = c("ax 2001", "ay 2003"),
+  ref_urls = c("www.this.is.a.ref.ax+2001", "www.another.url.ay+2003")
+)
+d3 <- add_ref_url(
+  refs = "ax et al. 2001",
+  ref_urls = "www.this.is.a.ref.ax+2001"
+)
+d4 <- add_ref_url(
+  refs = "ax     et al. 2001",
+  ref_urls = "www.this.is.a.ref.ax+2001"
+)
+d5 <- add_ref_url(
+  refs = c("ax 2001", "ay 2003"),
+  ref_urls = c("www.this.is.a.ref.ay+2001", "www.another.url.ay+2004")
+)
+d6 <- add_ref_url(
+  refs = "ax 2001",
+  ref_urls = c("www.this.is.a.ref.ax+2001", "www.another.url.ax+2001")
+)
 
 test_that("Test add_ref_url helper function", {
   expect_equal(d1$ref_tag, "ax 2001")

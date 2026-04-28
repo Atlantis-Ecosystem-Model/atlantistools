@@ -48,5 +48,3 @@ convert_bgm <- function(bgm) {
 
   return(result)
 }
-
-

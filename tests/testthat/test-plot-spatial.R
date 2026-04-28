@@ -15,13 +15,21 @@ test_that("test utility functions - select_time", {
 })
 
 
-df <- expand.grid(species = c("sp1", "sp2", "sp3"), layer = 0:3, polygon = 0:3, stringsAsFactors = FALSE)
+df <- expand.grid(
+  species = c("sp1", "sp2", "sp3"),
+  layer = 0:3,
+  polygon = 0:3,
+  stringsAsFactors = FALSE
+)
 
 test_that("test utility functions - split_dfs", {
-  expect_error(split_dfs(df, cols = c("species", "atoutput")), "Column names in df do not match")
+  expect_error(
+    split_dfs(df, cols = c("species", "atoutput")),
+    "Column names in df do not match"
+  )
   expect_equal(length(split_dfs(df, cols = "species")), 3)
-  expect_equal(unique(sapply(split_dfs(df, cols = c("layer", "polygon")), length)), 3)
+  expect_equal(
+    unique(sapply(split_dfs(df, cols = c("layer", "polygon")), length)),
+    3
+  )
 })
-
-
-

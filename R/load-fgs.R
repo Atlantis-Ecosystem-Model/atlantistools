@@ -22,7 +22,12 @@
 #' head(fgs)
 
 load_fgs <- function(fgs) {
-  result <- utils::read.table(file = fgs, sep = ",", header = TRUE, stringsAsFactors = FALSE)
+  result <- utils::read.table(
+    file = fgs,
+    sep = ",",
+    header = TRUE,
+    stringsAsFactors = FALSE
+  )
   # Rename column longname if space is present in raw file.
   names(result)[names(result) == "Long.Name"] <- "LongName"
   return(result)

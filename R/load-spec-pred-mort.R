@@ -28,19 +28,41 @@
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_spec_pred_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, version_flag = 2) {
+load_spec_pred_mort <- function(
+  specmort,
+  prm_run,
+  fgs,
+  convert_names = FALSE,
+  version_flag = 2
+) {
   if (version_flag == 1) {
     mort <- load_txt(file = specmort)
-    mort <- tidyr::separate_(mort, col = "code", into = c("prey", "agecl", "stock", "pred", "mort"), convert = TRUE)
+    mort <- tidyr::separate_(
+      mort,
+      col = "code",
+      into = c("prey", "agecl", "stock", "pred", "mort"),
+      convert = TRUE
+    )
     # check uniqueness of column notsure and mort
-    if (any(sapply(mort[, c("stock", "mort")], function(x) length(unique(x))) != 1)) {
-      stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
+    if (
+      any(
+        sapply(mort[, c("stock", "mort")], function(x) length(unique(x))) != 1
+      )
+    ) {
+      stop(
+        "Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team."
+      )
     }
   } else if (version_flag == 2) {
-    mort <- load_txt(file = specmort, id_col = c("Time", "Group", "Cohort", "Stock"))
+    mort <- load_txt(
+      file = specmort,
+      id_col = c("Time", "Group", "Cohort", "Stock")
+    )
     mort <- dplyr::rename_(mort, pred = ~group, agecl = ~cohort, prey = ~code)
     if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
-      stop("Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team.")
+      stop(
+        "Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team."
+      )
     }
   }
   mort$agecl <- mort$agecl + 1
@@ -57,7 +79,7 @@ load_spec_pred_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, v
   nr_prey <- length(unique(mort$prey))
   count_zero <- mort %>%
     dplyr::group_by_(~time, ~pred, ~agecl) %>%
-    dplyr::summarise_(count_zero = ~sum(atoutput == 0) / nr_prey) %>%
+    dplyr::summarise_(count_zero = ~ sum(atoutput == 0) / nr_prey) %>%
     dplyr::filter(count_zero == 1)
 
   # Remove zeros
@@ -65,7 +87,12 @@ load_spec_pred_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, v
 
   # Convert species codes to longnames!
   if (convert_names) {
-    mort <- dplyr::mutate_at(mort, .cols = c("pred", "prey"), .funs = convert_factor, data_fgs = load_fgs(fgs = fgs))
+    mort <- dplyr::mutate_at(
+      mort,
+      .cols = c("pred", "prey"),
+      .funs = convert_factor,
+      data_fgs = load_fgs(fgs = fgs)
+    )
   }
 
   # Convert time
@@ -73,11 +100,14 @@ load_spec_pred_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, v
 
   # For some weird reason putput rows with exact yearly output are duplicated...
   # ***This will cause a potentially unnoticed bug when this issue in the output file gets fixed
-  mort <- agg_data(data = mort, groups = c("time", "pred", "agecl", "prey"), fun = mean)
+  mort <- agg_data(
+    data = mort,
+    groups = c("time", "pred", "agecl", "prey"),
+    fun = mean
+  )
 
   return(mort)
 }
-
 
 # ggplot2::ggplot(subset(mort, pred == "COD" & prey == "COD"), ggplot2::aes(x = factor(time), y = atoutput, fill = stanza)) +
 #   ggplot2::geom_boxplot(position = "dodge") +
@@ -87,9 +117,3 @@ load_spec_pred_mort <- function(specmort, prm_run, fgs, convert_names = FALSE, v
 # dir <- "z:/Atlantis_models/Runs/dummy_01_ATLANTIS_NS/"
 # specmort = "outputNorthSeaSpecificPredMort.txt"
 # prm_biol = "NorthSea_biol_fishing.prm"
-
-
-
-
-
-

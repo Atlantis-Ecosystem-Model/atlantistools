@@ -12,5 +12,3 @@ test_that("test conversion factor and helper functions", {
 
   expect_equal(get_conv_mgnbiot(dd), 1.14e-07)
 })
-
-

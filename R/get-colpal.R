@@ -9,8 +9,7 @@
 #'
 #' @export
 
-
-get_colpal <- function(){
+get_colpal <- function() {
   greys <- c(51, 128, 204, 71, 148, 224, 91, 168, 244)
   greys <- grDevices::rgb(cbind(greys, greys, greys), maxColorValue = 255)
   col_pal <- c(RColorBrewer::brewer.pal(n = 12, name = "Paired"), greys)

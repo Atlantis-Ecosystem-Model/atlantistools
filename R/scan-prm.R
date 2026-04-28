@@ -5,7 +5,7 @@
 #' @export
 
 # Extract position of variable in a Vector of character strings.
-scan_prm <- function(chars, variable){
+scan_prm <- function(chars, variable) {
   pos <- grep(pattern = variable, x = chars)
   if (length(pos) == 0) {
     stop(paste("Variable", variable, "not found."))
@@ -27,8 +27,10 @@ scan_prm <- function(chars, variable){
     } else {
       # check if the variable is part of another variable and exclude those!
       # We check for equality of the first two characters!
-      check <- substr(chars[pos], start = 1, stop = 2) %in% substr(variable, start = 1, stop = 2)
-      if (sum(check) == 1) { # apply the fix
+      check <- substr(chars[pos], start = 1, stop = 2) %in%
+        substr(variable, start = 1, stop = 2)
+      if (sum(check) == 1) {
+        # apply the fix
         pos <- pos[check]
         return(pos)
       } else {
@@ -37,4 +39,3 @@ scan_prm <- function(chars, variable){
     }
   }
 }
-

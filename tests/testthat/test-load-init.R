@@ -20,5 +20,3 @@ test_that("test get_layers", {
   expect_equal(length(layers), 11)
   expect_equal(max(layers), 6)
 })
-
-

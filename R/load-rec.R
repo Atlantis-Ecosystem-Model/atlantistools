@@ -33,14 +33,27 @@ load_rec <- function(yoy, ssb, prm_biol) {
 
   # Extract info about recruit weights from the biological parameterfile!
   acr <- unique(result$code)
-  kwrr <- lapply(paste("KWRR", acr, sep = "_"), extract_prm, prm_biol = prm_biol)
-  kwsr <- lapply(paste("KWSR", acr, sep = "_"), extract_prm, prm_biol = prm_biol)
-  rec_weights <- data.frame(code = acr, rec_weights = unlist(kwrr) + unlist(kwsr), stringsAsFactors = F)
+  kwrr <- lapply(
+    paste("KWRR", acr, sep = "_"),
+    extract_prm,
+    prm_biol = prm_biol
+  )
+  kwsr <- lapply(
+    paste("KWSR", acr, sep = "_"),
+    extract_prm,
+    prm_biol = prm_biol
+  )
+  rec_weights <- data.frame(
+    code = acr,
+    rec_weights = unlist(kwrr) + unlist(kwsr),
+    stringsAsFactors = F
+  )
 
   # Combine with recruitment data and convert units!
   result <- dplyr::inner_join(x = result, y = rec_weights, by = "code")
   bio_conv <- get_conv_mgnbiot(prm_biol = prm_biol)
-  result$atoutput.x <- ((result$atoutput.x / bio_conv) / result$rec_weights) / 1000
+  result$atoutput.x <- ((result$atoutput.x / bio_conv) / result$rec_weights) /
+    1000
 
   # Final data transformations
   names(result)[names(result) == "atoutput.x"] <- "rec"
@@ -50,6 +63,3 @@ load_rec <- function(yoy, ssb, prm_biol) {
 
   return(result)
 }
-
-
-

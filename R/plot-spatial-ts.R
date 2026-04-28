@@ -47,10 +47,30 @@
 #
 # names(result)
 
-plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, ncol = 7, polygon_overview = 0.2) {
+plot_spatial_ts <- function(
+  bio_spatial,
+  bgm_as_df,
+  vol,
+  select_species = NULL,
+  ncol = 7,
+  polygon_overview = 0.2
+) {
   # Check input dataframe!
-  check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
-  check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
+  check_df_names(
+    bio_spatial,
+    expect = c(
+      "species",
+      "polygon",
+      "layer",
+      "time",
+      "species_stanza",
+      "atoutput"
+    )
+  )
+  check_df_names(
+    bgm_as_df,
+    expect = c("lat", "long", "inside_lat", "inside_long", "polygon")
+  )
 
   # Flip layers in bio_spatial!
   bio_spatial <- flip_layers(bio_spatial)
@@ -59,7 +79,7 @@ plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, 
   # Warning: Will change input parameter which makes it harder to debug...
   if (!is.null(select_species)) {
     if (all(select_species %in% unique(bio_spatial$species))) {
-      bio_spatial <- dplyr::filter_(bio_spatial, ~species %in% select_species)
+      bio_spatial <- dplyr::filter_(bio_spatial, ~ species %in% select_species)
     } else {
       stop("Not all selected_species are present in bio_spatial.")
     }
@@ -69,21 +89,44 @@ plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, 
 
   # Step1: Calculate summary tables
   # - biomass timeseries per box
-  ts_bio <- agg_data(bio_spatial, groups = c("time", "species", "species_stanza", "polygon"), fun = sum) %>%
+  ts_bio <- agg_data(
+    bio_spatial,
+    groups = c("time", "species", "species_stanza", "polygon"),
+    fun = sum
+  ) %>%
     dplyr::left_join(vol) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput / volume), "density"))
+    dplyr::mutate_(
+      .dots = stats::setNames(list(~ atoutput / volume), "density")
+    )
 
   plot_ts_species <- function(data, ncol) {
-    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~time, y = ~density, colour = ~atoutput)) +
+    plot <- ggplot2::ggplot(
+      data,
+      ggplot2::aes_(x = ~time, y = ~density, colour = ~atoutput)
+    ) +
       ggplot2::geom_line(lineend = "round") +
-      ggplot2::facet_wrap(~polygon, ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15)) +
+      ggplot2::facet_wrap(
+        ~polygon,
+        ncol = ncol,
+        labeller = ggplot2::label_wrap_gen(width = 15)
+      ) +
       # ggplot2::scale_y_continuous(breaks = function(x) c(min(x), max(x)), labels = function(x) scales::scientific(x, digits = 2)) +
-      ggplot2::scale_colour_gradientn(paste("Biomass [t]", sep = "\n"), colours = grDevices::rainbow(n = 7),
-                                      labels = function(x) scales::scientific(x, digits = 2)) +
+      ggplot2::scale_colour_gradientn(
+        paste("Biomass [t]", sep = "\n"),
+        colours = grDevices::rainbow(n = 7),
+        labels = function(x) scales::scientific(x, digits = 2)
+      ) +
       ggplot2::labs(x = "Time [years]", y = "Biomassdensity [t/m^-3]") +
       theme_atlantis() +
       ggplot2::theme(legend.position = "right") +
-      ggplot2::labs(title = paste("Species:", unique(data$species), "with stanza:", unique(data$species_stanza)))
+      ggplot2::labs(
+        title = paste(
+          "Species:",
+          unique(data$species),
+          "with stanza:",
+          unique(data$species_stanza)
+        )
+      )
 
     plot <- ggplot_custom(plot)
 
@@ -98,14 +141,21 @@ plot_spatial_ts <- function(bio_spatial, bgm_as_df, vol, select_species = NULL, 
     # Divide species specific data in stanza specific data
     dfs <- split(dfs_species[[i]], dfs_species[[i]]$species_stanza)
     plots <- lapply(dfs, plot_ts_species, ncol = ncol)
-    grobs[[i]] <- gridExtra::arrangeGrob(grobs = plots, ncol = 1, heights = grid::unit(rep(0.5, 2), units = "npc"))
+    grobs[[i]] <- gridExtra::arrangeGrob(
+      grobs = plots,
+      ncol = 1,
+      heights = grid::unit(rep(0.5, 2), units = "npc")
+    )
   }
 
   # Step3: Combine plots with polygon overview!
-  grobs <- lapply(grobs, plot_add_polygon_overview, bgm_as_df = bgm_as_df, polygon_overview = polygon_overview)
+  grobs <- lapply(
+    grobs,
+    plot_add_polygon_overview,
+    bgm_as_df = bgm_as_df,
+    polygon_overview = polygon_overview
+  )
   names(grobs) <- select_species
 
   return(grobs)
 }
-
-

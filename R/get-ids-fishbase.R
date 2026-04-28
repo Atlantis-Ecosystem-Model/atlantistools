@@ -12,7 +12,7 @@
 #' get_ids_fishbase(fish)
 #' @export
 
-get_ids_fishbase <- function(fish){
+get_ids_fishbase <- function(fish) {
   pos <- get_info_fishbase(fish = fish)
   res <- atlantistools::fishbase_data$SpecCode[pos]
   names(res) <- names(pos)
@@ -20,7 +20,7 @@ get_ids_fishbase <- function(fish){
   return(res)
 }
 
-get_fcs_fishbase <- function(fish){
+get_fcs_fishbase <- function(fish) {
   pos <- get_info_fishbase(fish = fish)
   res <- atlantistools::fishbase_data$FamCode[pos]
   names(res) <- names(pos)
@@ -30,17 +30,36 @@ get_fcs_fishbase <- function(fish){
 
 get_info_fishbase <- function(fish) {
   # Check if every fishname is composed of genus and species!
-  if (any(vapply(stringr::str_split(fish, pattern = " "), length, FUN.VALUE = integer(1)) < 2)) stop("Fishnames not complete.")
+  if (
+    any(
+      vapply(
+        stringr::str_split(fish, pattern = " "),
+        length,
+        FUN.VALUE = integer(1)
+      ) <
+        2
+    )
+  ) {
+    stop("Fishnames not complete.")
+  }
 
   ge_sp <- split_species(fish)
 
   # get fishbase ids
-  pos <- purrr::map2(.x = ge_sp$ge, .y = ge_sp$sp, ~atlantistools::fishbase_data$Genus == .x & atlantistools::fishbase_data$Species == .y)
+  pos <- purrr::map2(
+    .x = ge_sp$ge,
+    .y = ge_sp$sp,
+    ~ atlantistools::fishbase_data$Genus == .x &
+      atlantistools::fishbase_data$Species == .y
+  )
 
   # report species not found in database
   missing <- purrr::map_int(pos, sum) == 0
   if (sum(missing >= 1)) {
-    warning(paste("The following species are not part of the fishbase dataframe", paste(fish[missing], collapse = ", ")))
+    warning(paste(
+      "The following species are not part of the fishbase dataframe",
+      paste(fish[missing], collapse = ", ")
+    ))
     fish <- fish[!missing]
     pos <- pos[!missing]
   }
@@ -56,5 +75,3 @@ split_species <- function(fish) {
   result <- list(ge = result[, 1], sp = result[, 2])
   return(result)
 }
-
-
