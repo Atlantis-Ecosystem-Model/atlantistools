@@ -15,6 +15,8 @@ ref_lit <- tibble::tribble(
   "Age and growth of Callionymus lyra L. J. Mar. Biol. Asoc. U.K. 30(2):281-296."
 )
 
-devtools::use_data(ref_lit, overwrite = TRUE)
+if (0) {
+  devtools::use_data(ref_lit, overwrite = TRUE)
+}
 
 rm(list = ls())
