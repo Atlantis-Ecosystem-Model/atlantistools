@@ -1,4 +1,4 @@
-# Dataframes related to refernce extraction.
+# Dataframes related to reference extraction.
 
 ref_lit <- tibble::tribble(
   ~year,
@@ -15,8 +15,6 @@ ref_lit <- tibble::tribble(
   "Age and growth of Callionymus lyra L. J. Mar. Biol. Asoc. U.K. 30(2):281-296."
 )
 
-if (0) {
+if (1) {
   devtools::use_data(ref_lit, overwrite = TRUE)
 }
-
-rm(list = ls())
