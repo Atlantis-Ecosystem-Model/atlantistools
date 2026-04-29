@@ -13,7 +13,6 @@
 #' @return A \code{data.frame} in long format with the following column names:
 #'   variable, time, polygon, layer, and atoutput (i.e., variable).
 
-
 #' @details This functions converts the ATLANTIS output to a dataframe which can be processed in R.
 #' @keywords gen
 #' @examples
@@ -36,20 +35,49 @@
 #'
 #' test <- load_nc_physics(nc, select_physics = "nominal_dz", prm_run, bboxes)
 
-load_nc_physics <- function(nc,
-                            select_physics,
-                            prm_run,
-                            bboxes,
-                            aggregate_layers = FALSE,
-                            warn_zeros = FALSE){
-  if (is.null(select_physics)) stop("No physical variables selected.")
-  supported_variables <- c("salt", "NO3", "NH3", "Temp", "Oxygen", "Si", "Det_Si", "DON", "Chl_a", "hdsource", "hdsink",
-                           "Denitrifiction", "Nitrification", "eflux", "vflux", "volume", "Light", "dz", "nominal_dz")
+load_nc_physics <- function(
+  nc,
+  select_physics,
+  prm_run,
+  bboxes,
+  aggregate_layers = FALSE,
+  warn_zeros = FALSE
+) {
+  if (is.null(select_physics)) {
+    stop("No physical variables selected.")
+  }
+  supported_variables <- c(
+    "salt",
+    "NO3",
+    "NH3",
+    "Temp",
+    "Oxygen",
+    "Si",
+    "Det_Si",
+    "DON",
+    "Chl_a",
+    "hdsource",
+    "hdsink",
+    "Denitrifiction",
+    "Nitrification",
+    "eflux",
+    "vflux",
+    "volume",
+    "Light",
+    "dz",
+    "nominal_dz"
+  )
 
-  wrong_input <- select_physics[which(!is.element(select_physics, supported_variables))]
+  wrong_input <- select_physics[which(
+    !is.element(select_physics, supported_variables)
+  )]
 
   if (length(wrong_input) >= 1) {
-    stop(paste(wrong_input, "not part of", paste(supported_variables, collapse = ", ")))
+    stop(paste(
+      wrong_input,
+      "not part of",
+      paste(supported_variables, collapse = ", ")
+    ))
   }
 
   # Load ATLANTIS output!
@@ -58,12 +86,16 @@ load_nc_physics <- function(nc,
 
   # Extract number of timesteps, polygons and layers from netcdf
   n_timesteps <- RNetCDF::dim.inq.nc(at_out, 0)$length
-  n_boxes     <- RNetCDF::dim.inq.nc(at_out, 1)$length
-  n_layers    <- RNetCDF::dim.inq.nc(at_out, 2)$length
+  n_boxes <- RNetCDF::dim.inq.nc(at_out, 1)$length
+  n_layers <- RNetCDF::dim.inq.nc(at_out, 2)$length
 
-  if (n_timesteps == 1) stop("Timestep is one.")
+  if (n_timesteps == 1) {
+    stop("Timestep is one.")
+  }
 
-  num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")[,1]
+  num_layers <- RNetCDF::var.get.nc(ncfile = at_out, variable = "numlayers")[,
+    1
+  ]
   # add sediment layer!
   num_layers <- num_layers + ifelse(num_layers == 0, 0, 1)
 
@@ -74,14 +106,19 @@ load_nc_physics <- function(nc,
   # to 0! This will speed up the code ALOT! In addition is helps to vectorise
   # the dataframe creation. Applying a boolean array to an array results in a vector!
   for (i in seq_along(num_layers)) {
-    if (i == 1) layerid <- array(dim = c(n_layers, n_boxes))
+    if (i == 1) {
+      layerid <- array(dim = c(n_layers, n_boxes))
+    }
     if (num_layers[i] == 0) {
       layerid[, i] <- 0
     } else {
       if (!is.null(bboxes) & is.element((i - 1), bboxes)) {
         layerid[, i] <- 0
       } else {
-        layerid[, i] <- c(rep(0, times = n_layers - num_layers[i]), rep(1, times = num_layers[i]))
+        layerid[, i] <- c(
+          rep(0, times = n_layers - num_layers[i]),
+          rep(1, times = num_layers[i])
+        )
       }
     }
   }
@@ -104,19 +141,31 @@ load_nc_physics <- function(nc,
   num_layers <- num_layers[!island_ids]
 
   polygons <- rep(boxes, times = num_layers)
-  layers <- sapply(num_layers[num_layers != 0] - 2, function(x) c(seq(x, from = 0, by = 1), n_layers - 1))
+  layers <- sapply(num_layers[num_layers != 0] - 2, function(x) {
+    c(seq(x, from = 0, by = 1), n_layers - 1)
+  })
   if (any(sapply(layers, length) != num_layers[num_layers != 0])) {
     stop("Number of layers incorrect. Contact package development team.")
   }
   layers <- do.call(c, layers)
-  if (length(polygons) != length(layers)) stop("Number of polygons and layers do not match. Contact package development team.")
+  if (length(polygons) != length(layers)) {
+    stop(
+      "Number of polygons and layers do not match. Contact package development team."
+    )
+  }
 
   # Actual data extraction is performed!
-  for (i in seq_along(physic_output)) {# for loop over physical variables
-    if (i == 1) result <- list()
+  for (i in seq_along(physic_output)) {
+    # for loop over physical variables
+    if (i == 1) {
+      result <- list()
+    }
     if (select_physics[i] != "nominal_dz") {
-      for (j in 1:n_timesteps) {# loop over timesteps
-        if (j == 1) values <- array(dim = c(length(layers), n_timesteps))
+      for (j in 1:n_timesteps) {
+        # loop over timesteps
+        if (j == 1) {
+          values <- array(dim = c(length(layers), n_timesteps))
+        }
         values[, j] <- physic_output[[i]][,, j][which(layerid == 1)]
       }
       result[[i]] <- as.vector(values)
@@ -126,7 +175,10 @@ load_nc_physics <- function(nc,
       # of timesteps to match with the other outputs.
       fix_layerid <- apply(layerid[-nrow(layerid), ], MARGIN = 2, rev)
       fix_layerid <- rbind(fix_layerid, layerid[nrow(layerid), ])
-      result[[i]] <- rep(physic_output[[i]][fix_layerid == 1], times = n_timesteps)
+      result[[i]] <- rep(
+        physic_output[[i]][fix_layerid == 1],
+        times = n_timesteps
+      )
     }
   }
 
@@ -136,36 +188,41 @@ load_nc_physics <- function(nc,
   # 3. polygon          --> rep polygons times timesteps * select_physics
   # 4. layer            --> rep layers times timesteps * select_physics
   # The code is highly vectorized and therefore quite effective!
-  result <- data.frame(variable = rep(select_physics, each = length(layers) * n_timesteps),
-                       polygon = rep(polygons, times = n_timesteps * length(select_physics)),
-                       layer = rep(layers, times = n_timesteps * length(select_physics)),
-                       time = rep(rep(0:(n_timesteps - 1), each = length(layers)), times = length(select_physics)),
-                       atoutput = do.call(c, result),
-                       stringsAsFactors = F)
+  result <- data.frame(
+    variable = rep(select_physics, each = length(layers) * n_timesteps),
+    polygon = rep(polygons, times = n_timesteps * length(select_physics)),
+    layer = rep(layers, times = n_timesteps * length(select_physics)),
+    time = rep(
+      rep(0:(n_timesteps - 1), each = length(layers)),
+      times = length(select_physics)
+    ),
+    atoutput = do.call(c, result),
+    stringsAsFactors = F
+  )
 
   # Remove min_pools if existent (well, there always are min pools... ;)).
   min_pools <- is.element(result$atoutput, c(0, 1e-08, 1e-16))
   if (length(min_pools) > 0) {
     print_min_pools <- sum(min_pools)
     if (print_min_pools > 0 & warn_zeros) {
-      warning(paste0(round(print_min_pools/dim(result)[1] * 100), "% of entries are min-pools (0, 1e-08, 1e-16)"))
+      warning(paste0(
+        round(print_min_pools / dim(result)[1] * 100),
+        "% of entries are min-pools (0, 1e-08, 1e-16)"
+      ))
     }
     result <- result[!min_pools, ]
   }
 
   if (aggregate_layers) {
-    result <- result %>%
-      dplyr::group_by_("variable", "polygon", "time") %>%
-      dplyr::summarise_(atoutput = ~mean(atoutput))
+    result <- result |>
+      dplyr::group_by(variable, polygon, time) |>
+      dplyr::summarise(
+        atoutput = mean(atoutput, na.rm = TRUE),
+        .groups = "drop"
+      )
   }
 
   result$time <- convert_time(prm_run = prm_run, col = result$time)
 
   return(result)
 }
-
-
-
-
-
-
