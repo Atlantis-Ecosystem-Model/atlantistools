@@ -86,11 +86,11 @@ calculate_biomass_spatial <- function(nums, sn, rn, n, vol_dz, bio_conv, bps) {
   biomass_age <- dplyr::inner_join(
     nums,
     sn,
-    by = c(species, agecl, polygon, layer, time)
+    by = c("species", "agecl", "polygon", "layer", "time")
   ) |>
     dplyr::left_join(
       rn,
-      by = c(species, agecl, polygon, layer, time)
+      by = c("species", "agecl", "polygon", 'layer', "time")
     ) |>
     dplyr::mutate(
       atoutput = (sn + rn) * atoutput * bio_conv
@@ -98,7 +98,7 @@ calculate_biomass_spatial <- function(nums, sn, rn, n, vol_dz, bio_conv, bps) {
     dplyr::select(dplyr::across(-c(sn, rn)))
 
   # - Non age based groups!
-  biomass_pools <- dplyr::left_join(n, vol, by = c(polygon, layer, time))
+  biomass_pools <- dplyr::left_join(n, vol, by = c("polygon", "layer", "time"))
   biomass_pools$atoutput <- with(
     biomass_pools,
     ifelse(
