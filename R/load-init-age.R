@@ -77,7 +77,8 @@ load_init_age <- function(
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~ !is.na(layer))
+  result <- result |>
+    dplyr::filter(!is.na(layer))
   result$species <- convert_factor(data_fgs = fgs_data, col = result$species)
 
   return(result)
@@ -145,7 +146,8 @@ load_init_nonage <- function(
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~ !is.na(layer))
+  result <- result |>
+    dplyr::filter(!is.na(layer))
   result$species <- convert_factor(
     data_fgs = load_fgs(fgs = fgs),
     col = result$species
@@ -201,7 +203,8 @@ load_init_stanza <- function(
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~ !is.na(layer))
+  result <- result |>
+    dplyr::filter(!is.na(layer))
   result$species <- convert_factor(data_fgs = fgs_data, col = result$species)
 
   return(result)
@@ -222,7 +225,8 @@ load_init_physics <- function(init, select_variable, bboxes) {
   # Cleanup
   result <- remove_min_pools(df = result)
   result <- remove_bboxes(df = result, bboxes = bboxes)
-  result <- dplyr::filter_(result, ~ !is.na(layer))
+  result <- result |>
+    dplyr::filter(!is.na(layer))
 
   return(result)
 }
@@ -236,9 +240,9 @@ load_init_weight <- function(init, fgs, bboxes) {
     select_variable = "ResN",
     bboxes = bboxes
   ) %>%
-    dplyr::filter_(~ !is.na(atoutput)) %>%
-    dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
-    dplyr::rename_(.dots = c("rn" = "atoutput")) %>%
+    dplyr::filter(!is.na(atoutput)) |>
+    dplyr::select(atoutput, species, agecl) |>
+    dplyr::rename(rn = atoutput) |>
     unique()
   sn <- load_init_age(
     init = init,
@@ -246,11 +250,11 @@ load_init_weight <- function(init, fgs, bboxes) {
     select_variable = "StructN",
     bboxes = bboxes
   ) %>%
-    dplyr::filter_(~ !is.na(atoutput)) %>%
-    dplyr::select_(.dots = c("atoutput", "species", "agecl")) %>%
-    dplyr::rename_(.dots = c("sn" = "atoutput")) %>%
+    dplyr::filter(!is.na(atoutput)) |>
+    dplyr::select(atoutput, species, agecl) |>
+    dplyr::rename(sn = atoutput) |>
     unique()
-  df <- dplyr::inner_join(rn, sn, by = c("species", "agecl")) %>%
-    dplyr::select_(.dots = c("species", "agecl", "sn", "rn"))
+  df <- dplyr::inner_join(rn, sn, by = c("species", "agecl")) |>
+    dplyr::select(species, agecl, sn, rn)
   return(df)
 }

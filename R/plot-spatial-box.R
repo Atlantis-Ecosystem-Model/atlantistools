@@ -82,7 +82,7 @@ plot_spatial_box <- function(
   # Warning: Will change input parameter which makes it harder to debug...
   if (!is.null(select_species)) {
     if (all(select_species %in% unique(bio_spatial$species))) {
-      bio_spatial <- dplyr::filter_(bio_spatial, ~ species %in% select_species)
+      bio_spatial <- bio_spatial |> dplyr::filter(species %in% select_species)
     } else {
       stop("Not all selected_species are present in bio_spatial.")
     }
@@ -167,7 +167,7 @@ select_time <- function(df, timesteps = 2) {
       pos <- pos[-length(pos)]
       select_time <- c(select_time, time_sorted[pos])
     }
-    dplyr::filter_(df, ~ time %in% select_time)
+    dplyr::filter(df, time %in% select_time)
   } else {
     df
   }

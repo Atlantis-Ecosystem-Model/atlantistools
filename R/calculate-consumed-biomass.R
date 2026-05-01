@@ -99,7 +99,7 @@ calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
     dplyr::full_join(dm, by = c("species" = "pred", "time", "agecl")) %>%
     # Restrict timesteps to netcdf data! Last timestep is weird in Dietcheck.txt.
     dplyr::filter(time %in% ts_eat) |>
-    dplyr::rename(species = pred)
+    dplyr::rename(pred = species)
 
   # Some detective work is needed here!
   det_eat <- consumed_bio[is.na(consumed_bio$atoutput.x), ]
@@ -123,7 +123,7 @@ calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
   # Setp4: Calculate consumed biomass of prey species.
   consumed_biomass <- consumed_bio |>
     dplyr::filter(!is.na(atoutput.x)) |>
-    dplyr::filter_(!is.na(atoutput.y)) |>
+    dplyr::filter(!is.na(atoutput.y)) |>
     dplyr::mutate(
       atoutput = atoutput.x * atoutput.y
     ) |>

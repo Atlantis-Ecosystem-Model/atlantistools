@@ -16,7 +16,7 @@ ref_to_bibkey <- function(ref_df, bib) {
   # single_ref <- ref_df[4, ]
   single_bibtex <- function(single_ref, ref_bib) {
     # Match by year
-    bibkey <- dplyr::filter_(ref_bib, ~ year == single_ref$year)
+    bibkey <- ref_bib |> dplyr::filter(year == single_ref$year)
     if (nrow(bibkey) > 0) {
       # Match by title
       bibkey <- bibkey[

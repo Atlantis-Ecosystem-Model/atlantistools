@@ -79,7 +79,7 @@ plot_spatial_ts <- function(
   # Warning: Will change input parameter which makes it harder to debug...
   if (!is.null(select_species)) {
     if (all(select_species %in% unique(bio_spatial$species))) {
-      bio_spatial <- dplyr::filter_(bio_spatial, ~ species %in% select_species)
+      bio_spatial <- bio_spatial |> dplyr::filter(species %in% select_species)
     } else {
       stop("Not all selected_species are present in bio_spatial.")
     }

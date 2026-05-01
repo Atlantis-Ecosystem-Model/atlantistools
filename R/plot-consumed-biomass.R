@@ -45,10 +45,10 @@ plot_consumed_biomass <- function(
 ) {
   # Restrict to selected timestep!
   if (is.null(select_time)) {
-    one_time <- dplyr::filter_(bio_consumed, ~ time == min(time))
+    one_time <- bio_consumed |> dplyr::filter(time == min(time))
   } else {
     if (length(select_time) == 1) {
-      one_time <- dplyr::filter_(bio_consumed, ~ time == select_time)
+      one_time <- bio_consumed |> dplyr::filter(time == select_time)
     } else {
       stop("Only one value for select_time allowed per function call.")
     }

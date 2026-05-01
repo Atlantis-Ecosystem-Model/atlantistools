@@ -109,14 +109,14 @@ sc_init <- function(
     bboxes = bboxes
   )
 
-  surface <- vol %>%
-    dplyr::filter_(~ layer != maxl) %>%
+  surface <- vol |>
+    dplyr::filter(layer != maxl) |>
     agg_data(col = "layer", groups = "polygon", fun = max, out = "layer")
 
-  vol <- vol %>%
-    dplyr::inner_join(surface, by = c("polygon", "layer")) %>%
-    dplyr::rename_(.dots = c("vol" = "atoutput")) %>%
-    dplyr::select_(quote(-variable))
+  vol <- vol |>
+    dplyr::inner_join(surface, by = c("polygon", "layer")) |>
+    dplyr::rename(vol = atoutput) |>
+    dplyr::select(-variable)
 
   # Extract data for age based groups
   pd1 <- prm_to_df(
@@ -263,19 +263,19 @@ sc_init <- function(
     fgs = fgs,
     convert_names = TRUE,
     version_flag = version_flag
-  ) %>%
-    dplyr::filter_(~ avail != 0) %>%
+  ) |>
+    dplyr::filter(avail != 0) |>
     dplyr::left_join(ass_type, by = "prey")
   if (!is.null(set_avail)) {
     dm$avail <- set_avail
   }
   ## Combine everything to one dataframe!
-  result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) %>%
-    dplyr::left_join(asseff, by = "species") %>%
+  result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) |>
+    dplyr::left_join(asseff, by = "species") |>
     dplyr::inner_join(
       dm,
       by = c("species" = "pred", "pred_stanza", "ass_type")
-    ) %>%
+    ) |>
     dplyr::inner_join(preydens, by = c("prey_stanza", "prey")) |> # only use prey items which are consumed (e.g. no juvenile inverts)
     dplyr::rename(pred = species) |>
     dplyr::mutate(

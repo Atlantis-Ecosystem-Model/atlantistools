@@ -152,8 +152,8 @@ remove_min_pools <- function(
   col = "atoutput",
   min_pools = c(0, 1e-08, 1e-16)
 ) {
-  expr <- lazyeval::interp(quote(!(x %in% y)), x = as.name(col), y = min_pools)
-  df %>% dplyr::filter_(expr)
+  df |>
+    dplyr::filter(!(.data[[col]] %in% min_pools))
 }
 
 # Remove boundary boxes from a dataframe. bboxes is the vector of box ids (starting with 0)
@@ -161,5 +161,5 @@ remove_bboxes <- function(df, bboxes) {
   if (!any(names(df) == "polygon")) {
     stop("No column polygon in df. Cannot remove boundary boxes.")
   }
-  df %>% dplyr::filter_(~ !(polygon %in% bboxes))
+  df |> dplyr::filter(!(polygon %in% bboxes))
 }

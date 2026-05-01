@@ -86,7 +86,7 @@ load_dietcheck <- function(
       ) |>
 
       dplyr::summarise(out = dplyr::n_distinct(Time)) |>
-      dplyr::filter_(~ out != 1)
+      dplyr::filter(out != 1)
 
     if (nrow(print_diet) != 0) {
       print_diet <- print_diet |>

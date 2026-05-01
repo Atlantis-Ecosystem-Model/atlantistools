@@ -90,16 +90,14 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   data_bio$perc_bio[is.na(data_bio$perc_bio)] <- 0
 
   # Remove sediment layer! Need to read in the sediment penetration depth (KDEP) to include sedimant layer.
-  data_bio <- dplyr::filter_(
-    data_bio,
-    lazyeval::interp(~ col != max(col), col = as.name("layer"))
-  )
+  data_bio <- data_bio |>
+    dplyr::filter(layer != max(layer))
 
   # Apply Schoener calculations to all predators!
-  ps <- data_bio %>%
-    dplyr::select_(.dots = c("species", "agecl")) %>%
-    unique() %>%
-    dplyr::filter_(~ species %in% unique(dietmatrix$pred))
+  ps <- data_bio |>
+    dplyr::select(species, agecl) |>
+    unique() |>
+    dplyr::filter(species %in% unique(dietmatrix$pred))
 
   sis <- Map(
     schoener,
@@ -126,17 +124,13 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
   }
 
   # Select specific predator/ageclass combination! (columns still called species at this point)
-  df_pred <- dplyr::filter_(biomass, ~ species == predgrp & agecl == ageclass)
+  df_pred <- biomass |> dplyr::filter(species == predgrp, agecl == ageclass)
   pstanza <- unique(df_pred$species_stanza)
-  df_avail <- dplyr::filter_(
-    avail,
-    ~ pred == predgrp & pred_stanza == pstanza & avail != 0
-  )
+  df_avail <- avail |>
+    dplyr::filter(pred == predgrp, pred_stanza == pstanza, avail != 0)
   # Remove predator/predstanza since overlap is 1 by default!
-  biomass_clean <- dplyr::filter_(
-    biomass,
-    ~ !(species == predgrp & agecl == ageclass)
-  )
+  biomass_clean <- biomass |>
+    dplyr::filter(!(species == predgrp & agecl == ageclass))
 
   # Combine predator data with prey data!
   # WARNING: This may lead to a very huge dataframe... all (even non existing)

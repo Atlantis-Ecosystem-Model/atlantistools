@@ -122,8 +122,8 @@ plot_diet <- function(
 
   for (i in seq_along(species)) {
     # Select species!
-    df_pred <- dplyr::filter_(pred_comb, ~ pred == species[i])
-    df_prey <- dplyr::filter_(prey_comb, ~ prey == species[i])
+    df_pred <- pred_comb |> dplyr::filter(pred == species[i])
+    df_prey <- pred_comb |> dplyr::filter(prey == species[i])
     grobs[[i]][[1]] <- plot_sp(df_pred, col = "prey", wrap_col = wrap_col)
     grobs[[i]][[2]] <- plot_sp(df_prey, col = "pred", wrap_col = wrap_col)
   }
