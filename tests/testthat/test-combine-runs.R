@@ -11,14 +11,14 @@ out <- combine_runs(outs = test, runs = c("run1", "run2", "run3"))
 
 # Some simple calculations!
 test1 <- out[[1]] %>%
-  group_by_(.dots = names(.)[!names(.) %in% c("run", "atoutput")]) %>%
-  summarise(atoutput = mean(atoutput)) %>%
-  left_join(test_list[[1]], by = names(.)[!names(.) %in% c("atoutput")])
+  dplyr::group_by(across(-c(run, atoutput))) |>
+  summarise(atoutput = mean(atoutput)) |>
+  left_join(test_list[[1]], by = across(-atoutput))
 
-test3 <- out[[3]] %>%
-  group_by_(.dots = names(.)[!names(.) %in% c("run", "atoutput")]) %>%
-  summarise(atoutput = mean(atoutput)) %>%
-  left_join(test_list[[3]], by = names(.)[!names(.) %in% c("atoutput")])
+test3 <- out[[3]] |>
+  group_by(across(run, atoutput)) |>
+  summarise(atoutput = mean(atoutput)) |>
+  left_join(test_list[[3]], by = across(-atoutput))
 
 test_that("test combine_runs", {
   expect_error(
