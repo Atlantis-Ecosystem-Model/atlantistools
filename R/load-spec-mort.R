@@ -35,17 +35,30 @@
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_spec_mort <- function(mortFile, prm_run, fgs, convert_names = FALSE, removeZeros = T) {
-
+load_spec_mort <- function(
+  mortFile,
+  prm_run,
+  fgs,
+  convert_names = FALSE,
+  removeZeros = T
+) {
   df <- load_txt(file = mortFile)
-  mort <- preprocess_txt(df_txt = df, into = c("code", "agecl", "empty_col", "mort"),removeZeros=removeZeros) %>%
+  mort <- preprocess_txt(
+    df_txt = df,
+    into = c("code", "agecl", "empty_col", "mort"),
+    removeZeros = removeZeros
+  ) %>%
     tibble::as_tibble()
 
   # Convert species codes to longnames!
   if (convert_names) {
-    data_fgs <- load_fgs(fgs=fgs)
+    data_fgs <- load_fgs(fgs = fgs)
     mort <- mort %>%
-      dplyr::left_join(.,data_fgs[,c("Code","LongName")], by = c("code"="Code")) %>%
+      dplyr::left_join(
+        .,
+        data_fgs[, c("Code", "LongName")],
+        by = c("code" = "Code")
+      ) %>%
       dplyr::rename(species = .data$LongName)
   }
 
@@ -54,10 +67,3 @@ load_spec_mort <- function(mortFile, prm_run, fgs, convert_names = FALSE, remove
 
   return(mort)
 }
-
-
-
-
-
-
-

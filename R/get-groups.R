@@ -40,7 +40,7 @@
 
 #' @export
 #' @rdname get_groups
-get_groups <- function(fgs){
+get_groups <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Name
   return(result)
@@ -48,16 +48,23 @@ get_groups <- function(fgs){
 
 #' @export
 #' @rdname get_groups
-get_age_groups <- function(fgs){
+get_age_groups <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   supported_columns <- c("InvertType", "GroupType")
-  result <- fgs_df$Name[fgs_df$NumCohorts > 2 | (fgs_df$NumCohorts == 2 & grepl(pattern = "FISH", fgs_df[, is.element(names(fgs_df), supported_columns)]))]
+  result <- fgs_df$Name[
+    fgs_df$NumCohorts > 2 |
+      (fgs_df$NumCohorts == 2 &
+        grepl(
+          pattern = "FISH",
+          fgs_df[, is.element(names(fgs_df), supported_columns)]
+        ))
+  ]
   return(result)
 }
 
 #' @export
 #' @rdname get_groups
-get_acronyms <- function(fgs){
+get_acronyms <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df[, names(fgs_df) == "Code"]
   return(result)
@@ -65,16 +72,23 @@ get_acronyms <- function(fgs){
 
 #' @export
 #' @rdname get_groups
-get_age_acronyms <- function(fgs){
+get_age_acronyms <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   supported_columns <- c("InvertType", "GroupType")
-  result <- fgs_df$Code[fgs_df$NumCohorts > 2 | (fgs_df$NumCohorts == 2 & grepl(pattern = "FISH", fgs_df[, is.element(names(fgs_df), supported_columns)]))]
+  result <- fgs_df$Code[
+    fgs_df$NumCohorts > 2 |
+      (fgs_df$NumCohorts == 2 &
+        grepl(
+          pattern = "FISH",
+          fgs_df[, is.element(names(fgs_df), supported_columns)]
+        ))
+  ]
   return(result)
 }
 
 #' @export
 #' @rdname get_groups
-get_nonage_acronyms <- function(fgs){
+get_nonage_acronyms <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Code[fgs_df$NumCohorts <= 2]
   return(result)
@@ -82,14 +96,17 @@ get_nonage_acronyms <- function(fgs){
 
 #' @export
 #' @rdname get_groups
-get_fish_acronyms <- function(fgs){
+get_fish_acronyms <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   # Older models use the column GroupType, newer ones use InvertType.
   supported_columns <- c("InvertType", "GroupType")
   if (!any(is.element(names(fgs_df), supported_columns))) {
     stop(paste("Column names in fgs do not match any of", supported_columns))
   } else {
-    result <- fgs_df$Code[fgs_df[, is.element(names(fgs_df), supported_columns)] %in% c("FISH", "SHARK")]
+    result <- fgs_df$Code[
+      fgs_df[, is.element(names(fgs_df), supported_columns)] %in%
+        c("FISH", "SHARK")
+    ]
   }
   return(result)
 }
@@ -101,7 +118,7 @@ get_fish_acronyms <- function(fgs){
 #'
 #'
 #' @rdname get_groups
-get_cohorts_acronyms <- function(fgs,numCohorts = 10){
+get_cohorts_acronyms <- function(fgs, numCohorts = 10) {
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Code[fgs_df$NumCohorts == numCohorts]
   return(result)
@@ -109,7 +126,7 @@ get_cohorts_acronyms <- function(fgs,numCohorts = 10){
 
 #' @export
 #' @rdname get_groups
-get_fished_acronyms <- function(fgs){
+get_fished_acronyms <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Code[fgs_df$isFished == 1]
   return(result)
@@ -117,9 +134,8 @@ get_fished_acronyms <- function(fgs){
 
 #' @export
 #' @rdname get_groups
-get_turnedon_acronyms <- function(fgs){
+get_turnedon_acronyms <- function(fgs) {
   fgs_df <- load_fgs(fgs = fgs)
   result <- fgs_df$Code[fgs_df$IsTurnedOn == 1]
   return(result)
 }
-

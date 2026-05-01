@@ -49,23 +49,37 @@ check_growth <- function(data, yearly = FALSE) {
     # Extract yearly individual weight values
     for (i in seq_along(rcy)) {
       rcy[[i]] <- lapply(rcy[[i]], function(x) x$atoutput)
-      rcy[[i]] <- vapply(rcy[[i]], FUN = function(x) (max(x) - min(x)) / min(x), FUN.VALUE = numeric(1))
+      rcy[[i]] <- vapply(
+        rcy[[i]],
+        FUN = function(x) (max(x) - min(x)) / min(x),
+        FUN.VALUE = numeric(1)
+      )
     }
 
     # Combine result to dataframe!
-    data.frame(species = ls[[1]]$species[1],
-               agecl = as.numeric(unlist(Map(rep, names(rcy), sapply(rcy, length)))),
-               time = as.numeric(gsub("^[^.]+.\\s*", "", names(unlist(rcy)))),
-               relchange = unlist(rcy), stringsAsFactors = FALSE)
+    data.frame(
+      species = ls[[1]]$species[1],
+      agecl = as.numeric(unlist(Map(rep, names(rcy), sapply(rcy, length)))),
+      time = as.numeric(gsub("^[^.]+.\\s*", "", names(unlist(rcy)))),
+      relchange = unlist(rcy),
+      stringsAsFactors = FALSE
+    )
   }
 
   rel_change_overall <- function(ls) {
-    rc <- vapply(ls, FUN = function(x) (max(x$atoutput) - min(x$atoutput)) / min(x$atoutput), FUN.VALUE = numeric(1))
+    rc <- vapply(
+      ls,
+      FUN = function(x) (max(x$atoutput) - min(x$atoutput)) / min(x$atoutput),
+      FUN.VALUE = numeric(1)
+    )
 
     # Combine result to dataframe!
-    data.frame(species = ls[[1]]$species[1],
-               agecl = as.numeric(names(rc)),
-               relchange = rc, stringsAsFactors = FALSE)
+    data.frame(
+      species = ls[[1]]$species[1],
+      agecl = as.numeric(names(rc)),
+      relchange = rc,
+      stringsAsFactors = FALSE
+    )
   }
 
   if (yearly) {
@@ -91,5 +105,3 @@ check_growth <- function(data, yearly = FALSE) {
 
   cleanup(result)
 }
-
-

@@ -20,7 +20,7 @@
 #'
 #' load_bps(fgs, init)
 
-load_bps <- function(fgs, init){
+load_bps <- function(fgs, init) {
   if (utils::tail(unlist(strsplit(init, "\\.")), 1) != "nc") {
     stop(paste("The init argument", init, "does not end in .nc"))
   }
@@ -31,17 +31,26 @@ load_bps <- function(fgs, init){
   fgs <- load_fgs(fgs = fgs)
 
   all_groups <- fgs$Name
-  init_vars <- sapply(seq_len(RNetCDF::file.inq.nc(init_read)$nvars - 1),
-                      function(x) RNetCDF::var.inq.nc(init_read, x)$name)
+  init_vars <- sapply(
+    seq_len(RNetCDF::file.inq.nc(init_read)$nvars - 1),
+    function(x) RNetCDF::var.inq.nc(init_read, x)$name
+  )
 
   search_string <- paste(all_groups, "N", sep = "_")
   search_string <- search_string[is.element(search_string, init_vars)]
 
-  groups <- substr(x = search_string, start = 1, stop = nchar(search_string) - 2)
+  groups <- substr(
+    x = search_string,
+    start = 1,
+    stop = nchar(search_string) - 2
+  )
 
   bps_id <- vector()
   for (i in seq_along(search_string)) {
-    bps_id[i] <- RNetCDF::var.inq.nc(ncfile = init_read, variable = search_string[i])$ndims
+    bps_id[i] <- RNetCDF::var.inq.nc(
+      ncfile = init_read,
+      variable = search_string[i]
+    )$ndims
   }
   bps_id <- which(bps_id == 2)
 

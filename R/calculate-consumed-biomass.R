@@ -67,25 +67,38 @@ calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
 
   # Check DietCheck.txt
   check <- agg_data(dm, groups = c("time", "pred", "agecl"), fun = sum)
-  if (!all(abs(check$atoutput - 1) < 0.001)) stop("DietCheck.txt does not sum to 1 for all predators.")
+  if (!all(abs(check$atoutput - 1) < 0.001)) {
+    stop("DietCheck.txt does not sum to 1 for all predators.")
+  }
 
   # Check timesteps!
   ts_eat <- sort(unique(data_eat$time))
   ts_dm <- sort(unique(dm$time))
   matching <- sum(ts_eat %in% ts_dm) / length(ts_eat)
-  message(paste0(100 * round(matching, digits = 2), "% matching timesteps between PROD.nc and DietCheck.txt"))
+  message(paste0(
+    100 * round(matching, digits = 2),
+    "% matching timesteps between PROD.nc and DietCheck.txt"
+  ))
 
   # Step1: Calculate consumed biomass as Eat (or Grazing) * boxvolume per time, pred, agecl, box.
   # Weired stuff is happening here... Epibenthic groups consume the bulk of biomass!
   # Let's chceck this again with a different model!
   boxvol <- agg_data(vol, groups = c("polygon", "time"), out = "vol", fun = sum)
-  consumed_bio <- dplyr::left_join(data_eat, boxvol, by = c("polygon", "time")) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput * vol), "atoutput")) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput * bio_conv), "atoutput")) %>%
-  # Step2: Combine with diet contribution. We need a full join to make sure no data is lost!
+  consumed_bio <- dplyr::left_join(
+    data_eat,
+    boxvol,
+    by = c("polygon", "time")
+  ) %>%
+    dplyr::mutate_(
+      .dots = stats::setNames(list(~ atoutput * vol), "atoutput")
+    ) %>%
+    dplyr::mutate_(
+      .dots = stats::setNames(list(~ atoutput * bio_conv), "atoutput")
+    ) %>%
+    # Step2: Combine with diet contribution. We need a full join to make sure no data is lost!
     dplyr::full_join(dm, by = c("species" = "pred", "time", "agecl")) %>%
-  # Restrict timesteps to netcdf data! Last timestep is weird in Dietcheck.txt.
-    dplyr::filter_(~time %in% ts_eat) %>%
+    # Restrict timesteps to netcdf data! Last timestep is weird in Dietcheck.txt.
+    dplyr::filter_(~ time %in% ts_eat) %>%
     dplyr::rename_(.dots = c("pred" = "species"))
 
   # Some detective work is needed here!
@@ -94,26 +107,29 @@ calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
 
   # Remove NAs!
   if (nrow(det_eat) > 0) {
-    message(paste0(100 * round(nrow(det_eat)/nrow(consumed_bio), digits = 4),
-                   "% data is lost due to missing diet data despite available eat data."))
+    message(paste0(
+      100 * round(nrow(det_eat) / nrow(consumed_bio), digits = 4),
+      "% data is lost due to missing diet data despite available eat data."
+    ))
   }
   if (nrow(det_dm) > 0) {
-    message(paste0(100 * round(nrow(det_dm)/nrow(consumed_bio), digits = 4),
-                   "% data is lost due to missing eat data despite available diet data."))
+    message(paste0(
+      100 * round(nrow(det_dm) / nrow(consumed_bio), digits = 4),
+      "% data is lost due to missing eat data despite available diet data."
+    ))
   }
 
   # atoutput.x = eat, atoutput.y = diet
   # Setp4: Calculate consumed biomass of prey species.
   consumed_biomass <- consumed_bio %>%
-    dplyr::filter_(~!is.na(atoutput.x)) %>%
-    dplyr::filter_(~!is.na(atoutput.y)) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput.x * atoutput.y), "atoutput")) %>%
-    dplyr::select_(.dots = names(.)[!names(.) %in% c("atoutput.x", "vol", "atoutput.y")])
+    dplyr::filter_(~ !is.na(atoutput.x)) %>%
+    dplyr::filter_(~ !is.na(atoutput.y)) %>%
+    dplyr::mutate_(
+      .dots = stats::setNames(list(~ atoutput.x * atoutput.y), "atoutput")
+    ) %>%
+    dplyr::select_(
+      .dots = names(.)[!names(.) %in% c("atoutput.x", "vol", "atoutput.y")]
+    )
 
   return(dplyr::ungroup(consumed_biomass))
 }
-
-
-
-
-

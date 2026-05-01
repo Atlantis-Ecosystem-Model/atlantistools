@@ -36,10 +36,13 @@ load_txt <- function(file, id_col = "Time") {
     data <- dplyr::rename_(data, Time = colnames(data)[1])
   }
 
-  data <- tidyr::gather_(data, key_col = "code", value_col = "atoutput", gather_cols = names(data)[!is.element(names(data), id_col)])
+  data <- tidyr::gather_(
+    data,
+    key_col = "code",
+    value_col = "atoutput",
+    gather_cols = names(data)[!is.element(names(data), id_col)]
+  )
   data$code <- as.character(data$code)
   names(data) <- tolower(names(data))
   return(data)
 }
-
-

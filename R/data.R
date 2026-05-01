@@ -227,7 +227,6 @@
 "ref_bio_sp"
 
 
-
 #' fishbase_data
 #'
 #' A table of all the the species found in Fihsbase, including taxonomic classification.
@@ -262,4 +261,3 @@
 #'   \item{\code{title}}{character. Title of the publication.}
 #' }
 "ref_lit"
-

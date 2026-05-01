@@ -10,23 +10,37 @@
 custom_grid <- function(plot, grid_x, grid_y) {
   px <- paste(grid_x, collapse = "+")
   py <- paste(grid_y, collapse = "+")
-  plot <- plot + ggplot2::facet_grid(stats::as.formula(paste(py, "~", px)),
-                                     scales = "free", labeller = ggplot2::label_wrap_gen(width = 15))
+  plot <- plot +
+    ggplot2::facet_grid(
+      stats::as.formula(paste(py, "~", px)),
+      scales = "free",
+      labeller = ggplot2::label_wrap_gen(width = 15)
+    )
   return(plot)
 }
 
 # Customised nse version of facet_wrap used within atlantistools
 custom_wrap <- function(plot, col, ncol = 7) {
-  plot <- plot + ggplot2::facet_wrap(stats::as.formula(paste("~", paste(col, collapse = "+"))),
-                                     scales = "free_y", ncol = ncol, labeller = ggplot2::label_wrap_gen(width = 15))
+  plot <- plot +
+    ggplot2::facet_wrap(
+      stats::as.formula(paste("~", paste(col, collapse = "+"))),
+      scales = "free_y",
+      ncol = ncol,
+      labeller = ggplot2::label_wrap_gen(width = 15)
+    )
   return(plot)
 }
 
 # Customised function to simplify nse mapping of x- and y variable.
 # Additional mappings may be added here. However, x- and y are the most fundamental ones...
 custom_map <- function(data, x, y) {
-  plot <- ggplot2::ggplot(data = data, ggplot2::aes_(x = lazyeval::interp(~var, var = as.name(x)),
-                                                     y = lazyeval::interp(~var, var = as.name(y))))
+  plot <- ggplot2::ggplot(
+    data = data,
+    ggplot2::aes_(
+      x = lazyeval::interp(~var, var = as.name(x)),
+      y = lazyeval::interp(~var, var = as.name(y))
+    )
+  )
   return(plot)
 }
 
@@ -34,7 +48,10 @@ custom_map <- function(data, x, y) {
 ggplot_custom <- function(plot, scientific = TRUE) {
   plot <- plot + ggplot2::coord_cartesian(expand = FALSE)
   if (scientific) {
-    plot <- plot + ggplot2::scale_y_continuous(labels = scales::scientific_format(digits = 2))
+    plot <- plot +
+      ggplot2::scale_y_continuous(
+        labels = scales::scientific_format(digits = 2)
+      )
   } else {
     plot <- plot + ggplot2::scale_y_continuous(labels = abbreviate)
   }
@@ -43,10 +60,12 @@ ggplot_custom <- function(plot, scientific = TRUE) {
 
 # Change specific theme elemets of plots. Only used in plot_species!
 change_theme <- function(plot) {
-  plot <- plot + ggplot2::theme(legend.position = "none",
-                          axis.title.x = ggplot2::element_blank(),
-                          strip.text.x = ggplot2::element_blank(),
-                          axis.text.y = ggplot2::element_text(angle = 90, hjust = 0.5))
+  plot <- plot +
+    ggplot2::theme(
+      legend.position = "none",
+      axis.title.x = ggplot2::element_blank(),
+      strip.text.x = ggplot2::element_blank(),
+      axis.text.y = ggplot2::element_text(angle = 90, hjust = 0.5)
+    )
   return(plot)
 }
-

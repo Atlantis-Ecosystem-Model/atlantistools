@@ -36,15 +36,13 @@
 #' head(df)
 
 #BJS 7/15/16 add version_flag and make compatible with trunk output
-load_mort <- function(mortFile, prm_run, fgs,convert_names= F) {
-
+load_mort <- function(mortFile, prm_run, fgs, convert_names = F) {
   mort <- load_txt(file = mortFile, id_col = c("Time"))
 
   # separate species code.mortalityType into two columns
   mort <- mort %>%
-    tidyr::separate(.data$code,into = c("code","source"),sep = "\\.") %>%
+    tidyr::separate(.data$code, into = c("code", "source"), sep = "\\.") %>%
     tibble::as_tibble()
-
 
   # First time step only has 0s as entry!
   # ***This will cause a potentially unnoticed bug when this issue in the output file gets fixed
@@ -52,15 +50,18 @@ load_mort <- function(mortFile, prm_run, fgs,convert_names= F) {
 
   # Convert species codes to longnames!
   if (convert_names) {
-    data_fgs <- load_fgs(fgs=fgs)
+    data_fgs <- load_fgs(fgs = fgs)
     mort <- mort %>%
-      dplyr::left_join(.,data_fgs[,c("Code","LongName")], by = c("code"="Code")) %>%
+      dplyr::left_join(
+        .,
+        data_fgs[, c("Code", "LongName")],
+        by = c("code" = "Code")
+      ) %>%
       dplyr::rename(species = .data$LongName)
   }
 
   # Convert time
   mort$time <- convert_time(prm_run = prm_run, col = mort$time)
-
 
   return(mort)
 }

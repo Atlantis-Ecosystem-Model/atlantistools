@@ -20,7 +20,9 @@
 #' flip_layers(data)
 
 flip_layers <- function(data) {
-  if (any(!c("polygon", "layer") %in% names(data))) stop("Columns polygon and layer not present in data.")
+  if (any(!c("polygon", "layer") %in% names(data))) {
+    stop("Columns polygon and layer not present in data.")
+  }
 
   # Create a df with fliped layers and normal layers based on the input dataframe.
   df <- unique(dplyr::select_(data, .dots = c("polygon", "layer")))
@@ -35,7 +37,7 @@ flip_layers <- function(data) {
   data_fliped$layer <- NULL
   names(data_fliped)[names(data_fliped) == "layer_fliped"] <- "layer"
 
-    return(data_fliped)
+  return(data_fliped)
 }
 
 add_fliped_layers <- function(df, sed) {
@@ -48,5 +50,3 @@ add_fliped_layers <- function(df, sed) {
   df$layer_fliped <- layer_fliped
   return(df)
 }
-
-

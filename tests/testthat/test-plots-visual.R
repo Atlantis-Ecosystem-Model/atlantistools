@@ -14,7 +14,11 @@ ex_bio <- preprocess$biomass
 ex_bio$atoutput <- ex_bio$atoutput * runif(n = nrow(ex_bio), 0, 1)
 ex_bio$model <- "test"
 
-dir <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+dir <- system.file(
+  "extdata",
+  "setas-model-new-trunk",
+  package = "atlantistools"
+)
 fgs <- file.path(dir, "SETasGroupsDem_NoCep.csv")
 init <- file.path(dir, "INIT_VMPA_Jan2015.nc")
 prm_biol <- file.path(dir, "VMPA_setas_biol_fishing_Trunk.prm")
@@ -30,7 +34,10 @@ p3 <- function() gridExtra::grid.arrange(plots$grobs[[2]])
 p4 <- function() gridExtra::grid.arrange(plots$grobs[[3]])
 
 # Does it work with any call to gridExtra functions?
-dummy <- gridExtra::arrangeGrob(grobs = list(p1, p1),  heights = grid::unit(c(0.5, 0.5), units = "npc"))
+dummy <- gridExtra::arrangeGrob(
+  grobs = list(p1, p1),
+  heights = grid::unit(c(0.5, 0.5), units = "npc")
+)
 p5 <- function() gridExtra::grid.arrange(dummy)
 
 p6 <- plot_bar(preprocess$nums_age, fill = "agecl", wrap = "species")
@@ -75,5 +82,8 @@ test_that("check visually", {
   # For some reason gem_rug results in rerendering...
   # vdiffr::expect_doppelganger("plot_add_range(p1, ex_bio)", p9)
 
-  vdiffr::expect_doppelganger("p10 plot_sc_init(df = data1, mult_mum, mult_c)", p10)
+  vdiffr::expect_doppelganger(
+    "p10 plot_sc_init(df = data1, mult_mum, mult_c)",
+    p10
+  )
 })

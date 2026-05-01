@@ -18,15 +18,27 @@ bboxes <- get_boundary(boxinfo = load_box(bgm = file.path(d, "VMPA_setas.bgm")))
 # load(c("ref_eat.rda", "ref_grazing.rda", "ref_n.rda", "ref_nums.rda"))
 
 # Test numbers!
-data <- load_nc(nc = nc1, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
-                select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
-                select_variable = "Nums")
+data <- load_nc(
+  nc = nc1,
+  bps = bps,
+  fgs = fgs,
+  prm_run = prm_run,
+  bboxes = bboxes,
+  report = FALSE,
+  select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
+  select_variable = "Nums"
+)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_nums))
 })
 
-test <- merge(data, ref_nums, all = TRUE, by = c("species", "agecl", "polygon", "layer", "time"))
+test <- merge(
+  data,
+  ref_nums,
+  all = TRUE,
+  by = c("species", "agecl", "polygon", "layer", "time")
+)
 test$check <- test$atoutput.x / test$atoutput.y
 
 test_that("test output numbers", {
@@ -36,15 +48,33 @@ test_that("test output numbers", {
 })
 #
 # Test nitrogen!
-data <- load_nc(nc = nc1, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
-                select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det"),
-                select_variable = "N")
+data <- load_nc(
+  nc = nc1,
+  bps = bps,
+  fgs = fgs,
+  prm_run = prm_run,
+  bboxes = bboxes,
+  report = FALSE,
+  select_groups = c(
+    "Cephalopod",
+    "Megazoobenthos",
+    "Diatom",
+    "Lab_Det",
+    "Ref_Det"
+  ),
+  select_variable = "N"
+)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_n))
 })
 
-test <- merge(data, ref_n, all = TRUE, by = c("species", "polygon", "layer", "time"))
+test <- merge(
+  data,
+  ref_n,
+  all = TRUE,
+  by = c("species", "polygon", "layer", "time")
+)
 test$check <- test$atoutput.x / test$atoutput.y
 
 test_that("test output nitrogen", {
@@ -54,15 +84,33 @@ test_that("test output nitrogen", {
 })
 
 # Test Grazing!
-data <- load_nc(nc = nc2, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
-                select_groups = c("Cephalopod", "Megazoobenthos", "Diatom", "Lab_Det", "Ref_Det"),
-                select_variable = "Grazing")
+data <- load_nc(
+  nc = nc2,
+  bps = bps,
+  fgs = fgs,
+  prm_run = prm_run,
+  bboxes = bboxes,
+  report = FALSE,
+  select_groups = c(
+    "Cephalopod",
+    "Megazoobenthos",
+    "Diatom",
+    "Lab_Det",
+    "Ref_Det"
+  ),
+  select_variable = "Grazing"
+)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_grazing))
 })
 
-test <- merge(data, ref_grazing, all = TRUE, by = c("species", "agecl", "polygon", "time"))
+test <- merge(
+  data,
+  ref_grazing,
+  all = TRUE,
+  by = c("species", "agecl", "polygon", "time")
+)
 test$check <- test$atoutput.x / test$atoutput.y
 
 test_that("test output nitrogen", {
@@ -72,15 +120,27 @@ test_that("test output nitrogen", {
 })
 
 # Test Eat!
-data <- load_nc(nc = nc2, bps = bps, fgs = fgs, prm_run = prm_run, bboxes = bboxes, report = FALSE,
-                select_groups =  c("Planktiv_S_Fish", "Pisciv_S_Fish"),
-                select_variable = "Eat")
+data <- load_nc(
+  nc = nc2,
+  bps = bps,
+  fgs = fgs,
+  prm_run = prm_run,
+  bboxes = bboxes,
+  report = FALSE,
+  select_groups = c("Planktiv_S_Fish", "Pisciv_S_Fish"),
+  select_variable = "Eat"
+)
 
 test_that("test column names", {
   expect_equal(names(data), names(ref_eat))
 })
 
-test <- merge(data, ref_eat, all = TRUE, by = c("species", "agecl", "polygon", "time"))
+test <- merge(
+  data,
+  ref_eat,
+  all = TRUE,
+  by = c("species", "agecl", "polygon", "time")
+)
 test$check <- test$atoutput.x / test$atoutput.y
 
 test_that("test output nitrogen", {
@@ -90,8 +150,12 @@ test_that("test output nitrogen", {
 })
 
 
-data <- load_nc_physics(nc = nc1, bboxes = bboxes, prm_run = prm_run,
-                        select_physics = c("hdsource", "hdsink", "eflux", "vflux"))
+data <- load_nc_physics(
+  nc = nc1,
+  bboxes = bboxes,
+  prm_run = prm_run,
+  select_physics = c("hdsource", "hdsink", "eflux", "vflux")
+)
 
 # add some antarctic debugging
 # dir <- "c:/Users/alexanderke/Dropbox/Antarctic Atlantis/"
@@ -161,13 +225,3 @@ data <- load_nc_physics(nc = nc1, bboxes = bboxes, prm_run = prm_run,
 # get_epi_array_attr(file.path(dir, "init_NorthSea.nc"), groups)
 #
 # load_bps(dir, fgs = "functionalGroups.csv", init = "init_NorthSea.nc")
-
-
-
-
-
-
-
-
-
-

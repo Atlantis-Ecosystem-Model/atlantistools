@@ -17,9 +17,18 @@ test_that("test output of check_growth with dummy data", {
   expect_equal(dim(df2), c(12, 4))
   expect_equal(unique(df1$relchange), 0)
   expect_equal(unique(df2$relchange), 0)
-  expect_equal(sapply(df1, class), c(species = "character", agecl = "numeric", relchange = "numeric"))
-  expect_equal(sapply(df2, class), c(species = "character", agecl = "numeric", time = "numeric", relchange = "numeric"))
+  expect_equal(
+    sapply(df1, class),
+    c(species = "character", agecl = "numeric", relchange = "numeric")
+  )
+  expect_equal(
+    sapply(df2, class),
+    c(
+      species = "character",
+      agecl = "numeric",
+      time = "numeric",
+      relchange = "numeric"
+    )
+  )
   expect_equal(unique(check_growth(df)$relchange), 1)
 })
-
-
