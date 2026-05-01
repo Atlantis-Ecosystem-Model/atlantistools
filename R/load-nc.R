@@ -488,10 +488,9 @@ load_nc <- function(
   # Sum up N for invert cohorts if invert cohorts are present!
   # NOTE: only invert cohorts of size 2 are considered!
   if (select_variable == "N" & any(final_agecl == 2)) {
-    result <- result %>%
-      dplyr::group_by_("species", "polygon", "layer", "time") %>%
-      dplyr::summarise_(atoutput = ~ sum(atoutput)) %>%
-      dplyr::ungroup()
+    result <- result |>
+      dplyr::group_by(species, polygon, layer, time) |>
+      dplyr::summarise(atoutput = sum(atoutput), .group = "drop")
   }
 
   # convert names to longnames

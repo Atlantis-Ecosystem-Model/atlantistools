@@ -77,9 +77,9 @@ load_spec_pred_mort <- function(
   # Check number of empty entries per predator!
   # BJS: is this needed? it doesnt appear to be used anywhere
   nr_prey <- length(unique(mort$prey))
-  count_zero <- mort %>%
-    dplyr::group_by_(~time, ~pred, ~agecl) %>%
-    dplyr::summarise_(count_zero = ~ sum(atoutput == 0) / nr_prey) %>%
+  count_zero <- mort |>
+    dplyr::group_by(time, pred, agecl) |>
+    dplyr::summarise(count_zero = sum(atoutput == 0) / nr_prey) |>
     dplyr::filter(count_zero == 1)
 
   # Remove zeros

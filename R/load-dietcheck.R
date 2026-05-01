@@ -85,7 +85,7 @@ load_dietcheck <- function(
         stats::as.formula(paste0("~", colnames(diet)[3]))
       ) |>
 
-      dplyr::summarise_(out = ~ dplyr::n_distinct(Time)) |>
+      dplyr::summarise(out = dplyr::n_distinct(Time)) |>
       dplyr::filter_(~ out != 1)
 
     if (nrow(print_diet) != 0) {
