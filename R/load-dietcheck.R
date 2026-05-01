@@ -79,24 +79,24 @@ load_dietcheck <- function(
     print_diet <- diet[
       empty_rows,
       c("Time", colnames(diet)[2], colnames(diet)[3])
-    ] %>%
+    ] |>
       dplyr::group_by_(
         stats::as.formula(paste0("~", colnames(diet)[2])),
         stats::as.formula(paste0("~", colnames(diet)[3]))
-      ) %>%
+      ) |>
 
-      dplyr::summarise_(out = ~ dplyr::n_distinct(Time)) %>%
+      dplyr::summarise_(out = ~ dplyr::n_distinct(Time)) |>
       dplyr::filter_(~ out != 1)
 
     if (nrow(print_diet) != 0) {
-      print_diet <- print_diet %>%
-        dplyr::mutate_(out = ~ out / length(unique(diet$Time)) * 100) %>%
+      print_diet <- print_diet |>
+        dplyr::mutate_(out = ~ out / length(unique(diet$Time)) * 100) |>
         #BJS predator -> colnames(diet)[2]
         tidyr::spread_(
           data = .,
           key_col = colnames(diet)[2],
           value_col = "out"
-        ) %>%
+        ) |>
         as.data.frame()
 
       warning(
@@ -111,12 +111,14 @@ load_dietcheck <- function(
 
   # Convert to long dataframe and rename columns!
   #bjs change 4 to prey_col_start to remove magic number
-  diet_long <- tidyr::gather_(
-    data = diet,
-    key_col = "prey",
-    value_col = "atoutput",
-    gather_cols = names(diet)[prey_col_start:ncol(diet)]
-  )
+  diet_long <- diet |>
+    tidyr::pivot_longer(
+      cols = prey_col_start:ncol(diet),
+      names_to = "prey",
+      values_to = "atoutput"
+    ) |>
+    dplyr::arrange(Time, Predator, Cohort, Updated, prey)
+
   names(diet_long)[names(diet_long) == "Predator"] <- "pred" #bjs predator -> colnames(diet)[2]
 
   if (version_flag == 2) {
@@ -134,12 +136,13 @@ load_dietcheck <- function(
 
   # Convert species codes to longnames!
   if (convert_names) {
-    diet_long <- dplyr::mutate_at(
-      diet_long,
-      .vars = c("pred", "prey"),
-      .funs = convert_factor,
-      data_fgs = load_fgs(fgs = fgs)
-    )
+    diet_long <- diet_long |>
+      dplyr::mutate(
+        dplyr::across(
+          c(pred, prey),
+          ~ convert_factor(.x, data_fgs = load_fgs(fgs = fgs))
+        )
+      )
   }
 
   # Convert timestep to time in years!

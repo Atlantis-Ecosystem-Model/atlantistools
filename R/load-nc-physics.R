@@ -214,9 +214,12 @@ load_nc_physics <- function(
   }
 
   if (aggregate_layers) {
-    result <- result %>%
-      dplyr::group_by_("variable", "polygon", "time") %>%
-      dplyr::summarise_(atoutput = ~ mean(atoutput))
+    result <- result |>
+      dplyr::group_by(variable, polygon, time) |>
+      dplyr::summarise(
+        atoutput = mean(atoutput, na.rm = TRUE),
+        .groups = "drop"
+      )
   }
 
   result$time <- convert_time(prm_run = prm_run, col = result$time)
