@@ -25,11 +25,8 @@ convert_relative_initial <- function(data, col = "atoutput") {
       ref,
       by = names(data)[!names(data) %in% c("time", col)]
     ) %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(
-        list(lazyeval::interp(~ var / atoutput_ref, var = as.name(col))),
-        col
-      )
+    dplyr::mutate(
+      !!col := .data[[col]] / atoutput_ref
     )
 
   # Replace division by 0 with 0!

@@ -174,12 +174,10 @@ load_dietmatrix <- function(
     )
     result <- dplyr::left_join(result, prey_order, by = "prey")
     if (convert_names) {
-      result <- dplyr::mutate_at(
-        result,
-        .cols = c("pred", "prey"),
-        .funs = convert_factor,
-        data_fgs = fgs_data
-      )
+      result <- result |>
+        dplyr::mutate(
+          across(c(pred, prey), ~ convert_factor(.x, data_fgs = fgs_data))
+        )
     }
   }
 

@@ -162,7 +162,7 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
   si$si <- with(si, abs(perc_bio.x - perc_bio.y))
 
   # Schoner index per pred/agecl/prey/preystanza combination!
-  si_spec <- si %>%
+  si_spec <- si |>
     agg_data(
       col = "si",
       groups = c(
@@ -177,17 +177,18 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
       ),
       out = "si",
       fun = sum
-    ) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~ 1 - si * 0.5), "si")) %>%
-    dplyr::rename_(
-      .dots = c("agecl_pred" = "agecl.x", "agecl_prey" = "agecl.y")
+    ) |>
+    dplyr::mutate(si = 1 - si * 0.5) |>
+    dplyr::rename(
+      agecl_pred = agecl.x,
+      agecl_prey = agecl.y
     )
 
   # 4th step: Aggregate schoner index based on availabilities
   # Combine to pred/predstanza index! Weight with present availabilities!
-  si_overall <- si_spec %>%
-    agg_perc(col = "avail", groups = c("time"), out = "avail") %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~ si * avail), "si")) %>%
+  si_overall <- si_spec |>
+    agg_perc(col = "avail", groups = c("time"), out = "avail") |>
+    dplyr::mutate(si = si * avail) |>
     agg_data(
       col = "si",
       groups = c("time", "pred", "agecl_pred"),

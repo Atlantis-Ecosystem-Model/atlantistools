@@ -90,7 +90,7 @@ load_dietcheck <- function(
 
     if (nrow(print_diet) != 0) {
       print_diet <- print_diet |>
-        dplyr::mutate_(out = ~ out / length(unique(diet$Time)) * 100) |>
+        dplyr::mutate(out = out / length(unique(diet$Time)) * 100) |>
         #BJS predator -> colnames(diet)[2]
         tidyr::spread_(
           data = .,

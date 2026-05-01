@@ -93,10 +93,10 @@ plot_spatial_ts <- function(
     bio_spatial,
     groups = c("time", "species", "species_stanza", "polygon"),
     fun = sum
-  ) %>%
-    dplyr::left_join(vol) %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ atoutput / volume), "density")
+  ) |>
+    dplyr::left_join(vol) |>
+    dplyr::mutate(
+      density = atoutput / volume
     )
 
   plot_ts_species <- function(data, ncol) {

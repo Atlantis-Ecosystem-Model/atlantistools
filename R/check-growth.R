@@ -34,7 +34,7 @@ check_growth <- function(data, yearly = FALSE) {
   # names(ref)[names(ref) == "atoutput"] <- "atoutput_ref"
   # result <- data %>%
   #   dplyr::left_join(ref) %>%
-  #   dplyr::mutate_(atoutput = ~atoutput / atoutput_ref)
+  #   dplyr::mutate(atoutput = atoutput / atoutput_ref)
   # result$atoutput[result$atoutput_ref == 0] <- 0
   # outcomment in case lm procedure is used! This is a bit messy.
   result <- data

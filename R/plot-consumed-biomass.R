@@ -58,10 +58,8 @@ plot_consumed_biomass <- function(
   one_time <- agg_data(one_time, groups = c("prey", "pred"), fun = sum)
 
   # Select main feedig interactions based on cumulative treshold.
-  main_links <- one_time %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ atoutput / sum(atoutput)), "perc")
-    ) %>%
+  main_links <- one_time |>
+    dplyr::mutate(perc = atoutput / sum(atoutput)) |>
     dplyr::arrange_(quote(desc(perc)))
   main_links <- main_links[1:min(which(cumsum(main_links$perc) > show)), ]
 

@@ -87,12 +87,13 @@ load_spec_pred_mort <- function(
 
   # Convert species codes to longnames!
   if (convert_names) {
-    mort <- dplyr::mutate_at(
-      mort,
-      .cols = c("pred", "prey"),
-      .funs = convert_factor,
-      data_fgs = load_fgs(fgs = fgs)
-    )
+    mort <- mort |>
+      dplyr::mutate(
+        across(
+          c(pred, prey),
+          ~ convert_factor(.x, data_fgs = load_fgs(fgs = fgs))
+        )
+      )
   }
 
   # Convert time
