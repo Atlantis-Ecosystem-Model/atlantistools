@@ -43,7 +43,7 @@ flip_layers <- function(data) {
 }
 
 add_fliped_layers <- function(df, sed) {
-  df <- dplyr::arrange_(df, ~layer)
+  df <- df |> dplyr::arrange(layer)
   if (any(df$layer == sed)) {
     layer_fliped <- c(rev(df$layer[df$layer != sed]), sed) + 1
   } else {

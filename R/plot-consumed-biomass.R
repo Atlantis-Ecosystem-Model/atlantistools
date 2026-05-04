@@ -60,7 +60,7 @@ plot_consumed_biomass <- function(
   # Select main feedig interactions based on cumulative treshold.
   main_links <- one_time |>
     dplyr::mutate(perc = atoutput / sum(atoutput)) |>
-    dplyr::arrange_(quote(desc(perc)))
+    dplyr::arrange(desc(perc))
   main_links <- main_links[1:min(which(cumsum(main_links$perc) > show)), ]
 
   # Combine groups with low contribution to Rest.
@@ -80,7 +80,7 @@ plot_consumed_biomass <- function(
 
   set_cols <- dplyr::bind_rows(d1, d2) |>
     agg_data(groups = "group", fun = sum, out = "order") |>
-    dplyr::arrange_(~ desc(order))
+    dplyr::arrange(desc(order))
   set_cols$order <- 1:nrow(set_cols)
   set_cols$col <- rep(get_colpal(), 3)[1:nrow(set_cols)]
   grp_sp <- stringr::str_split(set_cols$group, pattern = " ", n = 2)
