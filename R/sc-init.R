@@ -237,7 +237,6 @@ sc_init <- function(
   preydens_invert <- preydens_invert |>
     dplyr::mutate(prey_stanza = 2) |>
     dplyr::inner_join(surface, by = c("polygon", "layer"))
-  # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
   preydens <- rbind(preydens_ages, preydens_invert) |>
     dplyr::rename(prey = species, preydens = atoutput)
 
