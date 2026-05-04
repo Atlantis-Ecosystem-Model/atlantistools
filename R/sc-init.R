@@ -270,7 +270,8 @@ sc_init <- function(
     dm$avail <- set_avail
   }
   ## Combine everything to one dataframe!
-  result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) |>
+  result <- pd |>
+    dplyr::select(species, agecl, pred_stanza) |>
     dplyr::left_join(asseff, by = "species") |>
     dplyr::inner_join(
       dm,

@@ -41,7 +41,12 @@ prm_to_df <- function(prm_biol, fgs, group, parameter) {
   names(df) <- tolower(parameter)
   df$species <- group
   df$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = df$species)
-  df <- dplyr::select_(df, .dots = c("species", sort(names(df)[-ncol(df)])))
+
+  df <- df |>
+    dplyr::select(
+      species,
+      sort(names(.)[1:(ncol(.) - 1)])
+    )
 
   return(df)
 }

@@ -99,7 +99,10 @@ plot_spatial_box <- function(
   # Use layer (y-direction) and timestep (x-direction) to facet_grid
   plot_spatial_species <- function(data, full_grid) {
     # add time to polygon layout
-    bgrd <- merge(full_grid, unique(dplyr::select_(data, .dots = c("time"))))
+    unique_times <- data |>
+      dplyr::select(time) |>
+      unique()
+    bgrd <- merge(full_grid, unique_times)
     p_title <- paste(
       "Species:",
       unique(data$species),
@@ -178,7 +181,8 @@ split_dfs <- function(df, cols) {
   if (any(!cols %in% names(df))) {
     stop("Column names in df do not match with cols.")
   }
-  df_cat <- unique(dplyr::select_(df, .dots = cols))
+  df_cat <- df |>
+    dplyr::distinct(dplyr::across(dplyr::all_of(cols)))
   dfs <- vector(mode = "list", length = nrow(df_cat))
   # Should work much better with filter but the nse-part is a bit tricky...
   for (i in seq_along(dfs)) {

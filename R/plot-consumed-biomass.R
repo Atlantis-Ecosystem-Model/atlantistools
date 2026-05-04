@@ -71,10 +71,15 @@ plot_consumed_biomass <- function(
   # Setup final dataframes for plotting!
   clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
   # Will break if any predator only group is not grouped to Rest!
-  d1 <- dplyr::select_(clean_df, .dots = c("group" = "pred", "atoutput"))
-  d2 <- dplyr::select_(clean_df, .dots = c("group" = "prey", "atoutput"))
-  set_cols <- dplyr::bind_rows(d1, d2) %>%
-    agg_data(groups = "group", fun = sum, out = "order") %>%
+  d1 <- clean_df |>
+    dplyr::rename(group = pred) |>
+    dplyr::select(group, atoutput)
+  d2 <- clean_df |>
+    dplyr::rename(group = prey) |>
+    dplyr::select(group, atoutput)
+
+  set_cols <- dplyr::bind_rows(d1, d2) |>
+    agg_data(groups = "group", fun = sum, out = "order") |>
     dplyr::arrange_(~ desc(order))
   set_cols$order <- 1:nrow(set_cols)
   set_cols$col <- rep(get_colpal(), 3)[1:nrow(set_cols)]

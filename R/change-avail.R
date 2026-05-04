@@ -151,10 +151,14 @@ change_avail <- function(
   if (!consecutive) {
     dm$prey_id <- NULL
     dm <- tidyr::spread_(dm, key_col = "prey", value_col = "avail")
-    dm <- dplyr::select_(
-      dm,
-      .dots = c(names(dm)[1:4], prey_ordered, "DLsed", "DRsed", "DCsed")
-    )
+    dm <- dm |>
+      dplyr::select(
+        1:4,
+        dplyr::all_of(prey_ordered),
+        DLsed,
+        DRsed,
+        DCsed
+      )
   }
 
   invisible(dm)

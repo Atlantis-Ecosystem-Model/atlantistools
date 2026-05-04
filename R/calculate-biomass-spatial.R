@@ -107,10 +107,9 @@ calculate_biomass_spatial <- function(nums, sn, rn, n, vol_dz, bio_conv, bps) {
       atoutput * volume * bio_conv
     )
   )
-  biomass_pools <- dplyr::select_(
-    biomass_pools,
-    .dots = c("species", "time", "polygon", "layer", "atoutput")
-  )
+  biomass_pools <- biomass_pools |>
+    dplyr::select(species, time, polygon, layer, atoutput)
+
   biomass_pools$agecl <- 1
 
   # Combine both dataframes!

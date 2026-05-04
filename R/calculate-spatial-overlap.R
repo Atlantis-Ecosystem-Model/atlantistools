@@ -71,18 +71,23 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   # Fill data gaps to make sure that both combinations are present later:
   # - pred/stanza present in box/layer combination & prey/stanza absent
   # - prey/stanza present in box/layer combination $ pred/stanza absent
-  ac_box_layer <- unique(dplyr::select_(
-    dplyr::ungroup(biomass),
-    .dots = c("polygon", "layer")
-  ))
-  ac_pred_agecl <- unique(dplyr::select_(
-    dplyr::ungroup(biomass),
-    .dots = c("species", "agecl", "species_stanza")
-  ))
-  ac_time <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("time")))
+  ac_box_layer <- biomass |>
+    dplyr::ungroup() |>
+    dplyr::select(polygon, layer) |>
+    unique()
 
-  data_bio <- merge(ac_box_layer, ac_pred_agecl) %>%
-    merge(ac_time) %>%
+  ac_pred_agecl <- biomass |>
+    dplyr::ungroup() |>
+    dplyr::select(species, agecl, species_stanza) |>
+    unique()
+
+  ac_time <- biomass |>
+    dplyr::ungroup() |>
+    dplyr::select(time) |>
+    unique()
+
+  data_bio <- merge(ac_box_layer, ac_pred_agecl) |>
+    merge(ac_time) |>
     dplyr::left_join(
       biomass,
       by = c("time", "species", "agecl", "polygon", "layer", "species_stanza")
