@@ -33,7 +33,8 @@ load_txt <- function(file, id_col = "Time") {
   # to Time. If this changes in the future, then this will be a functional error that might be
   # hard to detect as it won't cause an error to be thrown
   if (colnames(data)[1] != "Time") {
-    data <- dplyr::rename_(data, Time = colnames(data)[1])
+    data <- data |>
+      dplyr::rename(Time = colnames(data)[1])
   }
 
   data <- tidyr::gather_(

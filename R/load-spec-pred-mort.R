@@ -58,7 +58,8 @@ load_spec_pred_mort <- function(
       file = specmort,
       id_col = c("Time", "Group", "Cohort", "Stock")
     )
-    mort <- dplyr::rename_(mort, pred = ~group, agecl = ~cohort, prey = ~code)
+    mort <- mort |>
+      dplyr::rename(pred = group, agecl = cohort, prey = code)
     if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
       stop(
         "Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team."
