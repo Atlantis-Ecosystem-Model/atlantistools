@@ -24,7 +24,8 @@
 #' head(df)
 
 preprocess_txt <- function(df_txt, sep_col = "code", into, removeZeros = TRUE) {
-  df_txt <- tidyr::separate_(df_txt, col = sep_col, into = into, convert = TRUE)
+  df_txt <- df_txt |>
+    tidyr::separate(col = sep_col, into = into, convert = TRUE)
   # df_txt$agecl <- df_txt$agecl + 1
 
   # check uniqueness of columns. Do not use sapply at this point!

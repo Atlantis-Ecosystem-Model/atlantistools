@@ -37,12 +37,12 @@ load_spec_pred_mort <- function(
 ) {
   if (version_flag == 1) {
     mort <- load_txt(file = specmort)
-    mort <- tidyr::separate_(
-      mort,
-      col = "code",
-      into = c("prey", "agecl", "stock", "pred", "mort"),
-      convert = TRUE
-    )
+    mort <- mort |>
+      tidyr::separate(
+        col = "code",
+        into = c("prey", "agecl", "stock", "pred", "mort"),
+        convert = TRUE
+      )
     # check uniqueness of column notsure and mort
     if (
       any(
