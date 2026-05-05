@@ -150,7 +150,8 @@ change_avail <- function(
   # Convert to wide dataframe
   if (!consecutive) {
     dm$prey_id <- NULL
-    dm <- tidyr::spread_(dm, key_col = "prey", value_col = "avail")
+    dm <- dm |>
+      tidyr::pivot_wider(names_from = prey, values_from = avail)
     dm <- dm |>
       dplyr::select(
         1:4,
