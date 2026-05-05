@@ -36,12 +36,12 @@ plot_bar <- function(
   # Add colour. check if integer or not
   if (is.numeric(data[, fill][[1]]) && all(data[, fill] %% 1 == 0)) {
     plot <- plot +
-      ggplot2::aes_(fill = lazyeval::interp(~ factor(var), var = as.name(fill)))
+      ggplot2::aes(factor(.data[[fill]]))
     plot <- plot + ggplot2::guides(fill = ggplot2::guide_legend(nrow = 1))
   } else {
     # used in whole system and diet plots!
     plot <- plot +
-      ggplot2::aes_(fill = lazyeval::interp(~var, var = as.name(fill)))
+      ggplot2::aes(fill = .data[[fill]])
     plot <- plot + ggplot2::scale_fill_manual(values = get_colpal())
     plot <- plot + ggplot2::theme(legend.position = "right")
   }

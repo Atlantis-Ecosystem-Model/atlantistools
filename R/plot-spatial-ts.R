@@ -102,7 +102,7 @@ plot_spatial_ts <- function(
   plot_ts_species <- function(data, ncol) {
     plot <- ggplot2::ggplot(
       data,
-      ggplot2::aes_(x = ~time, y = ~density, colour = ~atoutput)
+      ggplot2::aes(x = time, y = density, colour = atoutput)
     ) +
       ggplot2::geom_line(lineend = "round") +
       ggplot2::facet_wrap(

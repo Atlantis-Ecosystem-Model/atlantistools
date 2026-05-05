@@ -113,11 +113,11 @@ plot_spatial_box <- function(
     data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
     plot <- ggplot2::ggplot(
       data,
-      ggplot2::aes_(
-        x = ~long,
-        y = ~lat,
-        fill = ~atoutput,
-        group = ~ factor(polygon)
+      ggplot2::aes(
+        x = long,
+        y = lat,
+        fill = atoutput,
+        group = factor(polygon)
       )
     ) +
       ggplot2::geom_polygon(colour = "black") +

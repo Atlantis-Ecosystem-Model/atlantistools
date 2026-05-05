@@ -336,7 +336,7 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
 
   plot <- ggplot2::ggplot(
     result,
-    ggplot2::aes_(x = ~mult_mum, y = ~mult_c, fill = ~rel_growth)
+    ggplot2::aes(x = mult_mum, y = mult_c, fill = rel_growth)
   ) +
     ggplot2::geom_raster(interpolate = TRUE) +
     # ggplot2::geom_tile() +

@@ -86,10 +86,10 @@ plot_diet <- function(
 
       plot <- ggplot2::ggplot(
         data,
-        ggplot2::aes_(
-          x = ~time,
-          y = ~atoutput,
-          fill = lazyeval::interp(~var, var = as.name(col))
+        ggplot2::aes(
+          x = time,
+          y = atoutput,
+          fill = .data[[col]]
         )
       ) +
         ggplot2::geom_bar(stat = "identity") +

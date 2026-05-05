@@ -30,18 +30,18 @@ plot_boxes <- function(data, color_boxes = TRUE) {
 
   plot <- ggplot2::ggplot(
     data,
-    ggplot2::aes_(
-      x = ~long,
-      y = ~lat,
-      group = ~ factor(polygon),
-      label = ~polygon
+    ggplot2::aes(
+      x = long,
+      y = lat,
+      group = factor(polygon),
+      label = polygon
     )
   )
 
   if (color_boxes) {
     plot <- plot +
       ggplot2::geom_polygon(
-        ggplot2::aes_(fill = ~ factor(polygon)),
+        ggplot2::aes(fill = factor(polygon)),
         colour = "black"
       )
   } else {
