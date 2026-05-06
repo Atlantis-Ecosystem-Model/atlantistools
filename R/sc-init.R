@@ -159,12 +159,11 @@ sc_init <- function(
     fgs = fgs,
     group = acr_age,
     parameter = c("E", "EPlant", "EDL", "EDR")
-  ) %>%
-    tidyr::gather_(
-      data = .,
-      key_col = "ass_type",
-      value_col = "asseff",
-      gather_cols = names(.)[names(.) != "species"]
+  ) |>
+    tidyr::pivot_longer(
+      cols = !species,
+      names_to = "ass_type",
+      values_to = "asseff"
     )
 
   # Extract prey densities!
