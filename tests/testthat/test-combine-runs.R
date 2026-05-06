@@ -1,6 +1,6 @@
 context("combine_runs tests")
 
-suppressMessages(library("dplyr"))
+#suppressMessages(library("dplyr"))
 
 test_list <- list(ref_nums, ref_n, ref_structn)
 
@@ -10,15 +10,21 @@ test_error <- list(test_list, test_list[1:2])
 out <- combine_runs(outs = test, runs = c("run1", "run2", "run3"))
 
 # Some simple calculations!
-test1 <- out[[1]] %>%
-  dplyr::group_by(across(-c(run, atoutput))) |>
-  summarise(atoutput = mean(atoutput)) |>
-  left_join(test_list[[1]], by = across(-atoutput))
+test1 <- out[[1]] |>
+  dplyr::group_by(dplyr::across(-c(run, atoutput))) |>
+  dplyr::summarise(atoutput = mean(atoutput), .groups = "drop") |>
+  dplyr::left_join(
+    test_list[[1]],
+    by = dplyr::setdiff(colnames(out[[1]]), c("run", "atoutput"))
+  )
 
 test3 <- out[[3]] |>
-  group_by(across(run, atoutput)) |>
-  summarise(atoutput = mean(atoutput)) |>
-  left_join(test_list[[3]], by = across(-atoutput))
+  dplyr::group_by(dplyr::across(-c(run, atoutput))) |>
+  dplyr::summarise(atoutput = mean(atoutput), .groups = "drop") |>
+  dplyr::left_join(
+    test_list[[3]],
+    by = dplyr::setdiff(colnames(out[[3]]), c("run", "atoutput"))
+  )
 
 test_that("test combine_runs", {
   expect_error(
