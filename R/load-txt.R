@@ -39,10 +39,12 @@ load_txt <- function(file, id_col = "Time") {
 
   data <- data |>
     tidyr::pivot_longer(
-      cols = !dplyr::all_of(id_col),
+      cols = dplyr::setdiff(names(data), id_col),
       names_to = "code",
       values_to = "atoutput"
-    )
+    ) |>
+    dplyr::arrange(id_col, code)
+
   data$code <- as.character(data$code)
   names(data) <- tolower(names(data))
   return(data)
