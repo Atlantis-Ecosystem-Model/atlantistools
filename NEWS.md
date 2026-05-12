@@ -1,3 +1,14 @@
+# atlantistools 0.5.1
+
+## Patch fixes
+
+* Updated tidyverse functions using standard evaluation with functions using tidy evaluation
+
+  * `dplyr` package: `summarise_`, `filter_`, `mutate_`, `group_by_`, `rename_`, `select_`, `arrange_`
+  * `ggplot2` package: `aes_`
+  * `tidyr` package: `spread_`, `gather_`
+
+* Removed deprecated `dplyr::progress_estimated()` progress bar and replaced with a `message`
 
 # atlantistools 0.5.0
 
@@ -16,7 +27,7 @@
 * `preprocess_txt`. Added argument `removeZeros = T`. User can select not to remove zeros from output
 * `plot_line`. Added argument, `ylim` to specify min and max values 
 
-## Bug fixes
+## Patch fixes
 * `load-init` Variables that have data at box level only (no layer data) can now be read from the nc file. 
 
 
