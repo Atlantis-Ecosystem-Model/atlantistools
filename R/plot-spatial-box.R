@@ -82,7 +82,7 @@ plot_spatial_box <- function(
   # Warning: Will change input parameter which makes it harder to debug...
   if (!is.null(select_species)) {
     if (all(select_species %in% unique(bio_spatial$species))) {
-      bio_spatial <- dplyr::filter_(bio_spatial, ~ species %in% select_species)
+      bio_spatial <- bio_spatial |> dplyr::filter(species %in% select_species)
     } else {
       stop("Not all selected_species are present in bio_spatial.")
     }
@@ -99,7 +99,10 @@ plot_spatial_box <- function(
   # Use layer (y-direction) and timestep (x-direction) to facet_grid
   plot_spatial_species <- function(data, full_grid) {
     # add time to polygon layout
-    bgrd <- merge(full_grid, unique(dplyr::select_(data, .dots = c("time"))))
+    unique_times <- data |>
+      dplyr::select(time) |>
+      unique()
+    bgrd <- merge(full_grid, unique_times)
     p_title <- paste(
       "Species:",
       unique(data$species),
@@ -110,11 +113,11 @@ plot_spatial_box <- function(
     data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
     plot <- ggplot2::ggplot(
       data,
-      ggplot2::aes_(
-        x = ~long,
-        y = ~lat,
-        fill = ~atoutput,
-        group = ~ factor(polygon)
+      ggplot2::aes(
+        x = long,
+        y = lat,
+        fill = atoutput,
+        group = factor(polygon)
       )
     ) +
       ggplot2::geom_polygon(colour = "black") +
@@ -167,7 +170,7 @@ select_time <- function(df, timesteps = 2) {
       pos <- pos[-length(pos)]
       select_time <- c(select_time, time_sorted[pos])
     }
-    dplyr::filter_(df, ~ time %in% select_time)
+    dplyr::filter(df, time %in% select_time)
   } else {
     df
   }
@@ -178,7 +181,8 @@ split_dfs <- function(df, cols) {
   if (any(!cols %in% names(df))) {
     stop("Column names in df do not match with cols.")
   }
-  df_cat <- unique(dplyr::select_(df, .dots = cols))
+  df_cat <- df |>
+    dplyr::distinct(dplyr::across(dplyr::all_of(cols)))
   dfs <- vector(mode = "list", length = nrow(df_cat))
   # Should work much better with filter but the nse-part is a bit tricky...
   for (i in seq_along(dfs)) {

@@ -78,13 +78,13 @@ plot_line <- function(
     # check if integer or not
     if (is.numeric(data[, col][[1]]) && all(data[, col] %% 1 == 0)) {
       plot <- plot +
-        ggplot2::aes_(
-          colour = lazyeval::interp(~ factor(var), var = as.name(col))
+        ggplot2::aes(
+          colour = factor(.data[[col]])
         )
       plot <- plot + ggplot2::guides(col = ggplot2::guide_legend(nrow = 1))
     } else {
       plot <- plot +
-        ggplot2::aes_(colour = lazyeval::interp(~var, var = as.name(col)))
+        ggplot2::aes(colour = factor(.data[[col]]))
     }
   }
 

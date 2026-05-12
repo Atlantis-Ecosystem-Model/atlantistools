@@ -37,12 +37,12 @@ load_spec_pred_mort <- function(
 ) {
   if (version_flag == 1) {
     mort <- load_txt(file = specmort)
-    mort <- tidyr::separate_(
-      mort,
-      col = "code",
-      into = c("prey", "agecl", "stock", "pred", "mort"),
-      convert = TRUE
-    )
+    mort <- mort |>
+      tidyr::separate(
+        col = "code",
+        into = c("prey", "agecl", "stock", "pred", "mort"),
+        convert = TRUE
+      )
     # check uniqueness of column notsure and mort
     if (
       any(
@@ -58,7 +58,8 @@ load_spec_pred_mort <- function(
       file = specmort,
       id_col = c("Time", "Group", "Cohort", "Stock")
     )
-    mort <- dplyr::rename_(mort, pred = ~group, agecl = ~cohort, prey = ~code)
+    mort <- mort |>
+      dplyr::rename(pred = group, agecl = cohort, prey = code)
     if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
       stop(
         "Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team."
@@ -77,9 +78,9 @@ load_spec_pred_mort <- function(
   # Check number of empty entries per predator!
   # BJS: is this needed? it doesnt appear to be used anywhere
   nr_prey <- length(unique(mort$prey))
-  count_zero <- mort %>%
-    dplyr::group_by_(~time, ~pred, ~agecl) %>%
-    dplyr::summarise_(count_zero = ~ sum(atoutput == 0) / nr_prey) %>%
+  count_zero <- mort |>
+    dplyr::group_by(time, pred, agecl) |>
+    dplyr::summarise(count_zero = sum(atoutput == 0) / nr_prey) |>
     dplyr::filter(count_zero == 1)
 
   # Remove zeros
@@ -87,12 +88,13 @@ load_spec_pred_mort <- function(
 
   # Convert species codes to longnames!
   if (convert_names) {
-    mort <- dplyr::mutate_at(
-      mort,
-      .cols = c("pred", "prey"),
-      .funs = convert_factor,
-      data_fgs = load_fgs(fgs = fgs)
-    )
+    mort <- mort |>
+      dplyr::mutate(
+        across(
+          c(pred, prey),
+          ~ convert_factor(.x, data_fgs = load_fgs(fgs = fgs))
+        )
+      )
   }
 
   # Convert time

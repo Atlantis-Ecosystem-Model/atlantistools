@@ -139,10 +139,8 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       # Add in function to combine ref_urls and ref
       ref_url_df <- add_ref_url(refs = res$ref_tag, ref_urls = ref_urls)
       res <- merge(res, ref_url_df)
-      res <- dplyr::select_(
-        res,
-        .dots = c("species", "cat", "ref_tag", "ref_url")
-      )
+      res <- res |>
+        dplyr::select(species, cat, ref_tag, ref_url)
     }
 
     return(res)

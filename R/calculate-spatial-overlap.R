@@ -71,18 +71,23 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   # Fill data gaps to make sure that both combinations are present later:
   # - pred/stanza present in box/layer combination & prey/stanza absent
   # - prey/stanza present in box/layer combination $ pred/stanza absent
-  ac_box_layer <- unique(dplyr::select_(
-    dplyr::ungroup(biomass),
-    .dots = c("polygon", "layer")
-  ))
-  ac_pred_agecl <- unique(dplyr::select_(
-    dplyr::ungroup(biomass),
-    .dots = c("species", "agecl", "species_stanza")
-  ))
-  ac_time <- unique(dplyr::select_(dplyr::ungroup(biomass), .dots = c("time")))
+  ac_box_layer <- biomass |>
+    dplyr::ungroup() |>
+    dplyr::select(polygon, layer) |>
+    unique()
 
-  data_bio <- merge(ac_box_layer, ac_pred_agecl) %>%
-    merge(ac_time) %>%
+  ac_pred_agecl <- biomass |>
+    dplyr::ungroup() |>
+    dplyr::select(species, agecl, species_stanza) |>
+    unique()
+
+  ac_time <- biomass |>
+    dplyr::ungroup() |>
+    dplyr::select(time) |>
+    unique()
+
+  data_bio <- merge(ac_box_layer, ac_pred_agecl) |>
+    merge(ac_time) |>
     dplyr::left_join(
       biomass,
       by = c("time", "species", "agecl", "polygon", "layer", "species_stanza")
@@ -90,16 +95,14 @@ calculate_spatial_overlap <- function(biomass_spatial, dietmatrix, agemat) {
   data_bio$perc_bio[is.na(data_bio$perc_bio)] <- 0
 
   # Remove sediment layer! Need to read in the sediment penetration depth (KDEP) to include sedimant layer.
-  data_bio <- dplyr::filter_(
-    data_bio,
-    lazyeval::interp(~ col != max(col), col = as.name("layer"))
-  )
+  data_bio <- data_bio |>
+    dplyr::filter(layer != max(layer))
 
   # Apply Schoener calculations to all predators!
-  ps <- data_bio %>%
-    dplyr::select_(.dots = c("species", "agecl")) %>%
-    unique() %>%
-    dplyr::filter_(~ species %in% unique(dietmatrix$pred))
+  ps <- data_bio |>
+    dplyr::select(species, agecl) |>
+    unique() |>
+    dplyr::filter(species %in% unique(dietmatrix$pred))
 
   sis <- Map(
     schoener,
@@ -126,17 +129,13 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
   }
 
   # Select specific predator/ageclass combination! (columns still called species at this point)
-  df_pred <- dplyr::filter_(biomass, ~ species == predgrp & agecl == ageclass)
+  df_pred <- biomass |> dplyr::filter(species == predgrp, agecl == ageclass)
   pstanza <- unique(df_pred$species_stanza)
-  df_avail <- dplyr::filter_(
-    avail,
-    ~ pred == predgrp & pred_stanza == pstanza & avail != 0
-  )
+  df_avail <- avail |>
+    dplyr::filter(pred == predgrp, pred_stanza == pstanza, avail != 0)
   # Remove predator/predstanza since overlap is 1 by default!
-  biomass_clean <- dplyr::filter_(
-    biomass,
-    ~ !(species == predgrp & agecl == ageclass)
-  )
+  biomass_clean <- biomass |>
+    dplyr::filter(!(species == predgrp & agecl == ageclass))
 
   # Combine predator data with prey data!
   # WARNING: This may lead to a very huge dataframe... all (even non existing)
@@ -162,7 +161,7 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
   si$si <- with(si, abs(perc_bio.x - perc_bio.y))
 
   # Schoner index per pred/agecl/prey/preystanza combination!
-  si_spec <- si %>%
+  si_spec <- si |>
     agg_data(
       col = "si",
       groups = c(
@@ -177,17 +176,18 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
       ),
       out = "si",
       fun = sum
-    ) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~ 1 - si * 0.5), "si")) %>%
-    dplyr::rename_(
-      .dots = c("agecl_pred" = "agecl.x", "agecl_prey" = "agecl.y")
+    ) |>
+    dplyr::mutate(si = 1 - si * 0.5) |>
+    dplyr::rename(
+      agecl_pred = agecl.x,
+      agecl_prey = agecl.y
     )
 
   # 4th step: Aggregate schoner index based on availabilities
   # Combine to pred/predstanza index! Weight with present availabilities!
-  si_overall <- si_spec %>%
-    agg_perc(col = "avail", groups = c("time"), out = "avail") %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~ si * avail), "si")) %>%
+  si_overall <- si_spec |>
+    agg_perc(col = "avail", groups = c("time"), out = "avail") |>
+    dplyr::mutate(si = si * avail) |>
     agg_data(
       col = "si",
       groups = c("time", "pred", "agecl_pred"),

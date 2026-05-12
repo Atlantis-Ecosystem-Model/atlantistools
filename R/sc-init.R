@@ -109,14 +109,14 @@ sc_init <- function(
     bboxes = bboxes
   )
 
-  surface <- vol %>%
-    dplyr::filter_(~ layer != maxl) %>%
+  surface <- vol |>
+    dplyr::filter(layer != maxl) |>
     agg_data(col = "layer", groups = "polygon", fun = max, out = "layer")
 
-  vol <- vol %>%
-    dplyr::inner_join(surface, by = c("polygon", "layer")) %>%
-    dplyr::rename_(.dots = c("vol" = "atoutput")) %>%
-    dplyr::select_(quote(-variable))
+  vol <- vol |>
+    dplyr::inner_join(surface, by = c("polygon", "layer")) |>
+    dplyr::rename(vol = atoutput) |>
+    dplyr::select(-variable)
 
   # Extract data for age based groups
   pd1 <- prm_to_df(
@@ -159,12 +159,11 @@ sc_init <- function(
     fgs = fgs,
     group = acr_age,
     parameter = c("E", "EPlant", "EDL", "EDR")
-  ) %>%
-    tidyr::gather_(
-      data = .,
-      key_col = "ass_type",
-      value_col = "asseff",
-      gather_cols = names(.)[names(.) != "species"]
+  ) |>
+    tidyr::pivot_longer(
+      cols = !species,
+      names_to = "ass_type",
+      values_to = "asseff"
     )
 
   # Extract prey densities!
@@ -194,20 +193,20 @@ sc_init <- function(
   nums <- dplyr::left_join(nums, stanzas, by = "species")
   nums$prey_stanza <- ifelse(nums$agecl < nums$age_mat, 1, 2)
 
-  preydens_ages <- nums %>%
-    dplyr::left_join(weights, by = c("species", "agecl")) %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ (rn + sn) * atoutput), "atoutput")
-    ) %>%
+  preydens_ages <- nums |>
+    dplyr::left_join(weights, by = c("species", "agecl")) |>
+    dplyr::mutate(
+      atoutput = (rn + sn) * atoutput
+    ) |>
     agg_data(
       groups = c("species", "polygon", "prey_stanza", "layer"),
       fun = sum
-    ) %>%
-    dplyr::left_join(vol, by = c("polygon", "layer")) %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ atoutput / vol), "atoutput")
-    ) %>%
-    dplyr::select(-vol) %>%
+    ) |>
+    dplyr::left_join(vol, by = c("polygon", "layer")) |>
+    dplyr::mutate(
+      atoutput = atoutput / vol
+    ) |>
+    dplyr::select(-vol) |>
     dplyr::ungroup()
   # Get nitrogen desity for non age based groups and combine with age based data
 
@@ -229,26 +228,21 @@ sc_init <- function(
       fgs = fgs,
       select_groups = groups_stanza,
       bboxes = bboxes
-    ) %>%
+    ) |>
       agg_data(groups = c("polygon", "layer", "species"), fun = mean)
     preydens_invert <- dplyr::bind_rows(preydens_invert, preydens_stanza)
   }
 
-  preydens_invert <- preydens_invert %>%
-    dplyr::mutate(prey_stanza = 2) %>%
+  preydens_invert <- preydens_invert |>
+    dplyr::mutate(prey_stanza = 2) |>
     dplyr::inner_join(surface, by = c("polygon", "layer"))
-  # dplyr::select_(.dots = names(.)[!names(.) %in% "agecl"]) # only remove column "agecl" if present!
-  preydens <- rbind(preydens_ages, preydens_invert) %>%
-    dplyr::rename_(.dots = c("prey" = "species", "preydens" = "atoutput"))
+  preydens <- rbind(preydens_ages, preydens_invert) |>
+    dplyr::rename(prey = species, preydens = atoutput)
 
   # Extract availability matrix and combine with assimilation types
-  ass_type <- dplyr::select_(
-    fgs_data,
-    .dots = c(
-      "Code",
-      names(fgs_data)[is.element(names(fgs_data), c("GroupType", "InvertType"))]
-    )
-  )
+  ass_type <- fgs_data %>%
+    dplyr::select(Code, dplyr::any_of(c("GroupType", "InvertType")))
+
   names(ass_type) <- c("prey", "grp")
   ass_type$ass_type <- "e"
   ass_type$ass_type[ass_type$grp == "LAB_DET"] <- "edl"
@@ -267,34 +261,35 @@ sc_init <- function(
     fgs = fgs,
     convert_names = TRUE,
     version_flag = version_flag
-  ) %>%
-    dplyr::filter_(~ avail != 0) %>%
+  ) |>
+    dplyr::filter(avail != 0) |>
     dplyr::left_join(ass_type, by = "prey")
   if (!is.null(set_avail)) {
     dm$avail <- set_avail
   }
   ## Combine everything to one dataframe!
-  result <- dplyr::select_(pd, .dots = c("species", "agecl", "pred_stanza")) %>%
-    dplyr::left_join(asseff, by = "species") %>%
+  result <- pd |>
+    dplyr::select(species, agecl, pred_stanza) |>
+    dplyr::left_join(asseff, by = "species") |>
     dplyr::inner_join(
       dm,
       by = c("species" = "pred", "pred_stanza", "ass_type")
-    ) %>%
-    dplyr::inner_join(preydens, by = c("prey_stanza", "prey")) %>% # only use prey items which are consumed (e.g. no juvenile inverts)
-    dplyr::rename_(.dots = c("pred" = "species")) %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ preydens * avail * asseff), "atoutput")
-    ) %>% # available biomass
+    ) |>
+    dplyr::inner_join(preydens, by = c("prey_stanza", "prey")) |> # only use prey items which are consumed (e.g. no juvenile inverts)
+    dplyr::rename(pred = species) |>
+    dplyr::mutate(
+      atoutput = preydens * avail * asseff
+    ) |> # available biomass
     agg_data(
       groups = c("pred", "agecl", "polygon", "layer"),
       out = "availbio",
       fun = sum
-    ) %>% # sum up per pred/agcl/time/box/layer
+    ) |> # sum up per pred/agcl/time/box/layer
     dplyr::ungroup()
 
   # Add mum and C
-  pd <- dplyr::rename_(pd, .dots = c("pred" = "species")) %>%
-    dplyr::select_(.dots = c("pred", "agecl", "mum", "c", "growth_req"))
+  pd <- dplyr::rename(pd, pred = species) |>
+    dplyr::select(pred, agecl, mum, c, growth_req)
   result <- dplyr::left_join(result, pd, by = c("pred", "agecl"))
 
   return(result)
@@ -308,19 +303,11 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
   }
 
   calc_growth <- function(df, mult_mum, mult_c) {
-    result <- df %>%
-      dplyr::mutate_(.dots = stats::setNames(list(~ mum * mult_mum), "mum")) %>%
-      dplyr::mutate_(.dots = stats::setNames(list(~ c * mult_c), "c")) %>%
-      dplyr::filter_(~ !is.na(availbio)) %>% # Only needed in case data is read in from init
-      dplyr::mutate_(
-        .dots = stats::setNames(
-          list(lazyeval::interp(
-            ~ c * availbio / (x + c / mum * availbio),
-            x = 1
-          )),
-          "atoutput"
-        )
-      ) %>% # calculate realised growth rate
+    result <- df |>
+      dplyr::mutate(mum = mum * mult_mum) |>
+      dplyr::mutate(c = c * mult_c) |>
+      dplyr::filter(!is.na(availbio)) |> # Only needed in case data is read in from init
+      dplyr::mutate(atoutput = c * availbio / (1 + c / mum * availbio)) |> # calculate realised growth rate
       agg_data(
         groups = c("pred", "agecl", "growth_req"),
         out = "growth_feed",
@@ -340,15 +327,15 @@ plot_sc_init <- function(df, mult_mum, mult_c, pred = NULL) {
     dd$id <- i
     result[[i]] <- dd
   }
-  result <- do.call(rbind, result) %>%
-    dplyr::left_join(mults, by = "id") %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ growth_feed / growth_req), "rel_growth")
+  result <- do.call(rbind, result) |>
+    dplyr::left_join(mults, by = "id") |>
+    dplyr::mutate(
+      rel_growth = growth_feed / growth_req
     )
 
   plot <- ggplot2::ggplot(
     result,
-    ggplot2::aes_(x = ~mult_mum, y = ~mult_c, fill = ~rel_growth)
+    ggplot2::aes(x = mult_mum, y = mult_c, fill = rel_growth)
   ) +
     ggplot2::geom_raster(interpolate = TRUE) +
     # ggplot2::geom_tile() +

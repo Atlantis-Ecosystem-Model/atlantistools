@@ -49,11 +49,11 @@ plot_rec <- function(data, ex_data, ncol = 7) {
 
   plot <- ggplot2::ggplot(
     data = comp,
-    ggplot2::aes_(
-      x = ~ssb,
-      y = ~rec,
-      shape = ~model,
-      colour = ~ as.numeric(time)
+    ggplot2::aes(
+      x = ssb,
+      y = rec,
+      shape = model,
+      colour = as.numeric(time)
     )
   ) +
     ggplot2::geom_point() +

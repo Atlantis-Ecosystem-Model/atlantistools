@@ -39,7 +39,7 @@ plot_add_range <- function(plot, ex_data) {
   plot <- plot +
     ggplot2::geom_rug(
       data = ex_data,
-      ggplot2::aes_(colour = ~model),
+      ggplot2::aes(colour = model),
       sides = "lr",
       position = "jitter",
       alpha = 0.5

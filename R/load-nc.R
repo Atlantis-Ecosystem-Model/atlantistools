@@ -209,20 +209,13 @@ load_nc <- function(
   # Initialise progress par!
   # if (report) pb <- txtProgressBar(min = 0, max = length(search_clean), style = 3)
   if (report) {
-    pb <- dplyr::progress_estimated(length(search_clean))
+    message(paste0("Reading in the nc file: ", nc))
   }
   for (i in seq_along(search_clean)) {
     at_data[[i]] <- RNetCDF::var.get.nc(
       ncfile = at_out,
       variable = search_clean[i]
     )
-    # update progress bar
-    # if (report) setTxtProgressBar(pb, i)
-    if (report) pb$tick()$print()
-  }
-  # if (report) close(pb)
-  if (report) {
-    pb$stop()
   }
 
   # at_data <- lapply(search_clean, RNetCDF::var.get.nc, ncfile = at_out)
@@ -488,10 +481,9 @@ load_nc <- function(
   # Sum up N for invert cohorts if invert cohorts are present!
   # NOTE: only invert cohorts of size 2 are considered!
   if (select_variable == "N" & any(final_agecl == 2)) {
-    result <- result %>%
-      dplyr::group_by_("species", "polygon", "layer", "time") %>%
-      dplyr::summarise_(atoutput = ~ sum(atoutput)) %>%
-      dplyr::ungroup()
+    result <- result |>
+      dplyr::group_by(species, polygon, layer, time) |>
+      dplyr::summarise(atoutput = sum(atoutput), .group = "drop")
   }
 
   # convert names to longnames

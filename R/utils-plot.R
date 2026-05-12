@@ -36,9 +36,9 @@ custom_wrap <- function(plot, col, ncol = 7) {
 custom_map <- function(data, x, y) {
   plot <- ggplot2::ggplot(
     data = data,
-    ggplot2::aes_(
-      x = lazyeval::interp(~var, var = as.name(x)),
-      y = lazyeval::interp(~var, var = as.name(y))
+    ggplot2::aes(
+      x = .data[[x]],
+      y = .data[[y]]
     )
   )
   return(plot)

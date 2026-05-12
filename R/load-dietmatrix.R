@@ -156,17 +156,12 @@ load_dietmatrix <- function(
 
   # Transform to long format
   if (transform) {
-    result <- tidyr::gather_(
-      data = result,
-      key_col = "prey",
-      value_col = "avail",
-      names(result)[
-        !is.element(
-          names(result),
-          c("pred", "pred_stanza", "prey_stanza", "code")
-        )
-      ]
-    )
+    result <- result |>
+      tidyr::pivot_longer(
+        cols = !any_of(c("pred", "pred_stanza", "prey_stanza", "code")),
+        names_to = "prey",
+        values_to = "avail"
+      )
     prey_order <- data.frame(
       prey = prey,
       prey_id = 1:length(prey),
@@ -174,12 +169,10 @@ load_dietmatrix <- function(
     )
     result <- dplyr::left_join(result, prey_order, by = "prey")
     if (convert_names) {
-      result <- dplyr::mutate_at(
-        result,
-        .cols = c("pred", "prey"),
-        .funs = convert_factor,
-        data_fgs = fgs_data
-      )
+      result <- result |>
+        dplyr::mutate(
+          across(c(pred, prey), ~ convert_factor(.x, data_fgs = fgs_data))
+        )
     }
   }
 

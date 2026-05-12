@@ -25,14 +25,16 @@ flip_layers <- function(data) {
   }
 
   # Create a df with fliped layers and normal layers based on the input dataframe.
-  df <- unique(dplyr::select_(data, .dots = c("polygon", "layer")))
+  df <- data |>
+    dplyr::select(polygon, layer) |>
+    unique()
   sediment <- max(df$layer)
-  df_fliped <- split(df, df$polygon) %>%
-    lapply(add_fliped_layers, sed = sediment) %>%
+  df_fliped <- split(df, df$polygon) |>
+    lapply(add_fliped_layers, sed = sediment) |>
     dplyr::bind_rows()
 
   # Combine original dataframe with fliped layers and replace columns.
-  data_fliped <- data %>%
+  data_fliped <- data |>
     dplyr::left_join(df_fliped, by = c("polygon", "layer"))
   data_fliped$layer <- NULL
   names(data_fliped)[names(data_fliped) == "layer_fliped"] <- "layer"
@@ -41,7 +43,7 @@ flip_layers <- function(data) {
 }
 
 add_fliped_layers <- function(df, sed) {
-  df <- dplyr::arrange_(df, ~layer)
+  df <- df |> dplyr::arrange(layer)
   if (any(df$layer == sed)) {
     layer_fliped <- c(rev(df$layer[df$layer != sed]), sed) + 1
   } else {

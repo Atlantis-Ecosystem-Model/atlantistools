@@ -50,8 +50,8 @@ plot_bar(df, fill = "agecl", wrap = "species")
 \seealso{
 Other plot functions: 
 \code{\link{plot_boxes}()},
-\code{\link{plot_diet_bec_dev}()},
 \code{\link{plot_diet}()},
+\code{\link{plot_diet_bec_dev}()},
 \code{\link{plot_line}()},
 \code{\link{plot_rec}()},
 \code{\link{plot_species}()}

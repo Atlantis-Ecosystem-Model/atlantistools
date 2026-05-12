@@ -33,8 +33,8 @@ combine_groups <- function(
       as.data.frame() %>%
       group_data(groups = groups)
   }
-  imp_species <- comb_grps %>%
-    dplyr::arrange_(~ desc(atoutput)) %>%
+  imp_species <- comb_grps |>
+    dplyr::arrange(desc(atoutput)) |>
     dplyr::slice(1:(combine_thresh - 1))
   imp_species$atoutput <- NULL
 

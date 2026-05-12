@@ -79,7 +79,7 @@ plot_spatial_ts <- function(
   # Warning: Will change input parameter which makes it harder to debug...
   if (!is.null(select_species)) {
     if (all(select_species %in% unique(bio_spatial$species))) {
-      bio_spatial <- dplyr::filter_(bio_spatial, ~ species %in% select_species)
+      bio_spatial <- bio_spatial |> dplyr::filter(species %in% select_species)
     } else {
       stop("Not all selected_species are present in bio_spatial.")
     }
@@ -93,16 +93,16 @@ plot_spatial_ts <- function(
     bio_spatial,
     groups = c("time", "species", "species_stanza", "polygon"),
     fun = sum
-  ) %>%
-    dplyr::left_join(vol) %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ atoutput / volume), "density")
+  ) |>
+    dplyr::left_join(vol) |>
+    dplyr::mutate(
+      density = atoutput / volume
     )
 
   plot_ts_species <- function(data, ncol) {
     plot <- ggplot2::ggplot(
       data,
-      ggplot2::aes_(x = ~time, y = ~density, colour = ~atoutput)
+      ggplot2::aes(x = time, y = density, colour = atoutput)
     ) +
       ggplot2::geom_line(lineend = "round") +
       ggplot2::facet_wrap(

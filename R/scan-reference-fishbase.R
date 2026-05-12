@@ -51,14 +51,9 @@ scan_reference_fishbase <- function(fish, chr, mirror = "se") {
     )
 
   # Convert column types
-  result <- dplyr::mutate_(
-    result,
-    .dots = stats::setNames(list(~ as.integer(ref_id)), "ref_id")
-  )
-  result <- dplyr::mutate_(
-    result,
-    .dots = stats::setNames(list(~ as.integer(year)), "year")
-  )
+  result <- result |>
+    dplyr::mutate(ref_id = as.integer(ref_id)) |>
+    dplyr::mutate(year = as.integer(year))
 
   # Find chr string in the refernce
   pos <- grep(pattern = chr, x = result$ref)

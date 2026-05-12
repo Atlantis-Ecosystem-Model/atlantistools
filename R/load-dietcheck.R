@@ -85,12 +85,12 @@ load_dietcheck <- function(
         stats::as.formula(paste0("~", colnames(diet)[3]))
       ) |>
 
-      dplyr::summarise_(out = ~ dplyr::n_distinct(Time)) |>
-      dplyr::filter_(~ out != 1)
+      dplyr::summarise(out = dplyr::n_distinct(Time)) |>
+      dplyr::filter(out != 1)
 
     if (nrow(print_diet) != 0) {
       print_diet <- print_diet |>
-        dplyr::mutate_(out = ~ out / length(unique(diet$Time)) * 100) |>
+        dplyr::mutate(out = out / length(unique(diet$Time)) * 100) |>
         #BJS predator -> colnames(diet)[2]
         tidyr::spread_(
           data = .,

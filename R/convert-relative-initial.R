@@ -17,19 +17,17 @@ convert_relative_initial <- function(data, col = "atoutput") {
 
   # Divide values by reference value (time = min(time))
   ref <- dplyr::ungroup(data)
-  ref <- dplyr::filter_(ref, ~ time == min(time))
+  ref <- ref |>
+    dplyr::filter(time == min(time))
   ref$time <- NULL
   names(ref)[names(ref) == col] <- "atoutput_ref"
-  result <- data %>%
+  result <- data |>
     dplyr::left_join(
       ref,
       by = names(data)[!names(data) %in% c("time", col)]
-    ) %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(
-        list(lazyeval::interp(~ var / atoutput_ref, var = as.name(col))),
-        col
-      )
+    ) |>
+    dplyr::mutate(
+      !!col := .data[[col]] / atoutput_ref
     )
 
   # Replace division by 0 with 0!

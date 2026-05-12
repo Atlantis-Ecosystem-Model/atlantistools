@@ -45,10 +45,10 @@ plot_consumed_biomass <- function(
 ) {
   # Restrict to selected timestep!
   if (is.null(select_time)) {
-    one_time <- dplyr::filter_(bio_consumed, ~ time == min(time))
+    one_time <- bio_consumed |> dplyr::filter(time == min(time))
   } else {
     if (length(select_time) == 1) {
-      one_time <- dplyr::filter_(bio_consumed, ~ time == select_time)
+      one_time <- bio_consumed |> dplyr::filter(time == select_time)
     } else {
       stop("Only one value for select_time allowed per function call.")
     }
@@ -58,11 +58,9 @@ plot_consumed_biomass <- function(
   one_time <- agg_data(one_time, groups = c("prey", "pred"), fun = sum)
 
   # Select main feedig interactions based on cumulative treshold.
-  main_links <- one_time %>%
-    dplyr::mutate_(
-      .dots = stats::setNames(list(~ atoutput / sum(atoutput)), "perc")
-    ) %>%
-    dplyr::arrange_(quote(desc(perc)))
+  main_links <- one_time |>
+    dplyr::mutate(perc = atoutput / sum(atoutput)) |>
+    dplyr::arrange(desc(perc))
   main_links <- main_links[1:min(which(cumsum(main_links$perc) > show)), ]
 
   # Combine groups with low contribution to Rest.
@@ -73,11 +71,16 @@ plot_consumed_biomass <- function(
   # Setup final dataframes for plotting!
   clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
   # Will break if any predator only group is not grouped to Rest!
-  d1 <- dplyr::select_(clean_df, .dots = c("group" = "pred", "atoutput"))
-  d2 <- dplyr::select_(clean_df, .dots = c("group" = "prey", "atoutput"))
-  set_cols <- dplyr::bind_rows(d1, d2) %>%
-    agg_data(groups = "group", fun = sum, out = "order") %>%
-    dplyr::arrange_(~ desc(order))
+  d1 <- clean_df |>
+    dplyr::rename(group = pred) |>
+    dplyr::select(group, atoutput)
+  d2 <- clean_df |>
+    dplyr::rename(group = prey) |>
+    dplyr::select(group, atoutput)
+
+  set_cols <- dplyr::bind_rows(d1, d2) |>
+    agg_data(groups = "group", fun = sum, out = "order") |>
+    dplyr::arrange(desc(order))
   set_cols$order <- 1:nrow(set_cols)
   set_cols$col <- rep(get_colpal(), 3)[1:nrow(set_cols)]
   grp_sp <- stringr::str_split(set_cols$group, pattern = " ", n = 2)

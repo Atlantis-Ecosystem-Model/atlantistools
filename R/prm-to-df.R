@@ -41,7 +41,11 @@ prm_to_df <- function(prm_biol, fgs, group, parameter) {
   names(df) <- tolower(parameter)
   df$species <- group
   df$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = df$species)
-  df <- dplyr::select_(df, .dots = c("species", sort(names(df)[-ncol(df)])))
+
+  names_to_keep <- sort(names(df)[-ncol(df)])
+
+  df <- df |>
+    dplyr::select(species, dplyr::all_of(names_to_keep))
 
   return(df)
 }
@@ -66,7 +70,8 @@ prm_to_df_ages <- function(prm_biol, fgs, group, parameter) {
   df$agecl <- rep(unlist(sapply(nc, seq, from = 1)), times = length(parameter))
   df$prm <- rep(tolower(parameter), each = sum(nc))
 
-  result <- tidyr::spread_(data = df, key_col = "prm", value_col = "values")
+  result <- df |>
+    tidyr::pivot_wider(names_from = prm, values_from = values)
 
   result$species <- convert_factor(
     data_fgs = load_fgs(fgs = fgs),
