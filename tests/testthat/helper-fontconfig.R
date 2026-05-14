@@ -5,4 +5,3 @@ on_appveyor <- function() {
 on_cran <- function() {
   !identical(Sys.getenv("NOT_CRAN"), "true")
 }
-

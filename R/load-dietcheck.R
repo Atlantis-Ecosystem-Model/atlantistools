@@ -33,21 +33,35 @@
 #' head(diet, n = 10)
 
 #BJS 7/6/16 change to be compatible with trunk version; added version_flag
-load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE, version_flag = 2) {
+load_dietcheck <- function(
+  dietcheck,
+  fgs,
+  prm_run,
+  convert_names = FALSE,
+  report = FALSE,
+  version_flag = 2
+) {
   # read in diet information
-  diet <- utils::read.table(file = dietcheck, header = TRUE, sep = " ", stringsAsFactors = FALSE)
+  diet <- utils::read.table(
+    file = dietcheck,
+    header = TRUE,
+    sep = " ",
+    stringsAsFactors = FALSE
+  )
 
-  #Check if multiple stocks are available per functional group for trunk branch! 
+  #Check if multiple stocks are available per functional group for trunk branch!
   if (version_flag == 2) {
     if (all(diet$Stock) == 0) {
       diet$Stock <- NULL
     } else {
-      stop("Multiple stocks present. Dietcheck only works with 1 stock per funtional group.")
+      stop(
+        "Multiple stocks present. Dietcheck only works with 1 stock per funtional group."
+      )
     }
 
     diet$Cohort <- diet$Cohort + 1 # Cohorts start with 0 in DietCheck.txt!
   }
-  
+
   # Column Updated was added to trunk code.
   if (version_flag == 2 & "Updated" %in% names(diet)) {
     prey_col_start <- 5 #bjs remove magic number below
@@ -62,21 +76,33 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
   #This is only being used if report==TRUE so no need to do the calculations if report flag is false
   # Create intermediate dataframe to print predators without diet information!
   if (report) {
-    print_diet <- diet[empty_rows, c("Time", colnames(diet)[2], colnames(diet)[3])] %>%
-      dplyr::group_by_(stats::as.formula(paste0("~", colnames(diet)[2])), stats::as.formula(paste0("~", colnames(diet)[3]))) %>%
+    print_diet <- diet[
+      empty_rows,
+      c("Time", colnames(diet)[2], colnames(diet)[3])
+    ] |>
+      dplyr::group_by_(
+        stats::as.formula(paste0("~", colnames(diet)[2])),
+        stats::as.formula(paste0("~", colnames(diet)[3]))
+      ) |>
 
-      dplyr::summarise_(out = ~dplyr::n_distinct(Time)) %>%
-      dplyr::filter_(~out != 1)
+      dplyr::summarise(out = dplyr::n_distinct(Time)) |>
+      dplyr::filter(out != 1)
 
     if (nrow(print_diet) != 0) {
-      print_diet <- print_diet %>%
-        dplyr::mutate_(out = ~out / length(unique(diet$Time)) * 100) %>%
+      print_diet <- print_diet |>
+        dplyr::mutate(out = out / length(unique(diet$Time)) * 100) |>
         #BJS predator -> colnames(diet)[2]
-        tidyr::spread_(data = ., key_col = colnames(diet)[2], value_col = "out") %>%
+        tidyr::spread_(
+          data = .,
+          key_col = colnames(diet)[2],
+          value_col = "out"
+        ) |>
         as.data.frame()
 
-
-      warning("Incomplete diet information.\n% timesteps without any diet information per predator.", immediate. = TRUE)
+      warning(
+        "Incomplete diet information.\n% timesteps without any diet information per predator.",
+        immediate. = TRUE
+      )
       print(print_diet)
     }
   }
@@ -85,15 +111,21 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
 
   # Convert to long dataframe and rename columns!
   #bjs change 4 to prey_col_start to remove magic number
-  diet_long <- tidyr::gather_(data = diet, key_col = "prey", value_col = "atoutput",
-                              gather_cols = names(diet)[prey_col_start:ncol(diet)])
+  diet_long <- diet |>
+    tidyr::pivot_longer(
+      cols = prey_col_start:ncol(diet),
+      names_to = "prey",
+      values_to = "atoutput"
+    ) |>
+    dplyr::arrange(Time, Predator, Cohort, Updated, prey)
+
   names(diet_long)[names(diet_long) == "Predator"] <- "pred" #bjs predator -> colnames(diet)[2]
 
   if (version_flag == 2) {
     names(diet_long)[names(diet_long) == "Cohort"] <- "agecl" #bjs cohort -> colnames(diet)[3]
     # Column Updated was added to trunk code.
     if ("Updated" %in% names(diet_long)) {
-      diet_long <- diet_long[, names(diet_long) != "Updated" ]
+      diet_long <- diet_long[, names(diet_long) != "Updated"]
     }
   }
 
@@ -104,15 +136,17 @@ load_dietcheck <- function(dietcheck, fgs, prm_run, convert_names = FALSE, repor
 
   # Convert species codes to longnames!
   if (convert_names) {
-    diet_long <- dplyr::mutate_at(diet_long, .vars = c("pred", "prey"), .funs = convert_factor,
-                                  data_fgs = load_fgs(fgs = fgs))
+    diet_long <- diet_long |>
+      dplyr::mutate(
+        dplyr::across(
+          c(pred, prey),
+          ~ convert_factor(.x, data_fgs = load_fgs(fgs = fgs))
+        )
+      )
   }
 
   # Convert timestep to time in years!
   diet_long$time <- convert_time(prm_run = prm_run, col = diet_long$time)
 
-
   return(diet_long)
 }
-
-

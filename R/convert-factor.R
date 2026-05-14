@@ -13,7 +13,9 @@
 convert_factor <- function(data_fgs, col) {
   set_factor <- function(col_fgs, col, data_fgs) {
     labels <- sort(data_fgs$LongName[is.element(col_fgs, unique(col))])
-    fac_levels <- col_fgs[sapply(labels, function(x) which(data_fgs$LongName == x))]
+    fac_levels <- col_fgs[sapply(labels, function(x) {
+      which(data_fgs$LongName == x)
+    })]
     # if (diet & is.element("Rest", unique(col))) {
     #   fac_levels <- c(fac_levels, "Rest")
     #   labels <- c(labels, "Rest")
@@ -36,18 +38,22 @@ convert_factor <- function(data_fgs, col) {
       ids <- (nrow(data_fgs) - 2):nrow(data_fgs)
       data_fgs <- rbind(data_fgs, data_fgs[ids, ])
       data_fgs[ids + 3, "Code"] <- paste0(data_fgs[ids + 3, "Code"], "sed")
-      data_fgs[ids + 3, "LongName"] <- paste0(data_fgs[ids + 3, "LongName"], "_sed")
+      data_fgs[ids + 3, "LongName"] <- paste0(
+        data_fgs[ids + 3, "LongName"],
+        "_sed"
+      )
       if (all(is.element(avail, data_fgs$Code))) {
-        col <- set_factor(col_fgs = data_fgs$Code, col = col, data_fgs = data_fgs)
+        col <- set_factor(
+          col_fgs = data_fgs$Code,
+          col = col,
+          data_fgs = data_fgs
+        )
         return(col)
       } else {
-        stop("Not all entries in column Code (or Name) match the entries in parameter col!")
+        stop(
+          "Not all entries in column Code (or Name) match the entries in parameter col!"
+        )
       }
     }
   }
 }
-
-
-
-
-

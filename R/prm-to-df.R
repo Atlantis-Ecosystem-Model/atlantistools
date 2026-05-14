@@ -22,24 +22,30 @@ prm_to_df <- function(prm_biol, fgs, group, parameter) {
   prms <- lapply(parameter, set_single_prm, group = group)
   prm_biol_new <- readLines(con = prm_biol, warn = FALSE)
 
-  prm_t  <- do.call(rbind, prms)[,1]
+  prm_t <- do.call(rbind, prms)[, 1]
   no_prm <- which(is.na(charmatch(prm_t, prm_biol_new)))
-  if (sum(no_prm) > 1 && unlist(strsplit(prm_t[no_prm], '_'))[2] == 'AgeClassSize') {
-    prms2  <- prms[-no_prm]
+  if (
+    sum(no_prm) > 1 && unlist(strsplit(prm_t[no_prm], '_'))[2] == 'AgeClassSize'
+  ) {
+    prms2 <- prms[-no_prm]
     values <- lapply(prms2, extract_prm, prm_biol = prm_biol)
-    sps    <- which(load_fgs(fgs = fgs)$Code %in% group)
-    extr   <- load_fgs(fgs = fgs)$NumAgeClassSize[sps]
+    sps <- which(load_fgs(fgs = fgs)$Code %in% group)
+    extr <- load_fgs(fgs = fgs)$NumAgeClassSize[sps]
     values[[length(values) + 1]] <- extr
-    parameter                    <- c(parameter[-no_prm], parameter[no_prm])
+    parameter <- c(parameter[-no_prm], parameter[no_prm])
   } else {
     values <- lapply(prms, extract_prm, prm_biol = prm_biol)
   }
   # Combine to df!
-  df         <- as.data.frame(do.call(cbind, values))
-  names(df)  <- tolower(parameter)
+  df <- as.data.frame(do.call(cbind, values))
+  names(df) <- tolower(parameter)
   df$species <- group
   df$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = df$species)
-  df <- dplyr::select_(df, .dots = c("species", sort(names(df)[-ncol(df)])))
+
+  names_to_keep <- sort(names(df)[-ncol(df)])
+
+  df <- df |>
+    dplyr::select(species, dplyr::all_of(names_to_keep))
 
   return(df)
 }
@@ -64,9 +70,13 @@ prm_to_df_ages <- function(prm_biol, fgs, group, parameter) {
   df$agecl <- rep(unlist(sapply(nc, seq, from = 1)), times = length(parameter))
   df$prm <- rep(tolower(parameter), each = sum(nc))
 
-  result <- tidyr::spread_(data = df, key_col = "prm", value_col = "values")
+  result <- df |>
+    tidyr::pivot_wider(names_from = prm, values_from = values)
 
-  result$species <- convert_factor(data_fgs = load_fgs(fgs = fgs), col = result$species)
+  result$species <- convert_factor(
+    data_fgs = load_fgs(fgs = fgs),
+    col = result$species
+  )
 
   return(result)
 }

@@ -44,23 +44,45 @@
 #'                           select_species = "Shallow piscivorous fish", timesteps = 3)
 #' gridExtra::grid.arrange(grobs[[1]])
 
-plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, timesteps = 2, polygon_overview = 0.2){
+plot_spatial_box <- function(
+  bio_spatial,
+  bgm_as_df,
+  select_species = NULL,
+  timesteps = 2,
+  polygon_overview = 0.2
+) {
   # Check input dataframe!
-  check_df_names(bio_spatial, expect = c("species", "polygon", "layer", "time", "species_stanza", "atoutput"))
-  check_df_names(bgm_as_df, expect = c("lat", "long", "inside_lat", "inside_long", "polygon"))
+  check_df_names(
+    bio_spatial,
+    expect = c(
+      "species",
+      "polygon",
+      "layer",
+      "time",
+      "species_stanza",
+      "atoutput"
+    )
+  )
+  check_df_names(
+    bgm_as_df,
+    expect = c("lat", "long", "inside_lat", "inside_long", "polygon")
+  )
 
   # Flip layers in bio_spatial!
   bio_spatial <- flip_layers(bio_spatial)
 
   # Create dataframe with all polygon + layer combinations.
-  full_grid <- expand.grid(polygon = unique(bgm_as_df$polygon), layer = min(bio_spatial$layer):max(bio_spatial$layer))
+  full_grid <- expand.grid(
+    polygon = unique(bgm_as_df$polygon),
+    layer = min(bio_spatial$layer):max(bio_spatial$layer)
+  )
   full_grid <- dplyr::left_join(full_grid, bgm_as_df)
 
   # Filter by species if select_species not NULL!
   # Warning: Will change input parameter which makes it harder to debug...
   if (!is.null(select_species)) {
     if (all(select_species %in% unique(bio_spatial$species))) {
-      bio_spatial <- dplyr::filter_(bio_spatial, ~species %in% select_species)
+      bio_spatial <- bio_spatial |> dplyr::filter(species %in% select_species)
     } else {
       stop("Not all selected_species are present in bio_spatial.")
     }
@@ -68,20 +90,43 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
 
   # Step1: Calculate summary table
   # - perc biomass per box and layer
-  perc_bio <- agg_perc(bio_spatial, groups = c("time", "species", "species_stanza"))
+  perc_bio <- agg_perc(
+    bio_spatial,
+    groups = c("time", "species", "species_stanza")
+  )
 
   # Plot spatial distribution per species, species_stanza, timesteps and layer!
   # Use layer (y-direction) and timestep (x-direction) to facet_grid
   plot_spatial_species <- function(data, full_grid) {
     # add time to polygon layout
-    bgrd <- merge(full_grid, unique(dplyr::select_(data, .dots = c("time"))))
-    p_title <- paste("Species:", unique(data$species), "with stanza:", unique(data$species_stanza))
+    unique_times <- data |>
+      dplyr::select(time) |>
+      unique()
+    bgrd <- merge(full_grid, unique_times)
+    p_title <- paste(
+      "Species:",
+      unique(data$species),
+      "with stanza:",
+      unique(data$species_stanza)
+    )
 
     data <- dplyr::left_join(bgrd, data, by = c("polygon", "layer", "time"))
-    plot <- ggplot2::ggplot(data, ggplot2::aes_(x = ~long, y = ~lat, fill = ~atoutput, group = ~factor(polygon))) +
+    plot <- ggplot2::ggplot(
+      data,
+      ggplot2::aes(
+        x = long,
+        y = lat,
+        fill = atoutput,
+        group = factor(polygon)
+      )
+    ) +
       ggplot2::geom_polygon(colour = "black") +
       ggplot2::facet_grid(layer ~ time) +
-      ggplot2::scale_fill_gradient("biomass distribution", low = "red", high = "green") +
+      ggplot2::scale_fill_gradient(
+        "biomass distribution",
+        low = "red",
+        high = "green"
+      ) +
       ggplot2::guides(fill = ggplot2::guide_colorbar(barwidth = 20)) +
       ggplot2::coord_equal() +
       theme_atlantis() +
@@ -95,10 +140,19 @@ plot_spatial_box <- function(bio_spatial, bgm_as_df, select_species = NULL, time
   # Step2: Apply predator and stanza specific plot function
   dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
     split_dfs(cols = c("species", "species_stanza"))
-  plots_spatial <- lapply(dfs_spatial, plot_spatial_species, full_grid = full_grid)
+  plots_spatial <- lapply(
+    dfs_spatial,
+    plot_spatial_species,
+    full_grid = full_grid
+  )
 
   # Step3: Combine plots with polygon overview!
-  grobs <- lapply(plots_spatial, plot_add_polygon_overview, bgm_as_df = bgm_as_df, polygon_overview = polygon_overview)
+  grobs <- lapply(
+    plots_spatial,
+    plot_add_polygon_overview,
+    bgm_as_df = bgm_as_df,
+    polygon_overview = polygon_overview
+  )
 
   return(grobs)
 }
@@ -110,11 +164,13 @@ select_time <- function(df, timesteps = 2) {
   if (timesteps < length(time_sorted)) {
     select_time <- c(min(df$time), max(df$time))
     if (timesteps > 2) {
-      pos <- (1:(timesteps - 1) * (trunc(length(time_sorted) / (timesteps - 1)))) + 1
+      pos <- (1:(timesteps - 1) *
+        (trunc(length(time_sorted) / (timesteps - 1)))) +
+        1
       pos <- pos[-length(pos)]
       select_time <- c(select_time, time_sorted[pos])
     }
-    dplyr::filter_(df, ~time %in% select_time)
+    dplyr::filter(df, time %in% select_time)
   } else {
     df
   }
@@ -122,8 +178,11 @@ select_time <- function(df, timesteps = 2) {
 
 # Setpx: Split data into species / species_stanza categories and apply plotting routines
 split_dfs <- function(df, cols) {
-  if (any(!cols %in% names(df))) stop("Column names in df do not match with cols.")
-  df_cat <- unique(dplyr::select_(df, .dots = cols))
+  if (any(!cols %in% names(df))) {
+    stop("Column names in df do not match with cols.")
+  }
+  df_cat <- df |>
+    dplyr::distinct(dplyr::across(dplyr::all_of(cols)))
   dfs <- vector(mode = "list", length = nrow(df_cat))
   # Should work much better with filter but the nse-part is a bit tricky...
   for (i in seq_along(dfs)) {
@@ -133,4 +192,3 @@ split_dfs <- function(df, cols) {
   names(dfs) <- apply(df_cat, MARGIN = 1, paste, collapse = " ")
   return(dfs)
 }
-

@@ -55,33 +55,46 @@
 #' custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 #' }
 
-plot_line <- function(data, x = "time", y = "atoutput", wrap = "species", col = NULL, ncol = 7, yexpand = FALSE, ylim =  NULL) {
+plot_line <- function(
+  data,
+  x = "time",
+  y = "atoutput",
+  wrap = "species",
+  col = NULL,
+  ncol = 7,
+  yexpand = FALSE,
+  ylim = NULL
+) {
   plot <- custom_map(data = data, x = x, y = y) +
     ggplot2::geom_line() +
     theme_atlantis()
-  if (!is.null(wrap)) plot <- custom_wrap(plot, col = wrap, ncol = ncol)
+  if (!is.null(wrap)) {
+    plot <- custom_wrap(plot, col = wrap, ncol = ncol)
+  }
   plot <- ggplot_custom(plot)
 
   # Add colour
   if (!is.null(col)) {
     # check if integer or not
     if (is.numeric(data[, col][[1]]) && all(data[, col] %% 1 == 0)) {
-      plot <- plot + ggplot2::aes_(colour = lazyeval::interp(~factor(var), var = as.name(col)))
+      plot <- plot +
+        ggplot2::aes(
+          colour = factor(.data[[col]])
+        )
       plot <- plot + ggplot2::guides(col = ggplot2::guide_legend(nrow = 1))
     } else {
-      plot <- plot + ggplot2::aes_(colour = lazyeval::interp(~var, var = as.name(col)))
+      plot <- plot +
+        ggplot2::aes(colour = factor(.data[[col]]))
     }
   }
 
-  if (yexpand == TRUE){
+  if (yexpand == TRUE) {
     plot <- plot + ggplot2::expand_limits(y = 0)
   }
 
-  if(!is.null(ylim)) {
-    plot <- plot + ggplot2::ylim(ylim[1],ylim[2])
+  if (!is.null(ylim)) {
+    plot <- plot + ggplot2::ylim(ylim[1], ylim[2])
   }
 
   return(plot)
 }
-
-

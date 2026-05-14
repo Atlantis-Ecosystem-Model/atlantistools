@@ -84,8 +84,8 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 Other plot functions: 
 \code{\link{plot_bar}()},
 \code{\link{plot_boxes}()},
-\code{\link{plot_diet_bec_dev}()},
 \code{\link{plot_diet}()},
+\code{\link{plot_diet_bec_dev}()},
 \code{\link{plot_rec}()},
 \code{\link{plot_species}()}
 }

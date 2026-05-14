@@ -20,7 +20,10 @@ plot_spatial_overlap <- function(df_list) {
   si_spec <- combine_list(df_list, 1)
   si_overall <- combine_list(df_list, 2)
 
-  plot <- ggplot2::ggplot(si_spec, ggplot2::aes_(x = ~time, y = ~si, group = ~time)) +
+  plot <- ggplot2::ggplot(
+    si_spec,
+    ggplot2::aes(x = time, y = si, group = time)
+  ) +
     ggplot2::geom_violin() +
     ggplot2::geom_point(data = si_overall, colour = "red") +
     ggplot2::facet_grid(agecl_pred ~ pred)

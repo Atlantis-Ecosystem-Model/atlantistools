@@ -21,8 +21,24 @@
 
 # Function to add data range to calibration plot!
 plot_add_box <- function(plot, range = c(0.5, 0.2)) {
-  plot <- plot + ggplot2::annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1 - range[1], ymax = 1 + range[1], alpha = 0.1)
-  plot <- plot + ggplot2::annotate("rect", xmin = -Inf, xmax = Inf, ymin = 1 - range[2], ymax = 1 + range[2], alpha = 0.3)
+  plot <- plot +
+    ggplot2::annotate(
+      "rect",
+      xmin = -Inf,
+      xmax = Inf,
+      ymin = 1 - range[1],
+      ymax = 1 + range[1],
+      alpha = 0.1
+    )
+  plot <- plot +
+    ggplot2::annotate(
+      "rect",
+      xmin = -Inf,
+      xmax = Inf,
+      ymin = 1 - range[2],
+      ymax = 1 + range[2],
+      alpha = 0.3
+    )
   plot <- plot + ggplot2::geom_hline(yintercept = 1, linetype = "dotted")
 
   # Rearrange layers. Set newly added layers as first layers!

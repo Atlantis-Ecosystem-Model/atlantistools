@@ -11,4 +11,3 @@ devtools::use_data(preprocess, overwrite = TRUE)
 file.remove(file.path(dir, "model-preprocess.html"))
 
 rm(list = ls())
-

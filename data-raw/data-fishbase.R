@@ -5,4 +5,3 @@
 fishbase_data <- rfishbase::fishbase
 
 devtools::use_data(fishbase_data, overwrite = TRUE)
-

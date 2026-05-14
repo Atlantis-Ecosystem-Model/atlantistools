@@ -38,14 +38,17 @@
 #' }
 #' }
 
-
-plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95) {
+plot_consumed_biomass <- function(
+  bio_consumed,
+  select_time = NULL,
+  show = 0.95
+) {
   # Restrict to selected timestep!
   if (is.null(select_time)) {
-    one_time <- dplyr::filter_(bio_consumed, ~time == min(time))
+    one_time <- bio_consumed |> dplyr::filter(time == min(time))
   } else {
     if (length(select_time) == 1) {
-      one_time <- dplyr::filter_(bio_consumed, ~time == select_time)
+      one_time <- bio_consumed |> dplyr::filter(time == select_time)
     } else {
       stop("Only one value for select_time allowed per function call.")
     }
@@ -55,9 +58,9 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   one_time <- agg_data(one_time, groups = c("prey", "pred"), fun = sum)
 
   # Select main feedig interactions based on cumulative treshold.
-  main_links <- one_time %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~atoutput/sum(atoutput)), "perc")) %>%
-    dplyr::arrange_(quote(desc(perc)))
+  main_links <- one_time |>
+    dplyr::mutate(perc = atoutput / sum(atoutput)) |>
+    dplyr::arrange(desc(perc))
   main_links <- main_links[1:min(which(cumsum(main_links$perc) > show)), ]
 
   # Combine groups with low contribution to Rest.
@@ -68,11 +71,16 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # Setup final dataframes for plotting!
   clean_df <- agg_data(one_time, groups = c("pred", "prey"), fun = sum)
   # Will break if any predator only group is not grouped to Rest!
-  d1 <- dplyr::select_(clean_df, .dots = c("group" = "pred", "atoutput"))
-  d2 <- dplyr::select_(clean_df, .dots = c("group" = "prey", "atoutput"))
-  set_cols <- dplyr::bind_rows(d1, d2) %>%
-    agg_data(groups = "group", fun = sum, out = "order") %>%
-    dplyr::arrange_(~desc(order))
+  d1 <- clean_df |>
+    dplyr::rename(group = pred) |>
+    dplyr::select(group, atoutput)
+  d2 <- clean_df |>
+    dplyr::rename(group = prey) |>
+    dplyr::select(group, atoutput)
+
+  set_cols <- dplyr::bind_rows(d1, d2) |>
+    agg_data(groups = "group", fun = sum, out = "order") |>
+    dplyr::arrange(desc(order))
   set_cols$order <- 1:nrow(set_cols)
   set_cols$col <- rep(get_colpal(), 3)[1:nrow(set_cols)]
   grp_sp <- stringr::str_split(set_cols$group, pattern = " ", n = 2)
@@ -85,16 +93,30 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # See: https://github.com/gjabel/migest/blob/master/demo/cfplot_reg2.R
   # for Details!
   circlize::circos.clear()
-  circlize::circos.par(start.degree = 90, gap.degree = 4, track.margin = c(-0.1, 0.1), points.overflow.warning = FALSE)
+  circlize::circos.par(
+    start.degree = 90,
+    gap.degree = 4,
+    track.margin = c(-0.1, 0.1),
+    points.overflow.warning = FALSE
+  )
   graphics::par(mar = rep(0, 4))
 
   # chordDiagramFromDataFrame has a weird if !is.null(df$rank) which throws a warning by default...
   # Might be hard to bedug this in case of a different warning.
-  suppressWarnings(circlize::chordDiagram(x = clean_df, grid.col = set_cols$col, transparency = 0.25,
-                         order = set_cols$group, directional = 1,
-                         direction.type = c("arrows", "diffHeight"), diffHeight  = -0.04,
-                         annotationTrack = "grid", annotationTrackHeight = c(0.05, 0.1),
-                         link.arr.type = "big.arrow", link.sort = TRUE, link.largest.ontop = TRUE))
+  suppressWarnings(circlize::chordDiagram(
+    x = clean_df,
+    grid.col = set_cols$col,
+    transparency = 0.25,
+    order = set_cols$group,
+    directional = 1,
+    direction.type = c("arrows", "diffHeight"),
+    diffHeight = -0.04,
+    annotationTrack = "grid",
+    annotationTrackHeight = c(0.05, 0.1),
+    link.arr.type = "big.arrow",
+    link.sort = TRUE,
+    link.largest.ontop = TRUE
+  ))
 
   # line 1: read in the data (clean_df) and set colours of the outer sectors (set_cols).
   # line 2: set order of outer sectors and indicates that chords should be directional.
@@ -104,7 +126,11 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # line 5: use big arrows, sort the chords left to right in each sector and plot the smallest chords first.
 
   # Create space between x-axis ticks. In total 24 ticks for the whole circle --> every 15 degree.
-  sectors <- sapply(circlize::get.all.sector.index(), circlize::get.cell.meta.data, name = "xlim")[2, ]
+  sectors <- sapply(
+    circlize::get.all.sector.index(),
+    circlize::get.cell.meta.data,
+    name = "xlim"
+  )[2, ]
   tick_step <- sum(sectors) / 24
 
   # Add axis and text.
@@ -118,16 +144,29 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
       reg2 = set_cols$reg2[set_cols$group == sector.index]
 
       test <- nchar(reg2)
-      circlize::circos.text(x = mean(xlim), y = ifelse(test == 0, yes = 6.8, no = 7.6),
-                           labels = reg1, facing = "bending")
-      circlize::circos.text(x = mean(xlim), y = 6,
-                            labels = reg2, facing = "bending")
+      circlize::circos.text(
+        x = mean(xlim),
+        y = ifelse(test == 0, yes = 6.8, no = 7.6),
+        labels = reg1,
+        facing = "bending"
+      )
+      circlize::circos.text(
+        x = mean(xlim),
+        y = 6,
+        labels = reg2,
+        facing = "bending"
+      )
 
-      circlize::circos.axis(h = "top",
-                            major.at = as.numeric(scales::scientific(seq(from = 0, to = xlim[2], by = tick_step), digits = 2)),
-                            labels.cex = 0.8,
-                            major.tick.percentage = 0.5,
-                            labels.niceFacing = FALSE)
+      circlize::circos.axis(
+        h = "top",
+        major.at = as.numeric(scales::scientific(
+          seq(from = 0, to = xlim[2], by = tick_step),
+          digits = 2
+        )),
+        labels.cex = 0.8,
+        major.tick.percentage = 0.5,
+        labels.niceFacing = FALSE
+      )
     }
   )
 
@@ -140,6 +179,3 @@ plot_consumed_biomass <- function(bio_consumed, select_time = NULL, show = 0.95)
   # line 9:   (2nd circos.text) add text (reg2).
   # line 10:  add axis with major and minor ticks, without flipping the axis labels in the bottom half.
 }
-
-
-

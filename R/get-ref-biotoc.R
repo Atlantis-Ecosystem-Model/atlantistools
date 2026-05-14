@@ -28,7 +28,10 @@ get_ref_biotic <- function(taxon, test = FALSE) {
   single_taxon <- function(taxon, test) {
     # Split taxon to form url
     if (grepl(pattern = " ", taxon)) {
-      url <- paste0(stringr::str_split(taxon, pattern = " ")[[1]], collapse = "%20")
+      url <- paste0(
+        stringr::str_split(taxon, pattern = " ")[[1]],
+        collapse = "%20"
+      )
     } else {
       url <- taxon
     }
@@ -36,10 +39,16 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
     # Read in the url as raw html.
     if (!test) {
-      ref_raw <- xml2::read_html(curl::curl(url, handle = curl::new_handle("useragent" = "Mozilla/5.0")), timeout = 10000)
+      ref_raw <- xml2::read_html(
+        curl::curl(url, handle = curl::new_handle("useragent" = "Mozilla/5.0")),
+        timeout = 10000
+      )
     } else {
       # This is a bit messy but does it's job.
-      ref_raw <- xml2::read_html(system.file("extdata/biotic-cancer-pagurus.html", package = "atlantistools"))
+      ref_raw <- xml2::read_html(system.file(
+        "extdata/biotic-cancer-pagurus.html",
+        package = "atlantistools"
+      ))
     }
 
     # Extract reference by category
@@ -47,13 +56,22 @@ get_ref_biotic <- function(taxon, test = FALSE) {
 
     # Leave function in case no information is present
     if (all(dim(ref_df) == 1)) {
-      res <- tibble::tibble(species = taxon, cat = NA, ref_tag = NA, ref_url = NA)
+      res <- tibble::tibble(
+        species = taxon,
+        cat = NA,
+        ref_tag = NA,
+        ref_url = NA
+      )
     } else {
       # Data is replicated in columns >= 3
       ref_df <- ref_df[, 1:2]
       ref_df <- ref_df[grepl(ref_df[, 1], pattern = "References"), ]
       names(ref_df) <- c("cat", "ref")
-      ref_df$cat <- stringr::str_replace_all(ref_df$cat, pattern = " References", replacement = "")
+      ref_df$cat <- stringr::str_replace_all(
+        ref_df$cat,
+        pattern = " References",
+        replacement = ""
+      )
 
       # Get the urls to the reference metadata (author, year, title)
       ref_urls <- rvest::html_nodes(ref_raw, "a") %>%
@@ -73,16 +91,36 @@ get_ref_biotic <- function(taxon, test = FALSE) {
         # Well this is kinda getting ANNOYING! I will simply hardcode this for now...
         refs_bio <- refs_bio[refs_bio != "b), Nichols & Barker, 1984"]
         # Replace commas and double space entries in reference (THIS IS SO STUPID!!!!!!!)
-        refs_bio_fix <- stringr::str_replace_all(refs_bio, pattern = ",", replacement = "")
-        refs_bio_fix <- stringr::str_replace_all(refs_bio_fix, pattern = "  ", replacement = " ")
+        refs_bio_fix <- stringr::str_replace_all(
+          refs_bio,
+          pattern = ",",
+          replacement = ""
+        )
+        refs_bio_fix <- stringr::str_replace_all(
+          refs_bio_fix,
+          pattern = "  ",
+          replacement = " "
+        )
 
-        ref_ids1 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio))
-        ref_ids2 <- purrr::map(bio$col2, ~stringr::str_detect(., pattern = refs_bio_fix))
-        ref_ids <- purrr::map2(ref_ids1, ref_ids2, ~.x | .y)
+        ref_ids1 <- purrr::map(
+          bio$col2,
+          ~ stringr::str_detect(., pattern = refs_bio)
+        )
+        ref_ids2 <- purrr::map(
+          bio$col2,
+          ~ stringr::str_detect(., pattern = refs_bio_fix)
+        )
+        ref_ids <- purrr::map2(ref_ids1, ref_ids2, ~ .x | .y)
 
-        ref_bio <- tibble::tibble(cat = bio$headings, ref = purrr::map(ref_ids, ~refs_bio[.]))
+        ref_bio <- tibble::tibble(
+          cat = bio$headings,
+          ref = purrr::map(ref_ids, ~ refs_bio[.])
+        )
       } else {
-        ref_bio <- tibble::tibble(cat = bio$headings, ref = rep(NA, times = length(bio$headings)))
+        ref_bio <- tibble::tibble(
+          cat = bio$headings,
+          ref = rep(NA, times = length(bio$headings))
+        )
       }
 
       # Create output tibble
@@ -91,15 +129,18 @@ get_ref_biotic <- function(taxon, test = FALSE) {
       nulls <- purrr::map_lgl(dummy$ref, is.null)
       dummy$ref[nulls] <- NA
 
-      res <- tibble::as.tibble(cbind(rep(dummy$cat, times = purrr::map_int(dummy$ref, length)),
-                                     purrr::flatten_chr(dummy$ref)))
+      res <- tibble::as.tibble(cbind(
+        rep(dummy$cat, times = purrr::map_int(dummy$ref, length)),
+        purrr::flatten_chr(dummy$ref)
+      ))
       res$species <- taxon
       res <- purrr::set_names(res, nm = c("cat", "ref_tag", "species"))
 
       # Add in function to combine ref_urls and ref
       ref_url_df <- add_ref_url(refs = res$ref_tag, ref_urls = ref_urls)
       res <- merge(res, ref_url_df)
-      res <- dplyr::select_(res, .dots = c("species", "cat", "ref_tag", "ref_url"))
+      res <- res |>
+        dplyr::select(species, cat, ref_tag, ref_url)
     }
 
     return(res)
@@ -111,7 +152,14 @@ get_ref_biotic <- function(taxon, test = FALSE) {
   # Add in reference metadata! Make sure to remove NAs from urls.
   pass_url <- unique(result$ref_url[!is.na(result$ref_url)])
   if (length(pass_url) == 0) {
-    refmeta <- tibble::tibble(ref_id = NA, ref_url = NA, ref = NA, year = NA, author = NA, title = NA)
+    refmeta <- tibble::tibble(
+      ref_id = NA,
+      ref_url = NA,
+      ref = NA,
+      year = NA,
+      author = NA,
+      title = NA
+    )
   } else {
     refmeta <- meta_refurl(refurl = pass_url)
   }
@@ -126,15 +174,22 @@ bio_txt <- function(url, test = FALSE) {
     biology <- readLines(url)
   } else {
     # very sloppy...
-    biology <- readLines(system.file("extdata/biotic-cancer-pagurus.html", package = "atlantistools"))
+    biology <- readLines(system.file(
+      "extdata/biotic-cancer-pagurus.html",
+      package = "atlantistools"
+    ))
   }
-  biol_start <- grep(pattern = "General Biology Additional Information", biology)
-  biol_end   <- grep(pattern = "Biology References", biology)
+  biol_start <- grep(
+    pattern = "General Biology Additional Information",
+    biology
+  )
+  biol_end <- grep(pattern = "Biology References", biology)
   biology <- biology[biol_start:(biol_end - 5)]
 
   # Get the section headings of "General Biology Additional Information"
   get_headings <- function(chr) {
-    headings_start <- stringr::str_locate_all(pattern = "<b>", chr)[[1]][, 2] + 1
+    headings_start <- stringr::str_locate_all(pattern = "<b>", chr)[[1]][, 2] +
+      1
     headings_end <- stringr::str_locate_all(pattern = "</b>", chr)[[1]][, 1] - 1
 
     # Select headings from string
@@ -144,17 +199,33 @@ bio_txt <- function(url, test = FALSE) {
 
   col2 <- vector(mode = "character", length = length(headings))
   for (i in seq_along(headings)) {
-    if (i == 1) { # first headings is first entry in biology
+    if (i == 1) {
+      # first headings is first entry in biology
       sec_start <- 1
-      sec_end   <- grep(pattern = paste0("<b>", headings[i + 1], "</b>"), x = biology) - 1
+      sec_end <- grep(
+        pattern = paste0("<b>", headings[i + 1], "</b>"),
+        x = biology
+      ) -
+        1
     }
     if (i < length(headings) & i != 1) {
-      sec_start <- grep(pattern = paste0("<b>", headings[i], "</b>"), x = biology)
-      sec_end   <- grep(pattern = paste0("<b>", headings[i + 1], "</b>"), x = biology) - 1
+      sec_start <- grep(
+        pattern = paste0("<b>", headings[i], "</b>"),
+        x = biology
+      )
+      sec_end <- grep(
+        pattern = paste0("<b>", headings[i + 1], "</b>"),
+        x = biology
+      ) -
+        1
     }
     if (i == length(headings)) {
-      sec_start <- grep(pattern = paste0("<b>", headings[i], "</b>"), x = biology) + 1
-      sec_end   <- length(biology)
+      sec_start <- grep(
+        pattern = paste0("<b>", headings[i], "</b>"),
+        x = biology
+      ) +
+        1
+      sec_end <- length(biology)
     }
     col2[i] <- paste(biology[sec_start:sec_end], collapse = " ")
   }
@@ -172,14 +243,27 @@ bio_txt <- function(url, test = FALSE) {
 
   # Cleanup headings
   cleanup <- function(chr) {
-    while (grepl(pattern = " ", x = stringr::str_sub(chr, start = stringr::str_length(chr), end = stringr::str_length(chr)))) {
+    while (
+      grepl(
+        pattern = " ",
+        x = stringr::str_sub(
+          chr,
+          start = stringr::str_length(chr),
+          end = stringr::str_length(chr)
+        )
+      )
+    ) {
       chr <- stringr::str_sub(chr, end = stringr::str_length(chr) - 1)
     }
     return(chr)
   }
 
   headings <- purrr::map_chr(headings, cleanup)
-  headings <- stringr::str_replace_all(headings, pattern = ":", replacement = "")
+  headings <- stringr::str_replace_all(
+    headings,
+    pattern = ":",
+    replacement = ""
+  )
 
   bio <- tibble::tibble(headings, col2)
   return(bio)
@@ -197,40 +281,64 @@ refstr_to_ref <- function(refstr) {
     # year entry.
     num_pos <- stringr::str_locate_all(refstr, pattern = "[0-9]")[[1]][, 1]
     lags <- diff(num_pos)
-    if (all(lags == 1)) { # Only one reference present!
+    if (all(lags == 1)) {
+      # Only one reference present!
       res <- refstr
     } else {
       # Iteravtively split the string into substrings
       num_pos <- num_pos[lags != 1]
       res <- vector(mode = "character", length = length(num_pos) + 1)
       for (i in seq_along(res)) {
-        if (i == 1)                    res[i] <- stringr::str_sub(refstr, end = num_pos[1])
-        if (i < length(res) & i != 1)  res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3, end = num_pos[i])
-        if (i == length(res))          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
+        if (i == 1) {
+          res[i] <- stringr::str_sub(refstr, end = num_pos[1])
+        }
+        if (i < length(res) & i != 1) {
+          res[i] <- stringr::str_sub(
+            refstr,
+            start = num_pos[i - 1] + 3,
+            end = num_pos[i]
+          )
+        }
+        if (i == length(res)) {
+          res[i] <- stringr::str_sub(refstr, start = num_pos[i - 1] + 3)
+        }
       }
       # Remove numeric only strings (happens when year is given as 1871-1872 entry)
       # Its a bit hacky but does the rick
       num_only <- !is.na(suppressWarnings(as.numeric(res)))
       if (sum(num_only) > 0) res <- res[!num_only]
-
     }
     # Remove trailing non integer and leading non character entries from string
     clean_string <- function(str) {
       nchr <- stringr::str_length(str)
       #  Remove trailing non integer entries from string
-      while (!grepl(pattern = "[0-9]", x = stringr::str_sub(str, start = nchr, end = nchr))) {
+      while (
+        !grepl(
+          pattern = "[0-9]",
+          x = stringr::str_sub(str, start = nchr, end = nchr)
+        )
+      ) {
         nchr <- nchr - 1
         str <- stringr::str_sub(str, end = nchr)
       }
       # Remove leading non character entries from string
-      while (!grepl(pattern = "[a-z|A-Z]", x = stringr::str_sub(str, start = 1, end = 1))) {
+      while (
+        !grepl(
+          pattern = "[a-z|A-Z]",
+          x = stringr::str_sub(str, start = 1, end = 1)
+        )
+      ) {
         nchr <- nchr - 1
         str <- stringr::str_sub(str, start = 2)
       }
       # Insert comma between author and year if missing!
       if (!grepl(pattern = ",", x = str)) {
         num_pos <- stringr::str_locate_all(str, pattern = "[0-9]")[[1]][1]
-        str <- paste(stringr::str_sub(str, end = num_pos - 2), stringr::str_sub(str, start = num_pos), sep = ", ")
+        str <- paste(
+          stringr::str_sub(str, end = num_pos - 2),
+          stringr::str_sub(str, start = num_pos),
+          sep = ", "
+        )
       }
 
       return(str)
@@ -252,18 +360,29 @@ add_ref_url <- function(refs, ref_urls) {
     years <- as.integer(purrr::map_chr(years, paste, collapse = ""))
 
     # Extract the authors and split them based on "," and "&"
-    authors <- stringr::str_split_fixed(string = refs_clean, pattern = as.character(years), n = 2)[, 1]
+    authors <- stringr::str_split_fixed(
+      string = refs_clean,
+      pattern = as.character(years),
+      n = 2
+    )[, 1]
     authors <- purrr::map(authors, double_split)
 
     # Handcode some stupid exceptions
     authors[authors == "KleinBreteler"] <- list(c("Klein", "Breteler"))
     authors[authors == "Meerenvander"] <- "Meeren"
-    authors[which(purrr::map_int(authors, ~sum(. %in% c("b)", "Nichols", "Barker"))) == 3)] <- list(c("Nichols", "Barker", "b"))
-    authors[which(purrr::map_int(authors, ~sum(. %in% c("Jangoux", "vanImpe"))) == 2)] <- list(c("Jangoux", "Impe"))
+    authors[which(
+      purrr::map_int(authors, ~ sum(. %in% c("b)", "Nichols", "Barker"))) == 3
+    )] <- list(c("Nichols", "Barker", "b"))
+    authors[which(
+      purrr::map_int(authors, ~ sum(. %in% c("Jangoux", "vanImpe"))) == 2
+    )] <- list(c("Jangoux", "Impe"))
 
     find_refurl <- function(author, year, ref_urls) {
       # all authors present?
-      author_id <- purrr::map(author, ~grepl(pattern = ., x = ref_urls, ignore.case = FALSE))
+      author_id <- purrr::map(
+        author,
+        ~ grepl(pattern = ., x = ref_urls, ignore.case = FALSE)
+      )
       author_id <- do.call(rbind, author_id)
       author_id <- apply(X = author_id, MARGIN = 2, FUN = all)
 
@@ -293,17 +412,27 @@ add_ref_url <- function(refs, ref_urls) {
 # refurl <- result$ref_url[1:10]
 # refurl <- ref_urls
 meta_refurl <- function(refurl) {
-  txt_raw <- purrr::map(refurl, ~xml2::read_html(paste0("http://www.marlin.ac.uk/biotic/", .)))
+  txt_raw <- purrr::map(
+    refurl,
+    ~ xml2::read_html(paste0("http://www.marlin.ac.uk/biotic/", .))
+  )
 
   # Extract biotic reference id. Read raw text, scan for "BIOTIC References" and extract integers
   # from next 5 character entries (thus only numbers <10000 are allowed.)
   refid <- purrr::map_chr(txt_raw, rvest::html_text)
-  refid_pos <- stringr::str_locate(string = refid, pattern = "BIOTIC References")[, 2]
-  refid <- stringr::str_replace_all(stringr::str_sub(refid, start = refid_pos + 1, end = refid_pos + 4), pattern = "[a-z|A-Z]", replacement = "")
+  refid_pos <- stringr::str_locate(
+    string = refid,
+    pattern = "BIOTIC References"
+  )[, 2]
+  refid <- stringr::str_replace_all(
+    stringr::str_sub(refid, start = refid_pos + 1, end = refid_pos + 4),
+    pattern = "[a-z|A-Z]",
+    replacement = ""
+  )
   refid <- as.integer(refid)
 
   # Extract reference text
-  txt <- purrr::map(txt_raw, ~rvest::html_nodes(., "div")) %>%
+  txt <- purrr::map(txt_raw, ~ rvest::html_nodes(., "div")) %>%
     purrr::map(., rvest::html_text)
 
   # Remove broken reference links
@@ -314,26 +443,52 @@ meta_refurl <- function(refurl) {
 
   # Find the position of the year (e.g. 1st 4 integers.)
   year_pos <- stringr::str_locate_all(txt, pattern = "[0-9]") %>%
-    purrr::map(., ~.[, 1]) %>%  # start == end, thus we only need the 1st column
-    purrr::map(., ~.[1:4]) # year == first 4 numeric entries!
+    purrr::map(., ~ .[, 1]) %>% # start == end, thus we only need the 1st column
+    purrr::map(., ~ .[1:4]) # year == first 4 numeric entries!
 
   # Use the year position to get the remaining infos.
-  year <- as.integer(purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, start = .y[1], end = .y[4])))
-  author <- purrr::map2(txt, year_pos, ~stringr::str_sub(string = .x, end = .y[1] - 1))
-  title <- purrr::map2_chr(txt, year_pos, ~stringr::str_sub(string = .x, start = .y[4] + 4))
+  year <- as.integer(purrr::map2(
+    txt,
+    year_pos,
+    ~ stringr::str_sub(string = .x, start = .y[1], end = .y[4])
+  ))
+  author <- purrr::map2(
+    txt,
+    year_pos,
+    ~ stringr::str_sub(string = .x, end = .y[1] - 1)
+  )
+  title <- purrr::map2_chr(
+    txt,
+    year_pos,
+    ~ stringr::str_sub(string = .x, start = .y[4] + 4)
+  )
 
   fix_authors <- function(chr) {
     fix <- stringr::str_replace_all(chr, pattern = "\\.", replacement = "") %>%
       purrr::map(., double_split)
 
     # Remove strings with length <= 2 and editors.
-    remove_these <- purrr::map(fix, ~stringr::str_length(.) <= 2 | grepl(pattern = "\\(ed\\)", x = .))
-    purrr::map2(fix, remove_these, ~.x[!.y])
+    remove_these <- purrr::map(
+      fix,
+      ~ stringr::str_length(.) <= 2 | grepl(pattern = "\\(ed\\)", x = .)
+    )
+    purrr::map2(fix, remove_these, ~ .x[!.y])
   }
 
   # Create outputtibble
-  res <- tibble::tibble(refid, refurl, txt, year, fix_authors(author), title, !ids)
-  res <- purrr::set_names(res, nm = c("ref_id", "ref_url", "ref", "year", "author", "title", "broken"))
+  res <- tibble::tibble(
+    refid,
+    refurl,
+    txt,
+    year,
+    fix_authors(author),
+    title,
+    !ids
+  )
+  res <- purrr::set_names(
+    res,
+    nm = c("ref_id", "ref_url", "ref", "year", "author", "title", "broken")
+  )
   return(res)
 }
 

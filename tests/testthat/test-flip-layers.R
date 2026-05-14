@@ -11,8 +11,3 @@ test_that("test add_fliped_layers", {
   expect_equal(add_fliped_layers(df3, 7)$layer_fliped, 3:1)
   expect_equal(add_fliped_layers(df4, 7)$layer_fliped, c(4:1, 8))
 })
-
-
-
-
-

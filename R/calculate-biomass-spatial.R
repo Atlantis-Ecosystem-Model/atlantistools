@@ -77,21 +77,40 @@
 #'                                 vol_dz = vol, bio_conv = bio_conv, bps = bps)
 
 calculate_biomass_spatial <- function(nums, sn, rn, n, vol_dz, bio_conv, bps) {
-  vol <- tidyr::spread_(vol_dz, key_col = c("variable"), value_col = "atoutput")
+  vol <- vol_dz |>
+    tidyr::pivot_wider(names_from = variable, values_from = atoutput)
 
   # Calculate biomass per time, box and layer per group and ageclass!
   # - Age based groups!
   names(sn)[names(sn) == "atoutput"] <- "sn"
   names(rn)[names(rn) == "atoutput"] <- "rn"
-  biomass_age <- dplyr::inner_join(nums, sn, by = c("species", "agecl", "polygon", "layer", "time")) %>%
-    dplyr::left_join(rn,  by = c("species", "agecl", "polygon", "layer", "time")) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(~(sn + rn) * atoutput * bio_conv), "atoutput")) %>%
-    dplyr::select_(.dots = names(.)[!names(.) %in% c("sn", "rn")])
+  biomass_age <- dplyr::inner_join(
+    nums,
+    sn,
+    by = c("species", "agecl", "polygon", "layer", "time")
+  ) |>
+    dplyr::left_join(
+      rn,
+      by = c("species", "agecl", "polygon", 'layer', "time")
+    ) |>
+    dplyr::mutate(
+      atoutput = (sn + rn) * atoutput * bio_conv
+    ) |>
+    dplyr::select(-c(sn, rn))
 
   # - Non age based groups!
   biomass_pools <- dplyr::left_join(n, vol, by = c("polygon", "layer", "time"))
-  biomass_pools$atoutput <- with(biomass_pools, ifelse(species %in% bps, atoutput * volume / dz * bio_conv, atoutput * volume * bio_conv))
-  biomass_pools <- dplyr::select_(biomass_pools, .dots = c("species", "time", "polygon", "layer", "atoutput"))
+  biomass_pools$atoutput <- with(
+    biomass_pools,
+    ifelse(
+      species %in% bps,
+      atoutput * volume / dz * bio_conv,
+      atoutput * volume * bio_conv
+    )
+  )
+  biomass_pools <- biomass_pools |>
+    dplyr::select(species, time, polygon, layer, atoutput)
+
   biomass_pools$agecl <- 1
 
   # Combine both dataframes!
@@ -99,4 +118,3 @@ calculate_biomass_spatial <- function(nums, sn, rn, n, vol_dz, bio_conv, bps) {
 
   return(dplyr::ungroup(biomass_spatial))
 }
-

@@ -11,16 +11,24 @@
 #' head(df[df$layer == 1, ], n = 15)
 
 convert_relative_initial <- function(data, col = "atoutput") {
-  if (!"time" %in% names(data)) stop("Column time is missing in data.")
+  if (!"time" %in% names(data)) {
+    stop("Column time is missing in data.")
+  }
 
   # Divide values by reference value (time = min(time))
   ref <- dplyr::ungroup(data)
-  ref <- dplyr::filter_(ref, ~time == min(time))
+  ref <- ref |>
+    dplyr::filter(time == min(time))
   ref$time <- NULL
   names(ref)[names(ref) == col] <- "atoutput_ref"
-  result <- data %>%
-    dplyr::left_join(ref, by = names(data)[!names(data) %in% c("time", col)]) %>%
-    dplyr::mutate_(.dots = stats::setNames(list(lazyeval::interp(~var / atoutput_ref, var = as.name(col))), col))
+  result <- data |>
+    dplyr::left_join(
+      ref,
+      by = names(data)[!names(data) %in% c("time", col)]
+    ) |>
+    dplyr::mutate(
+      !!col := .data[[col]] / atoutput_ref
+    )
 
   # Replace division by 0 with 0!
   result$atoutput[result$atoutput_ref == 0] <- 0

@@ -22,8 +22,14 @@ refs <- unique(c(df1$main_ref, df1$data_ref))
 df3 <- get_ref_fishbase(ref_id = na.omit(refs))
 
 test_that("test extraction of references for sprat", {
-  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 1231], "Zupanovic, S., 1961. Contribution"))
-  expect_true(stringr::str_detect(df3$ref[df3$ref_id == 81067], "Ivory, P., F. Jeal and C.P. Nolan, 2005. Age determination"))
+  expect_true(stringr::str_detect(
+    df3$ref[df3$ref_id == 1231],
+    "Zupanovic, S., 1961. Contribution"
+  ))
+  expect_true(stringr::str_detect(
+    df3$ref[df3$ref_id == 81067],
+    "Ivory, P., F. Jeal and C.P. Nolan, 2005. Age determination"
+  ))
 })
 
 # use this for internal testing only
@@ -36,7 +42,7 @@ test_that("test extraction of references for sprat", {
 # use this to check the package.
 test_url <- "/popdyn/FishPopGrowthSummary.php?ID=861&pref=312&sex=unsexed&loo=56.80000&k=0.53000&id2=845&genusname=Scyliorhinus&speciesname=canicula&fc=183&gm_loo=75.682521749986&gm_lm=49.520370700602&gm_m=0.184&gm_k=0.20812285885834&vautoctr=2040&gm_lm_rl=0.62928533390764"
 
-tests <- purrr::map_chr(test_url, ~paste0("http://www.fishbase.se/", .)) %>%
+tests <- purrr::map_chr(test_url, ~ paste0("http://www.fishbase.se/", .)) %>%
   purrr::map(., xml2::read_html) %>%
   purrr::map(., rvest::html_text)
 
@@ -48,15 +54,16 @@ test_that("test extraction of references for sprat", {
 })
 
 # test NA handling
-df <- suppressWarnings(get_growth_fishbase(c("Alosa agone", "Scyliorhinus canicula")))
+df <- suppressWarnings(get_growth_fishbase(c(
+  "Alosa agone",
+  "Scyliorhinus canicula"
+)))
 
 test_that("error and NA handling", {
-  expect_error(get_growth_fishbase("Alosa agone"), "None of the species have information about growth.")
+  expect_error(
+    get_growth_fishbase("Alosa agone"),
+    "None of the species have information about growth."
+  )
   expect_equal(sum(is.na(df[df$species == "Alosa agone", ])), 15)
   expect_equal(nrow(is.na(df[df$species == "Alosa agone", ])), 1)
 })
-
-
-
-
-

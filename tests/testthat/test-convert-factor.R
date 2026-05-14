@@ -15,5 +15,8 @@ test_that("test convert_factor", {
   expect_is(newcol, "character")
   expect_equal(newcol, fgs$LongName)
   expect_equal(newcol2, fgs$LongName)
-  expect_error(convert_factor(data_fgs = fgs, col = fgs$LongName), "match the entries in parameter col!")
+  expect_error(
+    convert_factor(data_fgs = fgs, col = fgs$LongName),
+    "match the entries in parameter col!"
+  )
 })
