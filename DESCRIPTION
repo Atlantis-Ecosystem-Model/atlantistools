@@ -9,7 +9,7 @@ Description: Atlantis is an end-to-end marine ecosystem modelling framework. It 
 URL: https://github.com/Atlantis-Ecosystem-Model/atlantistools, https://andybeet.github.io/atlantistools/
 BugReports: https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues
 Depends:
-    R (>= 4.0)
+    R (>= 4.1)
 License: GPL-3
 LazyData: true
 Encoding: UTF-8
@@ -23,7 +23,6 @@ Suggests:
 Imports:
   circlize,
   curl,
-  devtools,
   dplyr,
   ggplot2,
   graphics,
@@ -39,7 +38,6 @@ Imports:
   rlang,
   rvest,
   scales,
-  stringi,
   stringr,
   tibble,
   tidyr,
