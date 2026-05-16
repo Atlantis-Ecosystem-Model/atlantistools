@@ -59,22 +59,6 @@ Other load functions:
 ## Examples
 
 ``` r
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-specmort <- file.path(d, "outputSETASSpecificMort.txt")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-fgs <- file.path(d, "SETasGroups.csv")
-
-df <- load_spec_mort(specmort, prm_run, fgs)
-head(df)
-#> # A tibble: 6 × 5
-#>    time code  agecl mort  atoutput
-#>   <dbl> <chr> <dbl> <chr>    <dbl>
-#> 1     1 BML       1 M1    1.06e-15
-#> 2     2 BML       1 M1    1.03e-15
-#> 3     1 CEP       1 F     5.63e-18
-#> 4     2 CEP       1 F     3.83e-17
-#> 5     1 CEP       1 M2    3.70e- 4
-#> 6     2 CEP       1 M2    4.91e- 4
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 specmort <- file.path(d, "outputSETASSpecificMort.txt")

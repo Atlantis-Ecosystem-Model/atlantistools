@@ -72,19 +72,6 @@ Other load functions:
 ## Examples
 
 ``` r
-# Apply to bec-dev models.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-dietcheck <- file.path(d, "outputSETASDietCheck.txt")
-fgs <- file.path(d, "SETasGroups.csv")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-
-diet <- load_dietcheck(dietcheck, fgs, prm_run, version_flag = 1)
-#> Error in dplyr::arrange(tidyr::pivot_longer(diet, cols = prey_col_start:ncol(diet),     names_to = "prey", values_to = "atoutput"), Time, Predator,     Cohort, Updated, prey): ℹ In argument: `..3 = Cohort`.
-#> Caused by error:
-#> ! object 'Cohort' not found
-head(diet, n = 10)
-#> Error: object 'diet' not found
-
 # Apply to trunk models.
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 dietcheck <- file.path(d, "outputSETASDietCheck.txt")

@@ -65,22 +65,6 @@ Other load functions:
 ## Examples
 
 ``` r
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-fgs <- file.path(d, "SETasGroups.csv")
-
-df <- load_spec_pred_mort(specmort, prm_run, fgs, version_flag = 1)
-head(df)
-#> # A tibble: 6 × 5
-#>    time pred  agecl prey       atoutput
-#>   <dbl> <chr> <dbl> <chr>         <dbl>
-#> 1   0.2 CEP       1 CEP   0.00000000883
-#> 2   0.2 FVS       1 FVS   0.00000962   
-#> 3   0.4 CEP       1 CEP   0.0000000100 
-#> 4   0.4 FVS       1 FVS   0.00000962   
-#> 5   0.6 CEP       1 CEP   0.00000000898
-#> 6   0.6 CEP       2 FPS   0.000161     
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
@@ -92,13 +76,11 @@ df <- load_spec_pred_mort(specmort, prm_run, fgs)
 #> Caused by error:
 #> ! `..1` must be size 1512 or 1, not 4.
 head(df)
-#> # A tibble: 6 × 5
-#>    time pred  agecl prey       atoutput
-#>   <dbl> <chr> <dbl> <chr>         <dbl>
-#> 1   0.2 CEP       1 CEP   0.00000000883
-#> 2   0.2 FVS       1 FVS   0.00000962   
-#> 3   0.4 CEP       1 CEP   0.0000000100 
-#> 4   0.4 FVS       1 FVS   0.00000962   
-#> 5   0.6 CEP       1 CEP   0.00000000898
-#> 6   0.6 CEP       2 FPS   0.000161     
+#>                                               
+#> 1 function (x, df1, df2, ncp, log = FALSE)    
+#> 2 {                                           
+#> 3     if (missing(ncp))                       
+#> 4         .Call(C_df, x, df1, df2, log)       
+#> 5     else .Call(C_dnf, x, df1, df2, ncp, log)
+#> 6 }                                           
 ```

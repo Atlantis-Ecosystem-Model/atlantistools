@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Read in the atlantis dietcheck.txt file and perform some basic data transformations.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/docs/i47-pkgdwon-update/R/load-dietcheck.R" class="external-link"><code>R/load-dietcheck.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/fix/i57-load-dietcheck-fix/R/load-dietcheck.R" class="external-link"><code>R/load-dietcheck.R</code></a></small>
       <div class="d-none name"><code>load_dietcheck.Rd</code></div>
     </div>
 
@@ -115,20 +115,7 @@ be printed <code>TRUE</code> or not <code>FALSE</code>.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Apply to bec-dev models.</span></span></span>
-<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-becdev"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">dietcheck</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASDietCheck.txt"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"SETasGroups.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">prm_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_run_fishing_F_New.prm"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">diet</span> <span class="op">&lt;-</span> <span class="fu">load_dietcheck</span><span class="op">(</span><span class="va">dietcheck</span>, <span class="va">fgs</span>, <span class="va">prm_run</span>, version_flag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dplyr::arrange(tidyr::pivot_longer(diet, cols = prey_col_start:ncol(diet),     names_to = "prey", values_to = "atoutput"), Time, Predator,     Cohort, Updated, prey):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `..3 = Cohort`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> object 'Cohort' not found</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">diet</span>, n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'diet' not found</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Apply to trunk models.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Apply to trunk models.</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-trunk"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">dietcheck</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASDietCheck.txt"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"SETasGroupsDem_NoCep.csv"</span><span class="op">)</span></span></span>

@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Load mortality information from outputSpecificPredMort.txt</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/docs/i47-pkgdwon-update/R/load-spec-pred-mort.R" class="external-link"><code>R/load-spec-pred-mort.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/fix/i57-load-dietcheck-fix/R/load-spec-pred-mort.R" class="external-link"><code>R/load-spec-pred-mort.R</code></a></small>
       <div class="d-none name"><code>load_spec_pred_mort.Rd</code></div>
     </div>
 
@@ -109,23 +109,7 @@ thousands.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-becdev"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">specmort</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASSpecificPredMort.txt"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">prm_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_run_fishing_F_New.prm"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">fgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"SETasGroups.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">load_spec_pred_mort</span><span class="op">(</span><span class="va">specmort</span>, <span class="va">prm_run</span>, <span class="va">fgs</span>, version_flag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    time pred  agecl prey       atoutput</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>   0.2 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>008<span style="text-decoration: underline;">83</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>   0.2 FVS       1 FVS   0.000<span style="text-decoration: underline;">009</span>62   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>   0.4 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>010<span style="text-decoration: underline;">0</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   0.4 FVS       1 FVS   0.000<span style="text-decoration: underline;">009</span>62   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>   0.6 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>008<span style="text-decoration: underline;">98</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>   0.6 CEP       2 FPS   0.000<span style="text-decoration: underline;">161</span>     </span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-trunk"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">specmort</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASSpecificPredMort.txt"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">prm_run</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_run_fishing_F_Trunk.prm"</span><span class="op">)</span></span></span>
@@ -136,15 +120,13 @@ thousands.</p>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> `..1` must be size 1512 or 1, not 4.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    time pred  agecl prey       atoutput</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>   0.2 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>008<span style="text-decoration: underline;">83</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>   0.2 FVS       1 FVS   0.000<span style="text-decoration: underline;">009</span>62   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>   0.4 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>010<span style="text-decoration: underline;">0</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   0.4 FVS       1 FVS   0.000<span style="text-decoration: underline;">009</span>62   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>   0.6 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>008<span style="text-decoration: underline;">98</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>   0.6 CEP       2 FPS   0.000<span style="text-decoration: underline;">161</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 function (x, df1, df2, ncp, log = FALSE)    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 {                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     if (missing(ncp))                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         .Call(C_df, x, df1, df2, log)       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     else .Call(C_dnf, x, df1, df2, ncp, log)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 }                                           </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -9,7 +9,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/docs/i47-pkgdwon-update/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/fix/i57-load-dietcheck-fix/DESCRIPTION)
 
 Keth A (2026). *atlantistools: Process and Visualise Output from
 Atlantis Models*. R package version 0.5.1,
