@@ -2,10 +2,13 @@
 
 # atlantistools
 
+<!-- badges: start -->
+
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/atlantistools)](https://cran.r-project.org/package=atlantistools)
 [![R-CMD-check](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml)
 [![pkgdown.yaml](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yaml)
 [![format-check.yaml](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml)
+<!-- badges: end -->
 
 `atlantistools` is a data processing and visualisation tool for R, which
 helps to process output from Atlantis models within R. Using
@@ -14,29 +17,22 @@ file structure which facilitates intra and inter model comparisons.
 
 # Installation
 
-Install from CRAN: (Version 0.4.3 only)
-
-``` r
-install.packages("Atlantis-Ecosystem-Model/atlantistools")
-```
+CRAN: (Version 0.4.3 only)
 
 Since version 0.4.3 all development resides on GitHub. To view the
 changes to `atlantistools` since version 0.4.3 please read the
 [NEWS.md](https://Atlantis-Ecosystem-Model.github.io/atlantistools/news/index.html)
 
-To Install the development version from Github:
+To Install the latest version from Github:
 
-``` r
-remotes::install_github("Atlantis-Ecosystem-Model/atlantistools")
-```
+    pak::pak("Atlantis-Ecosystem-Model/atlantistools")
 
-# Documentation
+### Getting started
 
-All documentation can now be found online in the gh-pages branch of this
-repo
+Please see the [getting started guide](articles/atlantistools.html)
 
-Full documentation can be found
-[here](https://Atlantis-Ecosystem-Model.github.io/atlantistools/index.html)
+## Contact
 
-Vignettes can be found
-[here](https://Atlantis-Ecosystem-Model.github.io/atlantistools/articles/)
+| [andybeet](https://github.com/andybeet) |
+|------------------------------------------------------------------------|
+| [![andybeet avatar](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet) |
