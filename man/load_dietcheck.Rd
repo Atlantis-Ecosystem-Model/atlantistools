@@ -39,15 +39,6 @@ A \code{data.frame} in long format with the following column names:
 Read in the atlantis dietcheck.txt file and perform some basic data transformations.
 }
 \examples{
-# Apply to bec-dev models.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-dietcheck <- file.path(d, "outputSETASDietCheck.txt")
-fgs <- file.path(d, "SETasGroups.csv")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-
-diet <- load_dietcheck(dietcheck, fgs, prm_run, version_flag = 1)
-head(diet, n = 10)
-
 # Apply to trunk models.
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 dietcheck <- file.path(d, "outputSETASDietCheck.txt")
