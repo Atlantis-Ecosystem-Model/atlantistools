@@ -12,3 +12,4 @@ NEWS\.Rmd
 ^docs$
 ^pkgdown$
 ^\.github$
+^.toml

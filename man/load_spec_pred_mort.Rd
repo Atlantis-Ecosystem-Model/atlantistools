@@ -35,13 +35,6 @@ thousands.
 Load mortality information from outputSpecificPredMort.txt
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-fgs <- file.path(d, "SETasGroups.csv")
-
-df <- load_spec_pred_mort(specmort, prm_run, fgs, version_flag = 1)
-head(df)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 specmort <- file.path(d, "outputSETASSpecificPredMort.txt")
