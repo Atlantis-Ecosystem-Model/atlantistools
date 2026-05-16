@@ -2,10 +2,13 @@
 
 # atlantistools
 
+<!-- badges: start -->
+
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/atlantistools)](https://cran.r-project.org/package=atlantistools)
 [![R-CMD-check](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml)
 [![pkgdown.yaml](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yaml)
 [![format-check.yaml](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml)
+<!-- badges: end -->
 
 `atlantistools` is a data processing and visualisation tool for R, which
 helps to process output from Atlantis models within R. Using
