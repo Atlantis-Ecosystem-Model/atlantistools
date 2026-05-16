@@ -149,7 +149,7 @@ bib_to_df <- function(bib) {
       pattern = "\\}",
       replacement = ""
     )
-    # native encodnig based on stringi::stri_enc_mark
+
     return(out)
   }
 
