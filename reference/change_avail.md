@@ -1,0 +1,113 @@
+# Change the availability matrix to simplify automated ATLANTIS calibrations.
+
+Change the availability of predator XXX on specific preygroups.
+
+## Usage
+
+``` r
+change_avail(
+  dietmatrix,
+  pred = NULL,
+  pred_stanza = NULL,
+  prey = NULL,
+  roc,
+  relative = TRUE,
+  consecutive = FALSE
+)
+```
+
+## Arguments
+
+- dietmatrix:
+
+  Dataframe in 'long' format containing information about availabilities
+  with columns 'pred', 'prey', 'pred_stanza', 'prey_stanza', 'code',
+  'prey_id' and 'avail'. The dataframe should be generated with
+  [`load_dietmatrix()`](https://andybeet.github.io/atlantistools/reference/load_dietmatrix.md).
+
+- pred:
+
+  Character vector of predator Acronyms (see
+  [`get_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)).
+  Selecting `NULL` as pred results in all predators being selected. This
+  can be helpful if you want to increase the feeding pressure on a
+  specific prey item by all groups. Default is `NULL`.
+
+- pred_stanza:
+
+  Integer vector indicating if the predator is juvenile (= 1) or adult
+  (= 2). `pred` and `pred_stanza` need to be of the same length. In rare
+  instances, e.g. pred_stanza being `NULL` or one single integer either
+  all pred_stanzas are selected or the single pred_stanza is applied to
+  all predators. Default is `NULL`.
+
+- prey:
+
+  List of character vectors of prey Acronyms (see
+  [`get_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)).
+  `pred` and `prey` need to be of the same length. Selecting `NULL` as
+  prey results in all prey groups being selected. This can be helpful if
+  you want to increase the available prey for a specific predator
+  overall. Default is `NULL`.
+
+- roc:
+
+  Vector of multiplication factors which shall be applied to the old set
+  of parameters. Please supply one value per selected group. In case
+  relative is FALSE the new absolute values can be passed as roc.
+
+- relative:
+
+  Logical if TRUE values are changed relative to base values. If FALSE
+  new values can be passed directly. Default is `NULL`.
+
+- consecutive:
+
+  Boolean indicating if multiple calls to change_avail are performed one
+  after another `TRUE`. Default is `FALSE`.
+
+## Value
+
+parameterfile \*.prm file with the new parameter values.
+
+## Examples
+
+``` r
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
+dm <- load_dietmatrix(prm_biol = file.path(d, "VMPA_setas_biol_fishing_Trunk.prm"),
+                      fgs = file.path(d, "SETasGroupsDem_NoCep.csv"))
+
+dm1 <- change_avail(dietmatrix = dm,
+                    pred = "FPS",
+                    pred_stanza = 1,
+                    prey = "CEP",
+                    roc = 0.1234,
+                    relative = FALSE)
+# Show only rows with availability of 0.1234
+dm1[apply(apply(dm1[, 5:ncol(dm1)], MARGIN = 2, function(x) x == 0.1234), MARGIN = 1, any), ]
+#> # A tibble: 2 × 15
+#>   pred  pred_stanza prey_stanza code     FPS   FVS   CEP   BML    PL    DL    DR
+#>   <chr>       <dbl>       <dbl> <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 FPS             1           1 pPREY…     0     0 0.123  0.01     0     0     0
+#> 2 FPS             1           2 pPREY…     0     0 0.123  0.01     0     0     0
+#> # ℹ 4 more variables: DC <dbl>, DLsed <dbl>, DRsed <dbl>, DCsed <dbl>
+
+dm2 <- change_avail(dietmatrix = dm,
+                    pred = c("FPS", "FVS"),
+                    pred_stanza = c(1, 2),
+                    prey = list(c("FPS", "FVS"), c("FPS", "FVS")),
+                    roc = list(c(0.1111, 0.2222), c(0.3333, 0.4444)),
+                    relative = FALSE)
+
+# Show only rows with availability of 0.1111, 0.2222, 0.3333 or 0.4444
+dm2[apply(apply(dm2[, 5:ncol(dm2)], MARGIN = 2,
+function(x) is.element(x,  c(0.1111, 0.2222, 0.3333, 0.4444))), MARGIN = 1, any), ]
+#> # A tibble: 4 × 15
+#>   pred  pred_stanza prey_stanza code     FPS   FVS   CEP   BML    PL    DL    DR
+#>   <chr>       <dbl>       <dbl> <chr>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+#> 1 FPS             1           1 pPREY… 0.111 0.222  0     0.01 0     0      0   
+#> 2 FPS             1           2 pPREY… 0.111 0.222  0     0.01 0     0      0   
+#> 3 FVS             2           1 pPREY… 0.333 0.444  1e-3  0    0.02  0.001  0   
+#> 4 FVS             2           2 pPREY… 0.333 0.444  5e-4  0    0.004 0      1e-4
+#> # ℹ 4 more variables: DC <dbl>, DLsed <dbl>, DRsed <dbl>, DCsed <dbl>
+```

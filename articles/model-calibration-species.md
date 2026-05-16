@@ -1,0 +1,44 @@
+# model-calibration-species
+
+NOTE: This vigentte is optimised for longer simulation runs. Therefore
+the output is not as pleasant due to the fact that the dummy setas file
+have a simulation time of 5 years.
+
+In order to use this vignette make sure to render `model-preprocess.Rmd`
+first. Either save the resulting list of dataframes as shown in
+`data-raw/data-vignette-model-preprocess.R` or render both vignettes
+`model-preprocess.Rmd` and `model-calibration-species.Rmd` in the same
+R-instance. Of course, you can also use a personalised version of
+`mode-preprocess.Rmd`. Please make sure to add all resulting dataframes
+to the list of dataframes at the end of the preprocess vignette and
+change `model-calibration-species.Rmd` accordingly.
+
+``` r
+
+library("atlantistools")
+library("gridExtra")
+
+# You should be able to build the vignette either by clicking on "Knit PDF" in RStudio or with
+# rmarkdown::render("model-calibration-species.Rmd")
+```
+
+### User Input
+
+This section is used to read in the SETAS dummy files. Please change
+this accordingly.
+
+``` r
+
+result <- preprocess
+species <- c("Shallow piscivorous fish", "Small planktivorous fish")
+```
+
+## Overview species
+
+### Shallow piscivorous fish
+
+![](model-calibration-species_files/figure-html/unnamed-chunk-3-1.png)
+
+### Small planktivorous fish
+
+![](model-calibration-species_files/figure-html/unnamed-chunk-3-2.png)

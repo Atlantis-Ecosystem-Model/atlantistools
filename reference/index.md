@@ -1,0 +1,277 @@
+# Package index
+
+## Loading Functions
+
+Functions that load in and process atlantis output
+
+- [`load_box()`](https://andybeet.github.io/atlantistools/reference/load_box.md)
+  : Load the box specification file for an Atlantis scenario
+
+- [`load_bps()`](https://andybeet.github.io/atlantistools/reference/load_bps.md)
+  : Extracts the names of the epibenthic biomasspools from the initial
+  conditions file.
+
+- [`load_dietcheck()`](https://andybeet.github.io/atlantistools/reference/load_dietcheck.md)
+  : Read in the atlantis dietcheck.txt file and perform some basic data
+  transformations.
+
+- [`load_dietmatrix()`](https://andybeet.github.io/atlantistools/reference/load_dietmatrix.md)
+  [`write_diet()`](https://andybeet.github.io/atlantistools/reference/load_dietmatrix.md)
+  : Extract the dietmatrix from the biological parameterfile
+
+- [`load_fgs()`](https://andybeet.github.io/atlantistools/reference/load_fgs.md)
+  : Load the functional group file
+
+- [`load_init()`](https://andybeet.github.io/atlantistools/reference/load_init.md)
+  : This function is used to read in data from the initial conditions
+  file.
+
+- [`load_init_age()`](https://andybeet.github.io/atlantistools/reference/load_init_age.md)
+  [`load_init_nonage()`](https://andybeet.github.io/atlantistools/reference/load_init_age.md)
+  [`load_init_stanza()`](https://andybeet.github.io/atlantistools/reference/load_init_age.md)
+  [`load_init_physics()`](https://andybeet.github.io/atlantistools/reference/load_init_age.md)
+  [`load_init_weight()`](https://andybeet.github.io/atlantistools/reference/load_init_age.md)
+  : This function loads weight at age data (in mgN) from the initial
+  conditions file.
+
+- [`load_mort()`](https://andybeet.github.io/atlantistools/reference/load_mort.md)
+  : Load mortality information from outputMort.txt
+
+- [`load_spec_mort()`](https://andybeet.github.io/atlantistools/reference/load_spec_mort.md)
+  : Load mortality information from specificMort.txt
+
+- [`load_spec_pred_mort()`](https://andybeet.github.io/atlantistools/reference/load_spec_pred_mort.md)
+  : Load mortality information from outputSpecificPredMort.txt
+
+- [`load_nc()`](https://andybeet.github.io/atlantistools/reference/load_nc.md)
+  : Load Atlantis outputfiles (netcdf)
+
+- [`load_nc_physics()`](https://andybeet.github.io/atlantistools/reference/load_nc_physics.md)
+  : Load Atlantis outputfiles (netcdf)
+
+- [`load_rec()`](https://andybeet.github.io/atlantistools/reference/load_rec.md)
+  : Load information for SSB and Recruits from an Atlantis model run.
+
+- [`load_txt()`](https://andybeet.github.io/atlantistools/reference/load_txt.md)
+  : Function to load various txt files from Atlantis simulations
+
+- [`preprocess_txt()`](https://andybeet.github.io/atlantistools/reference/preprocess_txt.md)
+  :
+
+  Preprocess dataframes loaded in with
+  [`load_txt()`](https://andybeet.github.io/atlantistools/reference/load_txt.md)
+
+- [`preprocess`](https://andybeet.github.io/atlantistools/reference/preprocess.md)
+  : preprocess
+
+- [`calculate_biomass_spatial()`](https://andybeet.github.io/atlantistools/reference/calculate_biomass_spatial.md)
+  : Calculate spatially explicit biomass (in \[t\]) for each group and
+  ageclass per timestep.
+
+- [`calculate_consumed_biomass()`](https://andybeet.github.io/atlantistools/reference/calculate_consumed_biomass.md)
+  : Calculate the consumed biomass in \[t\] of prey j by predator i.
+
+- [`calculate_spatial_overlap()`](https://andybeet.github.io/atlantistools/reference/calculate_spatial_overlap.md)
+  : Calculate 3d overlap of predator groups with their prey over time
+  using Schoener Index.
+
+## Get/manipulate parameter values
+
+Functions that pull parameter values from parameter files
+
+- [`extract_prm()`](https://andybeet.github.io/atlantistools/reference/extract_prm.md)
+  [`extract_prm_cohort()`](https://andybeet.github.io/atlantistools/reference/extract_prm.md)
+  : Extract values for Atlantis parameters from the biological parameter
+  file.
+- [`scan_prm()`](https://andybeet.github.io/atlantistools/reference/scan_prm.md)
+  : Scan character vector for specific flag!
+- [`prm_to_df()`](https://andybeet.github.io/atlantistools/reference/prm_to_df.md)
+  [`prm_to_df_ages()`](https://andybeet.github.io/atlantistools/reference/prm_to_df.md)
+  : Extract parameters from the biological parameter file and transform
+  them to a dataframe.
+- [`change_prm()`](https://andybeet.github.io/atlantistools/reference/change_prm.md)
+  : Change biological parameterfile to simplify automated ATLANTIS
+  calibrations.
+- [`change_avail()`](https://andybeet.github.io/atlantistools/reference/change_avail.md)
+  : Change the availability matrix to simplify automated ATLANTIS
+  calibrations.
+
+## Get functions
+
+Functions that pull other atlantis information
+
+- [`get_boundary()`](https://andybeet.github.io/atlantistools/reference/get_boundary.md)
+  : Get boundary boxes from Atlantis box information.
+- [`get_colpal()`](https://andybeet.github.io/atlantistools/reference/get_colpal.md)
+  : Create discrete color palette used in plots.
+- [`get_conv_mgnbiot()`](https://andybeet.github.io/atlantistools/reference/get_conv_mgnbiot.md)
+  : Extract conversion factor used to transform data from nitrogen in mg
+  to biomass in tonnes.
+
+## Get functional group info
+
+Functions that pull information from the functionaGroups.csv file
+
+- [`get_groups()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_age_groups()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_age_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_nonage_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_fish_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_cohorts_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_fished_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  [`get_turnedon_acronyms()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
+  :
+
+  Collection of similar functions which get specific columns from the
+  Atlantis `functionalGroups.csv`
+
+## Fishbase/online data
+
+Functions that pull information from fishbase and other online sources
+
+- [`fishbase_data`](https://andybeet.github.io/atlantistools/reference/fishbase_data.md)
+  : fishbase_data
+- [`get_diet_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_diet_fishbase.md)
+  : Extract reference for diet information from http:://www.fishbase.se
+- [`get_ids_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_ids_fishbase.md)
+  : Extract fishbase IDs using the package "rfishbase" to generate
+  species specific fishbase URLs
+- [`get_growth_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_growth_fishbase.md)
+  : Extract growth parameters from http:://www.fishbase.se.
+- [`get_maturity_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_maturity_fishbase.md)
+  : Extract maturity parameters from http:://www.fishbase.se.
+- [`get_ref_biotic()`](https://andybeet.github.io/atlantistools/reference/get_ref_biotic.md)
+  : Extract bibliographic info from www.marlin.ac.uk/biotic.
+- [`get_ref_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_ref_fishbase.md)
+  : Extract the bibliographic info from www.fishbase.org.
+- [`scan_reference_fishbase()`](https://andybeet.github.io/atlantistools/reference/scan_reference_fishbase.md)
+  : Scan list of references for character string for fish species
+
+## Plotting
+
+Plotting functions to output
+
+- [`theme_atlantis()`](https://andybeet.github.io/atlantistools/reference/theme_atlantis.md)
+  : Customized theme used in all plots.
+- [`flip_layers()`](https://andybeet.github.io/atlantistools/reference/flip_layers.md)
+  : Flip layers for visualization.
+- [`custom_grid()`](https://andybeet.github.io/atlantistools/reference/custom_grid.md)
+  : Utility functions used for various plotting routines within
+  atlantistools.
+- [`plot_add_box()`](https://andybeet.github.io/atlantistools/reference/plot_add_box.md)
+  : Low level plotting function to add sudo confidence range to
+  calibration plots.
+- [`plot_add_polygon_overview()`](https://andybeet.github.io/atlantistools/reference/plot_add_polygon_overview.md)
+  : Add spatial representation of polygon layout to a ggplot2 object.
+- [`plot_add_range()`](https://andybeet.github.io/atlantistools/reference/plot_add_range.md)
+  : Low level plotting function to add range of observed values to time
+  series plots.
+- [`plot_bar()`](https://andybeet.github.io/atlantistools/reference/plot_bar.md)
+  : Function to plot relative contribution of biomass and numbers per
+  cohort.
+- [`plot_boxes()`](https://andybeet.github.io/atlantistools/reference/plot_boxes.md)
+  : Plot layout of boxes!
+- [`plot_consumed_biomass()`](https://andybeet.github.io/atlantistools/reference/plot_consumed_biomass.md)
+  : Circle diagram to visualize the consumed biomass for the whole
+  system.
+- [`plot_diet()`](https://andybeet.github.io/atlantistools/reference/plot_diet.md)
+  : Plot contribution of diet contents for each functional group.
+- [`plot_diet_bec_dev()`](https://andybeet.github.io/atlantistools/reference/plot_diet_bec_dev.md)
+  : Plot contribution of diet contents for each functional group.
+- [`plot_line()`](https://andybeet.github.io/atlantistools/reference/plot_line.md)
+  : Function to plot time series of atlantis ncdf output.
+- [`plot_rec()`](https://andybeet.github.io/atlantistools/reference/plot_rec.md)
+  : Plot recruitment.
+- [`plot_spatial_box()`](https://andybeet.github.io/atlantistools/reference/plot_spatial_box.md)
+  : Visualize the spatial distribution per species and stanza
+  combination.
+- [`plot_spatial_overlap()`](https://andybeet.github.io/atlantistools/reference/plot_spatial_overlap.md)
+  : Plot spatial overlap.
+- [`plot_spatial_ts()`](https://andybeet.github.io/atlantistools/reference/plot_spatial_ts.md)
+  : Visualize the spatial distribution per species and stanza
+  combination.
+- [`plot_species()`](https://andybeet.github.io/atlantistools/reference/plot_species.md)
+  : Create species specific overview plot.
+- [`sc_init()`](https://andybeet.github.io/atlantistools/reference/sc_init.md)
+  [`plot_sc_init()`](https://andybeet.github.io/atlantistools/reference/sc_init.md)
+  : Sanity check initial conditions file
+
+## Miscellaneous
+
+Other functions
+
+- [`str_split_twice()`](https://andybeet.github.io/atlantistools/reference/str_split_twice.md)
+  : Extract numeric values from string.
+- [`convert_time()`](https://andybeet.github.io/atlantistools/reference/convert_time.md)
+  : Convert timestep to actual time!
+- [`convert_relative_initial()`](https://andybeet.github.io/atlantistools/reference/convert_relative_initial.md)
+  : Calculate relative timeseries using the initial value as benchmark.
+- [`convert_factor()`](https://andybeet.github.io/atlantistools/reference/convert_factor.md)
+  : Function to convert any column with information about functional
+  groups to a factor whose levels use the LongName of the functional
+  groups file.
+- [`convert_bgm()`](https://andybeet.github.io/atlantistools/reference/convert_bgm.md)
+  : Transform data from bgm-file to map dataframe.
+- [`combine_runs()`](https://andybeet.github.io/atlantistools/reference/combine_runs.md)
+  : This function is used to combine model output from different
+  simulations!
+- [`combine_groups()`](https://andybeet.github.io/atlantistools/reference/combine_groups.md)
+  : Combine values from different groups if specific groups only have a
+  low contribution to the overall value.
+- [`combine_ages()`](https://andybeet.github.io/atlantistools/reference/combine_ages.md)
+  : Combine ageclasses to juvenile and adult stanza according to age at
+  maturity.
+- [`check_growth()`](https://andybeet.github.io/atlantistools/reference/check_growth.md)
+  : This function is used to check the individual growth per group over
+  time.
+- [`check_df_names()`](https://andybeet.github.io/atlantistools/reference/check_df_names.md)
+  : Function to check the names of a dataframe.
+- [`change_prm_cohort()`](https://andybeet.github.io/atlantistools/reference/change_prm_cohort.md)
+  : Change biological parameterfile for parameters which expect multiple
+  values.
+- [`agg_data()`](https://andybeet.github.io/atlantistools/reference/agg_data.md)
+  [`agg_perc()`](https://andybeet.github.io/atlantistools/reference/agg_data.md)
+  [`group_data()`](https://andybeet.github.io/atlantistools/reference/agg_data.md)
+  : Aggregate data using dplyr functionality.
+- [`%>%`](https://andybeet.github.io/atlantistools/reference/pipe.md) :
+  Pipeoperator
+
+## Ref functions
+
+???
+
+- [`ref_agemat`](https://andybeet.github.io/atlantistools/reference/ref_agemat.md)
+  : agemat.
+- [`ref_bio_cons`](https://andybeet.github.io/atlantistools/reference/ref_bio_cons.md)
+  : Consumed biomass.
+- [`ref_bio_sp`](https://andybeet.github.io/atlantistools/reference/ref_bio_sp.md)
+  : Spatial biomass.
+- [`ref_dietmatrix`](https://andybeet.github.io/atlantistools/reference/ref_dietmatrix.md)
+  : Dietmatrix.
+- [`ref_dm`](https://andybeet.github.io/atlantistools/reference/ref_dm.md)
+  : Dietcheck.
+- [`ref_eat`](https://andybeet.github.io/atlantistools/reference/ref_eat.md)
+  : Eat.
+- [`ref_grazing`](https://andybeet.github.io/atlantistools/reference/ref_grazing.md)
+  : Grazing.
+- [`ref_growth`](https://andybeet.github.io/atlantistools/reference/ref_growth.md)
+  : Growth.
+- [`ref_lit`](https://andybeet.github.io/atlantistools/reference/ref_lit.md)
+  : Reference dataframe
+- [`ref_n`](https://andybeet.github.io/atlantistools/reference/ref_n.md)
+  : Nitrogen.
+- [`ref_nums`](https://andybeet.github.io/atlantistools/reference/ref_nums.md)
+  : Numbers at age data.
+- [`ref_physics`](https://andybeet.github.io/atlantistools/reference/ref_physics.md)
+  : Physical variables.
+- [`ref_resn`](https://andybeet.github.io/atlantistools/reference/ref_resn.md)
+  : Reserve nitrogen.
+- [`ref_structn`](https://andybeet.github.io/atlantistools/reference/ref_structn.md)
+  : Structural nitrogen.
+- [`ref_to_bibkey()`](https://andybeet.github.io/atlantistools/reference/ref_to_bibkey.md)
+  : Convert reference to bib-tex-key.
+- [`ref_vol`](https://andybeet.github.io/atlantistools/reference/ref_vol.md)
+  : Volume.
+- [`ref_vol_dz`](https://andybeet.github.io/atlantistools/reference/ref_vol_dz.md)
+  : Volume and dz.
