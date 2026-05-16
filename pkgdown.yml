@@ -1,5 +1,5 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 3.8.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   atlantistools: atlantistools.html
@@ -8,8 +8,7 @@ articles:
   model-comparison: model-comparison.html
   model-preprocess: model-preprocess.html
   package-demo: package-demo.html
-last_built: 2021-10-25T13:27Z
+last_built: 2026-05-16T00:15Z
 urls:
-  reference: https://andybeet.github.io/atlantistools//reference
-  article: https://andybeet.github.io/atlantistools//articles
-
+  reference: https://andybeet.github.io/atlantistools/reference
+  article: https://andybeet.github.io/atlantistools/articles
