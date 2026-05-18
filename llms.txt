@@ -158,28 +158,6 @@ Functions that pull information from the functionaGroups.csv file
   Collection of similar functions which get specific columns from the
   Atlantis `functionalGroups.csv`
 
-## Fishbase/online data
-
-Functions that pull information from fishbase and other online sources
-
-- [`fishbase_data`](https://andybeet.github.io/atlantistools/reference/fishbase_data.md)
-  : fishbase_data
-- [`get_diet_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_diet_fishbase.md)
-  : Extract reference for diet information from http:://www.fishbase.se
-- [`get_ids_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_ids_fishbase.md)
-  : Extract fishbase IDs using the package "rfishbase" to generate
-  species specific fishbase URLs
-- [`get_growth_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_growth_fishbase.md)
-  : Extract growth parameters from http:://www.fishbase.se.
-- [`get_maturity_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_maturity_fishbase.md)
-  : Extract maturity parameters from http:://www.fishbase.se.
-- [`get_ref_biotic()`](https://andybeet.github.io/atlantistools/reference/get_ref_biotic.md)
-  : Extract bibliographic info from www.marlin.ac.uk/biotic.
-- [`get_ref_fishbase()`](https://andybeet.github.io/atlantistools/reference/get_ref_fishbase.md)
-  : Extract the bibliographic info from www.fishbase.org.
-- [`scan_reference_fishbase()`](https://andybeet.github.io/atlantistools/reference/scan_reference_fishbase.md)
-  : Scan list of references for character string for fish species
-
 ## Plotting
 
 Plotting functions to output
@@ -266,12 +244,10 @@ Other functions
   [`agg_perc()`](https://andybeet.github.io/atlantistools/reference/agg_data.md)
   [`group_data()`](https://andybeet.github.io/atlantistools/reference/agg_data.md)
   : Aggregate data using dplyr functionality.
-- [`%>%`](https://andybeet.github.io/atlantistools/reference/pipe.md) :
-  Pipeoperator
 
-## Ref functions
+## Reference data
 
-???
+Exported data
 
 - [`ref_agemat`](https://andybeet.github.io/atlantistools/reference/ref_agemat.md)
   : agemat.

@@ -86,8 +86,7 @@ CRAN release: 2017-05-09
 - `get_ids_fishbase` In order to extract data from fishbase species
   specific URLs need to be generated. This function is used to extract
   the fishbase reference id for any amount of fish species. The id is
-  extracted from
-  [`rfishbase::fishbase`](https://docs.ropensci.org/rfishbase/reference/fishbase.html).
+  extracted from `rfishbase::fishbase`.
 - `get_ref_fishbase` Extract bibliographic information for Van
   Bertalannfy growth parameters from fishbase.
 

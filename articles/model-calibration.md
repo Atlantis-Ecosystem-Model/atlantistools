@@ -18,6 +18,7 @@ change `model-calibration.Rmd` accordingly.
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
+library("magrittr")
 
 fig_height2 <- 11
 gen_labels <- list(x = "Time [years]", y = "Biomass [t]")

@@ -17,7 +17,7 @@ accordingly.
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
-
+library("magrittr")
 gen_labels <- list(x = "Time [years]", y = "Biomass [t]")
 
 # You should be able to build the vignette either by clicking on "Knit PDF" in RStudio or with

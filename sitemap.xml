@@ -28,18 +28,11 @@
 <url><loc>https://andybeet.github.io/atlantistools/reference/convert_time.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/custom_grid.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/extract_prm.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/fishbase_data.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/flip_layers.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/get_boundary.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/get_colpal.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/get_conv_mgnbiot.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/get_diet_fishbase.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/get_groups.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/get_growth_fishbase.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/get_ids_fishbase.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/get_maturity_fishbase.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/get_ref_biotic.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/get_ref_fishbase.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/index.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/load_box.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/load_bps.html</loc></url>
@@ -92,7 +85,6 @@
 <url><loc>https://andybeet.github.io/atlantistools/reference/ref_vol_dz.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/sc_init.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/scan_prm.html</loc></url>
-<url><loc>https://andybeet.github.io/atlantistools/reference/scan_reference_fishbase.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/str_split_twice.html</loc></url>
 <url><loc>https://andybeet.github.io/atlantistools/reference/theme_atlantis.html</loc></url>
 </urlset>

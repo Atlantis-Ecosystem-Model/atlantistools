@@ -45,6 +45,8 @@ library("dplyr")
 
 ``` r
 
+library("magrittr")
+
 # You should be able to build the vignette either by clicking on "Knit" in RStudio or with
 # rmarkdown::render("model-preprocess.Rmd")
 ```
