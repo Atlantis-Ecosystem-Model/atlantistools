@@ -74,21 +74,7 @@ reference:
   - theme_atlantis
   - flip_layers
   - custom_grid
-  - plot_add_box
-  - plot_add_polygon_overview
-  - plot_add_range
-  - plot_bar
-  - plot_boxes
-  - plot_consumed_biomass
-  - plot_diet
-  - plot_diet_bec_dev
-  - plot_line
-  - plot_rec
-  - plot_spatial_box
-  - plot_spatial_overlap
-  - plot_spatial_ts
-  - plot_species
-  - plot_sc_init
+  - starts_with("plot_")
 - title: "Miscellaneous"
   desc: "Other functions"
 - contents:
