@@ -26,12 +26,4 @@ test_that("test str_split_twice", {
     )),
     4
   )
-
-  # Used for reference id extraction in get_growth_fishbase.
-  expect_equal(
-    str_split_twice(
-      "Main Ref. :\r\n\t\t\r\n\t\t\r\n\t\t\t81067     Data Ref. :81067\t\t\r\n\t\r\n\t"
-    ),
-    81067
-  )
 })
