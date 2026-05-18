@@ -19,21 +19,6 @@
 #' plot_line(preprocess$biomass_age, col = "agecl")
 #' plot_line(preprocess$biomass_age, wrap = "agecl", col = "species")
 #'
-#' # The function can also be used to compare model outoput with observed data.
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' ex_data <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
-#' names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
-#'
-#' data <- preprocess$biomass
-#' data$model <- "atlantis"
-#' comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
-#'
-#' # Show atlantis as first factor!
-#' lev_ord <- c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"])
-#' comp$model <- factor(comp$model, levels = lev_ord)
-#'
-#' # Create plot
-#' plot_line(comp, col = "model")
 #'
 #' \dontrun{
 #' # Use \code{\link{convert_relative_initial}} and \code{\link{plot_add_box}}

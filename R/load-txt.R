@@ -9,12 +9,10 @@
 #' @family load functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+#' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' file <- file.path(d, "outputSETASSSB.txt")
 #' load_txt(file)
 #'
-#' file <- file.path(d, "outputSETASYOY.txt")
-#' load_txt(file)
 
 load_txt <- function(file, id_col = "Time") {
   # This is the main time consuming step. Checked it with Rprof. E.g. reading in outputNorthSeaSpecificPredMort.txt

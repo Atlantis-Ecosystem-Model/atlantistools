@@ -19,13 +19,6 @@
 #' @family load functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' mortFile <- file.path(d, "outputSETASMort.txt")
-#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-#' fgs <- file.path(d, "SETasGroups.csv")
-#'
-#' df <- load_mort(mortFile, prm_run, fgs)
-#' head(df)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' mortFile <- file.path(d, "outputSETASMort.txt")

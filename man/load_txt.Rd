@@ -20,12 +20,10 @@ Dataframe in tidy format!
 Function to load various txt files from Atlantis simulations
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 file <- file.path(d, "outputSETASSSB.txt")
 load_txt(file)
 
-file <- file.path(d, "outputSETASYOY.txt")
-load_txt(file)
 }
 \seealso{
 Other load functions: 

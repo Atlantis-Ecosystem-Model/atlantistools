@@ -24,9 +24,6 @@ Plot recruitment.
 }
 \examples{
 \dontrun{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
-plot_rec(preprocess_setas$ssb_rec, ex_data)
 }
 }
 \seealso{
@@ -34,7 +31,6 @@ Other plot functions:
 \code{\link{plot_bar}()},
 \code{\link{plot_boxes}()},
 \code{\link{plot_diet}()},
-\code{\link{plot_diet_bec_dev}()},
 \code{\link{plot_line}()},
 \code{\link{plot_species}()}
 }
