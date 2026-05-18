@@ -227,6 +227,29 @@
 "ref_bio_sp"
 
 
+#' fishbase_data
+#'
+#' A table of all the the species found in Fihsbase, including taxonomic classification.
+#'
+#' @format A data frame with 33104 rows and 12 variables:
+#' \describe{
+#'   \item{\code{SpecCode}}{integer. Species code.}
+#'   \item{\code{Genus}}{character.}
+#'   \item{\code{Species}}{character.}
+#'   \item{\code{SpeciesRefNo}}{integer. Reference number.}
+#'   \item{\code{FBname}}{character. Fishbase name.}
+#'   \item{\code{SubFamily}}{character.}
+#'   \item{\code{FamCode}}{integer. Family Code.}
+#'   \item{\code{GenCode}}{integer. Genetic Code.}
+#'   \item{\code{SubGenCode}}{integer. Sub Genetic Code.}
+#'   \item{\code{Family}}{character.}
+#'   \item{\code{Order}}{character.}
+#'   \item{\code{Class}}{character.}
+#' }
+#' @source \url{http://www.fishbase.org/} rfishbase::fishbase
+"fishbase_data"
+
+
 #' Reference dataframe
 #'
 #' Year, author and title from 3 random publications

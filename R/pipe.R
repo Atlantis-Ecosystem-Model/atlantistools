@@ -7,7 +7,7 @@
 #' @importFrom magrittr %>%
 #' @name %>%
 #' @rdname pipe
-#' @export
+#' @keywords internal
 NULL
 
 if (getRversion() >= "2.15.1") {
