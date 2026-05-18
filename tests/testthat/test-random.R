@@ -22,9 +22,6 @@ df1$atoutput <- runif(n = nrow(df1), min = 0, max = 1)
 
 # plot_consumed_biomass(df1, select_time = 1, show = 0.95)
 
-# plot-diet-bec-dev.R -----------------------------------------------------------------------------
-# plots <- plot_diet_bec_dev(preprocess_setas$diet_specmort, wrap_col = "agecl")
-
 # plot-species.R ----------------------------------------------------------------------------------
 plot <- plot_species(preprocess, species = "Shallow piscivorous fish")
 
