@@ -22,6 +22,7 @@ to the list of dataframes at the end of the preprocess vignette and change `mode
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
+library("magrittr")
 
 fig_height2 <- 11
 gen_labels <- list(x = "Time [years]", y = "Biomass [t]")
