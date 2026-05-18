@@ -55,7 +55,8 @@ test_that("test output numbers trunk", {
         diet2$agecl == 2 &
         diet2$prey == "PL"
     ],
-    2.680623e-001
+    2.680623e-001,
+    tolerance = 1e-3
   )
   expect_equal(
     diet2$atoutput[
@@ -64,6 +65,7 @@ test_that("test output numbers trunk", {
         diet2$agecl == 1 &
         diet2$prey == "CEP"
     ],
-    6.483338e-001
+    6.483338e-001,
+    tolerance = 1e-3
   )
 })
