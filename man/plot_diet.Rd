@@ -30,8 +30,7 @@ List of grobs composed of ggplot2 objects.
 Visualize diet proportions form predator and prey perspective. The upper panel
 plot shows the predator perspective while the lower panel plot shows the prey perspective
 for a given group. Please note that this function only works with models
-based on the trunk code. Bec_dev models should use \code{\link{plot_diet_bec_dev}} to get an indication
-of the feeding interactions.
+based on the trunk code.
 }
 \examples{
 \dontrun{
@@ -50,7 +49,6 @@ gridExtra::grid.arrange(plot[[1]])
 Other plot functions: 
 \code{\link{plot_bar}()},
 \code{\link{plot_boxes}()},
-\code{\link{plot_diet_bec_dev}()},
 \code{\link{plot_line}()},
 \code{\link{plot_rec}()},
 \code{\link{plot_species}()}

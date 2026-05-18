@@ -214,23 +214,7 @@ plot_line(biomass_age, col = "agecl")
 plot_line(biomass_age, wrap = "agecl", col = "species", ncol = 3)
 ```
 
-Compare model outoput with observed data. 
 
-```{r}
-ex_data <- read.csv(file.path(system.file("extdata", "setas-model-new-becdev", package = "atlantistools"), 
-                              "setas-bench.csv"), stringsAsFactors = FALSE)
-names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
-
-data <- biomass
-data$model <- "atlantis"
-comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
-
-# Show atlantis as first factor!
-comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
-
-# Create plot
-plot_line(comp, col = "model", ncol = 3)
-```
 
 ```{r}
 # Use convert_relative_initial and {plot_add_box with plot_line.
@@ -262,9 +246,9 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
 
 
-## Create a map of your model for Bec!
+## Create a map of your model
 
-Always add a spatial representation of your model if you have issues with model tuning. This makes the life of Bec and Beth much easier.
+Always add a spatial representation of your model if you have issues with model tuning. 
 
 ```{r, fig.width = 7, fig.height = 5}
 bgm_data <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
@@ -288,9 +272,7 @@ plot_bar(df, fill = "agecl", wrap = "species")
 Please note the plots will look much nicer if the simulation period is elongated.
 I only ran the SETAS model provided with `atlantistools` for 3 years to minimise the size of the package.
 
-Data about feeding interactions can be visualised with `plot_diet` (Please use `plot_diet_bec_dev` for bec-dev models.
-However, in contrast to trunk models the plots will only give an indication about feeding interacions. They do not show the
-actual consumed biomass). The data originates from `DietCheck.txt`.
+Data about feeding interactions can be visualised with `plot_diet`. The data originates from `DietCheck.txt`.
 
 The plots are stored as a list of table-grob. You can plot them on the graphics device with `gridExtra::grid.arrange`.
 

@@ -62,12 +62,4 @@ dietmatrix <- load_dietmatrix(prm_biol, fgs, transform = FALSE)
 # want to update your file.
 new_diet <- write_diet(dietmatrix, prm_biol, save_to_disc = FALSE)
 
-# And to bec-dev models.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-prm_biol <- file.path(d, "VMPA_setas_biol_fishing_New.prm")
-fgs <- file.path(d, "SETasGroups.csv")
-
-dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
-head(dm, n = 10)
-
 }
