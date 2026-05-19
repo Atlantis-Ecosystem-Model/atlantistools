@@ -1,6 +1,5 @@
 ---
 title: "model-calibration"
-author: "Alexander Keth"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{model-calibration}
