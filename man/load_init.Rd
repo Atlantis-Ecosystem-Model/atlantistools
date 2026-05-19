@@ -42,7 +42,4 @@ Other load functions:
 \code{\link{load_spec_pred_mort}()},
 \code{\link{load_txt}()}
 }
-\author{
-Alexander Keth
-}
 \concept{load functions}
