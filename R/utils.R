@@ -61,7 +61,6 @@ release_questions <- function() {
     "Have you updated the vignettes and the index from the local package installation?",
     "Have you run devtools::release(args = '--compact-vignettes=both')",
     "Have you checked the vignette size after devtools::build(args = '--compact-vignettes=both')",
-    "Have you updated cran-comments.md?",
     "Have you run devtools::build_win(args = '--compact-vignettes=both') to check with win-builder?"
   )
 }

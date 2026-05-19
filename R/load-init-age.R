@@ -14,8 +14,6 @@
 #' @export
 #' @return A dataframes with columns atoutput, polygon, layer (if present), species (if present).
 #'
-#' @author Alexander Keth
-
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' init <- file.path(d, "INIT_VMPA_Jan2015.nc")

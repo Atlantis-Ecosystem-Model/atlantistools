@@ -34,7 +34,6 @@
 #'   species, timestep, polygon, agecl, and atoutput (i.e., variable).
 #'
 #' @keywords gen
-#' @author Alexander Keth
 #'
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")

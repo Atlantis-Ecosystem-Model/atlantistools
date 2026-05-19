@@ -5,7 +5,6 @@
 #'
 #' @family get functions
 #' @seealso \code{\link{load_box}}
-#' @author Kelli Faye Johnson
 #'
 #' @param boxinfo A \code{list} as returned from \code{\link{load_box}}.
 #'

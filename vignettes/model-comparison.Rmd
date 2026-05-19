@@ -1,6 +1,5 @@
 ---
 title: "model-comparison"
-author: "Alexander Keth"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{model-comparison}

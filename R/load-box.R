@@ -4,7 +4,6 @@
 #' for an Atlantis scenario.
 #'
 #' @family load functions
-#' @author Kelli Faye Johnson
 #'
 #' @param bgm Character string giving the connection to the atlantis bgm file.
 #' The filename ends in \code{.bgm}.
