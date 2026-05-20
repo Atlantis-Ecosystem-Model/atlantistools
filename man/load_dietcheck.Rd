@@ -4,14 +4,7 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(
-  dietcheck,
-  fgs,
-  prm_run,
-  convert_names = FALSE,
-  report = FALSE,
-  version_flag = 2
-)
+load_dietcheck(dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE)
 }
 \arguments{
 \item{dietcheck}{Character string giving the connection of the dietcheck file.
@@ -28,8 +21,6 @@ or not (default = \code{FALSE}).}
 
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
-
-\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
 A \code{data.frame} in long format with the following column names:

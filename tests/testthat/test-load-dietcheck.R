@@ -14,8 +14,7 @@ test_that("test output numbers trunk", {
     dietcheck = file.path(d, "outputSETASDietCheck.txt"),
     fgs = file.path(d, "SETasGroupsDem_NoCep.csv"),
     prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"),
-    report = FALSE,
-    version_flag = 2
+    report = FALSE
   )
 
   # expect_true(all(abs(test1$check - 1) < 0.001))

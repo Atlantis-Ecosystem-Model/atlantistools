@@ -28,7 +28,6 @@
 #' df <- load_mort(mortFile, prm_run, fgs)
 #' head(df)
 
-#BJS 7/15/16 add version_flag and make compatible with trunk output
 load_mort <- function(mortFile, prm_run, fgs, convert_names = F) {
   mort <- load_txt(file = mortFile, id_col = c("Time"))
 
