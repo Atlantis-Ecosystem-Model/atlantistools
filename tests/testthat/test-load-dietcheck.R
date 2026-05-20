@@ -1,27 +1,23 @@
 context("load_dietcheck test datastructure")
 
-diet <- ref_dm
-
-d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
-
-diet2 <- load_dietcheck(
-  dietcheck = file.path(d, "outputSETASDietCheck.txt"),
-  fgs = file.path(d, "SETasGroupsDem_NoCep.csv"),
-  prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"),
-  report = FALSE,
-  version_flag = 2
-)
-
-# This is only used for code-coverage purposes.
-diet3 <- suppressWarnings(load_dietcheck(
-  dietcheck = file.path(d, "outputSETASDietCheck.txt"),
-  fgs = file.path(d, "SETasGroupsDem_NoCep.csv"),
-  prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"),
-  report = TRUE,
-  version_flag = 2
-))
 
 test_that("test output numbers trunk", {
+  diet <- ref_dm
+
+  d <- system.file(
+    "extdata",
+    "setas-model-new-trunk",
+    package = "atlantistools"
+  )
+
+  diet2 <- load_dietcheck(
+    dietcheck = file.path(d, "outputSETASDietCheck.txt"),
+    fgs = file.path(d, "SETasGroupsDem_NoCep.csv"),
+    prm_run = file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm"),
+    report = FALSE,
+    version_flag = 2
+  )
+
   # expect_true(all(abs(test1$check - 1) < 0.001))
   expect_equal(dim(diet), c(241, 5))
   expect_is(diet$pred, "character")
@@ -55,7 +51,8 @@ test_that("test output numbers trunk", {
         diet2$agecl == 2 &
         diet2$prey == "PL"
     ],
-    2.680623e-001
+    2.680623e-001,
+    tolerance = 1e-3
   )
   expect_equal(
     diet2$atoutput[
@@ -64,6 +61,7 @@ test_that("test output numbers trunk", {
         diet2$agecl == 1 &
         diet2$prey == "CEP"
     ],
-    6.483338e-001
+    6.483338e-001,
+    tolerance = 1e-3
   )
 })

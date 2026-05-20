@@ -41,7 +41,7 @@ load_txt <- function(file, id_col = "Time") {
       names_to = "code",
       values_to = "atoutput"
     ) |>
-    dplyr::arrange(id_col, code)
+    dplyr::arrange(dplyr::across(all_of(id_col)), code)
 
   data$code <- as.character(data$code)
   names(data) <- tolower(names(data))
