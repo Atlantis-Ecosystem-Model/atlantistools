@@ -5,13 +5,7 @@
 \alias{write_diet}
 \title{Extract the dietmatrix from the biological parameterfile}
 \usage{
-load_dietmatrix(
-  prm_biol,
-  fgs,
-  transform = TRUE,
-  convert_names = FALSE,
-  version_flag = 2
-)
+load_dietmatrix(prm_biol, fgs, transform = TRUE, convert_names = FALSE)
 
 write_diet(dietmatrix, prm_biol, save_to_disc = TRUE)
 }
@@ -29,8 +23,6 @@ diet matrix entries.}
 
 \item{convert_names}{Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 or not (default = \code{FALSE}).}
-
-\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 
 \item{dietmatrix}{Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}
 using \code{transform = FALSE}.}

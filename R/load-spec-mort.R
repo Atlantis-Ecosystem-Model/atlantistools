@@ -27,7 +27,6 @@
 #' df <- load_spec_mort(specmort, prm_run, fgs)
 #' head(df)
 
-#BJS 7/15/16 add version_flag and make compatible with trunk output
 load_spec_mort <- function(
   mortFile,
   prm_run,

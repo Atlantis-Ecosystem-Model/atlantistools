@@ -90,7 +90,6 @@ ref_dm <- atlantistools::load_dietcheck(
   dietcheck = dietcheck,
   fgs = fgs,
   prm_run = prm_run,
-  version_flag = 2,
   convert_names = TRUE
 )
 

@@ -68,7 +68,7 @@ df_grz <- load_nc(nc = nc_prod, bps = bps, fgs = fgs,
                select_groups = groups_rest, select_variable = "Grazing",
                prm_run = prm_run, bboxes = bboxes)
 df_dm <- load_dietcheck(dietcheck = file.path(d, "outputSETASDietCheck.txt"),
-                        fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
+                        fgs = fgs, prm_run = prm_run, convert_names = TRUE)
 vol <- load_nc_physics(nc = nc_gen, select_physics = "volume",
                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
 

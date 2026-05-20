@@ -78,8 +78,7 @@ sc_init <- function(
   fgs,
   bboxes,
   pred = NULL,
-  set_avail = NULL,
-  version_flag = 2
+  set_avail = NULL
 ) {
   fgs_data <- load_fgs(fgs = fgs)
 
@@ -259,8 +258,7 @@ sc_init <- function(
   dm <- load_dietmatrix(
     prm_biol = prm_biol,
     fgs = fgs,
-    convert_names = TRUE,
-    version_flag = version_flag
+    convert_names = TRUE
   ) |>
     dplyr::filter(avail != 0) |>
     dplyr::left_join(ass_type, by = "prey")

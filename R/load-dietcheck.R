@@ -23,14 +23,12 @@
 #' diet <- load_dietcheck(dietcheck, fgs, prm_run)
 #' head(diet, n = 10)
 
-#BJS 7/6/16 change to be compatible with trunk version; added version_flag
 load_dietcheck <- function(
   dietcheck,
   fgs,
   prm_run,
   convert_names = FALSE,
-  report = FALSE,
-  version_flag = 2
+  report = FALSE
 ) {
   # read in diet information
   diet <- utils::read.table(
@@ -41,20 +39,19 @@ load_dietcheck <- function(
   )
 
   #Check if multiple stocks are available per functional group for trunk branch!
-  if (version_flag == 2) {
-    if (all(diet$Stock) == 0) {
-      diet$Stock <- NULL
-    } else {
-      stop(
-        "Multiple stocks present. Dietcheck only works with 1 stock per funtional group."
-      )
-    }
 
-    diet$Cohort <- diet$Cohort + 1 # Cohorts start with 0 in DietCheck.txt!
+  if (all(diet$Stock) == 0) {
+    diet$Stock <- NULL
+  } else {
+    stop(
+      "Multiple stocks present. Dietcheck only works with 1 stock per funtional group."
+    )
   }
 
+  diet$Cohort <- diet$Cohort + 1 # Cohorts start with 0 in DietCheck.txt!
+
   # Column Updated was added to trunk code.
-  if (version_flag == 2 & "Updated" %in% names(diet)) {
+  if ("Updated" %in% names(diet)) {
     prey_col_start <- 5 #bjs remove magic number below
   } else {
     prey_col_start <- 4 #bjs remove magic number below
@@ -112,12 +109,10 @@ load_dietcheck <- function(
 
   names(diet_long)[names(diet_long) == "Predator"] <- "pred" #bjs predator -> colnames(diet)[2]
 
-  if (version_flag == 2) {
-    names(diet_long)[names(diet_long) == "Cohort"] <- "agecl" #bjs cohort -> colnames(diet)[3]
-    # Column Updated was added to trunk code.
-    if ("Updated" %in% names(diet_long)) {
-      diet_long <- diet_long[, names(diet_long) != "Updated"]
-    }
+  names(diet_long)[names(diet_long) == "Cohort"] <- "agecl" #bjs cohort -> colnames(diet)[3]
+  # Column Updated was added to trunk code.
+  if ("Updated" %in% names(diet_long)) {
+    diet_long <- diet_long[, names(diet_long) != "Updated"]
   }
 
   names(diet_long) <- tolower(names(diet_long))

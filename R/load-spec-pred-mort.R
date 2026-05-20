@@ -20,45 +20,24 @@
 #' df <- load_spec_pred_mort(specmort, prm_run, fgs)
 #' head(df)
 
-#BJS 7/15/16 add version_flag and make compatible with trunk output
 load_spec_pred_mort <- function(
   specmort,
   prm_run,
   fgs,
-  convert_names = FALSE,
-  version_flag = 2
+  convert_names = FALSE
 ) {
-  if (version_flag == 1) {
-    mort <- load_txt(file = specmort)
-    mort <- mort |>
-      tidyr::separate(
-        col = "code",
-        into = c("prey", "agecl", "stock", "pred", "mort"),
-        convert = TRUE
-      )
-    # check uniqueness of column notsure and mort
-    if (
-      any(
-        sapply(mort[, c("stock", "mort")], function(x) length(unique(x))) != 1
-      )
-    ) {
-      stop(
-        "Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team."
-      )
-    }
-  } else if (version_flag == 2) {
-    mort <- load_txt(
-      file = specmort,
-      id_col = c("Time", "Group", "Cohort", "Stock")
+  mort <- load_txt(
+    file = specmort,
+    id_col = c("Time", "Group", "Cohort", "Stock")
+  )
+  mort <- mort |>
+    dplyr::rename(pred = group, agecl = cohort, prey = code)
+  if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
+    stop(
+      "Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team."
     )
-    mort <- mort |>
-      dplyr::rename(pred = group, agecl = cohort, prey = code)
-    if (any(sapply(mort[, "stock"], function(x) length(unique(x))) != 1)) {
-      stop(
-        "Multiple stocks present. This is not covered by the current version of atlantistools. Please contact the package development team."
-      )
-    }
   }
+
   mort$agecl <- mort$agecl + 1
 
   # Remove unnecessary columns
