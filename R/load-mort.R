@@ -32,8 +32,8 @@ load_mort <- function(mortFile, prm_run, fgs, convert_names = F) {
   mort <- load_txt(file = mortFile, id_col = c("Time"))
 
   # separate species code.mortalityType into two columns
-  mort <- mort %>%
-    tidyr::separate(.data$code, into = c("code", "source"), sep = "\\.") %>%
+  mort <- mort |>
+    tidyr::separate(.data$code, into = c("code", "source"), sep = "\\.") |>
     tibble::as_tibble()
 
   # First time step only has 0s as entry!
@@ -43,12 +43,11 @@ load_mort <- function(mortFile, prm_run, fgs, convert_names = F) {
   # Convert species codes to longnames!
   if (convert_names) {
     data_fgs <- load_fgs(fgs = fgs)
-    mort <- mort %>%
+    mort <- mort |>
       dplyr::left_join(
-        .,
         data_fgs[, c("Code", "LongName")],
         by = c("code" = "Code")
-      ) %>%
+      ) |>
       dplyr::rename(species = .data$LongName)
   }
 

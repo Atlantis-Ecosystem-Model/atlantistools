@@ -39,18 +39,17 @@ load_spec_mort <- function(
     df_txt = df,
     into = c("code", "agecl", "empty_col", "mort"),
     removeZeros = removeZeros
-  ) %>%
+  ) |>
     tibble::as_tibble()
 
   # Convert species codes to longnames!
   if (convert_names) {
     data_fgs <- load_fgs(fgs = fgs)
-    mort <- mort %>%
+    mort <- mort |>
       dplyr::left_join(
-        .,
         data_fgs[, c("Code", "LongName")],
         by = c("code" = "Code")
-      ) %>%
+      ) |>
       dplyr::rename(species = .data$LongName)
   }
 

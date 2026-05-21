@@ -237,7 +237,7 @@ load_init_weight <- function(init, fgs, bboxes) {
     fgs = fgs,
     select_variable = "ResN",
     bboxes = bboxes
-  ) %>%
+  ) |>
     dplyr::filter(!is.na(atoutput)) |>
     dplyr::select(atoutput, species, agecl) |>
     dplyr::rename(rn = atoutput) |>
@@ -247,7 +247,7 @@ load_init_weight <- function(init, fgs, bboxes) {
     fgs = fgs,
     select_variable = "StructN",
     bboxes = bboxes
-  ) %>%
+  ) |>
     dplyr::filter(!is.na(atoutput)) |>
     dplyr::select(atoutput, species, agecl) |>
     dplyr::rename(sn = atoutput) |>

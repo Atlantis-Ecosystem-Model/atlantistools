@@ -29,8 +29,8 @@ combine_groups <- function(
   # Arrange by group_col and group by groups to select the 1:combinthethresh
   # group in group_col for each grouping combination.
   if (length(groups) > 0) {
-    comb_grps <- comb_grps %>%
-      as.data.frame() %>%
+    comb_grps <- comb_grps |>
+      as.data.frame() |>
       group_data(groups = groups)
   }
   imp_species <- comb_grps |>
@@ -47,7 +47,7 @@ combine_groups <- function(
     # Only combine groups if necessary!
     low_contrib[, group_col] <- "Rest"
 
-    new_data <- dplyr::inner_join(data, imp_species) %>%
+    new_data <- dplyr::inner_join(data, imp_species) |>
       rbind(low_contrib)
 
     # This should never happen...

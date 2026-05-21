@@ -138,7 +138,7 @@ plot_spatial_box <- function(
   }
 
   # Step2: Apply predator and stanza specific plot function
-  dfs_spatial <- select_time(perc_bio, timesteps = timesteps) %>%
+  dfs_spatial <- select_time(perc_bio, timesteps = timesteps) |>
     split_dfs(cols = c("species", "species_stanza"))
   plots_spatial <- lapply(
     dfs_spatial,
