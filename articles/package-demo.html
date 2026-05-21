@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,11 +62,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>package-demo</h1>
-                        <h4 data-toc-skip class="author">Alexander
-Keth</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/vignettes/package-demo.Rmd" class="external-link"><code>vignettes/package-demo.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/vignettes/package-demo.Rmd" class="external-link"><code>vignettes/package-demo.Rmd</code></a></small>
       <div class="d-none name"><code>package-demo.Rmd</code></div>
     </div>
 
@@ -281,7 +279,7 @@ timestep and polygon.</p>
 <pre><code><span><span class="co">## Reading in the nc file: /home/runner/work/_temp/Library/atlantistools/extdata/setas-model-new-trunk/outputSETASPROD.nc</span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_dietcheck.html">load_dietcheck</a></span><span class="op">(</span>dietcheck <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASDietCheck.txt"</span><span class="op">)</span>,</span>
-<span>                        fgs <span class="op">=</span> <span class="va">fgs</span>, prm_run <span class="op">=</span> <span class="va">prm_run</span>, version_flag <span class="op">=</span> <span class="fl">2</span>, convert_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>                        fgs <span class="op">=</span> <span class="va">fgs</span>, prm_run <span class="op">=</span> <span class="va">prm_run</span>, convert_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">vol</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_nc_physics.html">load_nc_physics</a></span><span class="op">(</span>nc <span class="op">=</span> <span class="va">nc_gen</span>, select_physics <span class="op">=</span> <span class="st">"volume"</span>,</span>
 <span>                       prm_run <span class="op">=</span> <span class="va">prm_run</span>, bboxes <span class="op">=</span> <span class="va">bboxes</span>, aggregate_layers <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
 <span></span>
@@ -307,7 +305,7 @@ able to customise the plots to your personal liking afterwards.</p>
 </h3>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aggregate spatial biomass!</span></span>
-<span><span class="va">biomass</span> <span class="op">&lt;-</span> <span class="va">df_bio_spatial</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">biomass</span> <span class="op">&lt;-</span> <span class="va">df_bio_spatial</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/agg_data.html">agg_data</a></span><span class="op">(</span>groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"time"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">biomass</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -317,8 +315,8 @@ able to customise the plots to your personal liking afterwards.</p>
 <p><img src="package-demo_files/figure-html/unnamed-chunk-11-2.png" class="r-plt" alt="" width="700"></p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aggregate spatial biomass for fully age structured groups!</span></span>
-<span><span class="va">biomass_age</span> <span class="op">&lt;-</span> <span class="va">df_bio_spatial</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">agecl</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">biomass_age</span> <span class="op">&lt;-</span> <span class="va">df_bio_spatial</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">agecl</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/agg_data.html">agg_data</a></span><span class="op">(</span>groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"agecl"</span>, <span class="st">"time"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">biomass_age</span>, col <span class="op">=</span> <span class="st">"agecl"</span><span class="op">)</span></span></code></pre></div>
@@ -326,23 +324,7 @@ able to customise the plots to your personal liking afterwards.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">biomass_age</span>, wrap <span class="op">=</span> <span class="st">"agecl"</span>, col <span class="op">=</span> <span class="st">"species"</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="package-demo_files/figure-html/unnamed-chunk-11-4.png" class="r-plt" alt="" width="700"></p>
-<p>Compare model outoput with observed data.</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ex_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-becdev"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span>, </span>
-<span>                              <span class="st">"setas-bench.csv"</span><span class="op">)</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ex_data</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ex_data</span><span class="op">)</span> <span class="op">==</span> <span class="st">"biomass"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"atoutput"</span></span>
-<span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">biomass</span></span>
-<span><span class="va">data</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="st">"atlantis"</span></span>
-<span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">ex_data</span>, <span class="va">data</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Show atlantis as first factor!</span></span>
-<span><span class="va">comp</span><span class="op">$</span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">comp</span><span class="op">$</span><span class="va">model</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"atlantis"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">comp</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">comp</span><span class="op">$</span><span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">!=</span> <span class="st">"atlantis"</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create plot</span></span>
-<span><span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">comp</span>, col <span class="op">=</span> <span class="st">"model"</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use convert_relative_initial and {plot_add_box with plot_line.</span></span>
 <span><span class="co"># Firstly, use convert_relative_initial to generate a relative time series first.</span></span>
 <span><span class="co"># Aggregate the polygon and layer based data first.</span></span>
@@ -354,17 +336,17 @@ able to customise the plots to your personal liking afterwards.</p>
 <span></span>
 <span><span class="co"># Add lower and upper range.</span></span>
 <span><span class="fu"><a href="../reference/plot_add_box.html">plot_add_box</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<p><img src="package-demo_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># You can set the upper and lower range of the box as you like!</span></span>
 <span><span class="fu"><a href="../reference/plot_add_box.html">plot_add_box</a></span><span class="op">(</span><span class="va">plot</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-13-2.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<p><img src="package-demo_files/figure-html/unnamed-chunk-12-2.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create spatial timeseries plots in conjuction with custom_grid to plot physics data.</span></span>
 <span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">ref_physics</span>, wrap <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/custom_grid.html">custom_grid</a></span><span class="op">(</span><span class="va">plot</span>, grid_x <span class="op">=</span> <span class="st">"polygon"</span>, grid_y <span class="op">=</span> <span class="st">"variable"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<p><img src="package-demo_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">flux</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_nc_physics.html">load_nc_physics</a></span><span class="op">(</span>nc <span class="op">=</span> <span class="va">nc_gen</span>, select_physics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"eflux"</span>, <span class="st">"vflux"</span><span class="op">)</span>,</span>
 <span>                        prm_run <span class="op">=</span> <span class="va">prm_run</span>, bboxes <span class="op">=</span> <span class="va">bboxes</span>, aggregate_layers <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -372,18 +354,18 @@ able to customise the plots to your personal liking afterwards.</p>
 <span><span class="fu"><a href="../reference/custom_grid.html">custom_grid</a></span><span class="op">(</span><span class="va">plot</span>, grid_x <span class="op">=</span> <span class="st">"polygon"</span>, grid_y <span class="op">=</span> <span class="st">"layer"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: Removed 62 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">## (`geom_line()`).</span></span></code></pre>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-14-2.png" class="r-plt" alt="" width="700"></p>
+<p><img src="package-demo_files/figure-html/unnamed-chunk-13-2.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="create-a-map-of-your-model-for-bec">Create a map of your model for Bec!<a class="anchor" aria-label="anchor" href="#create-a-map-of-your-model-for-bec"></a>
+<h3 id="create-a-map-of-your-model">Create a map of your model<a class="anchor" aria-label="anchor" href="#create-a-map-of-your-model"></a>
 </h3>
 <p>Always add a spatial representation of your model if you have issues
-with model tuning. This makes the life of Bec and Beth much easier.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+with model tuning.</p>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bgm_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_bgm.html">convert_bgm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas.bgm"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_boxes.html">plot_boxes</a></span><span class="op">(</span><span class="va">bgm_data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="672"></p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<p><img src="package-demo_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="672"></p>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aggregate numbers.</span></span>
 <span><span class="va">nums_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agg_data.html">agg_data</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nums</span>, groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"agecl"</span>, <span class="st">"time"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
 <span></span>
@@ -392,13 +374,13 @@ with model tuning. This makes the life of Bec and Beth much easier.</p>
 <span><span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span><span class="va">df</span>, fill <span class="op">=</span> <span class="st">"agecl"</span>, wrap <span class="op">=</span> <span class="st">"species"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: Removed 20 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">## (`geom_bar()`).</span></span></code></pre>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<p><img src="package-demo_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/agg_data.html">agg_perc</a></span><span class="op">(</span><span class="va">biomass_age</span>, groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"species"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_bar.html">plot_bar</a></span><span class="op">(</span><span class="va">df</span>, fill <span class="op">=</span> <span class="st">"agecl"</span>, wrap <span class="op">=</span> <span class="st">"species"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning: Removed 16 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">## (`geom_bar()`).</span></span></code></pre>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-16-2.png" class="r-plt" alt="" width="700"></p>
+<p><img src="package-demo_files/figure-html/unnamed-chunk-15-2.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="plot-feeding-interactions">Plot feeding interactions<a class="anchor" aria-label="anchor" href="#plot-feeding-interactions"></a>
@@ -408,31 +390,28 @@ is elongated. I only ran the SETAS model provided with
 <code>atlantistools</code> for 3 years to minimise the size of the
 package.</p>
 <p>Data about feeding interactions can be visualised with
-<code>plot_diet</code> (Please use <code>plot_diet_bec_dev</code> for
-bec-dev models. However, in contrast to trunk models the plots will only
-give an indication about feeding interacions. They do not show the
-actual consumed biomass). The data originates from
+<code>plot_diet</code>. The data originates from
 <code>DietCheck.txt</code>.</p>
 <p>The plots are stored as a list of table-grob. You can plot them on
 the graphics device with <code><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">gridExtra::grid.arrange</a></code>.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">feeding_plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_diet.html">plot_diet</a></span><span class="op">(</span><span class="va">df_cons</span>, wrap_col <span class="op">=</span> <span class="st">"agecl"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(time, pred, agecl, prey)`</span></span>
 <span><span class="co">## Joining with `by = join_by(time, pred, agecl, prey)`</span></span></code></pre>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">feeding_plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<p><img src="package-demo_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">feeding_plots</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<p><img src="package-demo_files/figure-html/unnamed-chunk-17-2.png" class="r-plt" alt="" width="700"></p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<p><img src="package-demo_files/figure-html/unnamed-chunk-16-2.png" class="r-plt" alt="" width="700"></p>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Apply names() to the list of table-grobs to extract the predator name</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">feeding_plots</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "Carrion3"                 "Cephalopod"              </span></span>
 <span><span class="co">## [3] "Diatom"                   "Labile detritus"         </span></span>
 <span><span class="co">## [5] "Megazoobenthos"           "Refractory detritus"     </span></span>
 <span><span class="co">## [7] "Shallow piscivorous fish" "Small planktivorous fish"</span></span></code></pre>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Save all plots to disc in multiple pdfs!</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">feeding_plots</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"feeding"</span>, <span class="va">i</span>, <span class="st">".pdf"</span><span class="op">)</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">14</span>, height <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
@@ -454,7 +433,7 @@ file. For example the recruit weights for a specific fish. In our case
 either change the existing valu by multiplication with a factor or set a
 new absolut value. In our case we increase the existing value by a
 factor of 2.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_prm</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/change_prm.html">change_prm</a></span><span class="op">(</span>prm_biol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_biol_fishing_Trunk.prm"</span><span class="op">)</span>, </span>
 <span>                       select_acronyms <span class="op">=</span> <span class="st">"FPS"</span>, </span>
 <span>                       roc <span class="op">=</span> <span class="fl">2</span>, </span>
@@ -465,16 +444,16 @@ resulting *.prm. However, I checked the function thoroughly so you would
 normally set <code>save_to_disc</code> to <code>TRUE</code> to overwrite
 your existing parameter file with the newly generated one Please make
 sure to backup your original files beforehand.</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/extract_prm.html">extract_prm</a></span><span class="op">(</span>prm_biol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_biol_fishing_Trunk.prm"</span><span class="op">)</span>, variables <span class="op">=</span> <span class="st">"KWRR_FPS"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.075</span></span></code></pre>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/extract_prm.html">extract_prm</a></span><span class="op">(</span>prm_biol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_biol_fishing_Trunk.prm"</span><span class="op">)</span>, variables <span class="op">=</span> <span class="st">"KWSR_FPS"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0.028</span></span></code></pre>
 <p>You can also pass a vector of groups to change the parameter for
 multiple functional groups with a single call to
 <code>change_prm</code>.</p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_prm</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/change_prm.html">change_prm</a></span><span class="op">(</span>prm_biol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_biol_fishing_Trunk.prm"</span><span class="op">)</span>, </span>
 <span>                       select_acronyms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FPL"</span>, <span class="st">"FPO"</span>, <span class="st">"FPS"</span>, <span class="st">"FVD"</span>, <span class="st">"FVV"</span>, <span class="st">"FVS"</span>, <span class="st">"FVB"</span>, <span class="st">"FVT"</span>, <span class="st">"FVO"</span><span class="op">)</span>, </span>
 <span>                       roc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">9</span>, min <span class="op">=</span> <span class="fl">2</span>, max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>, </span>
@@ -488,7 +467,7 @@ groups with multiple values per parameter (E.g. Clearance rate and mum
 for fish groups) please use <code>change_prm_cohrt</code>. Please note
 that the function only works with parameters whose values are stored in
 the next row following the flag in the *.prm file.</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">new_prm</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/change_prm_cohort.html">change_prm_cohort</a></span><span class="op">(</span>prm_biol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"VMPA_setas_biol_fishing_Trunk.prm"</span><span class="op">)</span>, </span>
 <span>                              select_acronyms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"FPL"</span>, <span class="st">"FPO"</span><span class="op">)</span>, </span>
 <span>                              roc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">2</span>, times <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>, </span>

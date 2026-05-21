@@ -17,7 +17,7 @@ accordingly.
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
-library("magrittr")
+
 gen_labels <- list(x = "Time [years]", y = "Biomass [t]")
 
 # You should be able to build the vignette either by clicking on "Knit PDF" in RStudio or with
@@ -66,7 +66,7 @@ update_labels(plot, gen_labels)
 
 ``` r
 
-plot_line(result$biomass, col = "run", ncol = 4) %>% update_labels(gen_labels)
+plot_line(result$biomass, col = "run", ncol = 4)  |>  update_labels(gen_labels)
 ```
 
 ![](model-comparison_files/figure-html/unnamed-chunk-4-1.png)

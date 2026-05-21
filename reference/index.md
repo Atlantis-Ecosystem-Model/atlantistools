@@ -155,8 +155,6 @@ Plotting functions to output
   system.
 - [`plot_diet()`](https://andybeet.github.io/atlantistools/reference/plot_diet.md)
   : Plot contribution of diet contents for each functional group.
-- [`plot_diet_bec_dev()`](https://andybeet.github.io/atlantistools/reference/plot_diet_bec_dev.md)
-  : Plot contribution of diet contents for each functional group.
 - [`plot_line()`](https://andybeet.github.io/atlantistools/reference/plot_line.md)
   : Function to plot time series of atlantis ncdf output.
 - [`plot_rec()`](https://andybeet.github.io/atlantistools/reference/plot_rec.md)

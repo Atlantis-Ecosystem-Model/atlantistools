@@ -5,15 +5,7 @@ Sanity check initial conditions file
 ## Usage
 
 ``` r
-sc_init(
-  init,
-  prm_biol,
-  fgs,
-  bboxes,
-  pred = NULL,
-  set_avail = NULL,
-  version_flag = 2
-)
+sc_init(init, prm_biol, fgs, bboxes, pred = NULL, set_avail = NULL)
 
 plot_sc_init(df, mult_mum, mult_c, pred = NULL)
 ```
@@ -51,11 +43,6 @@ plot_sc_init(df, mult_mum, mult_c, pred = NULL)
   Numeric value. All present availabilities can be set to a specific
   value. Default value is `NULL` which results in no changes to the
   present availability matrix.
-
-- version_flag:
-
-  The version of ATLANTIS model. 1 for bec_dev, 2 for trunk.
-  `default is 2.`.
 
 - df:
 

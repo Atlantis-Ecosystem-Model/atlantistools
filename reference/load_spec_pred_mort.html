@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Load mortality information from outputSpecificPredMort.txt</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/R/load-spec-pred-mort.R" class="external-link"><code>R/load-spec-pred-mort.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/R/load-spec-pred-mort.R" class="external-link"><code>R/load-spec-pred-mort.R</code></a></small>
       <div class="d-none name"><code>load_spec_pred_mort.Rd</code></div>
     </div>
 
@@ -48,13 +48,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_spec_pred_mort</span><span class="op">(</span></span>
-<span>  <span class="va">specmort</span>,</span>
-<span>  <span class="va">prm_run</span>,</span>
-<span>  <span class="va">fgs</span>,</span>
-<span>  convert_names <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  version_flag <span class="op">=</span> <span class="fl">2</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_spec_pred_mort</span><span class="op">(</span><span class="va">specmort</span>, <span class="va">prm_run</span>, <span class="va">fgs</span>, convert_names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,10 +73,6 @@ The filename usually contains <code>Groups</code> and does end in <code>.csv</co
 <dt id="arg-convert-names">convert_names<a class="anchor" aria-label="anchor" href="#arg-convert-names"></a></dt>
 <dd><p>Logical indicating if group codes are transformed to LongNames (<code>TRUE</code>)
 or not (default = <code>FALSE</code>).</p></dd>
-
-
-<dt id="arg-version-flag">version_flag<a class="anchor" aria-label="anchor" href="#arg-version-flag"></a></dt>
-<dd><p>The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. <code>default is 2.</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -116,17 +106,16 @@ thousands.</p>
 <span class="r-in"><span><span class="va">fgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"SETasGroupsDem_NoCep.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">load_spec_pred_mort</span><span class="op">(</span><span class="va">specmort</span>, <span class="va">prm_run</span>, <span class="va">fgs</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in dplyr::arrange(tidyr::pivot_longer(data, cols = dplyr::setdiff(names(data),     id_col), names_to = "code", values_to = "atoutput"), id_col,     code):</span> <span style="color: #00BBBB;">ℹ</span> In argument: `..1 = id_col`.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">Caused by error:</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> `..1` must be size 1512 or 1, not 4.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                               </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 function (x, df1, df2, ncp, log = FALSE)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 {                                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     if (missing(ncp))                       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         .Call(C_df, x, df1, df2, log)       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     else .Call(C_dnf, x, df1, df2, ncp, log)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 }                                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    time pred  agecl prey  atoutput</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1 CEP       1 CEP   4.73<span style="color: #949494;">e</span>+ 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     1 CEP       1 FVS   6.80<span style="color: #949494;">e</span>+ 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>     1 CEP       2 CEP   3.92<span style="color: #949494;">e</span><span style="color: #BB0000;">-27</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>     1 CEP       2 FVS   9.74<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     1 DC        1 BML   3.26<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     1 DL        1 BML   3.23<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -71,9 +71,9 @@ head(df)
 #>    time code  agecl mort  atoutput
 #>   <dbl> <chr> <dbl> <chr>    <dbl>
 #> 1     1 BML       1 M1    1.27e-15
-#> 2     2 BML       1 M1    1.06e-15
-#> 3     1 CEP       1 M1    3.82e- 5
-#> 4     2 CEP       1 M1    1.87e-13
-#> 5     1 CEP       1 M2    6.80e+ 8
-#> 6     2 CEP       1 M2    4.39e+ 0
+#> 2     1 CEP       1 M1    3.82e- 5
+#> 3     1 CEP       1 M2    6.80e+ 8
+#> 4     1 CEP       2 M1    1.08e-19
+#> 5     1 CEP       2 M2    9.74e- 5
+#> 6     1 DL        1 M2    7.39e- 9
 ```

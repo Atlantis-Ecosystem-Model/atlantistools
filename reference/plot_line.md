@@ -61,7 +61,6 @@ Other plot functions:
 [`plot_bar()`](https://andybeet.github.io/atlantistools/reference/plot_bar.md),
 [`plot_boxes()`](https://andybeet.github.io/atlantistools/reference/plot_boxes.md),
 [`plot_diet()`](https://andybeet.github.io/atlantistools/reference/plot_diet.md),
-[`plot_diet_bec_dev()`](https://andybeet.github.io/atlantistools/reference/plot_diet_bec_dev.md),
 [`plot_rec()`](https://andybeet.github.io/atlantistools/reference/plot_rec.md),
 [`plot_species()`](https://andybeet.github.io/atlantistools/reference/plot_species.md)
 
@@ -76,22 +75,6 @@ plot_line(preprocess$biomass_age, col = "agecl")
 
 plot_line(preprocess$biomass_age, wrap = "agecl", col = "species")
 
-
-# The function can also be used to compare model outoput with observed data.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-ex_data <- read.csv(file.path(d, "setas-bench.csv"), stringsAsFactors = FALSE)
-names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
-
-data <- preprocess$biomass
-data$model <- "atlantis"
-comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
-
-# Show atlantis as first factor!
-lev_ord <- c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"])
-comp$model <- factor(comp$model, levels = lev_ord)
-
-# Create plot
-plot_line(comp, col = "model")
 
 
 if (FALSE) { # \dontrun{

@@ -35,10 +35,6 @@ Other get functions:
 [`get_conv_mgnbiot()`](https://andybeet.github.io/atlantistools/reference/get_conv_mgnbiot.md),
 [`get_groups()`](https://andybeet.github.io/atlantistools/reference/get_groups.md)
 
-## Author
-
-Kelli Faye Johnson
-
 ## Examples
 
 ``` r

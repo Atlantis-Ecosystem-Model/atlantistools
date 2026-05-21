@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,11 +62,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>model-comparison</h1>
-                        <h4 data-toc-skip class="author">Alexander
-Keth</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/vignettes/model-comparison.Rmd" class="external-link"><code>vignettes/model-comparison.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/vignettes/model-comparison.Rmd" class="external-link"><code>vignettes/model-comparison.Rmd</code></a></small>
       <div class="d-none name"><code>model-comparison.Rmd</code></div>
     </div>
 
@@ -87,7 +85,7 @@ dataframes at the end of the preprocess vignette and change
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools" class="external-link">"atlantistools"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"gridExtra"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">gen_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time [years]"</span>, y <span class="op">=</span> <span class="st">"Biomass [t]"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># You should be able to build the vignette either by clicking on "Knit PDF" in RStudio or with</span></span>
@@ -130,7 +128,7 @@ this accordingly.</p>
 <h2 id="biomass-timeseries">Biomass timeseries<a class="anchor" aria-label="anchor" href="#biomass-timeseries"></a>
 </h2>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">biomass</span>, col <span class="op">=</span> <span class="st">"run"</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/update_labels.html" class="external-link">update_labels</a></span><span class="op">(</span><span class="va">gen_labels</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">biomass</span>, col <span class="op">=</span> <span class="st">"run"</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>  <span class="op">|&gt;</span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/update_labels.html" class="external-link">update_labels</a></span><span class="op">(</span><span class="va">gen_labels</span><span class="op">)</span></span></code></pre></div>
 <p><img src="model-comparison_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="700"></p>
 </div>
 <div class="section level2">

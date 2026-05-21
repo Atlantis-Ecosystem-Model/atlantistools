@@ -58,22 +58,6 @@ Other load functions:
 ## Examples
 
 ``` r
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-mortFile <- file.path(d, "outputSETASMort.txt")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-fgs <- file.path(d, "SETasGroups.csv")
-
-df <- load_mort(mortFile, prm_run, fgs)
-head(df)
-#> # A tibble: 6 × 4
-#>    time code  source atoutput
-#>   <dbl> <chr> <chr>     <dbl>
-#> 1     1 BB    F             0
-#> 2     2 BB    F             0
-#> 3     3 BB    F             0
-#> 4     4 BB    F             0
-#> 5     5 BB    F             0
-#> 6     6 BB    F             0
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 mortFile <- file.path(d, "outputSETASMort.txt")
@@ -85,10 +69,10 @@ head(df)
 #> # A tibble: 6 × 4
 #>    time code  source atoutput
 #>   <dbl> <chr> <chr>     <dbl>
-#> 1     1 BB    F             0
-#> 2     2 BB    F             0
-#> 3     3 BB    F             0
-#> 4     4 BB    F             0
-#> 5     5 BB    F             0
-#> 6     6 BB    F             0
+#> 1     1 BB    F      0       
+#> 2     1 BB    M      7.89e-14
+#> 3     1 BC    F      0       
+#> 4     1 BC    M      3.17e-13
+#> 5     1 BD    F      0       
+#> 6     1 BD    M      4.53e-12
 ```

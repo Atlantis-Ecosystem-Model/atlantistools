@@ -12,8 +12,7 @@ change_prm(
   roc,
   parameter,
   relative = TRUE,
-  save_to_disc = TRUE,
-  version_flag = 2
+  save_to_disc = TRUE
 )
 ```
 
@@ -51,11 +50,6 @@ change_prm(
 
   Logical indicating if the resulting prm file should be overwritten
   (`TRUE`) or not (`FALSE`). Defaults to `TRUE`.
-
-- version_flag:
-
-  The version of ATLANTIS model. 1 for bec_dev, 2 for trunk.
-  `default is 2.`.
 
 ## Value
 

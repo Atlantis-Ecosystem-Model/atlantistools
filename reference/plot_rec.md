@@ -35,7 +35,6 @@ Other plot functions:
 [`plot_bar()`](https://andybeet.github.io/atlantistools/reference/plot_bar.md),
 [`plot_boxes()`](https://andybeet.github.io/atlantistools/reference/plot_boxes.md),
 [`plot_diet()`](https://andybeet.github.io/atlantistools/reference/plot_diet.md),
-[`plot_diet_bec_dev()`](https://andybeet.github.io/atlantistools/reference/plot_diet_bec_dev.md),
 [`plot_line()`](https://andybeet.github.io/atlantistools/reference/plot_line.md),
 [`plot_species()`](https://andybeet.github.io/atlantistools/reference/plot_species.md)
 
@@ -43,8 +42,5 @@ Other plot functions:
 
 ``` r
 if (FALSE) { # \dontrun{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
-plot_rec(preprocess_setas$ssb_rec, ex_data)
 } # }
 ```

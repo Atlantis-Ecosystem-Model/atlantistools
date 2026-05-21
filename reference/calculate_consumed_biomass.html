@@ -25,7 +25,7 @@ The consumed biomass is calculated as follows:
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@ The consumed biomass is calculated as follows:
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Calculate the consumed biomass in [t] of prey j by predator i.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/R/calculate-consumed-biomass.R" class="external-link"><code>R/calculate-consumed-biomass.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/R/calculate-consumed-biomass.R" class="external-link"><code>R/calculate-consumed-biomass.R</code></a></small>
       <div class="d-none name"><code>calculate_consumed_biomass.Rd</code></div>
     </div>
 
@@ -149,7 +149,7 @@ Consumed biomass in [t] is stored in column 'atoutput'.</p>
 <span class="r-in"><span>               prm_run <span class="op">=</span> <span class="va">prm_run</span>, bboxes <span class="op">=</span> <span class="va">bboxes</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in the nc file: /home/runner/work/_temp/Library/atlantistools/extdata/setas-model-new-trunk/outputSETASPROD.nc</span>
 <span class="r-in"><span><span class="va">df_dm</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_dietcheck.html">load_dietcheck</a></span><span class="op">(</span>dietcheck <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASDietCheck.txt"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                        fgs <span class="op">=</span> <span class="va">fgs</span>, prm_run <span class="op">=</span> <span class="va">prm_run</span>, version_flag <span class="op">=</span> <span class="fl">2</span>, convert_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                        fgs <span class="op">=</span> <span class="va">fgs</span>, prm_run <span class="op">=</span> <span class="va">prm_run</span>, convert_names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">vol</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_nc_physics.html">load_nc_physics</a></span><span class="op">(</span>nc <span class="op">=</span> <span class="va">nc_gen</span>, select_physics <span class="op">=</span> <span class="st">"volume"</span>,</span></span>
 <span class="r-in"><span>                       prm_run <span class="op">=</span> <span class="va">prm_run</span>, bboxes <span class="op">=</span> <span class="va">bboxes</span>, aggregate_layers <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>

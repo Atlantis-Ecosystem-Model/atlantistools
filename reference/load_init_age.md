@@ -89,10 +89,6 @@ Other load functions:
 [`load_spec_pred_mort()`](https://andybeet.github.io/atlantistools/reference/load_spec_pred_mort.md),
 [`load_txt()`](https://andybeet.github.io/atlantistools/reference/load_txt.md)
 
-## Author
-
-Alexander Keth
-
 ## Examples
 
 ``` r

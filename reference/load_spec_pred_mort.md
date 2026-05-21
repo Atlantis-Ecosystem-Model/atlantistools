@@ -5,13 +5,7 @@ Load mortality information from outputSpecificPredMort.txt
 ## Usage
 
 ``` r
-load_spec_pred_mort(
-  specmort,
-  prm_run,
-  fgs,
-  convert_names = FALSE,
-  version_flag = 2
-)
+load_spec_pred_mort(specmort, prm_run, fgs, convert_names = FALSE)
 ```
 
 ## Arguments
@@ -35,11 +29,6 @@ load_spec_pred_mort(
 
   Logical indicating if group codes are transformed to LongNames
   (`TRUE`) or not (default = `FALSE`).
-
-- version_flag:
-
-  The version of ATLANTIS model. 1 for bec_dev, 2 for trunk.
-  `default is 2.`.
 
 ## Value
 
@@ -72,15 +61,14 @@ prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
 fgs <- file.path(d, "SETasGroupsDem_NoCep.csv")
 
 df <- load_spec_pred_mort(specmort, prm_run, fgs)
-#> Error in dplyr::arrange(tidyr::pivot_longer(data, cols = dplyr::setdiff(names(data),     id_col), names_to = "code", values_to = "atoutput"), id_col,     code): ℹ In argument: `..1 = id_col`.
-#> Caused by error:
-#> ! `..1` must be size 1512 or 1, not 4.
 head(df)
-#>                                               
-#> 1 function (x, df1, df2, ncp, log = FALSE)    
-#> 2 {                                           
-#> 3     if (missing(ncp))                       
-#> 4         .Call(C_df, x, df1, df2, log)       
-#> 5     else .Call(C_dnf, x, df1, df2, ncp, log)
-#> 6 }                                           
+#> # A tibble: 6 × 5
+#>    time pred  agecl prey  atoutput
+#>   <dbl> <chr> <dbl> <chr>    <dbl>
+#> 1     1 CEP       1 CEP   4.73e+ 3
+#> 2     1 CEP       1 FVS   6.80e+ 8
+#> 3     1 CEP       2 CEP   3.92e-27
+#> 4     1 CEP       2 FVS   9.74e- 5
+#> 5     1 DC        1 BML   3.26e- 7
+#> 6     1 DL        1 BML   3.23e- 9
 ```

@@ -3,10 +3,7 @@
 Visualize diet proportions form predator and prey perspective. The upper
 panel plot shows the predator perspective while the lower panel plot
 shows the prey perspective for a given group. Please note that this
-function only works with models based on the trunk code. Bec_dev models
-should use
-[`plot_diet_bec_dev`](https://andybeet.github.io/atlantistools/reference/plot_diet_bec_dev.md)
-to get an indication of the feeding interactions.
+function only works with models based on the trunk code.
 
 ## Usage
 
@@ -51,7 +48,6 @@ List of grobs composed of ggplot2 objects.
 Other plot functions:
 [`plot_bar()`](https://andybeet.github.io/atlantistools/reference/plot_bar.md),
 [`plot_boxes()`](https://andybeet.github.io/atlantistools/reference/plot_boxes.md),
-[`plot_diet_bec_dev()`](https://andybeet.github.io/atlantistools/reference/plot_diet_bec_dev.md),
 [`plot_line()`](https://andybeet.github.io/atlantistools/reference/plot_line.md),
 [`plot_rec()`](https://andybeet.github.io/atlantistools/reference/plot_rec.md),
 [`plot_species()`](https://andybeet.github.io/atlantistools/reference/plot_species.md)

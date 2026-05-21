@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,11 +62,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>model-calibration</h1>
-                        <h4 data-toc-skip class="author">Alexander
-Keth</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/vignettes/model-calibration.Rmd" class="external-link"><code>vignettes/model-calibration.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/vignettes/model-calibration.Rmd" class="external-link"><code>vignettes/model-calibration.Rmd</code></a></small>
       <div class="d-none name"><code>model-calibration.Rmd</code></div>
     </div>
 
@@ -89,7 +87,6 @@ vignette and change <code>model-calibration.Rmd</code> accordingly.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools" class="external-link">"atlantistools"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st">"gridExtra"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fig_height2</span> <span class="op">&lt;-</span> <span class="fl">11</span></span>
 <span><span class="va">gen_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time [years]"</span>, y <span class="op">=</span> <span class="st">"Biomass [t]"</span><span class="op">)</span></span>
@@ -194,7 +191,7 @@ timeseries<a class="anchor" aria-label="anchor" href="#numberage-timeseries"></a
 <h3 id="biomass-benchmark-2">Biomass benchmark 2<a class="anchor" aria-label="anchor" href="#biomass-benchmark-2"></a>
 </h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">biomass</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/update_labels.html" class="external-link">update_labels</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="va">gen_labels</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">biomass</span><span class="op">)</span> <span class="op">|&gt;</span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/update_labels.html" class="external-link">update_labels</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="va">gen_labels</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_add_range.html">plot_add_range</a></span><span class="op">(</span><span class="va">plot</span>, <span class="va">ex_bio</span><span class="op">)</span></span></code></pre></div>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
 </div>
@@ -211,12 +208,13 @@ timeseries<a class="anchor" aria-label="anchor" href="#numberage-timeseries"></a
 <h2 id="physics-1">Physics<a class="anchor" aria-label="anchor" href="#physics-1"></a>
 </h2>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">physics</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">$</span><span class="va">physics</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/flip_layers.html">flip_layers</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">.</span><span class="op">$</span><span class="va">variable</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">physics</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">$</span><span class="va">physics</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/flip_layers.html">flip_layers</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_split.html" class="external-link">group_split</a></span><span class="op">(</span><span class="va">variable</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">physics</span>, <span class="va">plot_line</span>, wrap <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">custom_grid</span>, grid_x <span class="op">=</span> <span class="st">"polygon"</span>, grid_y <span class="op">=</span> <span class="st">"layer"</span><span class="op">)</span></span>
+<span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="va">physics</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">plot_line</span>, wrap <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">custom_grid</span>, grid_x <span class="op">=</span> <span class="st">"polygon"</span>, grid_y <span class="op">=</span> <span class="st">"layer"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">plots</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"## "</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">plots</span><span class="op">)</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span>
@@ -225,40 +223,34 @@ timeseries<a class="anchor" aria-label="anchor" href="#numberage-timeseries"></a
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="chl_a">Chl_a<a class="anchor" aria-label="anchor" href="#chl_a"></a>
-</h3>
+<h3 id="section"></h3>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="2880"></p>
 </div>
 <div class="section level3">
-<h3 id="denitrifiction">Denitrifiction<a class="anchor" aria-label="anchor" href="#denitrifiction"></a>
-</h3>
+<h3 id="section-1"></h3>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-12-2.png" class="r-plt" alt="" width="2880"></p>
 </div>
 <div class="section level3">
-<h3 id="nh3">NH3<a class="anchor" aria-label="anchor" href="#nh3"></a>
-</h3>
+<h3 id="section-2"></h3>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-12-3.png" class="r-plt" alt="" width="2880"></p>
 </div>
 <div class="section level3">
-<h3 id="no3">NO3<a class="anchor" aria-label="anchor" href="#no3"></a>
-</h3>
+<h3 id="section-3"></h3>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-12-4.png" class="r-plt" alt="" width="2880"></p>
 </div>
 <div class="section level3">
-<h3 id="salt">salt<a class="anchor" aria-label="anchor" href="#salt"></a>
-</h3>
+<h3 id="section-4"></h3>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-12-5.png" class="r-plt" alt="" width="2880"></p>
 </div>
 <div class="section level3">
-<h3 id="temp">Temp<a class="anchor" aria-label="anchor" href="#temp"></a>
-</h3>
+<h3 id="section-5"></h3>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-12-6.png" class="r-plt" alt="" width="2880"></p>
 </div>
 <div class="section level3">
 <h3 id="fluxes-1">Fluxes 1<a class="anchor" aria-label="anchor" href="#fluxes-1"></a>
 </h3>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flip_layers.html">flip_layers</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">flux</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flip_layers.html">flip_layers</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">flux</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span>wrap <span class="op">=</span> <span class="cn">NULL</span>, col <span class="op">=</span> <span class="st">"variable"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/custom_grid.html">custom_grid</a></span><span class="op">(</span><span class="va">plot</span>, grid_x <span class="op">=</span> <span class="st">"polygon"</span>, grid_y <span class="op">=</span> <span class="st">"layer"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="2880"></p>
@@ -267,7 +259,7 @@ timeseries<a class="anchor" aria-label="anchor" href="#numberage-timeseries"></a
 <h3 id="fluxes-2">Fluxes 2<a class="anchor" aria-label="anchor" href="#fluxes-2"></a>
 </h3>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flip_layers.html">flip_layers</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">sink</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flip_layers.html">flip_layers</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">sink</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
 <span>  <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span>wrap <span class="op">=</span> <span class="cn">NULL</span>, col <span class="op">=</span> <span class="st">"variable"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/custom_grid.html">custom_grid</a></span><span class="op">(</span><span class="va">plot</span>, grid_x <span class="op">=</span> <span class="st">"polygon"</span>, grid_y <span class="op">=</span> <span class="st">"layer"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="model-calibration_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="2880"></p>
@@ -276,9 +268,9 @@ timeseries<a class="anchor" aria-label="anchor" href="#numberage-timeseries"></a
 <h3 id="relative-change-of-water-column-height-compared-to-nominal_dz">Relative change of water column height compared to nominal_dz<a class="anchor" aria-label="anchor" href="#relative-change-of-water-column-height-compared-to-nominal_dz"></a>
 </h3>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">check_dz</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">$</span><span class="va">dz</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">nominal_dz</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"polygon"</span>, <span class="st">"layer"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>check_dz <span class="op">=</span> <span class="va">atoutput.x</span> <span class="op">/</span> <span class="va">atoutput.y</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">check_dz</span> <span class="op">&lt;-</span> <span class="va">result</span><span class="op">$</span><span class="va">dz</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">nominal_dz</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"polygon"</span>, <span class="st">"layer"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>check_dz <span class="op">=</span> <span class="va">atoutput.x</span> <span class="op">/</span> <span class="va">atoutput.y</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">check_dz</span><span class="op">)</span><span class="op">)</span> <span class="co"># remove sediment layer</span></span>
 <span></span>
 <span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_line.html">plot_line</a></span><span class="op">(</span><span class="va">check_dz</span>, x <span class="op">=</span> <span class="st">"time"</span>, y <span class="op">=</span> <span class="st">"check_dz"</span>, wrap <span class="op">=</span> <span class="st">"polygon"</span>, col <span class="op">=</span> <span class="st">"layer"</span><span class="op">)</span></span>

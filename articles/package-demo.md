@@ -261,7 +261,7 @@ df_grz <- load_nc(nc = nc_prod, bps = bps, fgs = fgs,
 ``` r
 
 df_dm <- load_dietcheck(dietcheck = file.path(d, "outputSETASDietCheck.txt"),
-                        fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
+                        fgs = fgs, prm_run = prm_run, convert_names = TRUE)
 vol <- load_nc_physics(nc = nc_gen, select_physics = "volume",
                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = F)
 
@@ -288,7 +288,7 @@ afterwards.
 ``` r
 
 # Aggregate spatial biomass!
-biomass <- df_bio_spatial %>%
+biomass <- df_bio_spatial |> 
   agg_data(groups = c("species", "time"), fun = sum)
 
 plot_line(biomass, ncol = 3)
@@ -306,8 +306,8 @@ plot_line(biomass, col = "species", ncol = 3)
 ``` r
 
 # Aggregate spatial biomass for fully age structured groups!
-biomass_age <- df_bio_spatial %>%
-  filter(agecl > 2) %>%
+biomass_age <- df_bio_spatial |> 
+  filter(agecl > 2) |> 
   agg_data(groups = c("species", "agecl", "time"), fun = sum)
 
 plot_line(biomass_age, col = "agecl")
@@ -321,27 +321,6 @@ plot_line(biomass_age, wrap = "agecl", col = "species", ncol = 3)
 ```
 
 ![](package-demo_files/figure-html/unnamed-chunk-11-4.png)
-
-Compare model outoput with observed data.
-
-``` r
-
-ex_data <- read.csv(file.path(system.file("extdata", "setas-model-new-becdev", package = "atlantistools"), 
-                              "setas-bench.csv"), stringsAsFactors = FALSE)
-names(ex_data)[names(ex_data) == "biomass"] <- "atoutput"
-
-data <- biomass
-data$model <- "atlantis"
-comp <- rbind(ex_data, data, stringsAsFactors = FALSE)
-
-# Show atlantis as first factor!
-comp$model <- factor(comp$model, levels = c("atlantis", sort(unique(comp$model))[sort(unique(comp$model)) != "atlantis"]))
-
-# Create plot
-plot_line(comp, col = "model", ncol = 3)
-```
-
-![](package-demo_files/figure-html/unnamed-chunk-12-1.png)
 
 ``` r
 
@@ -358,7 +337,7 @@ plot <- plot_line(df, col = "agecl")
 plot_add_box(plot)
 ```
 
-![](package-demo_files/figure-html/unnamed-chunk-13-1.png)
+![](package-demo_files/figure-html/unnamed-chunk-12-1.png)
 
 ``` r
 
@@ -366,7 +345,7 @@ plot_add_box(plot)
 plot_add_box(plot, range = c(0.8, 0.4))
 ```
 
-![](package-demo_files/figure-html/unnamed-chunk-13-2.png)
+![](package-demo_files/figure-html/unnamed-chunk-12-2.png)
 
 ``` r
 
@@ -375,7 +354,7 @@ plot <- plot_line(ref_physics, wrap = NULL)
 custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 ```
 
-![](package-demo_files/figure-html/unnamed-chunk-14-1.png)
+![](package-demo_files/figure-html/unnamed-chunk-13-1.png)
 
 ``` r
 
@@ -389,12 +368,12 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
     ## Warning: Removed 62 rows containing missing values or values outside the scale range
     ## (`geom_line()`).
 
-![](package-demo_files/figure-html/unnamed-chunk-14-2.png)
+![](package-demo_files/figure-html/unnamed-chunk-13-2.png)
 
-### Create a map of your model for Bec!
+### Create a map of your model
 
 Always add a spatial representation of your model if you have issues
-with model tuning. This makes the life of Bec and Beth much easier.
+with model tuning.
 
 ``` r
 
@@ -402,7 +381,7 @@ bgm_data <- convert_bgm(file.path(d, "VMPA_setas.bgm"))
 plot_boxes(bgm_data)
 ```
 
-![](package-demo_files/figure-html/unnamed-chunk-15-1.png)
+![](package-demo_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
 
@@ -417,7 +396,7 @@ plot_bar(df, fill = "agecl", wrap = "species")
     ## Warning: Removed 20 rows containing missing values or values outside the scale range
     ## (`geom_bar()`).
 
-![](package-demo_files/figure-html/unnamed-chunk-16-1.png)
+![](package-demo_files/figure-html/unnamed-chunk-15-1.png)
 
 ``` r
 
@@ -428,7 +407,7 @@ plot_bar(df, fill = "agecl", wrap = "species")
     ## Warning: Removed 16 rows containing missing values or values outside the scale range
     ## (`geom_bar()`).
 
-![](package-demo_files/figure-html/unnamed-chunk-16-2.png)
+![](package-demo_files/figure-html/unnamed-chunk-15-2.png)
 
 ### Plot feeding interactions
 
@@ -436,11 +415,8 @@ Please note the plots will look much nicer if the simulation period is
 elongated. I only ran the SETAS model provided with `atlantistools` for
 3 years to minimise the size of the package.
 
-Data about feeding interactions can be visualised with `plot_diet`
-(Please use `plot_diet_bec_dev` for bec-dev models. However, in contrast
-to trunk models the plots will only give an indication about feeding
-interacions. They do not show the actual consumed biomass). The data
-originates from `DietCheck.txt`.
+Data about feeding interactions can be visualised with `plot_diet`. The
+data originates from `DietCheck.txt`.
 
 The plots are stored as a list of table-grob. You can plot them on the
 graphics device with
@@ -459,14 +435,14 @@ feeding_plots <- plot_diet(df_cons, wrap_col = "agecl")
 gridExtra::grid.arrange(feeding_plots[[1]])
 ```
 
-![](package-demo_files/figure-html/unnamed-chunk-17-1.png)
+![](package-demo_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
 
 gridExtra::grid.arrange(feeding_plots[[7]])
 ```
 
-![](package-demo_files/figure-html/unnamed-chunk-17-2.png)
+![](package-demo_files/figure-html/unnamed-chunk-16-2.png)
 
 ``` r
 

@@ -6,14 +6,7 @@ transformations.
 ## Usage
 
 ``` r
-load_dietcheck(
-  dietcheck,
-  fgs,
-  prm_run,
-  convert_names = FALSE,
-  report = FALSE,
-  version_flag = 2
-)
+load_dietcheck(dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE)
 ```
 
 ## Arguments
@@ -42,11 +35,6 @@ load_dietcheck(
 
   Logical indicating if incomplete DietCheck information shall be
   printed `TRUE` or not `FALSE`.
-
-- version_flag:
-
-  The version of ATLANTIS model. 1 for bec_dev, 2 for trunk.
-  `default is 2.`.
 
 ## Value
 

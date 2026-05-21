@@ -15,7 +15,7 @@ to align with agestructure in other functions. Columns without any informations
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@ to align with agestructure in other functions. Columns without any informations
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Preprocess dataframes loaded in with <code>load_txt()</code></h1>
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/R/preprocess-txt.R" class="external-link"><code>R/preprocess-txt.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/R/preprocess-txt.R" class="external-link"><code>R/preprocess-txt.R</code></a></small>
       <div class="d-none name"><code>preprocess_txt.Rd</code></div>
     </div>
 
@@ -90,32 +90,20 @@ to align with agestructure in other functions. Columns without any informations
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-becdev"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_txt.html">load_txt</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASSpecificPredMort.txt"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">preprocess_txt</span><span class="op">(</span>df_txt <span class="op">=</span> <span class="va">df</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pred"</span>, <span class="st">"agecl"</span>, <span class="st">"empty_col1"</span>, <span class="st">"prey"</span>, <span class="st">"empty_col2"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    time pred  agecl prey       atoutput</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>    73 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>008<span style="text-decoration: underline;">83</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>   146 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>010<span style="text-decoration: underline;">0</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>   219 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>008<span style="text-decoration: underline;">98</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   292 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>008<span style="text-decoration: underline;">08</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>   365 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>011<span style="text-decoration: underline;">9</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>   438 CEP       1 CEP   0.000<span style="text-decoration: underline;">000</span>013<span style="text-decoration: underline;">1</span> </span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-trunk"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_txt.html">load_txt</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"outputSETASSpecificMort.txt"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">preprocess_txt</span><span class="op">(</span>df_txt <span class="op">=</span> <span class="va">df</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"agecl"</span>, <span class="st">"empty_col"</span>, <span class="st">"mort"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    time species agecl mort  atoutput</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>   365 BML         1 M1    1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>   730 BML         1 M1    1.03<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>   365 CEP         1 F     5.63<span style="color: #949494;">e</span><span style="color: #BB0000;">-18</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   730 CEP         1 F     3.83<span style="color: #949494;">e</span><span style="color: #BB0000;">-17</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>   365 CEP         1 M2    3.70<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>   730 CEP         1 M2    4.91<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>   365 BML         1 M1    1.27<span style="color: #949494;">e</span><span style="color: #BB0000;">-15</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>   365 CEP         1 M1    3.82<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span>   365 CEP         1 M2    6.80<span style="color: #949494;">e</span>+ 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span>   365 CEP         2 M1    1.08<span style="color: #949494;">e</span><span style="color: #BB0000;">-19</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>   365 CEP         2 M2    9.74<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>   365 DL          1 M2    7.39<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

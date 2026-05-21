@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Load the functional group file</h1>
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/R/load-fgs.R" class="external-link"><code>R/load-fgs.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/R/load-fgs.R" class="external-link"><code>R/load-fgs.R</code></a></small>
       <div class="d-none name"><code>load_fgs.Rd</code></div>
     </div>
 
@@ -83,32 +83,7 @@ The filename usually contains <code>Groups</code> and does end in <code>.csv</co
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-becdev"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="st">"SETasGroups.csv"</span></span></span>
-<span class="r-in"><span><span class="va">fgs</span> <span class="op">&lt;-</span> <span class="fu">load_fgs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">file</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">fgs</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Code Index IsTurnedOn            Name                    LongName NumCohorts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  FPL     0          0 Planktiv_L_Fish    Large planktivorous fish         10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  FPO     1          0 Planktiv_O_Fish    Other planktivorous fish         10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  FPS     2          1 Planktiv_S_Fish    Small planktivorous fish         10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  FVD     3          0   Pisciv_D_Fish       Deep piscivorous fish         10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  FVV     4          0   Pisciv_V_Fish Vulnerable piscivorous fish         10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  FVS     5          1   Pisciv_S_Fish    Shallow piscivorous fish         10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   MovesVertically MovesHorizontally isFished IsImpacted isTAC InvertType</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1               1                 1        1          1     1       FISH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2               1                 1        1          1     1       FISH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3               1                 1        1          1     1       FISH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4               1                 1        1          1     1       FISH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5               1                 1        1          1     1       FISH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6               1                 1        1          1     1       FISH</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   isPredator IsCover isSiliconDep isAssessed IsCatchGrazer isOverWinter</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          1       0            0          1             0            0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          1       0            0          1             0            0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          1       0            0          1             0            0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          1       0            0          1             0            0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          1       0            0          1             0            0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          1       0            0          1             0            0</span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"setas-model-new-trunk"</span>, package <span class="op">=</span> <span class="st">"atlantistools"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">file</span> <span class="op">&lt;-</span> <span class="st">"SETasGroupsDem_NoCep.csv"</span></span></span>
 <span class="r-in"><span><span class="va">fgs</span> <span class="op">&lt;-</span> <span class="fu">load_fgs</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">file</span><span class="op">)</span><span class="op">)</span></span></span>

@@ -1,5 +1,27 @@
 # Changelog
 
+## atlantistools 1.0.0
+
+### Major changes
+
+- Replaced `magrittr` with native pipe and dependence on `R version 4.1`
+  (PR
+  [\#74](https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues/74))
+- Removed `version_flag` argument from several functions (PR
+  [\#64](https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues/64))
+- Removed all content (code and documentation) relating to a development
+  model (`bec-dev`) (PR
+  [\#65](https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues/65))
+- Removed all functions relating to `rfishbase` and `biotic` (PR
+  [\#63](https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues/63))
+
+### Patch fixes
+
+- Removed unused dependencies, `stringi`, `vdiffr` (PR
+  [\#61](https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues/61),
+  PR
+  [\#74](https://github.com/Atlantis-Ecosystem-Model/atlantistools/issues/74))
+
 ## atlantistools 0.5.1
 
 ### Patch fixes

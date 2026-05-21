@@ -77,34 +77,30 @@ Other load functions:
 ## Examples
 
 ``` r
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-nc <- file.path(d, "outputSETAS.nc")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
-select_physics <- c("salt", "NO3", "volume")
-
-test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
-str(test)
-#> 'data.frame':    1488 obs. of  5 variables:
-#>  $ variable: chr  "NO3" "NO3" "NO3" "NO3" ...
-#>  $ polygon : int  1 1 1 1 1 2 2 2 2 2 ...
-#>  $ layer   : num  0 1 2 3 6 0 1 2 3 4 ...
-#>  $ time    : num  0 0 0 0 0 0 0 0 0 0 ...
-#>  $ atoutput: num  14 12 6 6 15 25 14 12 6 6 ...
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 nc <- file.path(d, "outputSETAS.nc")
 prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
 bboxes <- get_boundary(boxinfo = load_box(file.path(d, bgm = "VMPA_setas.bgm")))
+select_physics = c("salt", "NO3", "NH3", "Temp", "Chl_a", "Denitrifiction")
 
 test <- load_nc_physics(nc, select_physics, prm_run, bboxes)
-str(test)
-#> 'data.frame':    453 obs. of  5 variables:
-#>  $ variable: chr  "NO3" "NO3" "NO3" "NO3" ...
-#>  $ polygon : int  1 1 1 1 1 2 2 2 2 2 ...
-#>  $ layer   : num  0 1 2 3 6 0 1 2 3 4 ...
-#>  $ time    : num  0 0 0 0 0 0 0 0 0 0 ...
-#>  $ atoutput: num  14 12 6 6 15 25 14 12 6 6 ...
+head(test)
+#>    variable polygon layer time     atoutput
+#> 32    Chl_a       1     0    1 1.195206e+00
+#> 33    Chl_a       1     1    1 9.336022e-01
+#> 34    Chl_a       1     2    1 2.946814e-02
+#> 35    Chl_a       1     3    1 2.166251e-03
+#> 36    Chl_a       1     6    1 2.147856e+02
+#> 37    Chl_a       2     0    1 1.590395e-01
 
 test <- load_nc_physics(nc, select_physics = "nominal_dz", prm_run, bboxes)
+head(test)
+#>     variable polygon layer time atoutput
+#> 1 nominal_dz       1     0    0       10
+#> 2 nominal_dz       1     1    0       50
+#> 3 nominal_dz       1     2    0       30
+#> 4 nominal_dz       1     3    0       20
+#> 5 nominal_dz       1     6    0        1
+#> 6 nominal_dz       2     0    0      216
 ```

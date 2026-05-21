@@ -6,13 +6,7 @@ file of any ATLANTIS simulation.
 ## Usage
 
 ``` r
-load_dietmatrix(
-  prm_biol,
-  fgs,
-  transform = TRUE,
-  convert_names = FALSE,
-  version_flag = 2
-)
+load_dietmatrix(prm_biol, fgs, transform = TRUE, convert_names = FALSE)
 
 write_diet(dietmatrix, prm_biol, save_to_disc = TRUE)
 ```
@@ -41,11 +35,6 @@ write_diet(dietmatrix, prm_biol, save_to_disc = TRUE)
 
   Logical indicating if group codes are transformed to LongNames
   (`TRUE`) or not (default = `FALSE`).
-
-- version_flag:
-
-  The version of ATLANTIS model. 1 for bec_dev, 2 for trunk.
-  `default is 2.`.
 
 - dietmatrix:
 
@@ -92,25 +81,4 @@ dietmatrix <- load_dietmatrix(prm_biol, fgs, transform = FALSE)
 # Write is set to FALSE here for technical reasons. Make sure to set it to TRUE in case you
 # want to update your file.
 new_diet <- write_diet(dietmatrix, prm_biol, save_to_disc = FALSE)
-
-# And to bec-dev models.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-prm_biol <- file.path(d, "VMPA_setas_biol_fishing_New.prm")
-fgs <- file.path(d, "SETasGroups.csv")
-
-dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
-head(dm, n = 10)
-#> # A tibble: 10 × 7
-#>    pred  pred_stanza prey_stanza code       prey  avail prey_id
-#>    <chr>       <dbl>       <dbl> <chr>      <chr> <dbl>   <int>
-#>  1 FPL             1           1 pPREY1FPL1 FPL   0           1
-#>  2 FPL             1           1 pPREY1FPL1 FPO   0           2
-#>  3 FPL             1           1 pPREY1FPL1 FPS   0.005       3
-#>  4 FPL             1           1 pPREY1FPL1 FVD   0           4
-#>  5 FPL             1           1 pPREY1FPL1 FVV   0           5
-#>  6 FPL             1           1 pPREY1FPL1 FVS   0           6
-#>  7 FPL             1           1 pPREY1FPL1 FVB   0           7
-#>  8 FPL             1           1 pPREY1FPL1 FVT   0           8
-#>  9 FPL             1           1 pPREY1FPL1 FVO   0           9
-#> 10 FPL             1           1 pPREY1FPL1 FMM   0.01       10
 ```

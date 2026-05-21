@@ -38,31 +38,6 @@ Other load functions:
 ## Examples
 
 ``` r
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-file <- "SETasGroups.csv"
-fgs <- load_fgs(file.path(d, file))
-head(fgs)
-#>   Code Index IsTurnedOn            Name                    LongName NumCohorts
-#> 1  FPL     0          0 Planktiv_L_Fish    Large planktivorous fish         10
-#> 2  FPO     1          0 Planktiv_O_Fish    Other planktivorous fish         10
-#> 3  FPS     2          1 Planktiv_S_Fish    Small planktivorous fish         10
-#> 4  FVD     3          0   Pisciv_D_Fish       Deep piscivorous fish         10
-#> 5  FVV     4          0   Pisciv_V_Fish Vulnerable piscivorous fish         10
-#> 6  FVS     5          1   Pisciv_S_Fish    Shallow piscivorous fish         10
-#>   MovesVertically MovesHorizontally isFished IsImpacted isTAC InvertType
-#> 1               1                 1        1          1     1       FISH
-#> 2               1                 1        1          1     1       FISH
-#> 3               1                 1        1          1     1       FISH
-#> 4               1                 1        1          1     1       FISH
-#> 5               1                 1        1          1     1       FISH
-#> 6               1                 1        1          1     1       FISH
-#>   isPredator IsCover isSiliconDep isAssessed IsCatchGrazer isOverWinter
-#> 1          1       0            0          1             0            0
-#> 2          1       0            0          1             0            0
-#> 3          1       0            0          1             0            0
-#> 4          1       0            0          1             0            0
-#> 5          1       0            0          1             0            0
-#> 6          1       0            0          1             0            0
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 file <- "SETasGroupsDem_NoCep.csv"

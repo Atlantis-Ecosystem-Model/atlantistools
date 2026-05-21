@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">atlantistools</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,11 +62,9 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>model-preprocess</h1>
-                        <h4 data-toc-skip class="author">Alexander
-Keth</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/feature/i5-fishbase-removal/vignettes/model-preprocess.Rmd" class="external-link"><code>vignettes/model-preprocess.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/vignettes/model-preprocess.Rmd" class="external-link"><code>vignettes/model-preprocess.Rmd</code></a></small>
       <div class="d-none name"><code>model-preprocess.Rmd</code></div>
     </div>
 
@@ -107,9 +105,7 @@ atlantistools is present.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://magrittr.tidyverse.org" class="external-link">"magrittr"</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># You should be able to build the vignette either by clicking on "Knit" in RStudio or with</span></span>
+<code class="sourceCode R"><span><span class="co"># You should be able to build the vignette either by clicking on "Knit" in RStudio or with</span></span>
 <span><span class="co"># rmarkdown::render("model-preprocess.Rmd")</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -196,8 +192,8 @@ functions.<a class="anchor" aria-label="anchor" href="#define-additional-variabl
 <span><span class="va">dz</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">vol_dz</span>, <span class="va">variable</span> <span class="op">==</span> <span class="st">"dz"</span><span class="op">)</span></span>
 <span><span class="va">vol</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">vol_dz</span>, <span class="va">variable</span> <span class="op">==</span> <span class="st">"volume"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">nominal_dz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_init.html">load_init</a></span><span class="op">(</span>init <span class="op">=</span> <span class="va">init</span>, vars <span class="op">=</span> <span class="st">"nominal_dz"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">nominal_dz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_init.html">load_init</a></span><span class="op">(</span>init <span class="op">=</span> <span class="va">init</span>, vars <span class="op">=</span> <span class="st">"nominal_dz"</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">layer</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Read in Dietcheck</span></span>
@@ -224,11 +220,11 @@ functions.<a class="anchor" aria-label="anchor" href="#define-additional-variabl
 <pre><code><span><span class="co">## Joining with `by = join_by(species)`</span></span></code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Aggregate biomass</span></span>
-<span><span class="va">biomass</span> <span class="op">&lt;-</span> <span class="va">bio_sp</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">biomass</span> <span class="op">&lt;-</span> <span class="va">bio_sp</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/agg_data.html">agg_data</a></span><span class="op">(</span>groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"time"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">biomass_age</span> <span class="op">&lt;-</span> <span class="va">bio_sp</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">agecl</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">biomass_age</span> <span class="op">&lt;-</span> <span class="va">bio_sp</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">agecl</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/agg_data.html">agg_data</a></span><span class="op">(</span>groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"species"</span>, <span class="st">"agecl"</span>, <span class="st">"time"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Aggregate Numbers! This is done seperately since numbers need to be summed!</span></span>
@@ -245,7 +241,7 @@ functions.<a class="anchor" aria-label="anchor" href="#define-additional-variabl
 <span></span>
 <span><span class="co"># Calculate consumed biomass</span></span>
 <span><span class="va">bio_cons</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calculate_consumed_biomass.html">calculate_consumed_biomass</a></span><span class="op">(</span>eat <span class="op">=</span> <span class="va">dfs_prod</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, grazing <span class="op">=</span> <span class="va">dfs_prod</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, dm <span class="op">=</span> <span class="va">df_dm</span>,</span>
-<span>                                       vol <span class="op">=</span> <span class="va">vol</span>, bio_conv <span class="op">=</span> <span class="va">bio_conv</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>                                       vol <span class="op">=</span> <span class="va">vol</span>, bio_conv <span class="op">=</span> <span class="va">bio_conv</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="../reference/agg_data.html">agg_data</a></span><span class="op">(</span>groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pred"</span>, <span class="st">"agecl"</span>, <span class="st">"time"</span>, <span class="st">"prey"</span><span class="op">)</span>, fun <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 50% matching timesteps between PROD.nc and DietCheck.txt</span></span>
 <span><span class="co">## 11.61% data is lost due to missing diet data despite available eat data.</span></span>
@@ -259,27 +255,38 @@ functions.<a class="anchor" aria-label="anchor" href="#define-additional-variabl
 <span>                        group <span class="op">=</span> <span class="fu"><a href="../reference/get_groups.html">get_age_acronyms</a></span><span class="op">(</span>fgs <span class="op">=</span> <span class="va">fgs</span><span class="op">)</span>, </span>
 <span>                        parameter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"KWRR"</span>, <span class="st">"KWSR"</span>, <span class="st">"AgeClassSize"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_init_age.html">load_init_weight</a></span><span class="op">(</span>init <span class="op">=</span> <span class="va">init</span>, fgs <span class="op">=</span> <span class="va">fgs</span>, bboxes <span class="op">=</span> <span class="va">bboxes</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rec_weight</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">.</span><span class="op">$</span><span class="va">species</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_init_age.html">load_init_weight</a></span><span class="op">(</span>init <span class="op">=</span> <span class="va">init</span>, fgs <span class="op">=</span> <span class="va">fgs</span>, bboxes <span class="op">=</span> <span class="va">bboxes</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">rec_weight</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  </span>
+<span>  <span class="co"># Ensure structural order before running any sequential math</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">agecl</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="co"># Total combined weight for the current row</span></span>
+<span>    total_w <span class="op">=</span> <span class="va">rn</span> <span class="op">+</span> <span class="va">sn</span>,</span>
+<span>    <span class="co"># Base weight threshold for the first age class</span></span>
+<span>    base_w <span class="op">=</span> <span class="va">kwrr</span> <span class="op">+</span> <span class="va">kwsr</span>,</span>
+<span>    <span class="co"># Calculate weight difference across age classes</span></span>
+<span>    wdiff <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html" class="external-link">if_else</a></span><span class="op">(</span></span>
+<span>      <span class="va">agecl</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">agecl</span><span class="op">)</span>,</span>
+<span>      <span class="va">total_w</span> <span class="op">-</span> <span class="va">base_w</span>,                <span class="co"># Ageclass 1: Compare to baseline constants</span></span>
+<span>      <span class="va">total_w</span> <span class="op">-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/lead-lag.html" class="external-link">lag</a></span><span class="op">(</span><span class="va">total_w</span><span class="op">)</span>    <span class="co"># Ageclass 2+: Subtract previous ageclass total weight</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># Calculate growth requirements using your dynamic wdiff</span></span>
+<span>    growth_req <span class="op">=</span> <span class="va">wdiff</span> <span class="op">/</span> <span class="op">(</span><span class="fl">365</span> <span class="op">*</span> <span class="va">ageclasssize</span><span class="op">)</span>,</span>
+<span>    </span>
+<span>    .by <span class="op">=</span> <span class="va">species</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(species)`</span></span></code></pre>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate weight difference from one ageclass to the next!</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">pd</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">wdiff</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">(</span><span class="va">pd</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">rn</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">pd</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sn</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">pd</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">kwrr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">pd</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">kwsr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>                     <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">pd</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">rn</span> <span class="op">+</span> <span class="va">pd</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">sn</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">pd</span><span class="op">)</span></span>
-<span><span class="va">pd</span><span class="op">$</span><span class="va">growth_req</span> <span class="op">&lt;-</span> <span class="va">pd</span><span class="op">$</span><span class="va">wdiff</span> <span class="op">/</span> <span class="op">(</span><span class="fl">365</span> <span class="op">*</span> <span class="va">pd</span><span class="op">$</span><span class="va">ageclasssize</span><span class="op">)</span></span>
-<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">growth_req</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">growth_req</span> <span class="op">&lt;</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning</a></span><span class="op">(</span><span class="st">"Required growth negative for some groups. Please check your initial conditions files."</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">gr_req</span> <span class="op">&lt;-</span> <span class="va">pd</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">gr_req</span> <span class="op">&lt;-</span> <span class="va">pd</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">species</span>, <span class="va">agecl</span>, <span class="va">growth_req</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">gr_rel_init</span> <span class="op">&lt;-</span> <span class="va">growth_age</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">gr_req</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">gr_rel_init</span> <span class="op">&lt;-</span> <span class="va">growth_age</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">gr_req</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>gr_rel <span class="op">=</span> <span class="op">(</span><span class="va">atoutput</span> <span class="op">-</span> <span class="va">growth_req</span><span class="op">)</span> <span class="op">/</span> <span class="va">growth_req</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Joining with `by = join_by(species, agecl)`</span></span></code></pre>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">

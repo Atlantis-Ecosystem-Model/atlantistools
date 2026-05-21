@@ -44,38 +44,18 @@ Other load functions:
 ## Examples
 
 ``` r
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 file <- file.path(d, "outputSETASSSB.txt")
 load_txt(file)
-#> # A tibble: 32 × 3
-#>     time code  atoutput
-#>    <dbl> <chr>    <dbl>
-#>  1     0 FPS      1321.
-#>  2    73 FPS      1318.
-#>  3   146 FPS      1314.
-#>  4   219 FPS       986.
-#>  5   292 FPS       984.
-#>  6   365 FPS       982.
-#>  7   438 FPS       979.
-#>  8   511 FPS       976.
-#>  9   584 FPS       871.
-#> 10   657 FPS       870.
-#> # ℹ 22 more rows
-
-file <- file.path(d, "outputSETASYOY.txt")
-load_txt(file)
-#> # A tibble: 32 × 3
-#>     time code  atoutput
-#>    <dbl> <chr>    <dbl>
-#>  1     0 FPS.0   1.22  
-#>  2    73 FPS.0   1.22  
-#>  3   146 FPS.0   1.22  
-#>  4   219 FPS.0   0.724 
-#>  5   292 FPS.0   0.724 
-#>  6   365 FPS.0   0.724 
-#>  7   438 FPS.0   0.724 
-#>  8   511 FPS.0   0.724 
-#>  9   584 FPS.0   0.0240
-#> 10   657 FPS.0   0.0240
-#> # ℹ 22 more rows
+#> # A tibble: 8 × 3
+#>    time code  atoutput
+#>   <dbl> <chr>    <dbl>
+#> 1    0  FPS         0 
+#> 2    0  FVS         0 
+#> 3  365  FPS      1320.
+#> 4  365  FVS      6010.
+#> 5  730  FPS       992.
+#> 6  730  FVS      2365.
+#> 7 1094. FPS       889.
+#> 8 1094. FVS      1748.
 ```

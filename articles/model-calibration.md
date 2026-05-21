@@ -18,7 +18,6 @@ change `model-calibration.Rmd` accordingly.
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
-library("magrittr")
 
 fig_height2 <- 11
 gen_labels <- list(x = "Time [years]", y = "Biomass [t]")
@@ -140,7 +139,7 @@ update_labels(plot, gen_labels)
 
 ``` r
 
-plot <- plot_line(result$biomass) %>% update_labels(labels = gen_labels)
+plot <- plot_line(result$biomass) |>  update_labels(labels = gen_labels)
 plot_add_range(plot, ex_bio)
 ```
 
@@ -160,12 +159,13 @@ custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
 ``` r
 
-physics <- result$physics %>%
-  flip_layers() %>%
-  split(., .$variable)
+physics <- result$physics |>
+  flip_layers() |>
+  dplyr::group_split(variable)
 
-plots <- lapply(physics, plot_line, wrap = NULL) %>% 
-  lapply(., custom_grid, grid_x = "polygon", grid_y = "layer")
+plots <- physics |> 
+  lapply(plot_line, wrap = NULL) |> 
+  lapply(custom_grid, grid_x = "polygon", grid_y = "layer")
 
 for (i in seq_along(plots)) {
   cat(paste0("## ", names(plots)[i]), sep = "\n")
@@ -175,27 +175,27 @@ for (i in seq_along(plots)) {
 }
 ```
 
-### Chl_a
+### 
 
 ![](model-calibration_files/figure-html/unnamed-chunk-12-1.png)
 
-### Denitrifiction
+### 
 
 ![](model-calibration_files/figure-html/unnamed-chunk-12-2.png)
 
-### NH3
+### 
 
 ![](model-calibration_files/figure-html/unnamed-chunk-12-3.png)
 
-### NO3
+### 
 
 ![](model-calibration_files/figure-html/unnamed-chunk-12-4.png)
 
-### salt
+### 
 
 ![](model-calibration_files/figure-html/unnamed-chunk-12-5.png)
 
-### Temp
+### 
 
 ![](model-calibration_files/figure-html/unnamed-chunk-12-6.png)
 
@@ -203,7 +203,7 @@ for (i in seq_along(plots)) {
 
 ``` r
 
-plot <- flip_layers(result$flux) %>% 
+plot <- flip_layers(result$flux) |> 
   plot_line(wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
@@ -214,7 +214,7 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 
 ``` r
 
-plot <- flip_layers(result$sink) %>% 
+plot <- flip_layers(result$sink) |>  
   plot_line(wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
@@ -225,9 +225,9 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 
 ``` r
 
-check_dz <- result$dz %>% 
-  dplyr::left_join(result$nominal_dz, by = c("polygon", "layer")) %>% 
-  dplyr::mutate(check_dz = atoutput.x / atoutput.y) %>% 
+check_dz <- result$dz |> 
+  dplyr::left_join(result$nominal_dz, by = c("polygon", "layer")) |> 
+  dplyr::mutate(check_dz = atoutput.x / atoutput.y) |> 
   dplyr::filter(!is.na(check_dz)) # remove sediment layer
 
 plot <- plot_line(check_dz, x = "time", y = "check_dz", wrap = "polygon", col = "layer")
