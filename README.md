@@ -2,41 +2,28 @@
 
 # atlantistools
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/atlantistools)](https://cran.r-project.org/package=atlantistools)
-[![R-CMD-check](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml)
-[![gh-pages](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yml)
-[![format-check.yaml](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml)
+<!-- badges: start -->
 
-`atlantistools` is a data processing and visualisation tool for R, which
-helps to process output from Atlantis models within R. Using
-atlantistools makes sure that Atlantis users use the same input/output
-file structure which facilitates intra and inter model comparisons.
+[![R-CMD-check](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/R-CMD-check.yaml)
+[![pkgdown.yaml](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/pkgdown.yaml)
+[![format-check.yaml](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/atlantistools/actions/workflows/format-check.yaml)
+<!-- badges: end -->
+
+`atlantistools` is an R package to aid in the data processing and
+visualization of output from Atlantis models. Using `atlantistools`
+helps Atlantis users standardize input/output which facilitates intra
+and inter model comparisons.
 
 # Installation
 
-Install from CRAN: (Version 0.4.3 only)
+    pak::pak("Atlantis-Ecosystem-Model/atlantistools")
 
-``` r
-install.packages("Atlantis-Ecosystem-Model/atlantistools")
-```
+### Getting started
 
-Since version 0.4.3 all development resides on GitHub. To view the
-changes to `atlantistools` since version 0.4.3 please read the
-[NEWS.md](https://Atlantis-Ecosystem-Model.github.io/atlantistools/news/index.html)
+Please see the [getting started guide](articles/atlantistools.html)
 
-To Install the development version from Github:
+## Contact
 
-``` r
-remotes::install_github("Atlantis-Ecosystem-Model/atlantistools")
-```
-
-# Documentation
-
-All documentation can now be found online in the gh-pages branch of this
-repo
-
-Full documentation can be found
-[here](https://Atlantis-Ecosystem-Model.github.io/atlantistools/index.html)
-
-Vignettes can be found
-[here](https://Atlantis-Ecosystem-Model.github.io/atlantistools/articles/)
+| [andybeet](https://github.com/andybeet) |
+|------------------------------------------------------------------------|
+| [![andybeet avatar](https://avatars1.githubusercontent.com/u/22455149?s=100&v=4)](https://github.com/andybeet) |

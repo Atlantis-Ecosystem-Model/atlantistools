@@ -12,9 +12,6 @@
 #'
 #' @examples
 #' \dontrun{
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' ex_data <- read.csv(file.path(d, "setas-ssb-rec.csv"), stringsAsFactors = FALSE)
-#' plot_rec(preprocess_setas$ssb_rec, ex_data)
 #' }
 
 # d <- file.path("Z:", "Atlantis_models", "Runs", "dummy_01_ATLANTIS_NS")

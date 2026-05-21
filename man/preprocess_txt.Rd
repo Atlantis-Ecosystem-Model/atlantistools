@@ -26,11 +26,8 @@ to align with agestructure in other functions. Columns without any informations
  has zeros as values remove these values. remove zeros overall!
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-df <- load_txt(file = file.path(d, "outputSETASSpecificPredMort.txt"))
-df <- preprocess_txt(df_txt = df, into = c("pred", "agecl", "empty_col1", "prey", "empty_col2"))
-head(df)
 
+d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 df <- load_txt(file = file.path(d, "outputSETASSpecificMort.txt"))
 df <- preprocess_txt(df_txt = df, into = c("species", "agecl", "empty_col", "mort"))
 head(df)

@@ -28,15 +28,6 @@ check_growth <- function(data, yearly = FALSE) {
     df
   }
 
-  # Divide output with initial value!
-  # ref <- data[data$time == min(data$time), ]
-  # ref$time <- NULL
-  # names(ref)[names(ref) == "atoutput"] <- "atoutput_ref"
-  # result <- data %>%
-  #   dplyr::left_join(ref) %>%
-  #   dplyr::mutate(atoutput = atoutput / atoutput_ref)
-  # result$atoutput[result$atoutput_ref == 0] <- 0
-  # outcomment in case lm procedure is used! This is a bit messy.
   result <- data
 
   # Split dataframe into species and age specific subdataframes!

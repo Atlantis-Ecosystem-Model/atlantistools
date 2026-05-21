@@ -38,7 +38,4 @@ Other load functions:
 \code{\link{load_spec_pred_mort}()},
 \code{\link{load_txt}()}
 }
-\author{
-Kelli Faye Johnson
-}
 \concept{load functions}

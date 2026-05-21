@@ -19,13 +19,6 @@
 #' @family load functions
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' mortFile <- file.path(d, "outputSETASMort.txt")
-#' prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-#' fgs <- file.path(d, "SETasGroups.csv")
-#'
-#' df <- load_mort(mortFile, prm_run, fgs)
-#' head(df)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' mortFile <- file.path(d, "outputSETASMort.txt")
@@ -35,13 +28,12 @@
 #' df <- load_mort(mortFile, prm_run, fgs)
 #' head(df)
 
-#BJS 7/15/16 add version_flag and make compatible with trunk output
 load_mort <- function(mortFile, prm_run, fgs, convert_names = F) {
   mort <- load_txt(file = mortFile, id_col = c("Time"))
 
   # separate species code.mortalityType into two columns
-  mort <- mort %>%
-    tidyr::separate(.data$code, into = c("code", "source"), sep = "\\.") %>%
+  mort <- mort |>
+    tidyr::separate(.data$code, into = c("code", "source"), sep = "\\.") |>
     tibble::as_tibble()
 
   # First time step only has 0s as entry!
@@ -51,12 +43,11 @@ load_mort <- function(mortFile, prm_run, fgs, convert_names = F) {
   # Convert species codes to longnames!
   if (convert_names) {
     data_fgs <- load_fgs(fgs = fgs)
-    mort <- mort %>%
+    mort <- mort |>
       dplyr::left_join(
-        .,
         data_fgs[, c("Code", "LongName")],
         by = c("code" = "Code")
-      ) %>%
+      ) |>
       dplyr::rename(species = .data$LongName)
   }
 

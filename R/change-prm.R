@@ -32,8 +32,7 @@ change_prm <- function(
   roc,
   parameter,
   relative = TRUE,
-  save_to_disc = TRUE,
-  version_flag = 2
+  save_to_disc = TRUE
 ) {
   if (length(parameter) != 1) {
     stop("Please suply only one parameter per function call.")
@@ -64,15 +63,10 @@ change_prm <- function(
       new_value <- roc
     }
 
-    # Update value. Some pesky expectations have to be added here.
-    if (
-      is.element(parameter, c("mum", "C", "mQ", "mL", "jmL", "jmQ")) &
-        version_flag == 1
-    ) {
-      prm_biol[pos] <- paste(paste0(flag, "_T15"), new_value, sep = "\t")
-    } else {
-      prm_biol[pos] <- paste(flag, new_value, sep = "\t")
-    }
+    # Update value.
+
+    prm_biol[pos] <- paste(flag, new_value, sep = "\t")
+
     return(prm_biol)
   }
 

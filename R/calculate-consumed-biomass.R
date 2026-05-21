@@ -54,7 +54,7 @@
 #'                select_groups = groups_rest, select_variable = "Grazing",
 #'                prm_run = prm_run, bboxes = bboxes)
 #' df_dm <- load_dietcheck(dietcheck = file.path(d, "outputSETASDietCheck.txt"),
-#'                         fgs = fgs, prm_run = prm_run, version_flag = 2, convert_names = TRUE)
+#'                         fgs = fgs, prm_run = prm_run, convert_names = TRUE)
 #' vol <- load_nc_physics(nc = nc_gen, select_physics = "volume",
 #'                        prm_run = prm_run, bboxes = bboxes, aggregate_layers = FALSE)
 #'
@@ -96,7 +96,7 @@ calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
       atoutput = atoutput * bio_conv
     ) |>
     # Step2: Combine with diet contribution. We need a full join to make sure no data is lost!
-    dplyr::full_join(dm, by = c("species" = "pred", "time", "agecl")) %>%
+    dplyr::full_join(dm, by = c("species" = "pred", "time", "agecl")) |>
     # Restrict timesteps to netcdf data! Last timestep is weird in Dietcheck.txt.
     dplyr::filter(time %in% ts_eat) |>
     dplyr::rename(pred = species)

@@ -11,7 +11,6 @@
 #' diet matrix entries.
 #' @param convert_names Logical indicating if group codes are transformed to LongNames (\code{TRUE})
 #' or not (default = \code{FALSE}).
-#' @param version_flag The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.
 #' @return dataframe of the availability matrix in long format with columns
 #' pred, pred_stanza (1 = juvenile, 2 = adult), prey_stanza, prey, avail, code.
 #' @param dietmatrix Dataframe of the ATLANTIS dietmatrix generated with \code{load_dietmatrix}
@@ -36,21 +35,12 @@
 #' # want to update your file.
 #' new_diet <- write_diet(dietmatrix, prm_biol, save_to_disc = FALSE)
 #'
-#' # And to bec-dev models.
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' prm_biol <- file.path(d, "VMPA_setas_biol_fishing_New.prm")
-#' fgs <- file.path(d, "SETasGroups.csv")
-#'
-#' dm <- load_dietmatrix(prm_biol, fgs, version_flag = 1)
-#' head(dm, n = 10)
-#'
 
 load_dietmatrix <- function(
   prm_biol,
   fgs,
   transform = TRUE,
-  convert_names = FALSE,
-  version_flag = 2
+  convert_names = FALSE
 ) {
   fgs_data <- load_fgs(fgs = fgs)
   acr <- fgs_data$Code[
@@ -71,10 +61,8 @@ load_dietmatrix <- function(
   coh2 <- acr[agecl == 2]
   coh1 <- acr[agecl == 1]
 
-  if (version_flag == 2) {
-    coh10 <- c(coh10, coh2)
-    coh2 <- NULL
-  }
+  coh10 <- c(coh10, coh2)
+  coh2 <- NULL
 
   if (length(c(coh10, coh2, coh1)) != length(acr)) {
     stop("Incomplete functional groups file.")
@@ -245,12 +233,3 @@ write_diet <- function(dietmatrix, prm_biol, save_to_disc = TRUE) {
     }
   }
 }
-
-# sicily debugging
-# dir <- "z:/my_data_alex/Matteo/"
-# prm_biol <- list.files(dir)[2]
-# fgs <- list.files(dir)[1]
-# transform <- FALSE
-# convert_names <- FALSE
-# version_flag <- 1
-# dietmatrix <- load_dietmatrix(dir, prm_biol, fgs, transform, convert_names, version_flag)

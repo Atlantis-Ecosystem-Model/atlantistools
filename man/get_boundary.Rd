@@ -34,7 +34,4 @@ Other get functions:
 \code{\link{get_conv_mgnbiot}()},
 \code{\link{get_groups}()}
 }
-\author{
-Kelli Faye Johnson
-}
 \concept{get functions}

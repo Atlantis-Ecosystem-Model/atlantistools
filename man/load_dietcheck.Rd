@@ -4,14 +4,7 @@
 \alias{load_dietcheck}
 \title{Read in the atlantis dietcheck.txt file and perform some basic data transformations.}
 \usage{
-load_dietcheck(
-  dietcheck,
-  fgs,
-  prm_run,
-  convert_names = FALSE,
-  report = FALSE,
-  version_flag = 2
-)
+load_dietcheck(dietcheck, fgs, prm_run, convert_names = FALSE, report = FALSE)
 }
 \arguments{
 \item{dietcheck}{Character string giving the connection of the dietcheck file.
@@ -28,8 +21,6 @@ or not (default = \code{FALSE}).}
 
 \item{report}{Logical indicating if incomplete DietCheck information shall
 be printed \code{TRUE} or not \code{FALSE}.}
-
-\item{version_flag}{The version of ATLANTIS model. 1 for bec_dev, 2 for trunk. \code{default is 2.}.}
 }
 \value{
 A \code{data.frame} in long format with the following column names:
@@ -39,15 +30,6 @@ A \code{data.frame} in long format with the following column names:
 Read in the atlantis dietcheck.txt file and perform some basic data transformations.
 }
 \examples{
-# Apply to bec-dev models.
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-dietcheck <- file.path(d, "outputSETASDietCheck.txt")
-fgs <- file.path(d, "SETasGroups.csv")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-
-diet <- load_dietcheck(dietcheck, fgs, prm_run, version_flag = 1)
-head(diet, n = 10)
-
 # Apply to trunk models.
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 dietcheck <- file.path(d, "outputSETASDietCheck.txt")

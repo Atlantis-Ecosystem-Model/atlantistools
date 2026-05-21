@@ -6,9 +6,9 @@
 NEWS\.Rmd
 ^data-raw$
 ^appveyor\.yml$
-^cran-comments\.md$
 ^revdep$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^\.github$
+air.toml

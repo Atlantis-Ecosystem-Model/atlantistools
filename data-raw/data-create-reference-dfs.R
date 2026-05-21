@@ -12,8 +12,10 @@ ssb <- file.path(d, "outputSETASSSB.txt")
 prm_biol <- file.path(d, "VMPA_setas_biol_fishing_Trunk.prm")
 prm_run <- file.path(d, "VMPA_setas_run_fishing_F_Trunk.prm")
 
-boundary_boxes <- get_boundary(boxinfo = load_box(bgm = bgm))
-epibenthic_groups <- load_bps(fgs = fgs, init = init)
+boundary_boxes <- atlantistools::get_boundary(
+  boxinfo = atlantistools::load_box(bgm = bgm)
+)
+epibenthic_groups <- atlantistools::load_bps(fgs = fgs, init = init)
 groups <- c(
   "Planktiv_S_Fish",
   "Pisciv_S_Fish",
@@ -25,7 +27,7 @@ groups <- c(
 )
 groups_age <- groups[1:2]
 groups_rest <- groups[3:length(groups)]
-bio_conv <- get_conv_mgnbiot(prm_biol = prm_biol)
+bio_conv <- atlantistools::get_conv_mgnbiot(prm_biol = prm_biol)
 
 # Create reference dataframes ---------------------------------------------------------------------
 vars <- list("Nums", "StructN", "ResN", "Growth", "Eat", "Grazing", "N")
@@ -40,7 +42,7 @@ grps <- list(
   groups_rest
 )
 dfs <- Map(
-  load_nc,
+  atlantistools::load_nc,
   nc = ncs,
   select_variable = vars,
   select_groups = grps,
@@ -60,7 +62,7 @@ ref_eat <- dfs[[5]]
 ref_grazing <- dfs[[6]]
 ref_n <- dfs[[7]]
 
-ref_vol_dz <- load_nc_physics(
+ref_vol_dz <- atlantistools::load_nc_physics(
   nc = nc_gen,
   select_physics = c("volume", "dz"),
   prm_run = prm_run,
@@ -68,7 +70,7 @@ ref_vol_dz <- load_nc_physics(
   aggregate_layers = F
 )
 
-ref_vol <- load_nc_physics(
+ref_vol <- atlantistools::load_nc_physics(
   nc = nc_gen,
   select_physics = "volume",
   prm_run = prm_run,
@@ -76,7 +78,7 @@ ref_vol <- load_nc_physics(
   aggregate_layers = F
 )
 
-ref_physics <- load_nc_physics(
+ref_physics <- atlantistools::load_nc_physics(
   nc = nc_gen,
   select_physics = c("salt", "NO3", "NH3", "Temp", "Chl_a", "Denitrifiction"),
   prm_run = prm_run,
@@ -84,15 +86,14 @@ ref_physics <- load_nc_physics(
   aggregate_layers = F
 )
 
-ref_dm <- load_dietcheck(
+ref_dm <- atlantistools::load_dietcheck(
   dietcheck = dietcheck,
   fgs = fgs,
   prm_run = prm_run,
-  version_flag = 2,
   convert_names = TRUE
 )
 
-ref_bio_sp <- calculate_biomass_spatial(
+ref_bio_sp <- atlantistools::calculate_biomass_spatial(
   nums = ref_nums,
   sn = ref_structn,
   rn = ref_resn,
@@ -102,7 +103,7 @@ ref_bio_sp <- calculate_biomass_spatial(
   bps = epibenthic_groups
 )
 
-ref_bio_cons <- calculate_consumed_biomass(
+ref_bio_cons <- atlantistools::calculate_consumed_biomass(
   eat = ref_eat,
   grazing = ref_grazing,
   dm = ref_dm,
@@ -110,17 +111,21 @@ ref_bio_cons <- calculate_consumed_biomass(
   bio_conv = bio_conv
 )
 
-ref_dietmatrix <- load_dietmatrix(prm_biol, fgs, convert_names = TRUE)
+ref_dietmatrix <- atlantistools::load_dietmatrix(
+  prm_biol,
+  fgs,
+  convert_names = TRUE
+)
 
-ref_agemat <- prm_to_df(
+ref_agemat <- atlantistools::prm_to_df(
   prm_biol = prm_biol,
   fgs = fgs,
-  group = get_age_acronyms(fgs = fgs),
+  group = atlantistools::get_age_acronyms(fgs = fgs),
   parameter = "age_mat"
 )
 
 # Save to HDD and cleanup -------------------------------------------------------------------------
-devtools::use_data(
+usethis::use_data(
   ref_eat,
   ref_grazing,
   ref_n,

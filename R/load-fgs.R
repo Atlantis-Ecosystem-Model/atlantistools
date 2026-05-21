@@ -11,10 +11,6 @@
 #' @return A \code{data.frame} of functional group information.
 #'
 #' @examples
-#' d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-#' file <- "SETasGroups.csv"
-#' fgs <- load_fgs(file.path(d, file))
-#' head(fgs)
 #'
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' file <- "SETasGroupsDem_NoCep.csv"

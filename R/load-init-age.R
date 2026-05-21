@@ -14,8 +14,6 @@
 #' @export
 #' @return A dataframes with columns atoutput, polygon, layer (if present), species (if present).
 #'
-#' @author Alexander Keth
-
 #' @examples
 #' d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 #' init <- file.path(d, "INIT_VMPA_Jan2015.nc")
@@ -239,7 +237,7 @@ load_init_weight <- function(init, fgs, bboxes) {
     fgs = fgs,
     select_variable = "ResN",
     bboxes = bboxes
-  ) %>%
+  ) |>
     dplyr::filter(!is.na(atoutput)) |>
     dplyr::select(atoutput, species, agecl) |>
     dplyr::rename(rn = atoutput) |>
@@ -249,7 +247,7 @@ load_init_weight <- function(init, fgs, bboxes) {
     fgs = fgs,
     select_variable = "StructN",
     bboxes = bboxes
-  ) %>%
+  ) |>
     dplyr::filter(!is.na(atoutput)) |>
     dplyr::select(atoutput, species, agecl) |>
     dplyr::rename(sn = atoutput) |>

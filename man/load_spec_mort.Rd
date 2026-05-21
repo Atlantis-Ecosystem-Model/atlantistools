@@ -29,13 +29,6 @@ Reads in the specificMort.txt file. Three values of instantaneous mortality for 
 age group, and stock. Predation (M2), other natural mortality (M1), Fishing (F)
 }
 \examples{
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-specmort <- file.path(d, "outputSETASSpecificMort.txt")
-prm_run <- file.path(d, "VMPA_setas_run_fishing_F_New.prm")
-fgs <- file.path(d, "SETasGroups.csv")
-
-df <- load_spec_mort(specmort, prm_run, fgs)
-head(df)
 
 d <- system.file("extdata", "setas-model-new-trunk", package = "atlantistools")
 specmort <- file.path(d, "outputSETASSpecificMort.txt")

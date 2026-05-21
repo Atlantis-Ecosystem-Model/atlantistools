@@ -58,12 +58,3 @@ test_that("test output numbers", {
     x = dm_new[609]
   ))
 })
-
-
-d <- system.file("extdata", "setas-model-new-becdev", package = "atlantistools")
-
-dm2 <- load_dietmatrix(
-  prm_biol = file.path(d, "VMPA_setas_biol_fishing_New.prm"),
-  fgs = file.path(d, "SETasGroups.csv"),
-  version_flag = 1
-)

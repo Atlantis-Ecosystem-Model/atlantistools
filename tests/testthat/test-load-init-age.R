@@ -62,9 +62,9 @@ dl <- load_init_stanza(init = init, fgs = fgs, bboxes = bboxes)
 
 dm <- load_init_weight(init = init, fgs = fgs, bboxes = bboxes)
 
-data <- de %>%
-  dplyr::filter(!is.na(atoutput)) %>%
-  dplyr::group_by(species, agecl) %>%
+data <- de |>
+  dplyr::filter(!is.na(atoutput)) |>
+  dplyr::group_by(species, agecl) |>
   dplyr::summarise(out = unique(atoutput))
 
 test_that("test output numbers", {

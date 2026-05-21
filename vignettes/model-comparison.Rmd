@@ -1,6 +1,5 @@
 ---
 title: "model-comparison"
-author: "Alexander Keth"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{model-comparison}
@@ -62,7 +61,7 @@ update_labels(plot, gen_labels)
 
 # Biomass timeseries
 ```{r}
-plot_line(result$biomass, col = "run", ncol = 4) %>% update_labels(gen_labels)
+plot_line(result$biomass, col = "run", ncol = 4)  |>  update_labels(gen_labels)
 ```
 
 
