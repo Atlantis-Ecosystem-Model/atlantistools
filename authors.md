@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/Atlantis-Ecosystem-Model/atlantistools/blob/v1.0.0/DESCRIPTION)
 
 Keth A, Beet A (2026). *atlantistools: Process and Visualise Output from
 Atlantis Models*. R package version 1.0.0,
