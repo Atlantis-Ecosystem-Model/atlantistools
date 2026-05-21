@@ -1,7 +1,7 @@
 Package: atlantistools
 Type: Package
 Title: Process and Visualise Output from Atlantis Models
-Version: 0.5.1
+Version: 1.0.0
 Authors@R: 
   c(person("Alexander", "Keth", email = "alexander.keth@uni-hamburg.de", role = c("aut")),
     person("Andy", "Beet", email = "andrew.beet@noaa.gov", role = c("cre","aut"),
