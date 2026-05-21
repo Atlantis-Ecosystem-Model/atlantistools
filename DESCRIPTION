@@ -18,8 +18,7 @@ RoxygenNote: 7.3.3
 Suggests:
   knitr,
   rmarkdown,
-  testthat,
-  vdiffr
+  testthat
 Imports:
   circlize,
   curl,
@@ -30,7 +29,6 @@ Imports:
   grid,
   gridExtra,
   lazyeval,
-  magrittr,
   proj4,
   purrr,
   RColorBrewer,

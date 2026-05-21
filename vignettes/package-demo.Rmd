@@ -198,15 +198,15 @@ liking afterwards.
 
 ```{r}
 # Aggregate spatial biomass!
-biomass <- df_bio_spatial %>%
+biomass <- df_bio_spatial |> 
   agg_data(groups = c("species", "time"), fun = sum)
 
 plot_line(biomass, ncol = 3)
 plot_line(biomass, col = "species", ncol = 3)
 
 # Aggregate spatial biomass for fully age structured groups!
-biomass_age <- df_bio_spatial %>%
-  filter(agecl > 2) %>%
+biomass_age <- df_bio_spatial |> 
+  filter(agecl > 2) |> 
   agg_data(groups = c("species", "agecl", "time"), fun = sum)
 
 plot_line(biomass_age, col = "agecl")

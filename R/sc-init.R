@@ -171,14 +171,14 @@ sc_init <- function(
 
   # Comment in to extract numbers from output!
   # nums <- load_nc(dir = dir, nc = nc, bps = bps, select_variable = "Nums",
-  #                 fgs = fgs, select_groups = groups_age, bboxes = bboxes) %>%
+  #                 fgs = fgs, select_groups = groups_age, bboxes = bboxes) |>
   #   dplyr::filter(time == 0)
   nums <- load_init_age(
     init = init,
     fgs = fgs,
     select_variable = "Nums",
     bboxes = bboxes
-  ) %>%
+  ) |>
     dplyr::inner_join(surface, by = c("polygon", "layer")) # not needed in case numbers are already only in surface in init file
 
   # Add stanzas for all age-based groups!
@@ -211,7 +211,7 @@ sc_init <- function(
 
   # Comment in to get data from output file
   # preydens_invert <- load_nc(dir = dir, nc = nc, bps = bps, fgs = fgs, select_groups = groups_rest,
-  #                            select_variable = "N", bboxes = bboxes) %>%
+  #                            select_variable = "N", bboxes = bboxes) |>
   #   dplyr::filter(time == 0)
   preydens_invert <- load_init_nonage(
     init = init,
@@ -239,7 +239,7 @@ sc_init <- function(
     dplyr::rename(prey = species, preydens = atoutput)
 
   # Extract availability matrix and combine with assimilation types
-  ass_type <- fgs_data %>%
+  ass_type <- fgs_data |>
     dplyr::select(Code, dplyr::any_of(c("GroupType", "InvertType")))
 
   names(ass_type) <- c("prey", "grp")

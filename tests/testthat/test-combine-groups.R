@@ -1,8 +1,8 @@
 context("combine_groups tests")
 
 wuwu <- combine_groups(ref_dm, group_col = "pred", combine_thresh = 2)
-wawa <- wuwu %>%
-  dplyr::group_by(prey, agecl) %>%
+wawa <- wuwu |>
+  dplyr::group_by(prey, agecl) |>
   dplyr::summarise(count = dplyr::n_distinct(pred))
 
 # no grouping variable!

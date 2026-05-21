@@ -96,7 +96,7 @@ calculate_consumed_biomass <- function(eat, grazing, dm, vol, bio_conv) {
       atoutput = atoutput * bio_conv
     ) |>
     # Step2: Combine with diet contribution. We need a full join to make sure no data is lost!
-    dplyr::full_join(dm, by = c("species" = "pred", "time", "agecl")) %>%
+    dplyr::full_join(dm, by = c("species" = "pred", "time", "agecl")) |>
     # Restrict timesteps to netcdf data! Last timestep is weird in Dietcheck.txt.
     dplyr::filter(time %in% ts_eat) |>
     dplyr::rename(pred = species)

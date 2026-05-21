@@ -24,7 +24,7 @@ library("atlantistools")
 library("ggplot2")
 library("gridExtra")
 library("dplyr")
-library("magrittr")
+
 
 # You should be able to build the vignette either by clicking on "Knit" in RStudio or with
 # rmarkdown::render("model-preprocess.Rmd")
@@ -100,8 +100,8 @@ vol_dz <- load_nc_physics(nc = nc_gen, select_physics = c("volume", "dz"),
 dz <- dplyr::filter(vol_dz, variable == "dz")
 vol <- dplyr::filter(vol_dz, variable == "volume")
 
-nominal_dz <- load_init(init = init, vars = "nominal_dz") %>% 
-  as.data.frame() %>% 
+nominal_dz <- load_init(init = init, vars = "nominal_dz") |>  
+  as.data.frame() |> 
   dplyr::filter(!is.na(layer))
 
 # Read in Dietcheck
@@ -126,11 +126,11 @@ bio_sp <- calculate_biomass_spatial(nums = dfs_gen[[1]], sn = dfs_gen[[2]], rn =
 bio_sp_stanza <- combine_ages(bio_sp, grp_col = "species", agemat = df_agemat)
 
 # Aggregate biomass
-biomass <- bio_sp %>%
+biomass <- bio_sp |> 
   agg_data(groups = c("species", "time"), fun = sum)
 
-biomass_age <- bio_sp %>%
-  filter(agecl > 2) %>%
+biomass_age <- bio_sp |> 
+  filter(agecl > 2) |> 
   agg_data(groups = c("species", "agecl", "time"), fun = sum)
 
 # Aggregate Numbers! This is done seperately since numbers need to be summed!
@@ -147,7 +147,7 @@ growth_age  <- agg_data(data = dfs_prod[[3]], groups = c("species", "time", "age
 
 # Calculate consumed biomass
 bio_cons <- calculate_consumed_biomass(eat = dfs_prod[[1]], grazing = dfs_prod[[2]], dm = df_dm,
-                                       vol = vol, bio_conv = bio_conv) %>%
+                                       vol = vol, bio_conv = bio_conv) |> 
   agg_data(groups = c("pred", "agecl", "time", "prey"), fun = sum)
 
 # Calculate spatial overlap
@@ -158,26 +158,36 @@ rec_weight <- prm_to_df(prm_biol = prm_biol, fgs = fgs,
                         group = get_age_acronyms(fgs = fgs), 
                         parameter = c("KWRR", "KWSR", "AgeClassSize"))
 
-pd <- load_init_weight(init = init, fgs = fgs, bboxes = bboxes) %>%
-  left_join(rec_weight) %>%
-  split(.$species)
-
-# Calculate weight difference from one ageclass to the next!
-for (i in seq_along(pd)) {
-  pd[[i]]$wdiff <- c((pd[[i]]$rn[1] + pd[[i]]$sn[1]) - (pd[[i]]$kwrr[1] + pd[[i]]$kwsr[1]),
-                     diff(pd[[i]]$rn + pd[[i]]$sn))
-}
-pd <- do.call(rbind, pd)
-pd$growth_req <- pd$wdiff / (365 * pd$ageclasssize)
+pd <- load_init_weight(init = init, fgs = fgs, bboxes = bboxes) |> 
+  dplyr::left_join(rec_weight) |> 
+  
+  # Ensure structural order before running any sequential math
+  dplyr::arrange(species, agecl) |> 
+  dplyr::mutate(
+    # Total combined weight for the current row
+    total_w = rn + sn,
+    # Base weight threshold for the first age class
+    base_w = kwrr + kwsr,
+    # Calculate weight difference across age classes
+    wdiff = dplyr::if_else(
+      agecl == min(agecl),
+      total_w - base_w,                # Ageclass 1: Compare to baseline constants
+      total_w - dplyr::lag(total_w)    # Ageclass 2+: Subtract previous ageclass total weight
+    ),
+    # Calculate growth requirements using your dynamic wdiff
+    growth_req = wdiff / (365 * ageclasssize),
+    
+    .by = species
+  )
 if (any(pd$growth_req < 0)) {
   warning("Required growth negative for some groups. Please check your initial conditions files.")
 }
 
-gr_req <- pd %>%
+gr_req <- pd |> 
   select(species, agecl, growth_req)
 
-gr_rel_init <- growth_age %>%
-  left_join(gr_req) %>%
+gr_rel_init <- growth_age |> 
+  left_join(gr_req) |> 
   mutate(gr_rel = (atoutput - growth_req) / growth_req)
 
 # Aggregate volume vertically.

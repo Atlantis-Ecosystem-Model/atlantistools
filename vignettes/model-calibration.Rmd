@@ -21,7 +21,6 @@ to the list of dataframes at the end of the preprocess vignette and change `mode
 library("atlantistools")
 library("ggplot2")
 library("gridExtra")
-library("magrittr")
 
 fig_height2 <- 11
 gen_labels <- list(x = "Time [years]", y = "Biomass [t]")
@@ -112,7 +111,7 @@ update_labels(plot, gen_labels)
 
 ## Biomass benchmark 2
 ```{r}
-plot <- plot_line(result$biomass) %>% update_labels(labels = gen_labels)
+plot <- plot_line(result$biomass) |>  update_labels(labels = gen_labels)
 plot_add_range(plot, ex_bio)
 ```
 
@@ -127,12 +126,13 @@ custom_grid(plot, grid_x = "polygon", grid_y = "variable")
 
 # Physics
 ```{r, results = 'asis', fig.width = 30, fig.height = 12}
-physics <- result$physics %>%
-  flip_layers() %>%
-  split(., .$variable)
+physics <- result$physics |>
+  flip_layers() |>
+  dplyr::group_split(variable)
 
-plots <- lapply(physics, plot_line, wrap = NULL) %>% 
-  lapply(., custom_grid, grid_x = "polygon", grid_y = "layer")
+plots <- physics |> 
+  lapply(plot_line, wrap = NULL) |> 
+  lapply(custom_grid, grid_x = "polygon", grid_y = "layer")
 
 for (i in seq_along(plots)) {
   cat(paste0("## ", names(plots)[i]), sep = "\n")
@@ -145,7 +145,7 @@ for (i in seq_along(plots)) {
 
 ## Fluxes 1
 ```{r, fig.width = 30, fig.height = 12}
-plot <- flip_layers(result$flux) %>% 
+plot <- flip_layers(result$flux) |> 
   plot_line(wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
@@ -153,16 +153,16 @@ custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 
 ## Fluxes 2
 ```{r, fig.width = 30, fig.height = 12}
-plot <- flip_layers(result$sink) %>% 
+plot <- flip_layers(result$sink) |>  
   plot_line(wrap = NULL, col = "variable")
 custom_grid(plot, grid_x = "polygon", grid_y = "layer")
 ```
 
 ## Relative change of water column height compared to nominal_dz
 ```{r}
-check_dz <- result$dz %>% 
-  dplyr::left_join(result$nominal_dz, by = c("polygon", "layer")) %>% 
-  dplyr::mutate(check_dz = atoutput.x / atoutput.y) %>% 
+check_dz <- result$dz |> 
+  dplyr::left_join(result$nominal_dz, by = c("polygon", "layer")) |> 
+  dplyr::mutate(check_dz = atoutput.x / atoutput.y) |> 
   dplyr::filter(!is.na(check_dz)) # remove sediment layer
 
 plot <- plot_line(check_dz, x = "time", y = "check_dz", wrap = "polygon", col = "layer")

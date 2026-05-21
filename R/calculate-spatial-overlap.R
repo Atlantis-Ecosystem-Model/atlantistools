@@ -146,7 +146,7 @@ schoener <- function(predgrp, ageclass, biomass, avail) {
     df_avail,
     df_pred,
     by = c("pred" = "species", "pred_stanza" = "species_stanza")
-  ) %>%
+  ) |>
     dplyr::inner_join(
       biomass_clean,
       by = c(
